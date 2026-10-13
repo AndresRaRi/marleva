@@ -1,6 +1,6 @@
 # Marleva local
 
-Repositorio local: esta carpeta `marleva-local/repositorio`. API en `apps/api`, cliente en `apps/client`, herramientas/servicios en `infra/local`. `.gitignore` está en esta raíz. No hay remoto, commits ni subida.
+Repositorio local: esta carpeta `marleva-local/repositorio`. API en `apps/api`, cliente en `apps/client`, herramientas/servicios en `infra/local`. Git y `.gitignore` están en la raíz del proyecto, dos niveles arriba. Hay commits locales, sin remoto ni subida. [Entrada de lectura](../../README.md).
 
 Leer primero [proceso obligatorio y auditoría de todas las observaciones](docs/proceso/PROCESO_DESARROLLO_MARLEVA.md) y [AGENTS.md](AGENTS.md), además de las cuatro fuentes vigentes en `../../entregables/fuentes_finales`.
 

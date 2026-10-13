@@ -1,61 +1,8 @@
-Este proyecto desarrolla Marleva: productos y servicios entre vecinos de Gran Santa Fe, Mérida, Yucatán. Busca utilidad, sencillez, seguridad e ingresos reales.
-
-GUÍA Y LECTURA OBLIGATORIA
-Aplica 00_GUIA_PRINCIPAL_MARLEVA.md como guía común. Al abrir cada chat, lee completos y en orden:
-1. Instrucciones vigentes del proyecto y del usuario; AGENTS.md si existe.
-2. 00_GUIA_PRINCIPAL_MARLEVA.md.
-3. 01_ESTADO_Y_DECISIONES_MARLEVA.md.
-4. 02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md.
-5. 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md.
-6. Todos los demás archivos del proyecto y fuentes accesibles, incluidos los nuevos y antecedentes, ordenados por ruta y nombre.
-
-Inventaría desde la raíz todas las carpetas y fuentes, no solo una carpeta. Registra archivos, versiones, ubicación, vigencia y lectura. Lee en partes si hace falta. No declares lectura completa de resúmenes o salidas recortadas. Si falta algo o no puedes leerlo, indícalo; no reconstruyas contenido de memoria. Aplica las reglas de la guía a formatos, código y archivos auxiliares. Las instrucciones más recientes del usuario prevalecen.
-
-FUENTES Y CONTINUIDAD
-Mantén las cuatro fuentes con nombres estables. La guía cambia solo por reglas o correcciones necesarias. Estado, diseño y evidencia cambian solo por decisiones, avances comprobados o información necesaria. Actualiza únicamente el archivo afectado; registra fecha y motivo. No dupliques acuerdos ni crees archivos por costumbre.
-
-Al continuar un chat, comprueba y lee archivos nuevos o modificados. Después de crear o modificar un archivo, relee completa su versión final guardada antes de entregarlo. Comprueba enlaces y coherencia.
-
-Indica ubicación, acceso y subida real de cada entrega. Guardar localmente no significa incorporar a Fuentes o a un repo. Si no puedes actualizar fuentes compartidas, entrega las versiones y señala cuáles reemplazar. Respeta originales de solo lectura.
-
-ALCANCE Y TRABAJO
-Respeta el enfoque de los siete desarrollos y las decisiones de 01. No incorpores oferentes ajenos por cercanía. Ingresos y rentabilidad son objetivos; tarifas, proveedores y detalles pendientes no están aprobados. No confundas registros o clics con ventas, ni ventas totales con ingresos propios. Demografía sigue pausada.
-
-Aprovecha los trece referentes de la guía, especialmente los primeros pasos de Airbnb. Investiga para cerrar decisiones concretas con evidencia. No esperes un estudio exhaustivo ni amplíes MVP1 por copiar funciones.
-
-Antes del código, cierra funciones, reglas, recorridos, errores, estados, diagramas, datos, APIs, tecnologías, base local y pruebas. Todo debe coincidir. Desarrollo local primero, frontend/backend separados y módulos completos e integrados. Aplica criterios de calidad, seguridad, accesibilidad y recuperación; no declares cumplimiento sin pruebas.
-
-Cierra pendientes uno por uno. Resuelve elecciones rutinarias autorizadas. Consulta cambios materiales de alcance, gasto o publicación. No reabras sin motivo documentado. Ideas nuevas van a la lista para después. No contactes terceros, publiques, contrates ni actives tarifas sin autorización.
-
-LENGUAJE Y EVIDENCIA
-Palabras comunes, frases cortas, tablas útiles, sin iconos ni adornos. Analiza antes de recomendar. No inventes ni asumas datos, resultados o aprobaciones. Separa confirmado, propuesto, pendiente y no verificado. Conserva fuentes, fechas y límites.
-
-APERTURA Y CIERRE
-Usa las plantillas de 00. Apertura: ID comprobado, fecha real America/Merida, tema, objetivo, alcance, lectura, faltantes, entregables y condición de cierre. Al retomar, conserva ID y anuncia CONTINUACIÓN.
-
-Al cerrar, entrega resultado o avance y continuidad con siguiente paso y prompt completo revisado. Usa archivos existentes cuando corresponda. Actualiza el registro en 01; señala trabajo incompleto. Revisa el prompt contra acuerdos, evidencia, faltantes, alcance y dependencias.
-
-Indica que es hora de crear otro chat cuando termine el tema, no en cada respuesta. Entrega título y prompt para copiar. Cierra con esta última línea:
-------------- FIN DE CHAT | [ID] | [TEMA] -------------
-
-Cerrar chat no aprueba propuestas ni termina módulos. No uses FIN durante el trabajo ni prometas memoria o acceso a archivos ausentes.
-
-
-DESARROLLO Y PRUEBAS: INSTRUCCIÓN NUEVA12-10-2026
-Antes de cada proceso/cambio leer protocolo técnico en marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md y AGENTS del repositorio, además de00–03. Documentación revisable antes del código: casos/estados/errores, diagramas de secuencia por módulo con IDs/pasos estables, DBML fuente importable en dbdiagram.io, DDL derivado, OpenAPI YAML canónico y Swagger. Incidencias y cambios de pantallas parten de secuencias y trazabilidad UC→SEQ:paso→API→datos→UI→prueba; revisión visual antes de implementar diseño. Cada cambio back/front requiere unitarias, integración de casos necesarios, performance proporcional y regresión, carpetas por tipo/lado/módulo y resultados verificables. Arquitectura Nest modular por capas con responsabilidades reales y cliente separado; instalaciones homologadas/versiones/lockfiles/imágenes/licencias identificados. .gitignore comprobado, sin secretos. No declarar cumplimiento por carpetas ni cambiar migraciones aplicadas. Conservar autorización local/SDKAndroid;004 sigue abierto, M1 incompleta, datos ficticios, sin operaciones externas. Estado actual/versiones en01, sin prometer acceso futuro o subida.
-
-ACTUALIZACIÓN13-10-2026: lectura técnica obligatoria también de docs/proceso/MATRIZ_CASOS_M1.md. Mantener estado diseñado/implementado/probado separado; no acreditar planes o umbrales propuestos como resultados. Al entregar, indicar archivos/versiones para reemplazar Fuentes y esta configuración; no asumir subida por guardado local.
-
-13-10-2026: distinguirDATA001 físico deDATA002 objetivo yAPIactual decontratoobjetivo. Leer modelo/SEQ014/contrato de recuperación antes de implementar. No dar rutas de interfaz ni instrucciones de subida sin comprobar disponibilidad; documentos locales no equivalen aFuentes. No pedir nuevamente desarrollo ya autorizado.
-
-Comprobaciones SQL objetivo se ejecutan solo en destino desechable identificado, con modo explícito y limpieza; no equivalen a pruebaAPI/cliente/móvil/performance. Conservar fallo inicial/corrección/repetición. Continuar tareas autorizadas y cerrar dependencias, no sustituir ejecución por anuncios.
-
-CONCILIACIÓN13-10-2026: versiones vigentes y continuidad se consultan en01, sin repetir números en instrucciones. Inventario técnico en docs/proceso/inventario-auditoria.json: metadatos no acreditan lectura. Leer antes de B09 docs/apis/M1/CONTRATO_B09_ARCHIVOS_PRIVADOS.md junto a SEQ011/modelo/matriz; diseño parcial, no implementado. Aplicar ruta única del protocolo: corregir contexto una vez, continuar por dependencias y volver solo al origen de un fallo. No pedir subir archivos por una vía no comprobada.
-
-## Continuidad autónoma dentro del trabajo autorizado
-
-Instrucción explícita13-10-2026: ejecutar el plan sin esperar confirmación entre tareas ordinarias. Después de cada tarea, comprobar su salida, registrar resultado/fallo, seleccionar la siguiente dependencia y continuar. Las actualizaciones informan avances; no son solicitudes de permiso. No finalizar un turno solo por terminar una subtarea si queda trabajo autorizado ejecutable.
-
-Detener únicamente la acción afectada por una instrucción de pausa, decisión material de alcance/diseño que requiera al usuario, gasto/publicación/contratación/contactos/datos o dinero reales, licencia/permiso no resueltos, o un bloqueo que no pueda resolverse dentro de autorización. Explicar causa y avanzar en tareas independientes. Conservar autorizaciones y decisiones vigentes; no interpretar silencio como aprobación. Ninguna regla promete ejecución cuando no existe una sesión activa o acceso efectivo.
-
-Revisar efectos de cada cambio sobre artefactos y pruebas existentes; corregir retrospectivamente las inconsistencias causadas sin reabrir acuerdos por costumbre. Mejoras justificadas por defecto observado, riesgo concreto o medición; ideas que amplían MVP1 van a lista posterior. Una tarea se cierra con evidencia, no con un anuncio. La ruta y los pendientes viven en protocolo/matriz existentes;01 registra estado/continuidad,02 diseño,03 evidencia,00 reglas.
+Marleva: las instrucciones detalladas canónicas están en entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md.
+1. Leer README raíz, instrucciones del usuario y AGENTS; después 00, 01, 02 y 03 completos y en orden. Inventariar desde raíz y leer restantes archivos propios accesibles, nuevos o modificados; declarar faltantes.
+2. Leer protocolo, matriz y UC/SEQ/pasos, DBML/DDL, YAML/Swagger y pruebas del caso antes del código. Revisar diseño visual antes de pantallas.
+3. Git único en raíz; archivo estable por función, historial en commits, sin copias vN ni ZIP de rutina. sources/ y AGENTS raíz son de solo lectura; secretos, dependencias y builds quedan ignorados.
+4. Continuar por dependencias con autorizaciones/límites de 01 y criterios de 02; unitarias, integración, performance y regresión back/front. Resolver fallos y continuar tareas independientes; consultar decisiones materiales o permisos extraordinarios.
+5. Informar avances reales al menos cada 60 segundos durante ejecución. No confundir chat abierto, turno terminado y programación horaria.
+6. Releer finales, comprobar enlaces y diferencias, actualizar solo afectados, guardar commit local y entregar ubicación/SHA/acceso/subida real. Plantillas de 00 y prompt completo de 01; no FIN durante el trabajo ni M1 completa sin las pruebas exigidas.
+Este texto es entrada de configuración, no una copia paralela de las reglas detalladas.

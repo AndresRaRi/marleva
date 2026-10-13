@@ -1,6 +1,6 @@
 # Proceso de desarrollo y auditoría de Marleva
 
-Versión 1.4. Fecha: 13-10-2026 America/Merida. MAR-CHAT-004 continúa abierto. Instrucción vigente del usuario: documentación revisable antes de desarrollo; pruebas para cada cambio de backend/frontend; instalaciones correctas, homogéneas y sin componentes sin identificar. No acredita implementación completa ni conformidad con estándares.
+Historial por Git. Fecha: 13-10-2026 America/Merida. MAR-CHAT-004 continúa abierto. Instrucción vigente del usuario: documentación revisable antes de desarrollo; pruebas para cada cambio de backend/frontend; instalaciones correctas, homogéneas y sin componentes sin identificar. No acredita implementación completa ni conformidad con estándares.
 
 ## Lectura obligatoria antes de cada proceso o cambio
 
@@ -65,7 +65,7 @@ TypeScript estricto; nombres de código en inglés, mensajes de usuario en espa�
 
 ```text
 marleva-local/repositorio/
-  .git/ .gitignore AGENTS.md README.md
+  AGENTS.md README.md              Git y .gitignore únicos en raíz del proyecto
   apps/api/                         API y módulos backend
   apps/client/                      cliente y módulos frontend
   packages/contracts/               tipos/JSON generados desde YAML
@@ -266,3 +266,12 @@ Avance P03/B09,13-10-2026: contratoobjetivo3operaciones, Swagger yDATA00213tabla
 P02herramientas de calidad,13-10-2026: versiones del registro oficial consultadas: ESLint10.12.0,@eslint/js10.0.1,typescript-eslint8.71.2,Prettier3.9.10,globals17.13.0,eslint-plugin-react-hooks7.1.1. LicenciaMIT según metadatos. Node24.21.0 cumpleengines; typescript-eslint peerTypeScript>=4.8.4<6.1.0 admite6.0.3 yESLint10; pluginhooks admite10. Selección rutinaria dentro deA4, no nuevoframework. Instalar exactas como devDependencies locales, lockfileúnico eignore-scripts; confirmar versión ycompatibilidad instalada. Prettier separado dellint para no duplicarreglas de formato; ESLintflatconfig para JS/TS yhookscliente, generados/caches excluidos. Registrar defectos existentes; no apagar reglas para aparentar conformidad ni formatear todo negocio antes derefactor. Fuentes: registry.npmjs.org por paquete, https://typescript-eslint.io/users/dependency-versions/ y https://prettier.io/docs/install. No instalación oconformidad acreditadas hasta comprobar.
 
 P02calidad ejecutada: herramientas exactas instaladas; frozenoffline conservó lockfile. TypecheckAPI/cliente pasó y9unitarias pasaron. ESLint10errores, formato31archivos pendientes; acta tests/results/quality-baseline-20261013.json yprimeraconfiguración conservada. Falso positivo Playwrightdocument corregido conglobals de harnessfrontend, sin apagar reglas. Generadorobjetivo/testSQL formateados sin cambio decontenidoDDL/Swagger; no nueva corridaSQL innecesaria. Arquitectura de negocio sigue por refactor; calidadgeneral no aprobada. Xcodeactivo apuntaCLTools, xcodebuildfalla y /Applications noXcode encontrado, licencia no comprobada. Continuar P03antes de refactor concorrecciones trazadas, sinesperar respuesta ordinaria.
+
+## Control de cambios y ejecución numerada
+
+1. Entrada única: README en la raíz del proyecto; fuentes 00–03 y este protocolo según su orden.
+2. Git está en la raíz, no en marleva-local/repositorio. Las referencias históricas a Git sin commits son antecedentes superados; estado vigente en 01.
+3. Un archivo estable por función. Conservar antecedentes en Git, sin copias numeradas ni ZIP. Derivados se generan desde fuente; no reescribir migraciones ni eliminar actas de corridas distintas.
+4. Cada proceso usa pasos estables Sxxx y trazabilidad de la matriz; cada tarea sigue las ocho puertas de este protocolo. Entrada, salida, fallos y evidencia identificados.
+5. Avances reales al menos cada 60 segundos durante ejecución; resolver fallos y continuar tareas independientes. Chat abierto no acredita un proceso continuo.
+6. Revisar diferencias e ignorados, releer finales y guardar commit local por incremento coherente. Fuentes e instrucciones incluidas en el mismo Git; remoto/subida separados.

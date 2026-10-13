@@ -1,15 +1,45 @@
-import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';import path from 'node:path';import {createRequire} from 'node:module';import {exporter} from '@dbml/core';import YAML from 'yaml';import SwaggerParser from '@apidevtools/swagger-parser';
-const root=path.resolve(new URL('..',import.meta.url).pathname);process.chdir(root);const require=createRequire(import.meta.url);
-const dbml=await readFile('docs/modelado-datos/dbml/MAR-M1-DATA-001.dbml','utf8');
+import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { exporter } from '@dbml/core';
+import YAML from 'yaml';
+import SwaggerParser from '@apidevtools/swagger-parser';
+const root = path.resolve(new URL('..', import.meta.url).pathname);
+process.chdir(root);
+const require = createRequire(import.meta.url);
+const dbml = await readFile('docs/modelado-datos/dbml/MAR-M1-DATA-001.dbml', 'utf8');
 // DBML exporter defaults differ from the applied PostgreSQL baseline.
 // Preserve non-deferrable constraints; no changes to applied migrations.
-const ddl=exporter.export(dbml,'postgres').replaceAll(' DEFERRABLE INITIALLY IMMEDIATE',' NOT DEFERRABLE');if(!ddl.includes('CREATE TABLE'))throw new Error('DDL vacío');
-await writeFile('docs/modelado-datos/ddl/MAR-M1-DATA-001.sql','-- GENERADO desde MAR-M1-DATA-001.dbml. Solo revisión; no aplicar completo sobre base existente.\n'+ddl+'\n');
-const yamlPath='docs/apis/M1/openapi.yaml';let spec;
-try{spec=YAML.parse(await readFile(yamlPath,'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;spec=JSON.parse(await readFile('packages/contracts/openapi.json','utf8'));const ucByPath={'/v1/auth/challenges':'001','/v1/auth/verifications':'002','/v1/me':'003','/v1/auth/csrf':'003','/v1/auth/sessions/current':'004','/v1/auth/sessions':'004','/v1/auth/email-changes':'005','/v1/auth/email-changes/{id}/confirmations':'006','/v1/auth/mfa/enrollments':'007','/v1/auth/mfa/verifications':'007','/v1/operator/access':'007','/v1/notifications':'008'};let n=1;for(const [route,methods] of Object.entries(spec.paths))for(const [verb,op] of Object.entries(methods)){op.operationId='MAR_M1_API_'+String(n++).padStart(3,'0');op.tags=['M1'];op['x-use-case-id']='MAR-M1-UC-'+ucByPath[route];op['x-sequence-id']='MAR-M1-SEQ-'+ucByPath[route];op.description='Contrato inicial existente, en revisión. Ver proceso obligatorio y secuencia indicada; no acreditado como contrato completo de MVP1.';}await writeFile(yamlPath,'# Fuente canónica de API M1. En revisión; ejemplos del usuario aún no recibidos.\n'+YAML.stringify(spec));}
+const ddl = exporter
+  .export(dbml, 'postgres')
+  .replaceAll(' DEFERRABLE INITIALLY IMMEDIATE', ' NOT DEFERRABLE');
+if (!ddl.includes('CREATE TABLE')) throw new Error('DDL vacío');
+await writeFile(
+  'docs/modelado-datos/ddl/MAR-M1-DATA-001.sql',
+  '-- GENERADO desde MAR-M1-DATA-001.dbml. Solo revisión; no aplicar completo sobre base existente.\n' +
+    ddl +
+    '\n',
+);
+const yamlPath = 'docs/apis/M1/openapi.yaml';
+let spec;
+spec = YAML.parse(await readFile(yamlPath, 'utf8'));
 await SwaggerParser.validate(spec);
-await writeFile('packages/contracts/openapi.json',JSON.stringify(spec,null,2)+'\n');await writeFile('docs/apis/M1/openapi.json',JSON.stringify(spec,null,2)+'\n');
-const assets=path.dirname(require.resolve('swagger-ui-dist/package.json'));await mkdir('docs/apis/M1/vendor',{recursive:true});for(const name of ['swagger-ui.css','swagger-ui-bundle.js','swagger-ui-standalone-preset.js','LICENSE'])await copyFile(path.join(assets,name),path.join('docs/apis/M1/vendor',name));
-await writeFile('docs/apis/M1/swagger.html','<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marleva M1 - revisión de API</title><link rel="stylesheet" href="vendor/swagger-ui.css"></head><body><p>MAR-CHAT-004 · API M1 en revisión · Solo documentación local · Sin ejecución de solicitudes</p><div id="swagger-ui"></div><script src="vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:'+JSON.stringify(spec).replace(/</g,'\\u003c')+',dom_id:"#swagger-ui",supportedSubmitMethods:[],persistAuthorization:false,deepLinking:true});</script></body></html>');
-await writeFile('docs/apis/M1/README.md','# M1: documentación API\n\n[OpenAPI YAML canónico](openapi.yaml), [JSON generado](openapi.json), [Swagger local](swagger.html). Vista sin Try it out ni credenciales. No subida/publicación.14 acciones documentadas, incluidos Health y condiciones de transporte. Contrato parcial observado, con brechas explícitas; validación runtime/semántica y cobertura completa aún pendientes. Los tipos se generan desde el JSON derivado del YAML. No editar copias generadas a mano.\n\nRegenerar desde raíz: `./scripts/tool node scripts/generate-documentation.mjs` y `./scripts/tool pnpm contracts`. DBML se valida al exportar; OpenAPI se valida con Swagger Parser. La validación sintáctica no acredita coherencia con todos los estados, implementación o pruebas.\n');
-console.log('DBML parseado; DDL exportado. OpenAPI YAML/JSON válido; Swagger local preparado (sin solicitudes).');
+await writeFile('packages/contracts/openapi.json', JSON.stringify(spec, null, 2) + '\n');
+const assets = path.dirname(require.resolve('swagger-ui-dist/package.json'));
+await mkdir('docs/apis/M1/vendor', { recursive: true });
+for (const name of [
+  'swagger-ui.css',
+  'swagger-ui-bundle.js',
+  'swagger-ui-standalone-preset.js',
+  'LICENSE',
+])
+  await copyFile(path.join(assets, name), path.join('docs/apis/M1/vendor', name));
+await writeFile(
+  'docs/apis/M1/swagger.html',
+  '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marleva M1 - revisión de API</title><link rel="stylesheet" href="vendor/swagger-ui.css"></head><body><p>MAR-CHAT-004 · API M1 en revisión · Solo documentación local · Sin ejecución de solicitudes</p><div id="swagger-ui"></div><script src="vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:' +
+    JSON.stringify(spec).replace(/</g, '\\u003c') +
+    ',dom_id:"#swagger-ui",supportedSubmitMethods:[],persistAuthorization:false,deepLinking:true});</script></body></html>',
+);
+console.log(
+  'DBML parseado; DDL exportado. OpenAPI YAML/JSON válido; Swagger local preparado (sin solicitudes).',
+);
