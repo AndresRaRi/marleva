@@ -506,3 +506,15 @@ Metadatos del registro oficial por paquete (registry.npmjs.org/eslint/latest,@es
 [Acta calidad](../../marleva-local/repositorio/tests/results/quality-baseline-20261013.json): typecheckAPI/cliente exit0,9unitarias/3archivos pasaron381ms; ESLint10errores/0warnings yformato31archivos pendientes. Primera configuración11incluíafalsopositivo document de callbackPlaywright; globalsbrowser definidos solo enharnessfrontend, reglas conservadas yreporte inicialguardado. Frozenofflineignore-scripts exit0 yhashlockfileantes/después idéntico b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a. GeneradosDDL/Swaggerobjetivo iguales tras formatear generador/testSQL. No nueva integraciónAPI/performance/móvil ni estándar completo acreditado.
 
 Consulta actualxcode-select -p devuelve /Library/Developer/CommandLineTools; xcodebuild -version exit1requiereXcodecompleto. No coincidenciasXcode*.app en/Applications. No prueba ausencia enotrasrutas ni aceptación de licencia; iOSsiguependiente. Demografía/originalessin cambios.
+
+## Buenas prácticas de desarrollo solicitadas —13-10-2026
+
+Fuentes oficiales consultadas para decisiones concretas, no certificación del proyecto:
+
+| Fuente | Qué aporta | Aplicación y límite |
+|---|---|---|
+| [Docker: mejores prácticas](https://docs.docker.com/build/building/best-practices/) | Imágenes pequeñas, etapas separadas, excluir archivos innecesarios y fijar digest con actualización controlada | Ensayos B09 usan imagen local por digest, sin descarga y con contenedor propio. No hay imagen de aplicación productiva certificada. |
+| [Microsoft: principios de arquitectura](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles) | Separación de responsabilidades, encapsulación e inversión de dependencias | Casos B09 dependen de puertos; Prisma/Storage son adaptadores. La fuente explica principios, no impone .NET ni acredita SOLID de todo el código. |
+| [Flyway: migraciones versionadas](https://documentation.red-gate.com/fd/versioned-migrations-273973333.html) | Migraciones aplicadas una vez, orden e integridad por checksum | Flyway sigue en evaluación. Prisma conserva el historial actual; no dos dueños del esquema ni reescritura de migraciones aplicadas. |
+
+PDM y Sonar son opciones pendientes de evaluación de propósito, soporte TypeScript, licencia, recursos e integración. No instalados ni adoptados por silencio. La secuencia de comprobaciones locales existe y deja actas; calidad global aún falla, por lo que no se acredita CI/CD completo. No CD externo autorizado. Estas reglas se formalizan en00 §13 y se verifican por evidencia; las carpetas, nombres de patrones y herramientas no prueban cumplimiento.

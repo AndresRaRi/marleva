@@ -1,34 +1,37 @@
-# Marleva: entrada única del proyecto
+# Marleva
 
-Git está en esta raíz. El código está en `marleva-local/repositorio/` y las fuentes editables en `entregables/fuentes_finales/`. El historial se conserva en commits, sin copias documentales numeradas ni ZIP de rutina. No hay remoto ni publicación.
+Productos y servicios entre vecinos de los siete desarrollos de Gran Santa Fe, Mérida. Cualquiera podrá explorar; solo residentes actuales podrán comprar y ofrecer. Domicilio y documentos particulares son privados. Este proyecto todavía usa datos ficticios y pagos simulados; M1 está incompleta.
 
-## 1. Lectura en orden
+## Dónde está cada cosa
 
-1. Instrucciones del usuario y [AGENTS raíz](AGENTS.md), sincronizado de solo lectura.
-2. [00: guía y reglas](entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md).
-3. [01: estado, decisiones y prompt](entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md).
+| Material | Ubicación |
+|---|---|
+| Reglas, acuerdos, diseño y evidencia | entregables/fuentes_finales/00–03 |
+| Aplicación y servicios | marleva-local/repositorio/apps/client y apps/api |
+| Datos, API, procesos y pruebas | marleva-local/repositorio/docs y tests |
+| Herramientas/configuración locales | marleva-local/repositorio/infra/local; secretos y herramientas ignorados |
+| Historial Git | Esta raíz; sin remoto por decisión actual del usuario |
+
+## Leer antes de trabajar
+
+1. Instrucciones del usuario y [AGENTS](AGENTS.md), sincronizado de solo lectura.
+2. [00: guía](entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md), incluida§13 de revisión/Git/calidad.
+3. [01: estado y continuidad](entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md).
 4. [02: alcance y diseño](entregables/fuentes_finales/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md).
-5. [03: evidencia y límites](entregables/fuentes_finales/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
-6. [Protocolo técnico](marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md) y [matriz M1](marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md).
-7. Caso activo: secuencia y pasos, DBML/DDL, YAML/Swagger, código, pruebas y resultados. Leer también los restantes archivos propios accesibles por ruta y nombre; inventariar desde la raíz. Metadatos no prueban lectura.
+5. [03: evidencia](entregables/fuentes_finales/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
+6. [Protocolo](marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md), [matriz M1](marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md) y archivos del caso:UC/SEQ/pasos/datos/API/pruebas.
+7. Inventariar desde esta raíz; leer nuevos/modificados y registrar límites. Metadatos o resúmenes no acreditan lectura completa.
 
-## 2. Flujo por tarea
+## Revisar localmente
 
-1. Identificar caso, alcance, dependencias y salida.
-2. Concordar reglas, estados, secuencia, datos, API y pruebas antes del código.
-3. Implementar dentro de la autorización; revisar diseño visual antes de modificar pantallas.
-4. Ejecutar unitarias, integración, performance y regresión pertinentes; corregir fallos.
-5. Releer finales y enlaces; actualizar solo la fuente afectada.
-6. Revisar diferencias e ignorados, guardar commit local y continuar la siguiente dependencia. Informar avances reales al menos cada 60 segundos durante la ejecución.
+[Instructivo M1 con capturas reales](marleva-local/repositorio/docs/revision/M1/INSTRUCTIVO_M1.md). Aplicación: https://localhost:8443; capturador ficticio:http://127.0.0.1:54324. Ambos son locales. Pasos técnicos de arranque/parada en [README del código](marleva-local/repositorio/README.md). Abrir archivos ycontratos en IDE también sirve para revisar backend; no sustituye probar el recorrido.
 
-## 3. Un archivo por función
+Disponible y comprobado parcialmente: acceso/cuenta/salida/cambio por ambos buzones/MFA básico, cursor de avisos, correo durable y backend B09 de archivos ficticios privados. Pendientes: recuperación/restauración, revisión visual, Safari/nativos/físicos y casos restantes. Google/Supabase queda pendiente y no detiene lo independiente. No hay módulo M2–M10 completo; el simulador no acredita M6.
 
-Las cuatro fuentes son canónicas. Los antecedentes retirados se recuperan desde Git, commit `7a0ec5a`. `sources/` y AGENTS raíz son la excepción impuesta por sincronización: referencias de solo lectura, sin vigencia como copias editables.
+## Cada proceso y chat
 
-El modelo físico y el objetivo tienen funciones distintas hasta completar la migración. DDL, Swagger y tipos son derivados necesarios; migraciones y actas de corridas distintas son evidencia e historial técnico. No eliminarlos como copias. Secretos, herramientas descargadas, dependencias, cachés y builds quedan fuera de Git; su reconstrucción debe documentarse.
+Comprobar Git, fuentes y README antes de cambiar. Concordar reglas/estados/secuencia/datos/API/pruebas; revisar diseño antes de pantallas. Implementar un caso integrado y probar sus fallos, permisos, concurrencia, recuperación, rendimiento y regresión. Registrar resultados y corregirlos; no aprobar solo por tener carpetas.
 
-## 4. Continuidad
+Al terminar: releer finales, comprobar enlaces/diff/ignorados, actualizar README si ya no coincide y guardar commit claro tipo(módulo/caso): resultado. Al cerrar el chat, commit final ySHA, instructivo/revisión local, funcionalidades cubiertas/faltantes y porcentajes con criterios/evidencia de00 §13. FIN solo al cerrar el tema, no por terminar una subtarea.
 
-MAR-CHAT-004 cerrado documentalmente; MAR-CHAT-005 en continuación con incremento UC008 comprobado. M1 incompleta. Prompt completo en 01 y plantillas en 00. Chat abierto no significa proceso ejecutándose. FIN solo al cerrar realmente el tema; guardar, hacer commit y subir son acciones distintas.
-
-Git de CommandLineTools está disponible. Xcode 27.0 está instalado y seleccionado; comprobación inicial pasada. Runtimes y dispositivos de simulador todavía vacíos. Builds y pruebas físicas pendientes.
+Sin remoto: comprobar commits locales; no afirmar pull/push. Si posteriormente existe un remoto autorizado, actualizar sin descartar cambios locales antes de trabajar. Guardar, hacer commit, subir aFuentes y publicar son acciones distintas. sources/ yAGENTS raíz son referencias de solo lectura. Historial por Git, sin copias vN/fecha/ZIP de rutina.

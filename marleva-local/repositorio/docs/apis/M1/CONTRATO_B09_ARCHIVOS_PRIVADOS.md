@@ -31,3 +31,11 @@ Borrado: commit de intención bloquea futuras lecturas aunque Storage falle; tra
 | MAR-M1-PF-BE-111-A | S050–S090 | 1 KiB/1 MiB, concurrencia 1/5/10; latencia, bytes/s, RAM, errores y permisos |
 
 Todos diseñados, no ejecutados. UT/IT frontend se añaden cuando exista consumidor autorizado: espera, vencimiento, reintento y limpieza al salir. No crear pantalla solo para contabilizar pruebas. Este cambio documental no acredita performance runtime.
+
+## Incremento005: decisiones técnicas para implementación
+
+Sin cambio de método Auth: principal actual valida identidad; B09 revalida cuenta/sesión/revocación bajo transacción antes de emitir permiso y antes de entregar bytes. Consulta de Storage fuera de transacción, con timeout y lectura acotada1MiB; verificar MIME/tamaño/hash antes de respuesta. Cuenta y sesión del permiso no vienen del cliente. Emisión y borrado se serializan por titular; DELETE guarda intención/revoca capacidades y bloquea nuevas lecturas en el mismo commit.
+
+Nuevo esquema solo B09: tres tablas de fixtures/capacidades/intenciones y clave compuesta Session(id,accountId). No incorpora roles ni Recovery; DATA002 completo no se aplica. Migración nueva derivada del DDL objetivo, ensayada antes de negocio. Metadata sin contenido, sin retención legal inventada.
+
+Trabajador de borrado: lease15s, escrituras cercadas por misma lease, reintentos1/5/30min sin caducidad que borre la obligación. Confirmar ausencia en Storage antes de deleted. Repetición DELETE con misma clave/cuerpo devuelve estado durable; clave distinta/cuerpo distinto o versión vieja409. Borrado no recupera permisos. Revisión del usuario/flujo nativo siguen pendientes.

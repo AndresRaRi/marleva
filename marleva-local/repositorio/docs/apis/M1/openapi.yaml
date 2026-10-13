@@ -1,8 +1,7 @@
-# Fuente canónica, contrato parcial observado. Leer protocolo y matriz de casos antes de modificar.
 openapi: 3.1.1
 info:
   title: Marleva M1 local
-  version: 0.3.0
+  version: 0.4.0
   description: Datos ficticios; sin pagos reales. Cookie web con CSRF y origen
     exacto. Credencial móvil opaca en SecureStore. Contrato documental del
     código parcial observado, 13-10-2026. Las brechas y objetivos futuros se
@@ -1614,8 +1613,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "400":
@@ -1631,8 +1630,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "401":
@@ -1648,8 +1647,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "403":
@@ -1665,8 +1664,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "404":
@@ -1682,8 +1681,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "409":
@@ -1699,13 +1698,13 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "422":
-          description: "PAGINACION: query/cursor inválido o de otra cuenta; sin revelar datos ajenos.
-            Reiniciar desde primera página."
+          description: "PAGINACION: query/cursor inválido o de otra cuenta; sin revelar
+            datos ajenos. Reiniciar desde primera página."
           content:
             application/json:
               schema:
@@ -1717,8 +1716,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
         "429":
@@ -1734,13 +1733,13 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
             Retry-After:
-              description: "Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos reales
-                restantes."
+              description: "Código actual usa60 aunque pausa pueda ser900: brechaBUG007;
+                objetivo segundos reales restantes."
               schema:
                 type: integer
                 minimum: 1
@@ -1757,8 +1756,8 @@ paths:
                 type: string
                 const: no-store
             x-request-id:
-              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
-                middleware y proxy, por corregir
+              description: Referencia de soporte sin datos personales; falta en ciertos
+                errores previos al middleware y proxy, por corregir
               schema:
                 type: string
       security:
@@ -1768,29 +1767,32 @@ paths:
         - M1
       x-use-case-id: MAR-M1-UC-008
       x-sequence-id: MAR-M1-SEQ-008
-      description: "UC008:S070–S090. Contrato del incremento local: avisos propios, orden
-        createdAt DESC/id DESC; limit entero 1–50, defecto24. Cursor base64url canónico v1 ligado a
-        cuenta y frontera UTC con seis decimales e ID; no credencial ni autorización. Consulta viva,
-        no snapshot: avisos nuevos se ven al refrescar la primera página. Borrado de la fila
-        frontera no invalida continuación. Una consulta lee limit+1; última página y vacío devuelven
-        null. Cuenta del cursor distinta, formato inválido, repetición de parámetros o parámetros
-        desconocidos:422 PAGINACION. Autenticación vigente antes de interpretar cursor; no leer
-        avisos ajenos. Caída PG/Auth:503 o401 según contrato vigente, sin responder vacío por fallo.
-        No cambia negocio, leído ni correo."
+      description: "UC008:S070–S090. Contrato del incremento local: avisos propios,
+        orden createdAt DESC/id DESC; limit entero 1–50, defecto24. Cursor
+        base64url canónico v1 ligado a cuenta y frontera UTC con seis decimales
+        e ID; no credencial ni autorización. Consulta viva, no snapshot: avisos
+        nuevos se ven al refrescar la primera página. Borrado de la fila
+        frontera no invalida continuación. Una consulta lee limit+1; última
+        página y vacío devuelven null. Cuenta del cursor distinta, formato
+        inválido, repetición de parámetros o parámetros desconocidos:422
+        PAGINACION. Autenticación vigente antes de interpretar cursor; no leer
+        avisos ajenos. Caída PG/Auth:503 o401 según contrato vigente, sin
+        responder vacío por fallo. No cambia negocio, leído ni correo."
       x-implementation-status: implemented
       parameters:
         - name: Origin
           in: header
           required: false
-          description: Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con Origin
-            se rechaza; no es autorización por CORS.
+          description: Web exige origen exacto https://localhost:8443 en mutaciones.
+            Bearer junto con Origin se rechaza; no es autorización por CORS.
           schema:
             type: string
             const: https://localhost:8443
         - name: x-marleva-client
           in: header
           required: false
-          description: Móvil sin Origin usa native. Cabecera identifica transporte, no concede permiso.
+          description: Móvil sin Origin usa native. Cabecera identifica transporte, no
+            concede permiso.
           schema:
             type: string
             const: native
@@ -1802,7 +1804,8 @@ paths:
             minimum: 1
             maximum: 50
             default: 24
-          description: Representación decimal sin signos ni ceros iniciales. Repeticiones rechazadas.
+          description: Representación decimal sin signos ni ceros iniciales. Repeticiones
+            rechazadas.
         - name: cursor
           in: query
           required: false
@@ -1810,8 +1813,8 @@ paths:
             type: string
             maxLength: 512
             pattern: ^[A-Za-z0-9_-]+$
-          description: next_cursor previo; no contiene OTP ni credenciales. Ligado a cuenta, validado en
-            servidor. No concede acceso por conocerlo.
+          description: next_cursor previo; no contiene OTP ni credenciales. Ligado a
+            cuenta, validado en servidor. No concede acceso por conocerlo.
       x-sequence-steps:
         - S070
         - S075
@@ -2475,6 +2478,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/local/file-fixtures/{id}/access:
+    $ref: ./openapi-objetivo-archivos.yaml#/paths/~1v1~1local~1file-fixtures~1{id}~1access
+  /v1/local/file-fixtures/{id}/content:
+    $ref: ./openapi-objetivo-archivos.yaml#/paths/~1v1~1local~1file-fixtures~1{id}~1content
+  /v1/local/file-fixtures/{id}:
+    $ref: ./openapi-objetivo-archivos.yaml#/paths/~1v1~1local~1file-fixtures~1{id}
 components:
   schemas:
     Account:
@@ -2691,7 +2700,8 @@ components:
             - string
             - "null"
           maxLength: 512
-          description: Frontera exacta del último aviso devuelto si existe otro; null al terminar.
+          description: Frontera exacta del último aviso devuelto si existe otro; null al
+            terminar.
       required:
         - items
         - next_cursor

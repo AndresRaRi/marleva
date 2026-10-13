@@ -1,0 +1,6 @@
+{
+  "case": "MAR-M1-PF-BE-111-A",
+  "date": "2026-10-13T21:56:09.206Z",
+  "result": "No se inició carga: cuota real de emisión consumida por integración",
+  "correction": "Esperar Retry-After real; no desactivar cuota ni modificar registros de accesos"
+}

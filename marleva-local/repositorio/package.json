@@ -13,7 +13,7 @@
     "contracts": "pnpm --filter @marleva/contracts generate",
     "docs:generate": "node scripts/generate-documentation.mjs && pnpm contracts",
     "test:unit": "vitest run tests/unit",
-    "test:integration": "vitest run tests/integration/backend --exclude \"**/data-target.test.mjs\" --exclude \"**/outbox.test.mjs\"",
+    "test:integration": "vitest run tests/integration/backend --exclude \"**/data-target.test.mjs\" --exclude \"**/outbox.test.mjs\" --exclude \"**/files.test.mjs\"",
     "test:outbox": "vitest run tests/integration/backend/M1/outbox.test.mjs",
     "test:frontend:integration": "node tests/integration/frontend/M1/web-test.mjs",
     "test:performance:backend": "node tests/performance/backend/M1/health.mjs",
@@ -22,7 +22,8 @@
     "docs:target": "node scripts/generate-m1-target.mjs",
     "lint": "eslint .",
     "format:check": "prettier --check \"apps/**/*.{ts,tsx,mjs,cjs,json}\" \"scripts/*.{mjs,cjs}\" \"tests/**/*.{ts,mjs}\" eslint.config.mjs .prettierrc.json package.json",
-    "quality": "pnpm typecheck && pnpm lint && pnpm format:check"
+    "quality": "pnpm typecheck && pnpm lint && pnpm format:check",
+    "test:files": "vitest run tests/integration/backend/M1/files.test.mjs"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "13.1.0",

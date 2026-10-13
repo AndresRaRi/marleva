@@ -1,0 +1,180 @@
+{
+  "chat": "MAR-CHAT-005",
+  "date": "2026-10-13T22:10:06.318Z",
+  "timezone": "America/Merida",
+  "status": "B09 backend implementado y parcialmente probado; M1 incompleta",
+  "cases": [
+    "MAR-M1-UT-BE-111-A/B",
+    "MAR-M1-IT-BE-111-A/B/C/D/E/F/M",
+    "MAR-M1-PF-BE-111-A"
+  ],
+  "versions": {
+    "node": "24.21.0",
+    "pnpm": "12.11.2",
+    "prisma": "7.10.0",
+    "postgres": "17.11",
+    "supabaseCLI": "2.120.0"
+  },
+  "migration": {
+    "name": "202610130002_private_fixtures",
+    "isolated": "sobre002+202610130001, conservación y rollback comprobados",
+    "local": "prisma migrate deploy exit0",
+    "physicalBusinessTables": 11,
+    "targetBusinessTables": 13,
+    "previousMigrations": "inmutables"
+  },
+  "counts": {
+    "files-unit": {
+      "passed": 18,
+      "failed": 0
+    },
+    "files-migration": {
+      "passed": 12,
+      "failed": 0
+    },
+    "files-integration": {
+      "passed": 6,
+      "failed": 0
+    },
+    "files-api-regression": {
+      "passed": 12,
+      "failed": 0
+    },
+    "files-outbox-regression": {
+      "passed": 5,
+      "failed": 0
+    }
+  },
+  "performance": {
+    "case": "MAR-M1-PF-BE-111-A",
+    "date": "2026-10-13T21:57:08.656Z",
+    "node": "v24.21.0",
+    "scope": "ReadPrivateFile + PG17 + Storage local; sin HTTP/Auth frontend; humo proporcional, no capacidad productiva",
+    "results": [
+      {
+        "bytes": 1024,
+        "concurrency": 1,
+        "warmup_ms": 1000,
+        "measurement_ms": 5011.810834,
+        "successful": 298,
+        "errors": 0,
+        "totalBytes": 305152,
+        "p50_ms": 14.096999999999753,
+        "p95_ms": 29.645915999999943,
+        "p99_ms": 53.23258299999998,
+        "requests_per_second": 59.45954663300047,
+        "peak_client_rss_bytes": 208338944
+      },
+      {
+        "bytes": 1024,
+        "concurrency": 5,
+        "warmup_ms": 1000,
+        "measurement_ms": 5023.8793749999995,
+        "successful": 529,
+        "errors": 0,
+        "totalBytes": 541696,
+        "p50_ms": 39.8973330000008,
+        "p95_ms": 95.93562500000007,
+        "p99_ms": 154.9630419999994,
+        "requests_per_second": 105.29711414498283,
+        "peak_client_rss_bytes": 287391744
+      },
+      {
+        "bytes": 1024,
+        "concurrency": 10,
+        "warmup_ms": 1000,
+        "measurement_ms": 5063.4177500000005,
+        "successful": 342,
+        "errors": 0,
+        "totalBytes": 350208,
+        "p50_ms": 93.48616700000275,
+        "p95_ms": 500.4319170000017,
+        "p99_ms": 715.0680830000019,
+        "requests_per_second": 67.54331103729294,
+        "peak_client_rss_bytes": 263831552
+      },
+      {
+        "bytes": 1048576,
+        "concurrency": 1,
+        "warmup_ms": 1000,
+        "measurement_ms": 5004.494957999999,
+        "successful": 191,
+        "errors": 0,
+        "totalBytes": 200278016,
+        "p50_ms": 22.33445799999754,
+        "p95_ms": 39.895917000001646,
+        "p99_ms": 108.08591700000034,
+        "requests_per_second": 38.1656893658519,
+        "peak_client_rss_bytes": 288702464
+      },
+      {
+        "bytes": 1048576,
+        "concurrency": 5,
+        "warmup_ms": 1000,
+        "measurement_ms": 5070.8604159999995,
+        "successful": 285,
+        "errors": 0,
+        "totalBytes": 298844160,
+        "p50_ms": 85.72704200000226,
+        "p95_ms": 123.44691699999748,
+        "p99_ms": 148.3273330000011,
+        "requests_per_second": 56.20347961082588,
+        "peak_client_rss_bytes": 231276544
+      },
+      {
+        "bytes": 1048576,
+        "concurrency": 10,
+        "warmup_ms": 1000,
+        "measurement_ms": 5103.188624999999,
+        "successful": 192,
+        "errors": 0,
+        "totalBytes": 201326592,
+        "p50_ms": 237.484292000001,
+        "p95_ms": 538.3053749999963,
+        "p99_ms": 575.7910829999964,
+        "requests_per_second": 37.62353581433609,
+        "peak_client_rss_bytes": 196788224
+      }
+    ]
+  },
+  "failures": [
+    {
+      "report": "files-integration-first-failure.json",
+      "cause": "Prisma void bloqueo",
+      "correction": "casttext"
+    },
+    {
+      "report": "files-integration-second-failure.json",
+      "cause": "Storage NoSuchKey400 y ruta testlogout inexistente",
+      "correction": "confirmación404 de códigoNoSuchKey y ruta contractual DELETEauth/sessions/current"
+    },
+    {
+      "report": "files-performance-first-failure.json",
+      "cause": "cuota emisión consumida",
+      "correction": "esperar Retry-After real"
+    }
+  ],
+  "limits": [
+    "Sin UI de archivos ni documentosM2",
+    "MFA Recovery/B12 pendientes",
+    "Sin prueba nativa/Safari/física ni aceptación visual",
+    "Carga proporcional, noHTTP/Auth/frontend ni capacidadproductiva",
+    "Clocklease adelantado60s y dueAt solo fixture de prueba acelerado; Storage realmente detenido/reiniciado",
+    "Globalquality previamente falla; lint de archivos cambiados pasó",
+    "Inventario general/lectura siguen parciales",
+    "Sin remoto, subida o acciones externas"
+  ],
+  "commands": [
+    "pnpm --filter @marleva/api generate/build",
+    "pnpm typecheck",
+    "pnpm test:unit",
+    "MARLEVA_SCHEMA_CHECK=1 pnpm test:schema",
+    "pnpm test:files",
+    "MARLEVA_OUTBOX_CHECK=1 pnpm test:outbox",
+    "vitest run tests/integration/backend/M1/m1.test.mjs",
+    "node tests/performance/backend/M1/files.mjs",
+    "pnpm docs:target/docs:generate",
+    "eslint archivos nuevos/modificados"
+  ],
+  "cleanup": "Limpieza de claves creadas por cada runner confirmada por Storage, con ledger y estado deleted; integración repetida6/6 tras ajuste"
+}

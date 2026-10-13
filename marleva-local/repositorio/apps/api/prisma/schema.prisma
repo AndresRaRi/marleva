@@ -13,6 +13,7 @@ model Account {
   state String @default("active")
   operator Boolean @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz
+  privateFixtures PrivateFixture[]
   sessions Session[]
   notices Notice[]
   @@schema("marleva")
@@ -29,6 +30,8 @@ model Session {
   authenticatedAt DateTime @default(now()) @db.Timestamptz
   revokedAt DateTime? @db.Timestamptz
   refreshLease DateTime? @db.Timestamptz
+  fixtureAccess FixtureAccess[]
+  @@unique([id, accountId], map: "Session_id_accountId_key")
   @@schema("marleva")
 }
 model Challenge {
@@ -93,5 +96,57 @@ model Audit {
 model Development {
   id Int @id
   name String @unique
+  @@schema("marleva")
+}
+
+model PrivateFixture {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String @db.Uuid
+  account Account @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  objectKey String @unique
+  sha256 String
+  mimeType String @default("text/plain")
+  bytes Int
+  state String @default("available")
+  createdAt DateTime @default(now()) @db.Timestamptz
+  deletedAt DateTime? @db.Timestamptz
+  deleteRequestedAt DateTime? @db.Timestamptz
+  version Int @default(1)
+  access FixtureAccess[]
+  deletions FixtureDeletion[]
+  @@unique([id, accountId], map: "PrivateFixture_id_accountId_key")
+  @@schema("marleva")
+}
+
+model FixtureAccess {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fixtureId String @db.Uuid
+  accountId String @db.Uuid
+  sessionId String @db.Uuid
+  tokenHash String @unique
+  createdAt DateTime @default(now()) @db.Timestamptz
+  expiresAt DateTime @db.Timestamptz
+  revokedAt DateTime? @db.Timestamptz
+  fixture PrivateFixture @relation(fields: [fixtureId, accountId], references: [id, accountId], onDelete: NoAction, onUpdate: NoAction)
+  session Session @relation(fields: [sessionId, accountId], references: [id, accountId], onDelete: NoAction, onUpdate: NoAction)
+  @@index([sessionId, createdAt])
+  @@schema("marleva")
+}
+
+model FixtureDeletion {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fixtureId String @unique @db.Uuid
+  accountId String @db.Uuid
+  idempotencyKey String
+  requestHash String
+  expectedVersion Int
+  state String @default("pending")
+  attempts Int @default(0)
+  dueAt DateTime @default(now()) @db.Timestamptz
+  leaseUntil DateTime? @db.Timestamptz
+  createdAt DateTime @default(now()) @db.Timestamptz
+  completedAt DateTime? @db.Timestamptz
+  fixture PrivateFixture @relation(fields: [fixtureId, accountId], references: [id, accountId], onDelete: NoAction, onUpdate: NoAction)
+  @@unique([accountId, idempotencyKey])
   @@schema("marleva")
 }

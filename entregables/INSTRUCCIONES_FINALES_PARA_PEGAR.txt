@@ -6,3 +6,5 @@ Marleva: las instrucciones detalladas canónicas están en entregables/fuentes_f
 5. Informar avances reales al menos cada 60 segundos durante ejecución. No confundir chat abierto, turno terminado y programación horaria.
 6. Releer finales, comprobar enlaces y diferencias, actualizar solo afectados, guardar commit local y entregar ubicación/SHA/acceso/subida real. Plantillas de 00 y prompt completo de 01; no FIN durante el trabajo ni M1 completa sin las pruebas exigidas.
 Este texto es entrada de configuración, no una copia paralela de las reglas detalladas.
+
+7. Aplicar 00 §13: verificar cambios locales al abrir/cerrar y por proceso; README vigente; instructivo por módulo con capturas reales y revisión local; documentación sencilla de backend/frontend; porcentajes con criterios y evidencia; commits claros; Docker, arquitectura, SOLID y validación local comprobables. Sin remoto: verificar commits, sin pull/push. Flyway/PDM/Sonar siguen en evaluación; un dueño por esquema y migraciones aplicadas inmutables.

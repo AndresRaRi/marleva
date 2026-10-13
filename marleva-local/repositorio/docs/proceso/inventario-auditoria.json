@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-13T21:18:34.378Z",
+  "date": "2026-10-13T22:10:28.425Z",
   "timezone": "America/Merida",
   "root": "/Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a",
   "chat": "MAR-CHAT-005",
@@ -14,44 +14,31 @@
   "folders": [
     "entregables",
     "entregables/fuentes_finales",
-    "marleva-local",
     "marleva-local/repositorio",
-    "marleva-local/repositorio/apps",
     "marleva-local/repositorio/apps/api",
     "marleva-local/repositorio/apps/api/prisma",
     "marleva-local/repositorio/apps/api/prisma/migrations",
     "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1",
     "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables",
     "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor",
+    "marleva-local/repositorio/apps/api/prisma/migrations/202610130002_private_fixtures",
     "marleva-local/repositorio/apps/api/src",
-    "marleva-local/repositorio/apps/api/src/modules",
-    "marleva-local/repositorio/apps/api/src/modules/m1",
-    "marleva-local/repositorio/apps/api/src/modules/m1/application",
     "marleva-local/repositorio/apps/api/src/modules/m1/application/ports",
     "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases",
     "marleva-local/repositorio/apps/api/src/modules/m1/domain",
-    "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure",
     "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters",
     "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/repositories",
-    "marleva-local/repositorio/apps/api/src/modules/m1/presentation",
     "marleva-local/repositorio/apps/api/src/modules/m1/presentation/controllers",
     "marleva-local/repositorio/apps/api/src/modules/m1/presentation/dtos",
-    "marleva-local/repositorio/apps/api/tests",
     "marleva-local/repositorio/apps/client",
     "marleva-local/repositorio/apps/client/android",
     "marleva-local/repositorio/apps/client/android/app",
-    "marleva-local/repositorio/apps/client/android/app/src",
     "marleva-local/repositorio/apps/client/android/app/src/debug",
-    "marleva-local/repositorio/apps/client/android/app/src/debug/res",
     "marleva-local/repositorio/apps/client/android/app/src/debug/res/raw",
     "marleva-local/repositorio/apps/client/android/app/src/debug/res/xml",
     "marleva-local/repositorio/apps/client/android/app/src/debugOptimized",
     "marleva-local/repositorio/apps/client/android/app/src/main",
-    "marleva-local/repositorio/apps/client/android/app/src/main/java",
-    "marleva-local/repositorio/apps/client/android/app/src/main/java/mx",
-    "marleva-local/repositorio/apps/client/android/app/src/main/java/mx/marleva",
     "marleva-local/repositorio/apps/client/android/app/src/main/java/mx/marleva/local",
-    "marleva-local/repositorio/apps/client/android/app/src/main/res",
     "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable",
     "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-hdpi",
     "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-mdpi",
@@ -64,69 +51,46 @@
     "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxhdpi",
     "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxxhdpi",
     "marleva-local/repositorio/apps/client/android/app/src/main/res/values",
-    "marleva-local/repositorio/apps/client/android/gradle",
     "marleva-local/repositorio/apps/client/android/gradle/wrapper",
     "marleva-local/repositorio/apps/client/app",
     "marleva-local/repositorio/apps/client/plugins",
     "marleva-local/repositorio/apps/client/src",
-    "marleva-local/repositorio/docs",
-    "marleva-local/repositorio/docs/apis",
     "marleva-local/repositorio/docs/apis/M1",
-    "marleva-local/repositorio/docs/diagramas",
-    "marleva-local/repositorio/docs/diagramas/secuencia",
+    "marleva-local/repositorio/docs/apis/M1/vendor",
     "marleva-local/repositorio/docs/diagramas/secuencia/M1",
     "marleva-local/repositorio/docs/evidence",
     "marleva-local/repositorio/docs/modelado-datos",
     "marleva-local/repositorio/docs/modelado-datos/dbml",
     "marleva-local/repositorio/docs/modelado-datos/ddl",
     "marleva-local/repositorio/docs/proceso",
-    "marleva-local/repositorio/infra",
+    "marleva-local/repositorio/docs/revision/M1",
+    "marleva-local/repositorio/docs/revision/M1/capturas",
     "marleva-local/repositorio/infra/local",
     "marleva-local/repositorio/infra/local/supabase",
-    "marleva-local/repositorio/infra/local/supabase/supabase",
-    "marleva-local/repositorio/infra/local/supabase/supabase/snippets",
     "marleva-local/repositorio/infra/local/supabase/templates",
-    "marleva-local/repositorio/packages",
     "marleva-local/repositorio/packages/config",
     "marleva-local/repositorio/packages/contracts",
     "marleva-local/repositorio/scripts",
     "marleva-local/repositorio/tests",
     "marleva-local/repositorio/tests/fixtures",
-    "marleva-local/repositorio/tests/integration",
-    "marleva-local/repositorio/tests/integration/backend",
     "marleva-local/repositorio/tests/integration/backend/M1",
-    "marleva-local/repositorio/tests/integration/frontend",
     "marleva-local/repositorio/tests/integration/frontend/M1",
-    "marleva-local/repositorio/tests/performance",
-    "marleva-local/repositorio/tests/performance/backend",
     "marleva-local/repositorio/tests/performance/backend/M1",
-    "marleva-local/repositorio/tests/performance/frontend",
     "marleva-local/repositorio/tests/performance/frontend/M1",
     "marleva-local/repositorio/tests/results",
     "marleva-local/repositorio/tests/results/before-reorganization",
-    "marleva-local/repositorio/tests/unit",
-    "marleva-local/repositorio/tests/unit/backend",
     "marleva-local/repositorio/tests/unit/backend/M1",
-    "marleva-local/repositorio/tests/unit/frontend",
     "marleva-local/repositorio/tests/unit/frontend/M1",
     "sources"
   ],
   "files": [
-    {
-      "path": ".DS_Store",
-      "bytes": 10244,
-      "sha256": "a1dec80ed12dd64ccc1acb1d4dbb3cbc92ba2843af788fb15d7813d3bb7c4cd2",
-      "modifiedAt": "2026-10-13T18:19:45.770Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
     {
       "path": ".gitignore",
       "bytes": 565,
       "sha256": "086ed1c201823169003a54cb320373700e9a462a3f0cb067ee004111ee8458c8",
       "modifiedAt": "2026-10-13T17:38:15.880Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "AGENTS.md",
@@ -134,31 +98,23 @@
       "sha256": "25478cd78f9d432f4b9a7dfbb2db6d70b366a745ad9e3ff7ef64c1bc982a69cd",
       "modifiedAt": "2026-10-13T20:28:44.460Z",
       "reading": "C",
-      "role": "sincronizado solo lectura"
-    },
-    {
-      "path": "entregables/.DS_Store",
-      "bytes": 8196,
-      "sha256": "741109811ceb89cb231b4d58259aedb8f8ced0f58f73af3e40763b4dcbb48b26",
-      "modifiedAt": "2026-10-13T18:18:34.105Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Referencia sincronizada de solo lectura"
     },
     {
       "path": "entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md",
-      "bytes": 22425,
-      "sha256": "ff3e644ea7ccd0a108ec11ffe59203710210f3a941aef6ff883294fd87631d5d",
-      "modifiedAt": "2026-10-13T18:10:24.308Z",
+      "bytes": 29439,
+      "sha256": "f6d3e2567d372a7e3beae0e9533fe9480144bfcd53e26a5a8d592f17b830c832",
+      "modifiedAt": "2026-10-13T22:02:35.239Z",
       "reading": "C",
-      "role": "fuente canónica editable"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md",
-      "bytes": 30067,
-      "sha256": "d0c2739937280c37eefb858f2f0d7f6a65017bf660f736ba2d7e4d1ff3a2f974",
-      "modifiedAt": "2026-10-13T21:16:20.869Z",
+      "bytes": 34394,
+      "sha256": "a820f6a6262f07a32aacc73072c4a6ec0db256c920f5dab5a9224fc31466ca4f",
+      "modifiedAt": "2026-10-13T22:08:39.725Z",
       "reading": "C",
-      "role": "fuente canónica editable"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "entregables/fuentes_finales/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md",
@@ -166,44 +122,23 @@
       "sha256": "7c3b2fd522c20a46c0bc5898240fa6097de57ad7ade5e59e9daaffee739bb656",
       "modifiedAt": "2026-10-13T18:09:05.124Z",
       "reading": "C",
-      "role": "fuente canónica editable"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "entregables/fuentes_finales/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md",
-      "bytes": 83964,
-      "sha256": "08f182ca019e9ebdda9078c67fa86bb7623bb833605ecbd5857b4f449a72ff4a",
-      "modifiedAt": "2026-10-13T18:09:05.133Z",
+      "bytes": 85667,
+      "sha256": "fc376894e087045216002c0b9235fb196f4940eda40d7c972669b251582fa330",
+      "modifiedAt": "2026-10-13T22:01:35.396Z",
       "reading": "C",
-      "role": "fuente canónica editable"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "entregables/INSTRUCCIONES_FINALES_PARA_PEGAR.txt",
-      "bytes": 1424,
-      "sha256": "92f0c270c879338750950cf91bcc9669f0f571a5a80914b5ba434ef3d50a5844",
-      "modifiedAt": "2026-10-13T18:07:14.675Z",
+      "bytes": 1887,
+      "sha256": "451f9bbb5c20b3da8c9c2d0b9b80d02822c7f887822db70389872904a9610fc8",
+      "modifiedAt": "2026-10-13T22:08:39.727Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/.DS_Store",
-      "bytes": 8196,
-      "sha256": "909dad4de31d1656cf0d80507fc0d400e902ffa71c2b1d8f922ae7231b2992dd",
-      "modifiedAt": "2026-10-13T18:18:34.104Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/.DS_Store",
-      "bytes": 6148,
-      "sha256": "3329b4b35005d45f50111f919c0460fe93303da51739ec7d07c515ac64578499",
-      "modifiedAt": "2026-10-13T20:26:10.095Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/.env",
-      "reading": "P",
-      "role": "privado; sin hash ni contenido"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/.env.example",
@@ -211,7 +146,7 @@
       "sha256": "d1b319115c685032d2a74b385563cb8ab4151d2671de7f3e5d912becf81f012a",
       "modifiedAt": "2026-10-13T00:08:36.148Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/.node-version",
@@ -219,7 +154,7 @@
       "sha256": "73fb1b615e2043a933be1c0895cde4358036acc28d785692509b822aa53c761f",
       "modifiedAt": "2026-10-13T00:05:31.875Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/.prettierignore",
@@ -227,7 +162,7 @@
       "sha256": "ada1e0a8721ce221831d178c0ac6ff6c6bc8eec511c80aaba13087e73614e55b",
       "modifiedAt": "2026-10-13T17:18:12.610Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/.prettierrc.json",
@@ -235,23 +170,15 @@
       "sha256": "532549ce31022e615c56c8859f0914446b83076b1c94096547e8b11d13bc5cef",
       "modifiedAt": "2026-10-13T17:18:12.607Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/AGENTS.md",
-      "bytes": 909,
-      "sha256": "e8e5557c5a08be7a21fb3f7c474c29dc1926bb6a714d9b58c256cf0b6c7fa311",
-      "modifiedAt": "2026-10-13T18:07:14.675Z",
+      "bytes": 1199,
+      "sha256": "1cdbced804fa4d28eb9ccf376dc96b007ff560a45a765cdb22f3178f71b024d8",
+      "modifiedAt": "2026-10-13T22:08:39.727Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/.DS_Store",
-      "bytes": 6148,
-      "sha256": "42f6c300aa84a36f2ab3ebfc70bf88ae87e8046fe7ec77af124ff71d1f437999",
-      "modifiedAt": "2026-10-13T18:20:03.587Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/bootstrap.mjs",
@@ -259,7 +186,7 @@
       "sha256": "fbb736a18e5c951728e3e063311eb39929025c7aef82139bf4c2ed17ad7aed43",
       "modifiedAt": "2026-10-13T00:53:05.266Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/package.json",
@@ -267,47 +194,7 @@
       "sha256": "3ff9e3f3bd6f90ecec6de3bd92732d81048344d4e9050dc8a854c2348b3ffb49",
       "modifiedAt": "2026-10-13T01:20:30.785Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1/migration.sql",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "modifiedAt": "2026-10-13T00:18:39.558Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables/migration.sql",
-      "bytes": 2946,
-      "sha256": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c",
-      "modifiedAt": "2026-10-13T00:21:10.446Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql",
-      "bytes": 259,
-      "sha256": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b",
-      "modifiedAt": "2026-10-13T20:33:07.085Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/api/prisma/migrations/migration_lock.toml",
-      "bytes": 24,
-      "sha256": "1db17a8d051aa136110736752c5e1f8b7ed92b6ea8e803112fbbe2497047c210",
-      "modifiedAt": "2026-10-13T00:09:16.546Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/api/prisma/schema.prisma",
-      "bytes": 2872,
-      "sha256": "c10f62907943e63818e7becda55c284ceca047f6e18f5345a7500e6a4c1ea429",
-      "modifiedAt": "2026-10-13T20:33:07.108Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/prisma.config.ts",
@@ -315,7 +202,55 @@
       "sha256": "0e939eb6f3e67a8da118d89c561ce7dd2898a0037bf67740ca110d27d0fa61f2",
       "modifiedAt": "2026-10-13T00:09:16.544Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1/migration.sql",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "modifiedAt": "2026-10-13T00:18:39.558Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables/migration.sql",
+      "bytes": 2946,
+      "sha256": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c",
+      "modifiedAt": "2026-10-13T00:21:10.446Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql",
+      "bytes": 259,
+      "sha256": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b",
+      "modifiedAt": "2026-10-13T20:33:07.085Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql",
+      "bytes": 4428,
+      "sha256": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0",
+      "modifiedAt": "2026-10-13T21:45:11.240Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/migration_lock.toml",
+      "bytes": 24,
+      "sha256": "1db17a8d051aa136110736752c5e1f8b7ed92b6ea8e803112fbbe2497047c210",
+      "modifiedAt": "2026-10-13T00:09:16.546Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/schema.prisma",
+      "bytes": 4990,
+      "sha256": "98c5b23922af6de3433d724e38d68887af2046900771ba28dbb7fc714181ffff",
+      "modifiedAt": "2026-10-13T22:10:06.319Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/seed.mjs",
@@ -323,7 +258,7 @@
       "sha256": "f6eaf78848992edadfa9898f0598f019bf67d933648f73497720f030d553c79a",
       "modifiedAt": "2026-10-13T00:14:00.512Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/account.service.ts",
@@ -331,7 +266,7 @@
       "sha256": "8605ecbca01921898c395662cdc5de22984efbc2d6cccc071965903d276426e6",
       "modifiedAt": "2026-10-13T20:34:00.414Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/config.ts",
@@ -339,7 +274,7 @@
       "sha256": "5661e53e92be2e44103ede981e28704d02379957cb43de46309d12b98ae3208a",
       "modifiedAt": "2026-10-13T00:59:40.361Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/controller.ts",
@@ -347,7 +282,7 @@
       "sha256": "5dbad4e9791514a6c7d77320dc5059fa47de96fbbd1580f079a64841e40ff7b0",
       "modifiedAt": "2026-10-13T20:33:18.138Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/database.ts",
@@ -355,7 +290,7 @@
       "sha256": "52df36ea3ca0b7b2bcbe651615cbdf002d12c12c7a38d058a159926bae884390",
       "modifiedAt": "2026-10-13T00:10:33.696Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/identity.ts",
@@ -363,15 +298,31 @@
       "sha256": "e95a9301e3f50dee176b765b046f306f3759c90e379cb3c71c862df045d8f14f",
       "modifiedAt": "2026-10-13T00:23:12.820Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/main.ts",
-      "bytes": 3321,
-      "sha256": "fb8662bc0b702c9c0ef5a6fab31f36352a4b8e6b0f3bf3bb77801e46bc8c073c",
-      "modifiedAt": "2026-10-13T20:33:18.121Z",
+      "bytes": 4312,
+      "sha256": "485a9a46c2e6cd71ad742f102ad2ea43531bd601a6170e0046a377ebc5edf8c0",
+      "modifiedAt": "2026-10-13T21:50:09.817Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/file-repository.ts",
+      "bytes": 1062,
+      "sha256": "d1fb4e925f70aa4616429494376d0c461ef31924867f00e164f07e2b32c4b67b",
+      "modifiedAt": "2026-10-13T21:50:09.719Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/file-storage.ts",
+      "bytes": 178,
+      "sha256": "2de8bf919e56a4e0efd2aa020956352098099ffe654ea9ee0b8d7732c882e062",
+      "modifiedAt": "2026-10-13T21:45:55.205Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/notice-repository.ts",
@@ -379,7 +330,7 @@
       "sha256": "acebd585dfe321afb898a96eeae940af651e1018c133d9b24712ac5a644d5f8d",
       "modifiedAt": "2026-10-13T20:33:18.048Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/outbox-repository.ts",
@@ -387,7 +338,15 @@
       "sha256": "68b013ec070925c3d58eb476c4f0f78420515958d6224491aea2e2766f1b312f",
       "modifiedAt": "2026-10-13T20:44:50.784Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/delete-private-file.ts",
+      "bytes": 495,
+      "sha256": "b73da17d48c89283a96864ed925a605b7a6391d5a829eede43cdb58a872cd69d",
+      "modifiedAt": "2026-10-13T21:50:09.730Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/deliver-outbox.ts",
@@ -395,7 +354,15 @@
       "sha256": "0dd7101c96c437832c815f8adb047a809a052cec439a95c2f9b4555e14644541",
       "modifiedAt": "2026-10-13T20:44:50.796Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/issue-file-access.ts",
+      "bytes": 562,
+      "sha256": "9dee92160a230a8cf3e25f1a795d34006c7eb7bc2c908b98a328cdaab65c87fa",
+      "modifiedAt": "2026-10-13T21:45:55.206Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/list-notices.ts",
@@ -403,7 +370,39 @@
       "sha256": "ffc77bcc223860eeb85bf42cc3e08856e4d765e0e575904787c85fe23d269f6d",
       "modifiedAt": "2026-10-13T20:33:18.063Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/process-file-deletions.ts",
+      "bytes": 978,
+      "sha256": "6f8cef3c0797a62a5e4009e76a89483c35878589afa36eee3299962098f465ec",
+      "modifiedAt": "2026-10-13T21:50:09.741Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/read-private-file.ts",
+      "bytes": 913,
+      "sha256": "8c1189af9979cec2cc0ea39fed9c944df62ecdfdd993a31a7dae80b799df9c4b",
+      "modifiedAt": "2026-10-13T21:50:09.751Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/domain/file-fault.ts",
+      "bytes": 311,
+      "sha256": "a54fc2f87ddac3b49e1366fc13b14b3947a78ac16e2d55ae0b730d29d6628dda",
+      "modifiedAt": "2026-10-13T21:50:09.698Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/domain/file-policy.ts",
+      "bytes": 760,
+      "sha256": "f5bd48b3156e80cbd3adeffa97fbfeebf770492b3696ec58168b58fbce6dbb66",
+      "modifiedAt": "2026-10-13T21:50:09.710Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/domain/notice-cursor.ts",
@@ -411,7 +410,7 @@
       "sha256": "3f5e3983e36659b141de61b44b43cf893e5bd33ab8f3c4dab5ebd92a580ba4d1",
       "modifiedAt": "2026-10-13T20:35:03.312Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/domain/outbox-policy.ts",
@@ -419,7 +418,15 @@
       "sha256": "7ad7a4619d506753eba166291f9bfdf0a7b876658859e5c3a538050e5634defd",
       "modifiedAt": "2026-10-13T20:44:50.341Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters/local-private-storage.ts",
+      "bytes": 3287,
+      "sha256": "ece49cae013f1c3c1d6e808be106ab7aa1bccc025de97f073bddf4004177178d",
+      "modifiedAt": "2026-10-13T21:53:31.144Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters/smtp-outbox-mailer.ts",
@@ -427,7 +434,15 @@
       "sha256": "122be0190157b8fbfefb6f03772d6d0a71c5153fc8791f91caca988d27cf1570",
       "modifiedAt": "2026-10-13T20:44:50.826Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/repositories/prisma-file-repository.ts",
+      "bytes": 7644,
+      "sha256": "fb250c0cd58a636c36b6145e5a34cd9f199c4912acc79568bd57d6160f2d40c7",
+      "modifiedAt": "2026-10-13T21:53:31.122Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/repositories/prisma-notice-repository.ts",
@@ -435,7 +450,7 @@
       "sha256": "3f11baf9babe1d7dd6cb300db730c21c7c32885012551df25a3031b09275ad84",
       "modifiedAt": "2026-10-13T20:33:18.084Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/repositories/prisma-outbox-repository.ts",
@@ -443,7 +458,7 @@
       "sha256": "6e1d03972ed4aed224a87e0c50260968de12ad1c8cd7943d20c489d02231f27a",
       "modifiedAt": "2026-10-13T20:44:50.844Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/controllers/notifications.controller.ts",
@@ -451,7 +466,23 @@
       "sha256": "42d57101409d5f18bd7286c2998ffd13f96a3efd2cd5ff8b03b4d12b176cae32",
       "modifiedAt": "2026-10-13T20:33:18.094Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/controllers/private-files.controller.ts",
+      "bytes": 3672,
+      "sha256": "40a950bf4b26d2ac321811204ed8bf8ceb02d40e3198702c7372d1a91fa78e50",
+      "modifiedAt": "2026-10-13T21:50:09.808Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/dtos/file-request.ts",
+      "bytes": 824,
+      "sha256": "0ffeaa11df8b46de19ee51f40019a70343fc3ffae3745b2e96e7873cbe07502a",
+      "modifiedAt": "2026-10-13T21:50:09.798Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/dtos/notice-query.ts",
@@ -459,7 +490,7 @@
       "sha256": "74672ecbc61c3e3a73cd675347051c55cf039c5aac2d1d457c6da9541374feba",
       "modifiedAt": "2026-10-13T20:33:18.101Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/payment-simulator.ts",
@@ -467,7 +498,7 @@
       "sha256": "b169ca947b96d3d95aabd84a22e828ad437fae4076d2427de0cb9366d5c49e68",
       "modifiedAt": "2026-10-13T00:33:23.228Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/security.ts",
@@ -475,15 +506,15 @@
       "sha256": "380efec90ed20afd835ae35f195c3aeb3c7a80a7e2418051edf6a6ba93e7ede3",
       "modifiedAt": "2026-10-13T00:10:33.692Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/src/worker.ts",
-      "bytes": 1028,
-      "sha256": "4979bfe80ff0c9527bc19284e54ee76049fe94000d007d93d33ab40b4f8c3568",
-      "modifiedAt": "2026-10-13T20:44:50.860Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 1557,
+      "sha256": "f9298c16252bab1492c32072589cfc7ef0a5f6d03a800a90a812904e9d15f3e2",
+      "modifiedAt": "2026-10-13T21:57:01.939Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/api/tsconfig.json",
@@ -491,23 +522,7 @@
       "sha256": "8e8129be5dfb50278e3ab14ea1435f93c4e038485611bddc79eebf08c4d71c49",
       "modifiedAt": "2026-10-13T00:05:31.875Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/.DS_Store",
-      "bytes": 6148,
-      "sha256": "52d9d1ee85fc65fe75c82aa3becf07ed9f3c3a2c3f1c1af00c2e27378cca7095",
-      "modifiedAt": "2026-10-13T18:19:58.010Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/.DS_Store",
-      "bytes": 6148,
-      "sha256": "2e4fb8f22f4651f53b9bfd19f2f85920075178633434ae72961514167cc9bd25",
-      "modifiedAt": "2026-10-13T18:20:03.586Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/.gitignore",
@@ -515,7 +530,7 @@
       "sha256": "ed2e83b6a71e3b048dc2681be0bdf534a5ec81d4eded17012e78a6b252422465",
       "modifiedAt": "2026-10-13T01:04:38.268Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/build.gradle",
@@ -523,12 +538,7 @@
       "sha256": "8c5d0ae6fe26ccce99932839e9ed53d886a04c727b9acb7fba4c49a79e1691b7",
       "modifiedAt": "2026-10-13T01:04:38.406Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/app/debug.keystore",
-      "reading": "P",
-      "role": "privado; sin hash ni contenido"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/proguard-rules.pro",
@@ -536,7 +546,7 @@
       "sha256": "8bd4d7b69a1d78e8322b459b5e8d48234adce7481df04da34c0140d52ffb367a",
       "modifiedAt": "2026-10-13T01:04:38.262Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/debug/AndroidManifest.xml",
@@ -544,7 +554,7 @@
       "sha256": "c5ae0c386fa413fe4f95d626317ce215320e287262a244c2b070bc214b1bfe01",
       "modifiedAt": "2026-10-13T01:04:38.381Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/debug/res/raw/marleva_local_ca.crt",
@@ -552,7 +562,7 @@
       "sha256": "03c0132054c65669739cda004e25188e9eeec6e088c271e8867d7eb94ad3f30d",
       "modifiedAt": "2026-10-13T01:04:38.381Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/debug/res/xml/network_security_config.xml",
@@ -560,7 +570,7 @@
       "sha256": "0b845ebae5441868d54b21049b2f7f9c34a768d822756d381de4d0c61b478f9a",
       "modifiedAt": "2026-10-13T01:04:38.381Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/debugOptimized/AndroidManifest.xml",
@@ -568,7 +578,7 @@
       "sha256": "fb1795032c764d975376e1612ab7022058eca2268a45efbe731a47a5d3ac0f60",
       "modifiedAt": "2026-10-13T01:04:38.262Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/AndroidManifest.xml",
@@ -576,7 +586,7 @@
       "sha256": "47d05511cb41a8c079ceb63eb87d851bcb7f4dc9028b624ae66c3834d568447e",
       "modifiedAt": "2026-10-13T01:04:38.401Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/java/mx/marleva/local/MainActivity.kt",
@@ -584,7 +594,7 @@
       "sha256": "3238f6dcd551711cab523b6620d4af0bada4cd8727868aeda9c111b5e7e899c5",
       "modifiedAt": "2026-10-13T01:04:38.380Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/java/mx/marleva/local/MainApplication.kt",
@@ -592,23 +602,7 @@
       "sha256": "f9075bc7d25db083e737ecd9b96f7c7ea8eeb4d2b524eed0cfeb182ea1cbc46c",
       "modifiedAt": "2026-10-13T01:04:38.380Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable/ic_launcher_background.xml",
-      "bytes": 245,
-      "sha256": "51fca95679d075ddbe2b9fe7ad2efb5ef545c5770a9ad6cafe8bf610c18c67be",
-      "modifiedAt": "2026-10-13T01:04:38.264Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable/rn_edit_text_material.xml",
-      "bytes": 1917,
-      "sha256": "738e3aaad53180caba1419a6d5db8465a0742662fe59a4bbaf05f1061cbc3390",
-      "modifiedAt": "2026-10-13T01:04:38.264Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-hdpi/splashscreen_logo.png",
@@ -616,7 +610,7 @@
       "sha256": "721c895579cb08ec4c9a0fe7dadafe9a97c33ef758d3578ad5e8b540de59f974",
       "modifiedAt": "2026-10-13T01:04:38.266Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-mdpi/splashscreen_logo.png",
@@ -624,7 +618,7 @@
       "sha256": "f84b9b17a4a1c7d7dd840cd272c07a6c3fd66d5a9826b64bb53facb6f176bc24",
       "modifiedAt": "2026-10-13T01:04:38.266Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-xhdpi/splashscreen_logo.png",
@@ -632,7 +626,7 @@
       "sha256": "e1c5250e339add5ed7849cb0859d052edb9781abb91db049e68ae3a4059247d7",
       "modifiedAt": "2026-10-13T01:04:38.265Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-xxhdpi/splashscreen_logo.png",
@@ -640,7 +634,7 @@
       "sha256": "23d97ccb41a821ee345b2c5bb0c9bdab730a751a9227925acbf0af021dc38a9b",
       "modifiedAt": "2026-10-13T01:04:38.266Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable-xxxhdpi/splashscreen_logo.png",
@@ -648,7 +642,23 @@
       "sha256": "be9fac5c4cda48c41dce592288c486524bba3e4ca7fa00c0a04a46928154b5bf",
       "modifiedAt": "2026-10-13T01:04:38.267Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "bytes": 245,
+      "sha256": "51fca95679d075ddbe2b9fe7ad2efb5ef545c5770a9ad6cafe8bf610c18c67be",
+      "modifiedAt": "2026-10-13T01:04:38.264Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "bytes": 1917,
+      "sha256": "738e3aaad53180caba1419a6d5db8465a0742662fe59a4bbaf05f1061cbc3390",
+      "modifiedAt": "2026-10-13T01:04:38.264Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
@@ -656,7 +666,7 @@
       "sha256": "21304a0c9b00da6a72cfa31c7229c9528fc17b6e5eb4e68a969bce08c01a2fee",
       "modifiedAt": "2026-10-13T01:04:38.263Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
@@ -664,7 +674,7 @@
       "sha256": "ded7aabf6a56b694e486e096efd89e2f0c9067d292b634663898e352c9491f10",
       "modifiedAt": "2026-10-13T01:04:38.263Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
@@ -672,7 +682,7 @@
       "sha256": "520d05f978a15ba0ccf23006a1a5691a054a02478c70cafc5ebafae76e600f0d",
       "modifiedAt": "2026-10-13T01:04:38.263Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
@@ -680,7 +690,7 @@
       "sha256": "eef20f25fb1477d8c9df15757e764811cc503fb0777f18d0f7fb2d19178b5bf6",
       "modifiedAt": "2026-10-13T01:04:38.263Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
@@ -688,7 +698,7 @@
       "sha256": "2846e1a703e519791fe22f41bcb243b82f908d12e5ebcb43f020ddf9982780b0",
       "modifiedAt": "2026-10-13T01:04:38.267Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
@@ -696,7 +706,7 @@
       "sha256": "e77c5045bfdb6f4bbe955b3a793bfed3baa369ce4811ae2a9103d5480637cfff",
       "modifiedAt": "2026-10-13T01:04:38.267Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
@@ -704,7 +714,7 @@
       "sha256": "363a569beb72e8b007bf046454612148d4c9f782b9391352059fe83179f18e30",
       "modifiedAt": "2026-10-13T01:04:38.264Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
@@ -712,7 +722,7 @@
       "sha256": "eb3a34b13632e0cb3b1c0f4273035866cbe81b1b17b7178ce29d19c78d394a5e",
       "modifiedAt": "2026-10-13T01:04:38.264Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
@@ -720,7 +730,7 @@
       "sha256": "5bacd97a1b41e4413c6092cdbd83f65112a9124e823cfaa3a219c65e2761647b",
       "modifiedAt": "2026-10-13T01:04:38.264Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
@@ -728,7 +738,7 @@
       "sha256": "9ff27328b6916b7f75b99ef36153f154bb4724946e5654635cba2e257352c69f",
       "modifiedAt": "2026-10-13T01:04:38.264Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/values/colors.xml",
@@ -736,7 +746,7 @@
       "sha256": "37277cd2b0ea0704e1a5d0f0db8aab53de3dfbbde12b3885f794f7c17fa22bf1",
       "modifiedAt": "2026-10-13T01:04:38.405Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/values/strings.xml",
@@ -744,7 +754,7 @@
       "sha256": "646241240eb938dca13f77f03f32724f44db4c60f4ee8106adb701456d4827ce",
       "modifiedAt": "2026-10-13T01:04:38.403Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/app/src/main/res/values/styles.xml",
@@ -752,7 +762,7 @@
       "sha256": "e40414258372e05336fde31cd6a59ba286f0735dcc548fec42180b59af12b0f0",
       "modifiedAt": "2026-10-13T01:04:38.405Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/build.gradle",
@@ -760,23 +770,7 @@
       "sha256": "bdb916d3fe7085c9e9f3bb45bd5eacb97f5d2c5a2b2af965642f7d904739ca68",
       "modifiedAt": "2026-10-13T01:04:38.406Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/gradle/wrapper/gradle-wrapper.jar",
-      "bytes": 46175,
-      "sha256": "b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13",
-      "modifiedAt": "2026-10-13T01:04:38.268Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/android/gradle/wrapper/gradle-wrapper.properties",
-      "bytes": 340,
-      "sha256": "4683eb5ccb01f5e1f8a7db7780e7ac8ea193810f80bbfb2c52bc1a29f29a518e",
-      "modifiedAt": "2026-10-13T01:05:30.261Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/gradle.properties",
@@ -784,7 +778,23 @@
       "sha256": "d02b52da10bf3abb24279fd102df47694b8130a6b7fe6110cc47a9476ac8673c",
       "modifiedAt": "2026-10-13T01:04:38.404Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/android/gradle/wrapper/gradle-wrapper.jar",
+      "bytes": 46175,
+      "sha256": "b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13",
+      "modifiedAt": "2026-10-13T01:04:38.268Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/android/gradle/wrapper/gradle-wrapper.properties",
+      "bytes": 340,
+      "sha256": "4683eb5ccb01f5e1f8a7db7780e7ac8ea193810f80bbfb2c52bc1a29f29a518e",
+      "modifiedAt": "2026-10-13T01:05:30.261Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/gradlew",
@@ -792,7 +802,7 @@
       "sha256": "fb68debc1b1acf8ec55dc0d5e5495e1dedd0bd6b61f304bee61613eeb2bd9b92",
       "modifiedAt": "2026-10-13T01:04:38.268Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/gradlew.bat",
@@ -800,7 +810,7 @@
       "sha256": "982f1b2979dd2d13505c11e92192ab43eef338242ca61587f86f8d7fbc86f67b",
       "modifiedAt": "2026-10-13T01:04:38.269Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/android/settings.gradle",
@@ -808,23 +818,7 @@
       "sha256": "5378cb8b405ae4b213602684dbac75146698b533fe5979812e74c0b798720664",
       "modifiedAt": "2026-10-13T01:04:38.406Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/app/_layout.tsx",
-      "bytes": 122,
-      "sha256": "a2d42b7e40087caf09d715820495a34df1f94de63e2cb6fdc6d70987c24d817c",
-      "modifiedAt": "2026-10-13T00:16:40.722Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/apps/client/app/index.tsx",
-      "bytes": 8218,
-      "sha256": "29a82daa9b8e55135f8832e5029d95af4b1ec9ad6df796cf9f24f37441c87e8a",
-      "modifiedAt": "2026-10-13T00:27:07.678Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/app.json",
@@ -832,7 +826,23 @@
       "sha256": "132c228319282a1a536eba33e71d564fafdd688bb10232b704066eb9ce8b1fc2",
       "modifiedAt": "2026-10-13T00:25:19.362Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/app/_layout.tsx",
+      "bytes": 122,
+      "sha256": "a2d42b7e40087caf09d715820495a34df1f94de63e2cb6fdc6d70987c24d817c",
+      "modifiedAt": "2026-10-13T00:16:40.722Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/client/app/index.tsx",
+      "bytes": 8218,
+      "sha256": "29a82daa9b8e55135f8832e5029d95af4b1ec9ad6df796cf9f24f37441c87e8a",
+      "modifiedAt": "2026-10-13T00:27:07.678Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/package.json",
@@ -840,7 +850,7 @@
       "sha256": "dfeb80ce92316f1f8a0f58858641e60290b49c519477ec4e19e24fa04ba5bc03",
       "modifiedAt": "2026-10-13T00:25:19.362Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/plugins/local-debug-tls.cjs",
@@ -848,7 +858,7 @@
       "sha256": "2c9c6ec6eeb25a1846a4f00af939bc1a02555078a8166e4194c9f7d86eb1d511",
       "modifiedAt": "2026-10-13T01:05:30.261Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/src/api.ts",
@@ -856,7 +866,7 @@
       "sha256": "6cba0fac7e35c0cd8bab4141017dbd1dce6e0265d06f065f2a785f6fd7301119",
       "modifiedAt": "2026-10-13T00:16:40.718Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/apps/client/tsconfig.json",
@@ -864,47 +874,23 @@
       "sha256": "45e313c2b3bae82c11565cb8ef9cb591d1b6402186d62db3d93370dbccd665d8",
       "modifiedAt": "2026-10-13T01:03:13.955Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/docs/.DS_Store",
-      "bytes": 6148,
-      "sha256": "738357d8a9e9fc29a90153d1b25b239dd3bf81527a05e9bf3b5ae0c56a83137b",
-      "modifiedAt": "2026-10-13T20:27:13.886Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/docs/apis/.DS_Store",
-      "bytes": 6148,
-      "sha256": "ba689a7fa7b54542b76504aeb2254e0054f3b01f7a14d538383e2804d1339d36",
-      "modifiedAt": "2026-10-13T18:20:20.030Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/docs/apis/M1/.DS_Store",
-      "bytes": 8196,
-      "sha256": "6f453fe28cf77600d53e4078005d6ca32c8bed7f5bc3d0c45686264ed299c9c3",
-      "modifiedAt": "2026-10-13T18:20:25.037Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/CONTRATO_B09_ARCHIVOS_PRIVADOS.md",
-      "bytes": 4268,
-      "sha256": "1e212e2fd60183d48500970f35e07bd8aa2bbf34cfedb87956e5820850872fab",
-      "modifiedAt": "2026-10-13T17:07:14.949Z",
+      "bytes": 5502,
+      "sha256": "8ec955c98723f346c4178846908d62c04e2d43adada126d3952a9816c5aeaa26",
+      "modifiedAt": "2026-10-13T21:41:05.745Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/openapi-objetivo-archivos.yaml",
-      "bytes": 17961,
-      "sha256": "8cbaadc6a33e3e19cd9bbcb1b8035af0f6750430d4ebbc6e821a0af795158455",
-      "modifiedAt": "2026-10-13T17:12:15.684Z",
+      "bytes": 18087,
+      "sha256": "fb26a04db3533f7ee4f1f250d7aaab7616580ab6bfff3338128f2bb6c60b2ade",
+      "modifiedAt": "2026-10-13T21:52:41.349Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/openapi-objetivo-recuperacion.yaml",
@@ -912,63 +898,79 @@
       "sha256": "baa1461babc94a044acfda5c2cca1d66ad2e8e8195804b262272ebb79ab9529c",
       "modifiedAt": "2026-10-13T15:33:16.056Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/openapi.yaml",
-      "bytes": 93726,
-      "sha256": "59f742fd7d038755ebe5c1a89d4cd64ab3bd43ff9b85a1e15b9e85c71f18163c",
-      "modifiedAt": "2026-10-13T21:16:20.871Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 94054,
+      "sha256": "2c1fba3e807886ed1146dd1dce6f9fcda6b48cd4ab6719399274631ce525f8d8",
+      "modifiedAt": "2026-10-13T21:41:05.812Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/README.md",
-      "bytes": 1523,
-      "sha256": "c0deadda196c5cf4a105e38d7687890b47884ce1aaa0cab94c00ed000ae592a2",
-      "modifiedAt": "2026-10-13T20:32:16.629Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 1964,
+      "sha256": "2267705c1918b20a6c99269573858eef7c98298dac44adc9d2d8cee44c3ef7e1",
+      "modifiedAt": "2026-10-13T21:59:55.288Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/swagger-objetivo-archivos.html",
-      "bytes": 12994,
-      "sha256": "e9af83ceafdc0ca5696db8668d0339013ed4ce7d66f9e713f028f187ccd2812d",
-      "modifiedAt": "2026-10-13T20:32:18.964Z",
+      "bytes": 13139,
+      "sha256": "fe8788830b8352141b32610fa6ed758bbb277ee468a608c54af1fa4621b5a0d8",
+      "modifiedAt": "2026-10-13T21:58:56.505Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/swagger-objetivo-recuperacion.html",
       "bytes": 37413,
       "sha256": "12d22b337f7792acbf52db167817166eb64649a80d1531df23f4f1c513d7449f",
-      "modifiedAt": "2026-10-13T20:32:18.916Z",
+      "modifiedAt": "2026-10-13T21:58:56.437Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/apis/M1/swagger.html",
-      "bytes": 89661,
-      "sha256": "5e9211d2d4aefcd459c24744024c8af62e31b5116ed84f4c018edab766ed8918",
-      "modifiedAt": "2026-10-13T21:16:21.756Z",
+      "bytes": 106470,
+      "sha256": "620d1c80ad21d730e172af069371e826b11906da2892cf87e11ffa40b5d3ea76",
+      "modifiedAt": "2026-10-13T21:58:57.228Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
-      "path": "marleva-local/repositorio/docs/diagramas/.DS_Store",
-      "bytes": 6148,
-      "sha256": "e5c46f6e41dfc7e1dfc3f656e0b84abc8bb1da2069d9bf9a4e97233903714308",
-      "modifiedAt": "2026-10-13T20:26:26.290Z",
+      "path": "marleva-local/repositorio/docs/apis/M1/vendor/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "modifiedAt": "2026-10-13T21:58:57.227Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
-      "path": "marleva-local/repositorio/docs/diagramas/secuencia/.DS_Store",
-      "bytes": 6148,
-      "sha256": "cd01b9db0be654fdd81212882cf24dd73c4c45215a98a22351ffc756fb2b22a6",
-      "modifiedAt": "2026-10-13T18:18:44.790Z",
+      "path": "marleva-local/repositorio/docs/apis/M1/vendor/swagger-ui-bundle.js",
+      "bytes": 1587262,
+      "sha256": "6b3bfcaff3fc82c0e6992ca4b370c4f22970dec35fff60d229302b3ee7688715",
+      "modifiedAt": "2026-10-13T21:58:57.224Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/apis/M1/vendor/swagger-ui-standalone-preset.js",
+      "bytes": 267767,
+      "sha256": "5243d492e14505e0cab87ac8b0195d0e615943e651743b2b698450a46eb470be",
+      "modifiedAt": "2026-10-13T21:58:57.226Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/apis/M1/vendor/swagger-ui.css",
+      "bytes": 186154,
+      "sha256": "1ac324f7dcd27e4b9386b4bd6421271ec147e922a22c05ba24b11515e9aa6321",
+      "modifiedAt": "2026-10-13T21:58:57.221Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-001.mmd",
@@ -976,7 +978,7 @@
       "sha256": "e5de24a524c9bb6dda4f7f22982b584746f390f6b9276387219518b8b442cfec",
       "modifiedAt": "2026-10-13T01:27:32.643Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-002.mmd",
@@ -984,7 +986,7 @@
       "sha256": "1ecb9ed328f5fac7bdd27ace9cf906c7770135632ec30e2b73b4ff22bce19711",
       "modifiedAt": "2026-10-13T01:17:37.516Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-003.mmd",
@@ -992,7 +994,7 @@
       "sha256": "70c9074490c6505b0ee42a56a773320391219729a7ad9eab2e344e5e056f5595",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-004.mmd",
@@ -1000,7 +1002,7 @@
       "sha256": "08d978a10e1196c3296063a2b97c74def96ce51cf6e68f0f1bca5d33a80d25e0",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-005.mmd",
@@ -1008,7 +1010,7 @@
       "sha256": "ee425e88b017a6b120eab1335669afc23ee6f8690aece613cba18ff808a98130",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-006.mmd",
@@ -1016,7 +1018,7 @@
       "sha256": "f5561276c55d4d2627802a153cb0e8e25cdc2fdb66f18dc4e54a979d47b1b199",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-007.mmd",
@@ -1024,15 +1026,15 @@
       "sha256": "af999d25a8cc9ee0f9dd60cba88e7aa9282ae1fc925193ea7de08db628015e17",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-008.mmd",
-      "bytes": 1985,
-      "sha256": "f7eab4f226da2211b0f7b85b097ca2e1cf85199261b264addca959b0977012fa",
-      "modifiedAt": "2026-10-13T20:43:31.030Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 1991,
+      "sha256": "e65e169a019e71fe691ec09b4e4fe2a7df92c527b25a26d61317ef2b6e9442d5",
+      "modifiedAt": "2026-10-13T21:25:26.071Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-009.mmd",
@@ -1040,7 +1042,7 @@
       "sha256": "8c1cac2ea9136a33177be0aa0dc0131a083898cebd12f589c35e16cd28b09cb7",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-010.mmd",
@@ -1048,15 +1050,15 @@
       "sha256": "fa84b344bb8e6fbe32a53bb7cd91cbc518feb53e9b11828a886690f089f081d6",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-011.mmd",
-      "bytes": 1582,
-      "sha256": "96f5014cd91221fe608b95b16b69cf1bc5651ae9e0657d1f328cfaf0e15f46d2",
-      "modifiedAt": "2026-10-13T16:08:16.398Z",
+      "bytes": 1772,
+      "sha256": "2a09cd57e86bc42a91fc4316bdcc78f69bde371a84069799317ba92676407ee2",
+      "modifiedAt": "2026-10-13T21:59:55.289Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-012.mmd",
@@ -1064,7 +1066,7 @@
       "sha256": "25db79d8d5cf77856c638893fd30668b0617a6ef89837b8c4243006f90f5ae98",
       "modifiedAt": "2026-10-13T01:17:37.517Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-013.mmd",
@@ -1072,7 +1074,7 @@
       "sha256": "d34d0fef0940cc80894f7617dd23c6930db8fd295d10bff7b7d6d48b1c09aa2e",
       "modifiedAt": "2026-10-13T17:33:33.776Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/MAR-M1-SEQ-014.mmd",
@@ -1080,7 +1082,7 @@
       "sha256": "b524b95763008499944cb143fafed1e156004106129fe98fc0c2a46cb28d5ed0",
       "modifiedAt": "2026-10-13T15:33:15.828Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M1/README.md",
@@ -1088,7 +1090,7 @@
       "sha256": "44c7dd12826260a50c12b2b6ce43fd34de79ce4d837b159c5437db667cec6a1c",
       "modifiedAt": "2026-10-13T16:47:26.802Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/evidence/expo-bundle.json",
@@ -1096,7 +1098,7 @@
       "sha256": "3282270040e05a621b0f8ee6ae3655f58ea441b185c29f8b9be9000f77aa613b",
       "modifiedAt": "2026-10-13T00:06:43.761Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/evidence/expo-commit.json",
@@ -1104,7 +1106,7 @@
       "sha256": "4267225d9e4c51a9635df5d710174f724f2805b4fdd227a8c464cfa8dc0c3652",
       "modifiedAt": "2026-10-13T00:08:00.687Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/evidence/gradle-9.3.1.sha256",
@@ -1112,7 +1114,7 @@
       "sha256": "8f1011df390de48ba20583d6d8a4154e220da10513680e1f815c169ee8c176c2",
       "modifiedAt": "2026-10-13T00:28:22.791Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/evidence/package-metadata.json",
@@ -1120,76 +1122,71 @@
       "sha256": "c79609828aaf182d89089d8432fa1e9bf5209fc2f8144e151a182252dd41e901",
       "modifiedAt": "2026-10-13T00:04:00.128Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/docs/modelado-datos/.DS_Store",
-      "bytes": 8196,
-      "sha256": "2c71803cad38c99e45707e554d15273c1ff5128fa7c9896d75f4f39ebd76bb95",
-      "modifiedAt": "2026-10-13T15:39:44.729Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/modelado-datos/dbml/MAR-M1-DATA-001.dbml",
-      "bytes": 3805,
-      "sha256": "8edba75aec1a24ed12ad79695ffbe3aa5b5f22e68716e779475188be3690ac72",
-      "modifiedAt": "2026-10-13T21:02:44.911Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 6359,
+      "sha256": "c90c9f007a522d2c15a8f4db71b0f6ee6da4361857b9bc16b2bac66e76b3edab",
+      "modifiedAt": "2026-10-13T21:52:41.348Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/modelado-datos/dbml/MAR-M1-DATA-002.dbml",
-      "bytes": 8566,
-      "sha256": "683cabe3942db10f68ff03c58982c783e2c1f93ab726a7b0d95572e9ac6406ee",
-      "modifiedAt": "2026-10-13T20:32:16.629Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 8743,
+      "sha256": "d67e1da0c7c9a4169921bd80cb6f6bb689230a9b1a36207df5a90ecb117457d5",
+      "modifiedAt": "2026-10-13T21:52:41.348Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/modelado-datos/ddl/MAR-M1-DATA-001.sql",
-      "bytes": 4347,
-      "sha256": "a5134c497a9feed02442200e08a5719873781db2f9cdcc29dfc63ffe57fd3437",
-      "modifiedAt": "2026-10-13T21:16:21.640Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 9309,
+      "sha256": "1a21321280d233623696a5f58ed0c9bb7accc9b8441c300472e8f7dc18e062a4",
+      "modifiedAt": "2026-10-13T21:58:57.110Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/modelado-datos/ddl/MAR-M1-DATA-002.sql",
-      "bytes": 15962,
-      "sha256": "c5f2d9ec4918484988f2226a4c4769e5fb34907585c6ba6676c8a23382dd473c",
-      "modifiedAt": "2026-10-13T20:32:18.817Z",
+      "bytes": 16111,
+      "sha256": "239daa7fa98fdffe708817b65e771f7e02a4585dc468ac190e5b06b581d30406",
+      "modifiedAt": "2026-10-13T21:58:56.339Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/modelado-datos/README.md",
-      "bytes": 6147,
-      "sha256": "7d54fceb8a35d417d15320b73bcf737b9ef768de854439bc22c4327b8fba43e3",
-      "modifiedAt": "2026-10-13T21:02:44.912Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 6657,
+      "sha256": "f9b2ad0d4835d45087dd55bd376337fca15a90eeb80beb8d42f1a573019b5b1b",
+      "modifiedAt": "2026-10-13T21:59:55.288Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/proceso/inventario-auditoria.json",
+      "bytes": 75890,
+      "sha256": null,
+      "modifiedAt": "2026-10-13T21:18:34.378Z",
       "reading": "SELF",
-      "role": "registro de lectura"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md",
-      "bytes": 12913,
-      "sha256": "94c59e2854180070f323c24dca0dce05055d4d7ce02b8ff47eba0db9b34384b9",
-      "modifiedAt": "2026-10-13T21:16:20.870Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 14322,
+      "sha256": "099fdaa3bb729b3adc1ab0b32dae68c3aeb5107819dc98ef81a6a89ce4c9c333",
+      "modifiedAt": "2026-10-13T21:59:55.289Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md",
-      "bytes": 39496,
-      "sha256": "b8ffde7d97925257c9472b38fd45333c4156dc798c3a1e2af88ffa95fa07862e",
-      "modifiedAt": "2026-10-13T21:16:20.870Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 40714,
+      "sha256": "993d7ba74b379bc87b23e1c4d04e651910698b6752e6658817fd6c1fc1ccc8b9",
+      "modifiedAt": "2026-10-13T21:59:55.289Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md",
@@ -1197,7 +1194,63 @@
       "sha256": "4fda34653ee2b564bc42fb0d6fb05187ea0adb4fdc4c7cdd04a699be75f98d7e",
       "modifiedAt": "2026-10-13T17:34:45.453Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/01-acceso.png",
+      "bytes": 50503,
+      "sha256": "4bcb32eef1ece4728a1e04208c59f9688ca7f6fc380c40e65724caeff994fead",
+      "modifiedAt": "2026-10-13T21:32:12.891Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/02-codigo-pendiente.png",
+      "bytes": 57084,
+      "sha256": "b94c8e80ee8a03a1d175fa311ea4f42d7952b95f65b0c48d279d6441d78e350a",
+      "modifiedAt": "2026-10-13T21:32:13.178Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/03-codigo-invalido.png",
+      "bytes": 57309,
+      "sha256": "208b671e8ae8573cd4be010571340309055dd15c5c73670b1f3e4fba9c5fe74d",
+      "modifiedAt": "2026-10-13T21:32:13.309Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/04-cuenta.png",
+      "bytes": 57640,
+      "sha256": "507b405e41c02710dd1c424a38fd38fd6915844566c5f228a38a8dfa5c95e18b",
+      "modifiedAt": "2026-10-13T21:32:13.491Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/05-cambio-correo.png",
+      "bytes": 57640,
+      "sha256": "507b405e41c02710dd1c424a38fd38fd6915844566c5f228a38a8dfa5c95e18b",
+      "modifiedAt": "2026-10-13T21:32:13.559Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/capturas/06-sesion-cerrada.png",
+      "bytes": 60236,
+      "sha256": "fccdfbc9455f89f0b09e7317b9640a2d7ffc56755f8f7836de322092262fa249",
+      "modifiedAt": "2026-10-13T21:32:13.693Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/revision/M1/INSTRUCTIVO_M1.md",
+      "bytes": 6698,
+      "sha256": "9fac7c1086a6fce9d1b96d22e6b47dd891096c146917ec5d5cfd6f7be57d6f1b",
+      "modifiedAt": "2026-10-13T21:59:55.287Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/eslint.config.mjs",
@@ -1205,23 +1258,7 @@
       "sha256": "541dd0d56bb6c78e2403819bc914a46281b985a95f322ddb4d2d03bb84802ba2",
       "modifiedAt": "2026-10-13T17:20:13.856Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/infra/.DS_Store",
-      "bytes": 6148,
-      "sha256": "7f9072deddc5cce2736589ba858b85bbaa51f3a00f25f5b2740dc20eb19d4bcc",
-      "modifiedAt": "2026-10-13T20:26:10.091Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/infra/local/.DS_Store",
-      "bytes": 6148,
-      "sha256": "3457c8b142f003a9a1c86e0db75228b5bee703802004fe228dafa5619d2bd1a7",
-      "modifiedAt": "2026-10-13T20:26:20.191Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/infra/local/manifest.json",
@@ -1229,7 +1266,7 @@
       "sha256": "91991ff3e73fa4c91b9d163fbad12abae9572c72589ccd40bcf14b831c2e48bb",
       "modifiedAt": "2026-10-13T21:17:11.834Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/infra/local/supabase/config.toml",
@@ -1237,7 +1274,7 @@
       "sha256": "7ebbb341fe48ce4f0c4bbf66e2d658e8eb0c5e10526b44d63f8665f5a4dd1db4",
       "modifiedAt": "2026-10-13T01:02:08.152Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/infra/local/supabase/templates/otp.html",
@@ -1245,7 +1282,7 @@
       "sha256": "9ab19407e2594f5f656ae481b6ffd5685dacda07eb89f35b379cee7e0aafc352",
       "modifiedAt": "2026-10-13T00:03:23.205Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/infra/local/toolchain.json",
@@ -1253,15 +1290,15 @@
       "sha256": "5032577049c71cfe69cc3c932ebf0c3ebecb70d8f286516598fdfb0867138a9b",
       "modifiedAt": "2026-10-13T01:03:12.019Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/package.json",
-      "bytes": 1997,
-      "sha256": "e37a1ffb03831272f2d7611bde54201c1e776272af5d16e53a6f5bf61066cc77",
-      "modifiedAt": "2026-10-13T20:46:27.539Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 2105,
+      "sha256": "d18d8f81c3552281808f4b72e42d7c34f001a112282dff45b2ab72c805c05f69",
+      "modifiedAt": "2026-10-13T21:58:55.525Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/packages/config/limits.json",
@@ -1269,7 +1306,7 @@
       "sha256": "25fa26ab903b32297bc6a308083c10b17d0d09e79e38167d7be33b99730fb4d6",
       "modifiedAt": "2026-10-13T00:05:31.876Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/packages/config/package.json",
@@ -1277,23 +1314,23 @@
       "sha256": "b50ef91e9a080889bc26657cc99a5d031e8f70be5a1c3b13826743c49035d1ee",
       "modifiedAt": "2026-10-13T00:05:31.876Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/packages/contracts/generated.ts",
-      "bytes": 112227,
-      "sha256": "bee259bdcee93d7844bbadd9fcce2d853883e5ec3b5af38c4b6e9ed2d1af9ff9",
-      "modifiedAt": "2026-10-13T21:16:22.269Z",
+      "bytes": 133081,
+      "sha256": "9595b411d298523d46bf5beeb4359af3795cfcdfabdff636a7d331a5076f970f",
+      "modifiedAt": "2026-10-13T21:58:57.763Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/packages/contracts/openapi.json",
-      "bytes": 194885,
-      "sha256": "cd74a8e50d186a4b5fa45f643c3bbde4238eef756bdf8347bb88b67c276738c8",
-      "modifiedAt": "2026-10-13T21:16:21.739Z",
+      "bytes": 235954,
+      "sha256": "66529228dab4553672f56014ee89b81a69f127ded4b55b35760d23e0134e6798",
+      "modifiedAt": "2026-10-13T21:58:57.218Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/packages/contracts/package.json",
@@ -1301,7 +1338,7 @@
       "sha256": "e8d7f36d1862a61cf4c46fa116633179e73ae4b092242c89dcff4144a9c8e144",
       "modifiedAt": "2026-10-13T00:08:35.153Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/pnpm-lock.yaml",
@@ -1309,7 +1346,7 @@
       "sha256": "b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a",
       "modifiedAt": "2026-10-13T17:17:49.447Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/pnpm-workspace.yaml",
@@ -1317,15 +1354,15 @@
       "sha256": "6574a913a1e48bda28e37af3144cceab5b639bcd50f773e20fa9d98bb2bdd550",
       "modifiedAt": "2026-10-13T01:16:04.395Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/README.md",
-      "bytes": 2127,
-      "sha256": "6338c88f066c20fe00570bb48751facdd4407048abb1b16daab02c000d793937",
-      "modifiedAt": "2026-10-13T18:10:24.308Z",
+      "bytes": 4072,
+      "sha256": "0e3d9f12c23a72f031c0ef656a2f56d5b789d2f3bcfaae02b3a71dc50f934322",
+      "modifiedAt": "2026-10-13T22:08:39.726Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/audit-environment.mjs",
@@ -1333,7 +1370,7 @@
       "sha256": "a0e8528f2e860db58eddc681a6f10443e3c6325dcda207730619eca7c0fab1f7",
       "modifiedAt": "2026-10-13T00:52:32.519Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/check-lockfile.mjs",
@@ -1341,7 +1378,7 @@
       "sha256": "5bb4ccdaa43e178ad8d17b9209d2469ac0360e1def4cb682bec6265acb16f2f3",
       "modifiedAt": "2026-10-13T00:52:32.526Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/create-certificates.sh",
@@ -1349,23 +1386,23 @@
       "sha256": "4c8467990bacef43cc4cc704b3ae3c42213bc48807fe68c0ee03d2c97623224a",
       "modifiedAt": "2026-10-13T00:16:40.710Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/generate-documentation.mjs",
-      "bytes": 2392,
-      "sha256": "083e768629112e2e864f8bef6342bee2cf036767c270c64d1cb4f924682e58ea",
-      "modifiedAt": "2026-10-13T18:09:05.560Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 2470,
+      "sha256": "cbae2f99f9446ddc8e4915f78dd15280026148c22b0274f7ce55b70828194de5",
+      "modifiedAt": "2026-10-13T21:58:57.908Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/generate-m1-target.mjs",
-      "bytes": 7353,
-      "sha256": "091ea0ab025c0fd6dda094f299eec3c4860bf9056d2917266f9afc05bbbc4941",
-      "modifiedAt": "2026-10-13T17:21:09.867Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 5797,
+      "sha256": "0f113c7b634836ba952e1b0f980fe66394d877de55957e696d6942656ccd6f94",
+      "modifiedAt": "2026-10-13T21:58:57.916Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/local.mjs",
@@ -1373,7 +1410,15 @@
       "sha256": "02dd991ec165ab979388d143daa26d7db814f14e209e457130027e9855f097f0",
       "modifiedAt": "2026-10-13T00:52:32.523Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/scripts/private-fixture-constraints.mjs",
+      "bytes": 1831,
+      "sha256": "bf16d16df06c1862b4b4fd8c84efd02e9fbd87bcec8928ab1169e700994c38ec",
+      "modifiedAt": "2026-10-13T21:58:55.524Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/proxy.mjs",
@@ -1381,7 +1426,7 @@
       "sha256": "2748e1d48e637d0eb026a9c5402c388d4ab4750300353be997bcfa2311c773fe",
       "modifiedAt": "2026-10-13T00:16:40.707Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/scripts/tool",
@@ -1389,31 +1434,31 @@
       "sha256": "e9ffc58ca75bdf3075e466de079e130044db62e16d6e9b3675730dd51256d22a",
       "modifiedAt": "2026-10-13T00:25:19.362Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
-      "path": "marleva-local/repositorio/tests/.DS_Store",
-      "bytes": 6148,
-      "sha256": "cef263dc17347554a8ac40f9e55818b8a9d0bf85bd42e910bf24484fdf53fee9",
-      "modifiedAt": "2026-10-13T15:41:40.780Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
-    },
-    {
-      "path": "marleva-local/repositorio/tests/integration/.DS_Store",
-      "bytes": 6148,
-      "sha256": "f6920619276740bf8023f7fe1a7aa8953c0706548ae8a2f817b1fabf5b37734a",
-      "modifiedAt": "2026-10-13T15:41:40.779Z",
-      "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "path": "marleva-local/repositorio/tests/fixtures/private-file-cleanup.mjs",
+      "bytes": 1696,
+      "sha256": "62d213f528e77ae0cf140974e3200908a36e78710f0609082f87f08a3109b051",
+      "modifiedAt": "2026-10-13T22:06:20.422Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/integration/backend/M1/data-target.test.mjs",
-      "bytes": 8706,
-      "sha256": "a64558349a6a45982f8bb927df65632d1213254c36cce4ecbeb90fcfe43314e2",
-      "modifiedAt": "2026-10-13T20:40:04.513Z",
+      "bytes": 10147,
+      "sha256": "2f4e5a4f63c1f9d7a25c4ddd4c35b6085abb3a69e3937946e7efdb20adc63ec0",
+      "modifiedAt": "2026-10-13T21:53:31.204Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/files.test.mjs",
+      "bytes": 13016,
+      "sha256": "70edc4448a41377cb69697e1e5bd37022100bf1149b9bb275114b8dd3b2e5d3c",
+      "modifiedAt": "2026-10-13T22:06:19.661Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/integration/backend/M1/m1.test.mjs",
@@ -1421,7 +1466,7 @@
       "sha256": "43fcda2ae55e160253502928b409ef035819c686f5faf974d2da6b74c200d28c",
       "modifiedAt": "2026-10-13T20:42:34.474Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/integration/backend/M1/outbox.test.mjs",
@@ -1429,15 +1474,23 @@
       "sha256": "3906e677a432d3e909d4b47a71fc203c2210bcc73381510cec12e1fe7ea0fd62",
       "modifiedAt": "2026-10-13T21:12:52.141Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/integration/frontend/M1/web-test.mjs",
-      "bytes": 2768,
-      "sha256": "85b4bf34c3d14dda055bd99a9c844359eb4ff740bf0b1b13abb274b4c8a0b2a5",
-      "modifiedAt": "2026-10-13T01:27:32.642Z",
+      "bytes": 4372,
+      "sha256": "ba30dda2a1bf87e13848679a6aa958d9fbd63acfee4e115cd1ce235eaf2fb5dc",
+      "modifiedAt": "2026-10-13T21:32:10.988Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/performance/backend/M1/files.mjs",
+      "bytes": 5129,
+      "sha256": "cb39e9dbb6b3ebe01344ab8d010f3208bcc035c8ea102bb1d61b4e0749d46b8b",
+      "modifiedAt": "2026-10-13T22:06:19.661Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/performance/backend/M1/health.mjs",
@@ -1445,7 +1498,7 @@
       "sha256": "7e961072fad150098468d01f82fb4d2c7ebe2d3d768f6d3f0c5d8b3cd2dfd057",
       "modifiedAt": "2026-10-13T01:20:30.794Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/performance/backend/M1/notices.mjs",
@@ -1453,7 +1506,7 @@
       "sha256": "4da3bd6b16988903ff82d986c661fc99ab1bf0906dca136f8fa1410b9dcfd023",
       "modifiedAt": "2026-10-13T20:40:58.063Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/performance/frontend/M1/navigation.mjs",
@@ -1461,15 +1514,15 @@
       "sha256": "18be40880f605c90a795c8d462e8fcb6a1683f62e0de81b969bb48cc89aed492",
       "modifiedAt": "2026-10-13T01:20:30.797Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/README.md",
-      "bytes": 2562,
-      "sha256": "05a13c8a6b655a546c2dba9a935aaa0e15f2ed0b62c071d690fc27bf07912180",
-      "modifiedAt": "2026-10-13T21:02:13.402Z",
-      "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "bytes": 3255,
+      "sha256": "f8c68a1bb3e8f4ccb577e84dcd78243fe711581b843779ebff47c47fbc9da320",
+      "modifiedAt": "2026-10-13T22:06:19.662Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/before-reorganization/android-build.log",
@@ -1477,7 +1530,7 @@
       "sha256": "07503c70422a467095557553c4523f4e099c70c0c33114d2e7ddd4b4b347103b",
       "modifiedAt": "2026-10-13T01:06:28.929Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/before-reorganization/m1-tests.json",
@@ -1485,7 +1538,7 @@
       "sha256": "12f8b1cf6c7ebbe43340de316c438b98a279142a35fe6df4fc32d14632a8eae8",
       "modifiedAt": "2026-10-13T01:02:43.501Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/before-reorganization/web-access.png",
@@ -1493,7 +1546,7 @@
       "sha256": "4bcb32eef1ece4728a1e04208c59f9688ca7f6fc380c40e65724caeff994fead",
       "modifiedAt": "2026-10-13T00:33:32.889Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/before-reorganization/web-account.png",
@@ -1501,7 +1554,7 @@
       "sha256": "ca81b4c57faaf3b19bcf0e060148047bc28fa10bf089832b4c7fd6fe1e528f95",
       "modifiedAt": "2026-10-13T00:33:33.757Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/before-reorganization/web-test.json",
@@ -1509,7 +1562,7 @@
       "sha256": "94a14ad130b104d178fd689112c37e06c4cc54c9edb9125562375d5c65bf5325",
       "modifiedAt": "2026-10-13T00:33:33.859Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/cleanup-git.json",
@@ -1517,7 +1570,7 @@
       "sha256": "ad636bfcdffd981285770e29a141b6757ddf836085ba49fdca0fb386a636abec",
       "modifiedAt": "2026-10-13T20:22:08.530Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/data-target-20261013-first-failure.json",
@@ -1525,7 +1578,7 @@
       "sha256": "da3579dacad1c1af35e7a1d3f07598cdb7a31f627c5328e84231df75db6314df",
       "modifiedAt": "2026-10-13T15:37:31.672Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/data-target-20261013.json",
@@ -1533,7 +1586,7 @@
       "sha256": "9ca6d6cbaa36a04133d483bd4dede0b3e3224ee45cc0b5591b59b9807f0612c6",
       "modifiedAt": "2026-10-13T15:37:40.108Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/data-target-b09-20261013.json",
@@ -1541,7 +1594,7 @@
       "sha256": "71af8f9a3a9ccb96572164df087928960c79bc927b2d2879a8f35f91ef737470",
       "modifiedAt": "2026-10-13T17:10:09.701Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/documentation-20261013.json",
@@ -1549,7 +1602,103 @@
       "sha256": "c74aafd4d2d4b08270c6a0c307504d5bc56e45005f694913a5b477a82e3256b3",
       "modifiedAt": "2026-10-13T15:08:26.437Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-api-regression.json",
+      "bytes": 6011,
+      "sha256": "228f30a8421c4d41c2dd0e3e08c9fd1618f83afabdff2bb1fcd085dd6a388e78",
+      "modifiedAt": "2026-10-13T21:58:20.992Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-fixture-cleanup.json",
+      "bytes": 222,
+      "modifiedAt": "2026-10-13T22:10:13.806Z",
+      "sha256": "f0a9ed372f29f9ba20764bad389febd351e46002021a333c39fdf1ba080251c4",
+      "reading": "N",
+      "role": "Acta validada; lectura completa no acreditada"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-increment.json",
+      "bytes": 5550,
+      "sha256": "17fb86f848a72f873124cb8e320dd1e90d1c972aa9e66fbc303d43af31a9bfe8",
+      "modifiedAt": "2026-10-13T22:10:06.344Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-integration-first-failure.json",
+      "bytes": 4553,
+      "sha256": "ec5dd286d45b3f5dbb0f99398a54dd0e5a2422b750700ce22813439a3ac69528",
+      "modifiedAt": "2026-10-13T21:50:57.019Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-integration-second-failure.json",
+      "bytes": 3476,
+      "sha256": "6622145cd4a495e10c494b1f72d8e8adb0b20c7fb82dd0c3c1cc88166451f4ca",
+      "modifiedAt": "2026-10-13T21:51:44.331Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-integration.json",
+      "bytes": 2771,
+      "sha256": "69bd13f1f7b6391e0901d2a75028ae9df45e09035cd148b375f9f3b8ef35f053",
+      "modifiedAt": "2026-10-13T22:07:56.801Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-migration.json",
+      "bytes": 4506,
+      "sha256": "3ec86d251515c8351bf2fcb570c52f89c72afb897e97518aa8c2ca8ac43ac5cc",
+      "modifiedAt": "2026-10-13T22:08:08.238Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-outbox-regression.json",
+      "bytes": 2431,
+      "sha256": "36d2c2f85145054942a5bcca30a80783cd209dbf619f3f33b6974b693406e6b4",
+      "modifiedAt": "2026-10-13T21:58:16.561Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-performance-first-failure.json",
+      "bytes": 258,
+      "sha256": "6dbde2e34fcab0eab2fced5351b2d7f0a7f649fca2095d9305b70424b9ecd8b4",
+      "modifiedAt": "2026-10-13T21:56:09.207Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-performance.json",
+      "bytes": 2607,
+      "sha256": "29511709a0ce5e537ad1bb9f0963946dce813a33f59584d46c14500991b8ece7",
+      "modifiedAt": "2026-10-13T21:57:08.658Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/files-unit.json",
+      "bytes": 7802,
+      "sha256": "ad2b4b8d1fd14c44407d46319b248d12fe4f0f5fc6468491f69cabbbd9f8f3f5",
+      "modifiedAt": "2026-10-13T21:57:08.663Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/notices-increment.json",
+      "bytes": 6530,
+      "sha256": "3b9dcf8c1c1c4d470eb9c53b30f14cda3fb217911fdeaa48c1c5a14723e62832",
+      "modifiedAt": "2026-10-13T21:18:34.334Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-integration-first-failure.json",
@@ -1557,7 +1706,7 @@
       "sha256": "dcf24bde1ad753a9c473739ab51bdc93840b84e0cbdd6436d6f354ab2b37fe70",
       "modifiedAt": "2026-10-13T20:41:24.611Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-integration.json",
@@ -1565,7 +1714,15 @@
       "sha256": "07fbb589e77d1758d0e1f63bfe4df5bc9e083ac97b6ea90a3c2903a29dd88dbb",
       "modifiedAt": "2026-10-13T21:08:22.990Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/notices-lint.json",
+      "bytes": 48713,
+      "sha256": "112f6c27507d228b3d3ec25bc7680c695b3b1a3d5b2e46bb542833a0a3288c1e",
+      "modifiedAt": "2026-10-13T21:10:21.985Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-migration-local.json",
@@ -1573,7 +1730,7 @@
       "sha256": "4450ff33dd08040eeee8583ad31013ea3cf6d064ef6d20f6b4a2b4cdc094eb48",
       "modifiedAt": "2026-10-13T20:41:04.319Z",
       "reading": "C",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-migration.json",
@@ -1581,7 +1738,7 @@
       "sha256": "240e744048dc2ffa21edc48a8df68bc9deff598a55f179b21206ac501f8405d8",
       "modifiedAt": "2026-10-13T20:35:34.411Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-outbox.json",
@@ -1589,7 +1746,7 @@
       "sha256": "228f6eba34764b3114538c641994ca2f5dffa1fde73c3b178322b700b01b003a",
       "modifiedAt": "2026-10-13T21:12:57.730Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-performance-first-failure.json",
@@ -1597,7 +1754,7 @@
       "sha256": "863fedfcb34c869e819e66abccfaa11ed1c0dc76b9b3ddcebf91f7371d7e41e0",
       "modifiedAt": "2026-10-13T20:40:14.945Z",
       "reading": "C",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-performance.json",
@@ -1605,7 +1762,7 @@
       "sha256": "4d28ebe3ad0b810a13070f29fe6d04c00f1342789cecccda35e51f6deca589a9",
       "modifiedAt": "2026-10-13T20:44:36.424Z",
       "reading": "C",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/notices-unit.json",
@@ -1613,7 +1770,15 @@
       "sha256": "b165c45bbd0d71dc1a8c38ab18d7b419bce8a5ea866c017240e010b7dc415c13",
       "modifiedAt": "2026-10-13T20:46:19.206Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/notices-worker-performance.json",
+      "bytes": 731,
+      "sha256": "3976523975c09e9e3b35314fb85cd6d5ad41fc3d5dc82eff80306a0c7d56fa26",
+      "modifiedAt": "2026-10-13T21:58:16.330Z",
+      "reading": "N",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/quality-baseline-20261013.json",
@@ -1621,7 +1786,7 @@
       "sha256": "b3f7fd50397339e8c1193436b5237ccd935492f01a8d668054f3a20e905fe960",
       "modifiedAt": "2026-10-13T17:22:04.772Z",
       "reading": "C",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/quality-first-config-20261013.json",
@@ -1629,7 +1794,7 @@
       "sha256": "681fd1525213d3f686ddd4f321ef6507d382271cea2bb03a34c669d49470ed6d",
       "modifiedAt": "2026-10-13T17:20:13.856Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/unit-20261012.json",
@@ -1637,31 +1802,39 @@
       "sha256": "b54b338e4258aa355732f6650c7573a066717c99a191b932f9b39fc0bf6554f5",
       "modifiedAt": "2026-10-13T01:28:00.079Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/web-access.png",
       "bytes": 50503,
       "sha256": "4bcb32eef1ece4728a1e04208c59f9688ca7f6fc380c40e65724caeff994fead",
-      "modifiedAt": "2026-10-13T21:09:26.834Z",
+      "modifiedAt": "2026-10-13T21:32:12.862Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/web-account.png",
-      "bytes": 61238,
-      "sha256": "8af8a843d9e1109c0dbeaf9267bf1c3091aefcef3bfb17d42946c66dcd878ab9",
-      "modifiedAt": "2026-10-13T21:09:27.549Z",
+      "bytes": 57797,
+      "sha256": "9185fd1e2664bcfbae1586bcfc79cc3d8eb92ba60ac82d45708b17b6526c4b0b",
+      "modifiedAt": "2026-10-13T21:32:13.460Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/results/web-test.json",
       "bytes": 316,
-      "sha256": "91e9250b856454a683cd0a81a7f83549fd075e9b074113640445bbeb2daa8e17",
-      "modifiedAt": "2026-10-13T21:09:27.652Z",
+      "sha256": "67f9eb861411a8d77a0111b8c7bd8e1d6e99e113b9fb8f2d989580379381090a",
+      "modifiedAt": "2026-10-13T21:32:13.697Z",
       "reading": "N",
-      "role": "evidencia local"
+      "role": "Propio/derivado; vigencia según documento"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/unit/backend/M1/files.test.mjs",
+      "bytes": 2183,
+      "sha256": "e40f3d7aa254b15125f2963a44b4cc10a3eab3b3064297c0a0128fcc40ff0a9a",
+      "modifiedAt": "2026-10-13T21:50:09.837Z",
+      "reading": "C",
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/unit/backend/M1/notices.test.mjs",
@@ -1669,7 +1842,7 @@
       "sha256": "a465945fb42f9cc3721c99b843ef59cd7611e90ca6b2f3991ca35bf58d5fa8b4",
       "modifiedAt": "2026-10-13T20:35:03.279Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/unit/backend/M1/outbox.test.mjs",
@@ -1677,7 +1850,7 @@
       "sha256": "a1d35364f4da318925c9c6ee1b1ba5dfcf6859ef6f1ddee79e5ef177d6ee2f86",
       "modifiedAt": "2026-10-13T20:46:16.499Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/unit/backend/M1/security.test.mjs",
@@ -1685,7 +1858,7 @@
       "sha256": "82e7dbbc75f01e0fba142719027bb167396fa1a9275d1b4a8b1a6704f28366eb",
       "modifiedAt": "2026-10-13T01:27:32.643Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/unit/backend/M1/simulator.test.mjs",
@@ -1693,7 +1866,7 @@
       "sha256": "93a7cde591a54218b6b59f26d76007d487d76890c5e821be8d4738b3d2ddd929",
       "modifiedAt": "2026-10-13T01:20:30.784Z",
       "reading": "N",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "marleva-local/repositorio/tests/unit/frontend/M1/api.test.ts",
@@ -1701,15 +1874,15 @@
       "sha256": "8c0faaef46ce28b12f4d3ce4b39955860fa284e3c6f8d5be73e6a111df55e918",
       "modifiedAt": "2026-10-13T01:23:46.379Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "README.md",
-      "bytes": 2899,
-      "sha256": "4ccb49eadcfb24ec18b85cf5054ffe76805939dfbbe8737f56ed08c53ece28bb",
-      "modifiedAt": "2026-10-13T20:26:28.172Z",
+      "bytes": 3539,
+      "sha256": "0cc792b1dfcc27e85d0e73f01de130c8e135df2ad28547f53f7edd2a1602d45e",
+      "modifiedAt": "2026-10-13T22:08:39.726Z",
       "reading": "C",
-      "role": "propio o derivado; vigencia según documento"
+      "role": "Propio/derivado; vigencia según documento"
     },
     {
       "path": "sources/00_GUIA_PRINCIPAL_MARLEVA.md",
@@ -1717,7 +1890,7 @@
       "sha256": "2dd00513f18c5f96c4e6d8dac6258c6dfc4c8dd8a371a94488c8cb55d0fcfb8a",
       "modifiedAt": "2026-10-13T20:28:38.244Z",
       "reading": "N",
-      "role": "sincronizado solo lectura"
+      "role": "Referencia sincronizada de solo lectura"
     },
     {
       "path": "sources/01_ESTADO_Y_DECISIONES_MARLEVA.md",
@@ -1725,7 +1898,7 @@
       "sha256": "1cafdfbcbe0fd42d52de30baef6bc28672b78c6553c6305340389c1128d5a59a",
       "modifiedAt": "2026-10-13T20:28:40.575Z",
       "reading": "N",
-      "role": "sincronizado solo lectura"
+      "role": "Referencia sincronizada de solo lectura"
     },
     {
       "path": "sources/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md",
@@ -1733,7 +1906,7 @@
       "sha256": "c8aadd2a8295ea1ed180965bc8451b941ea0fdd9d5890e4512f9ea11bc638811",
       "modifiedAt": "2026-10-13T20:28:43.178Z",
       "reading": "N",
-      "role": "sincronizado solo lectura"
+      "role": "Referencia sincronizada de solo lectura"
     },
     {
       "path": "sources/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md",
@@ -1741,7 +1914,7 @@
       "sha256": "d655c9abfdcd332d9d491336e705eed6e3dd36e07fec4769223c7a195a099d45",
       "modifiedAt": "2026-10-13T20:28:44.459Z",
       "reading": "N",
-      "role": "sincronizado solo lectura"
+      "role": "Referencia sincronizada de solo lectura"
     }
   ],
   "excludedCategories": [
@@ -1842,6 +2015,12 @@
       "reading": "E"
     }
   ],
-  "previousInventoryDate": "2026-10-13T14:22:08-06:00",
-  "limits": "Lectura general parcial: sources, antecedentes Git7a0ec5a, lockfile completo, recursos binarios y archivos restantes N sin acreditar. Contratos Recovery/B09 no se implementan antes de leerlos completos. Ninguna inferencia de lectura por hash. No acceso remoto/Fuentes ni publicación. Las cuatro fuentes, instrucciones, protocolo/matriz y caso UC008 leídos. No equivalencia UI/móvil/performanceHTTP. Cambios sincronizados previos preservados."
+  "previousInventoryDate": "2026-10-13T21:18:34.378Z",
+  "limits": [
+    "Lectura general parcial; N no acredita lectura",
+    "Generados/resultados validados no equivalen a lectura completa",
+    "Secretos/dependencias/herramientas/cachés/builds/Git interno excluidos",
+    "Fuentes sincronizadas preservadas, sin actualización compartida",
+    "No remoto; comprobar commits locales"
+  ]
 }

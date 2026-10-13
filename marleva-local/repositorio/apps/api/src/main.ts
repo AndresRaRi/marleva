@@ -19,10 +19,26 @@ import { config } from './config.js';
 import { NotificationsController } from './modules/m1/presentation/controllers/notifications.controller.js';
 import { ListNotices } from './modules/m1/application/use-cases/list-notices.js';
 import { PrismaNoticeRepository } from './modules/m1/infrastructure/repositories/prisma-notice-repository.js';
+import { PrivateFilesController } from './modules/m1/presentation/controllers/private-files.controller.js';
+import { PrismaFileRepository } from './modules/m1/infrastructure/repositories/prisma-file-repository.js';
+import { LocalPrivateStorage } from './modules/m1/infrastructure/adapters/local-private-storage.js';
+import { IssueFileAccess } from './modules/m1/application/use-cases/issue-file-access.js';
+import { ReadPrivateFile } from './modules/m1/application/use-cases/read-private-file.js';
+import { DeletePrivateFile } from './modules/m1/application/use-cases/delete-private-file.js';
 const db = database();
+const files = new PrismaFileRepository(db);
+const storage = new LocalPrivateStorage();
 @Module({
-  controllers: [AccountController, HealthController, NotificationsController],
+  controllers: [
+    AccountController,
+    HealthController,
+    NotificationsController,
+    PrivateFilesController,
+  ],
   providers: [
+    { provide: IssueFileAccess, useFactory: () => new IssueFileAccess(files) },
+    { provide: ReadPrivateFile, useFactory: () => new ReadPrivateFile(files, storage) },
+    { provide: DeletePrivateFile, useFactory: () => new DeletePrivateFile(files) },
     { provide: AccountService, useFactory: () => new AccountService(db) },
     { provide: ListNotices, useFactory: () => new ListNotices(new PrismaNoticeRepository(db)) },
   ],
@@ -41,13 +57,11 @@ class Errors implements ExceptionFilter {
             mensaje: 'Una dependencia local no está disponible',
             accion_recuperacion: 'Intenta de nuevo',
           };
-    if (status === 429) res.setHeader('Retry-After', '60');
-    res
-      .status(status)
-      .json({
-        ...(typeof body === 'object' ? body : { mensaje: body }),
-        request_id: res.getHeader('x-request-id'),
-      });
+    if (status === 429 && !res.hasHeader('Retry-After')) res.setHeader('Retry-After', '60');
+    res.status(status).json({
+      ...(typeof body === 'object' ? body : { mensaje: body }),
+      request_id: res.getHeader('x-request-id'),
+    });
   }
 }
 export async function makeApp() {

@@ -1,21 +1,51 @@
-# Marleva local
+# Ejecutar y revisar Marleva local
 
-Repositorio local: esta carpeta `marleva-local/repositorio`. API en `apps/api`, cliente en `apps/client`, herramientas/servicios en `infra/local`. Git y `.gitignore` están en la raíz del proyecto, dos niveles arriba. Hay commits locales, sin remoto ni subida. [Entrada de lectura](../../README.md).
+API separada en apps/api; cliente web/Android/iOS en apps/client. Git está dos niveles arriba. Herramientas fijadas en infra/local/tools; usar scripts/tool. Estado y lectura: [README raíz](../../README.md), [AGENTS](AGENTS.md), [protocolo](docs/proceso/PROCESO_DESARROLLO_MARLEVA.md) y [matriz](docs/proceso/MATRIZ_CASOS_M1.md).
 
-Leer primero [proceso obligatorio y auditoría de todas las observaciones](docs/proceso/PROCESO_DESARROLLO_MARLEVA.md) y [AGENTS.md](AGENTS.md), además de las cuatro fuentes vigentes en `../../entregables/fuentes_finales`.
+## Antes de arrancar
 
-Estado: base/M1 en construcción y revisión documental. Código existente preservado, sin aprobación de diseño visual ni separación completa por capas. Arranque local y regresión del incremento UC008 comprobados en005. Las evidencias anteriores al traslado son históricas; comprobar estado vivo antes de usar servicios. No reanudar programación de pantallas/módulos antes de cerrar diferencias documentales.
+Entorno comprobado en este Mac ARM64: Node24.21.0, pnpm12.11.2, PostgreSQL17/SupabaseCLI2.120.0 y Colima. La configuración privada .env y los certificados locales ya preparados son necesarios; no se publican. Otro equipo necesita preparar herramientas, variables y confianza TLS, y probar repetibilidad. No desactivar TLS ni usar datos reales.
 
-| Material | Carpeta |
-|---|---|
-| Arquitectura, requisitos y protocolo | docs/proceso |
-| Secuencias por módulo/caso | docs/diagramas/secuencia |
-| Modelo DBML y DDL generado | docs/modelado-datos |
-| OpenAPI YAML y revisión Swagger | docs/apis |
-| Unitarias / integración / performance | tests/unit, tests/integration, tests/performance |
-| Fixtures y resultados | tests/fixtures, tests/results |
-| Manifiesto y procedencia de instalaciones | infra/local/manifest.json, infra/local/toolchain.json |
+## Arranque de este entorno preparado
 
-Las herramientas del proyecto se invocan con `./scripts/tool`; no editar runtime Codex ni usar instalaciones globales implícitas. Versiones exactas y hashes constan en manifiestos. Las carpetas de herramientas, descargas y secretos están ignoradas por Git y se distinguen del código.
+Desde esta carpeta:
 
-La reubicación conserva datos/volúmenes de Colima/Supabase. Cachés y artefactos nativos contienen rutas de la ubicación anterior: deben regenerarse y comprobarse antes de volver a construir. Arranque/parada de API y arranque de servicios locales comprobados en005; repetibilidad/restauración todavía pendientes. No ejecutar un DDL completo ni reset contra una base existente para compensar un fallo.
+```sh
+./scripts/tool colima start --profile marleva
+./scripts/tool supabase start --workdir infra/local --network-id marleva-private --exclude studio,imgproxy,edge-runtime,logflare,vector
+./scripts/tool pnpm --filter @marleva/api build
+./scripts/tool node scripts/local.mjs start
+```
+
+La ruta infra/local contiene la carpeta supabase. No usar infra/local/supabase como workdir: seleccionaría un entorno distinto. Red marleva-private conservada, puertos127.0.0.1. Si falta esa red/configuración, revisar antes de crear otra o aplicar migraciones. Nunca resetear para reparar un arranque.
+
+Aplicación: https://localhost:8443. Salud: https://localhost:8443/health/ready. Capturador: http://127.0.0.1:54324. Leer [instructivo M1](docs/revision/M1/INSTRUCTIVO_M1.md), con capturas y límites. El proxy usa el build web existente en apps/client/dist; si falta, compilar el cliente con su script build y comprobar el resultado antes de servirlo.
+
+## Parada conservando datos
+
+```sh
+./scripts/tool node scripts/local.mjs stop
+./scripts/tool supabase stop --workdir infra/local
+./scripts/tool colima stop --profile marleva
+```
+
+No borrar volúmenes. Estado API/proxy: scripts/local.mjs status. Arranque/parada local comprobados; instalación limpia/restauración todavía pendientes.
+
+## Pruebas y lectura por parte
+
+| Parte | Qué hace | Revisión/prueba |
+|---|---|---|
+| Backend | Autoriza y guarda reglas/datos; integra Auth/Storage/correo | docs/apis/M1 YAML/Swagger; apps/api/src; tests/unit/backend y integration/backend |
+| Frontend | Presenta pasos, errores y acciones | apps/client; tests/unit/frontend e integration/frontend; instructivo/capturas |
+| Base | Conserva esquema e historial | apps/api/prisma; docs/modelado-datos DBML/DDL; migraciones aplicadas inmutables |
+| Entorno | Versiones, imágenes, puertos y datos ficticios | infra/local/toolchain.json/manifest.json; protocolo Docker de00 §13 |
+
+Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integración API local preparada: pnpm test:integration. Chrome: pnpm test:frontend:integration. Usar siempre scripts/tool delante. B09: pnpm test:files (detiene/reinicia Storage; no correr junto con API/carga). Outbox y SQL aislados tienen puertas explícitas en tests/README.md; outbox detiene/reinicia el capturador, no correr junto con OTP. Pruebas de rendimiento tienen protección y destinos separados; no medir contra datos ajenos.
+
+## Estado real
+
+Incremento UC008 en commit cd0a019: cursor por cuenta/microsegundos, índice nuevo, reintentos/lease/caducidad del correo; actas notices-*.json. Calidad global todavía falla por errores existentes; no significa que la puerta esté aprobada. B09 backend tiene tres operaciones y seis pruebas reales locales pasadas; ver files-increment.json. Recuperación/B12, visual/nativos/físicos y otros casos siguen abiertos. Google/Supabase pendiente; Flyway/PDM/Sonar en evaluación, Prisma sigue dueño de migraciones marleva.
+
+Revisar este README al inicio/fin de cada proceso y chat; corregirlo solo si cambió la realidad. Cerrar con resultados, instructivo/revisión, porcentajes medibles y commit claro. Sin remoto por decisión del usuario; fuentes y originales sincronizados no se modifican ni se consideran subidos por guardado local.
+
+Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.json y ubicación en el instructivo. Requiere Metro; recorrido nativo aún pendiente.

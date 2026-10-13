@@ -246,3 +246,43 @@ Cambio1.2: continuidad autónoma solicitada por el usuario; no amplía autorizac
 6. Cada prompt incluye raíz/Git, lectura completa numerada, estado/tarea, autorizaciones/límites, trazabilidad/pruebas, comunicación y plantillas. Exigir leer la documentación canónica; no copiarla entera ni reconstruir faltantes.
 
 La instrucción posterior del usuario sustituye el versionado manual y la conservación de copias editables. sources/ y AGENTS raíz siguen de solo lectura.
+
+## 13. Entrega revisable, actualización y calidad — instrucción13-10-2026
+
+Estas reglas nuevas del usuario aplican a todos los módulos, procesos y archivos. Son parte de la lectura obligatoria. No amplían MVP1 ni autorizan publicación, gastos o datos reales.
+
+### Actualización y Git
+
+Al iniciar o retomar: comprobar raíz, rama, HEAD, cambios locales, registro de chat y remoto. Si existe un remoto autorizado, bajar cambios con avance rápido antes de trabajar; nunca resetear cambios locales ni resolver conflictos descartando trabajo. Si no hay remoto, comprobar los últimos commits locales y declarar que no hay pull/push posible. El usuario confirmó mantener Marleva solo local mientras crea su repositorio.
+
+Al terminar cada proceso: comprobar código, contratos, datos, pruebas, resultados, documentación y README. Cambiar únicamente lo afectado, releer finales y revisar enlaces, diff e ignorados. Al cerrar el chat: comprobar nuevamente todo lo anterior y hacer el commit final. Entregar SHA y estado real de acceso/subida. Otro chat comprueba los cambios existentes antes de continuar; un commit local no es una descarga, un remoto ni una subida a Fuentes.
+
+Commits rastreables: tipo(módulo/caso): resultado concreto. Título breve; cuerpo solo si ayuda a explicar motivo, prueba o límite. Usar UC/BUG cuando existan. No mensajes vagos como cambios, avances o ajustes varios. No mezclar modificaciones ajenas ni incluir secretos, dependencias o builds.
+
+### Revisión local e instructivo
+
+Un módulo o incremento importante se entrega funcionando localmente, con forma concreta de revisión en navegador, emulador, dispositivo o IDE según corresponda. Indicar URL/ruta, versiones, cómo arrancar/parar y qué se comprobó. Web no acredita móvil. Registrar revisión del usuario; no declarar aceptación por silencio.
+
+Cada módulo tendrá un instructivo sencillo y estable en docs/revision/Mn/INSTRUCTIVO_Mn.md, enlazado desde README y01. Incluye objetivo, requisitos, datos ficticios, pasos por flujo, capturas reales, resultado esperado, errores y recuperación, estado disponible/pendiente y límites de plataforma. No inventar pantallazos ni describir una maqueta como aplicación. Si no hay interfaz autorizada, mostrar revisión real de API/contrato en IDE y declarar pendiente la pantalla.
+
+Documentación del backend y frontend: qué hace cada parte, cómo ejecutarla, qué entrada/salida tiene, dónde están sus pruebas y cómo localizar un fallo mediante UC→SEQ:paso→API→datos→UI→prueba. Explicar términos necesarios. Evitar textos repetidos, carpetas vacías, abstracciones sin función y herramientas instaladas por costumbre.
+
+### README y porcentajes
+
+README es entrada útil para cualquier persona: propósito, alcance actual, ubicación, lectura, arranque/parada, revisión local, pruebas, problemas conocidos y siguiente paso. Revisarlo al inicio y fin del chat y de cada proceso; actualizarlo cuando cambie su contenido, sin editar por rutina si ya coincide.
+
+Al cerrar un chat, informar por módulo: funcionalidades cubiertas, parciales y faltantes; porcentaje de implementación y porcentaje de aceptación comprobada por separado. Denominador: lista estable de criterios funcionales de02/matriz; numerador: criterios completos con evidencia y revisión exigida. Parcial no cuenta como completo. Mostrar n/total, fecha y criterio de cálculo. No usar archivos, commits, registros o pruebas duplicadas como progreso. Si falta fijar o auditar la base, indicar no calculable todavía y la acción para calcularlo; nunca inventar un porcentaje.100% solo con integración, plataformas, seguridad, recuperación y revisión aplicables. El simulador aislado no acredita M6.
+
+### Arquitectura, programación, Docker y validación
+
+Aplicar responsabilidad única, dependencias explícitas, interfaces pequeñas e inversión de dependencias donde resuelvan un problema. Usar módulos Nest, repositorios, adaptadores, transacciones y outbox con responsabilidades reales; justificar patrones por caso. SOLID y estándares son criterios a comprobar, no etiquetas de cumplimiento. Preferir arquetipos mantenidos y bibliotecas estándar compatibles con los pins del proyecto.
+
+Docker: versiones/digests/plataforma y licencias identificados; imágenes mínimas/multietapa cuando se construyan imágenes propias; usuario sin privilegios y permisos mínimos cuando el servicio lo permita y se pruebe; secretos fuera de imágenes/Git; puertos solo localhost por defecto; redes y volúmenes identificados, healthchecks, límites de recursos, respaldo/recuperación y limpieza de destinos ficticios. No añadir restricciones que rompan servicios del proveedor sin comprobarlas. Actualizar digests con revisión y pruebas, no latest automático. Contenedores de prueba separados del origen, sin borrar volúmenes ajenos.
+
+Validación local equivalente a una puerta de CI: instalación fijada, generación determinista, tipado, lint/formato, unitarias y pruebas de integración/performance/regresión necesarias. Guardar resultados y fallos. No aprobar una puerta fallida, ocultar pruebas omitidas o desactivar reglas para aparentar calidad. CD local significa preparar y comprobar arranque/rollback del incremento; publicación y despliegue externos requieren autorización aparte.
+
+Flyway, PDM local y Sonar son opciones propuestas por el usuario para evaluar. Antes de adoptarlas: utilidad concreta, compatibilidad, licencia/costo, recursos, prueba y responsable. Solo un dueño de migraciones por esquema. Prisma gestiona actualmente marleva; Supabase sus esquemas. Pasar a Flyway exige transición ensayada que conserve historial/checksums y migraciones inmutables, sin dos herramientas modificando las mismas tablas. El modelo DBML/DDL existente se conserva como fuente/revisión; una herramienta PDM no añade un modelo paralelo.
+
+Referencias primarias consultadas13-10-2026: [principios de arquitectura Microsoft](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles), [migraciones versionadas Flyway](https://documentation.red-gate.com/fd/versioned-migrations-273973333.html), [historial Flyway](https://documentation.red-gate.com/flyway/flyway-concepts/migrations/flyway-schema-history-table), [buenas prácticas Docker](https://docs.docker.com/build/building/best-practices/), [multietapa Docker](https://docs.docker.com/build/building/multi-stage/), [análisis TypeScript Sonar](https://docs.sonarsource.com/sonarqube-community-build/analyzing-source-code/languages/javascript-typescript-css). Lectura puntual, no certificación. Sonar documenta soporte hastaTS5.9.3 en la página consultada; Marleva usaTS6.0.3. No declararlo homologado ni cambiar TypeScript sin una comprobación concreta.
+
+Motivo: solicitud del usuario de entregas revisables, documentación útil, actualización/Git, porcentajes medibles y calidad con procesos existentes. Google/Supabase permanece pendiente y no detiene tareas independientes.

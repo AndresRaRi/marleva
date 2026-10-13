@@ -242,6 +242,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/local/file-fixtures/{id}/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Emitir permiso de lectura de fixture ficticio privado
+         * @description B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Máximo300s o restante de sesión.10 emisiones/minuto/sesión, incluso entre objetos; reemisión revoca permiso anterior de sesión/fixture. Emisión de credencial limitada, sin operación de negocio duplicada ni Idempotency-Key. Limitador durable por sesión; reintento recibe nuevo permiso. No exponer existencia a otro titular.
+         */
+        post: operations["MAR_M1_API_022"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/local/file-fixtures/{id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Leer contenido íntegro por API HTTPS
+         * @description B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Revalidar permiso ligado a cuenta/sesión/objeto y revocación. Leer/verificar MIME,bytes,sha256 antes de responder (máximo1MiB); no emitir bytes antes de validar. Sin acceso directo público a Storage.
+         */
+        get: operations["MAR_M1_API_023"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/local/file-fixtures/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Solicitar borrado durable de fixture privado
+         * @description B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Clave por actor/operación, huella de cuerpo; misma clave/cuerpo conserva resultado, distinto409. Registrar intención y negar lecturas/revocar permisos en transacción antes de Storage.202 mientras pendiente;200 al confirmar. Repetición del titular con clave original devuelve estado durable incluso borrado; nuevo acceso no permitido. Trabajador conlease/reintento/reconciliación, objeto ausente confirma borrado. No eliminación de evidencia C14/M2.
+         */
+        delete: operations["MAR_M1_API_024"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2632,6 +2692,501 @@ export interface operations {
                         mensaje: string;
                         request_id?: string;
                         accion_recuperacion?: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_022: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web: origen HTTPS exacto configurado. Móvil: ausente. */
+                Origin?: string;
+                /** @description Obligatorio móvil; no reemplaza autenticación. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio en mutaciones web con cookie; válido para sesión actual. */
+                "x-csrf-token"?: string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Permiso emitido; solo aquí se entrega secreto */
+            201: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        capability: string;
+                        /** Format: date-time */
+                        expires_at: string;
+                        /** Format: uuid */
+                        fixture_id: string;
+                    };
+                };
+            };
+            /** @description Formato incorrecto */
+            400: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión inválida */
+            401: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Origin/CSRF/capacidad no permitidos */
+            403: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Inexistente, ajeno o no disponible: indistinguibles */
+            404: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Límite; Retry-After contiene segundos restantes reales */
+            429: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída; no entregar contenido inválido */
+            503: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_023: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web: origen HTTPS exacto configurado. Móvil: ausente. */
+                Origin?: string;
+                /** @description Obligatorio móvil; no reemplaza autenticación. */
+                "x-marleva-client"?: "native";
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Texto ficticio íntegro */
+            200: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    "X-Content-Type-Options"?: "nosniff";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Formato incorrecto */
+            400: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión inválida */
+            401: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Origin/CSRF/capacidad no permitidos */
+            403: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Inexistente, ajeno o no disponible: indistinguibles */
+            404: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Límite; Retry-After contiene segundos restantes reales */
+            429: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída; no entregar contenido inválido */
+            503: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_024: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Web: origen HTTPS exacto configurado. Móvil: ausente. */
+                Origin?: string;
+                /** @description Obligatorio móvil; no reemplaza autenticación. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio en mutaciones web con cookie; válido para sesión actual. */
+                "x-csrf-token"?: string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Borrado confirmado */
+            200: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        fixture_id: string;
+                        /** Format: uuid */
+                        task_id: string;
+                        /** @enum {string} */
+                        estado: "delete_pending" | "deleted";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Intención durable; lectura ya bloqueada */
+            202: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        fixture_id: string;
+                        /** Format: uuid */
+                        task_id: string;
+                        /** @enum {string} */
+                        estado: "delete_pending" | "deleted";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato incorrecto */
+            400: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión inválida */
+            401: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Origin/CSRF/capacidad no permitidos */
+            403: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Inexistente, ajeno o no disponible: indistinguibles */
+            404: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión o idempotencia incompatible */
+            409: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Límite; Retry-After contiene segundos restantes reales */
+            429: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída; no entregar contenido inválido */
+            503: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
                     };
                 };
             };

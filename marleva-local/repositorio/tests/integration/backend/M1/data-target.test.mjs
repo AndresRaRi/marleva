@@ -199,3 +199,32 @@ it('MAR-M1-IT-BE-108-F | SEQ008:S080 | nueva migración sobre002 conserva regist
     sql("SELECT count(*) FROM information_schema.tables WHERE table_schema='marleva';").output,
   ).toBe('13');
 });
+
+it('MAR-M1-IT-BE-111-M | SEQ011:S030 | migración B09 conserva base previa y limita cambios a tres tablas', () => {
+  const previous = readFileSync(
+    root + 'apps/api/prisma/migrations/202610120002_m1_tables/migration.sql',
+    'utf8',
+  );
+  const cursor = readFileSync(
+    root + 'apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql',
+    'utf8',
+  );
+  const migration = readFileSync(
+    root + 'apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql',
+    'utf8',
+  );
+  const result =
+    sql(`BEGIN; DROP SCHEMA marleva CASCADE; CREATE SCHEMA marleva; CREATE ROLE marleva_api; CREATE TABLE marleva._prisma_migrations(id text); ${previous} ${cursor}
+    INSERT INTO marleva."Account"(id,"authId",email) VALUES ('${a}','${a}','b09-migration@example.test');
+    INSERT INTO marleva."Notice"("accountId",kind,text) VALUES ('${a}','fixture','conservado');
+    ${migration}
+    SELECT count(*) FROM marleva."Notice";
+    SELECT count(*) FROM information_schema.tables WHERE table_schema='marleva' AND table_name<>'_prisma_migrations';
+    SELECT count(*) FROM information_schema.tables WHERE table_schema='marleva' AND table_name IN ('RoleAssignment','MfaRecovery');
+    ROLLBACK;`);
+  expect(result.ok, result.error).toBe(true);
+  expect(result.output).toContain('1\n11\n0');
+  expect(
+    sql("SELECT count(*) FROM information_schema.tables WHERE table_schema='marleva';").output,
+  ).toBe('13');
+});

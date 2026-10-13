@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Marleva M1 local",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Datos ficticios; sin pagos reales. Cookie web con CSRF y origen exacto. Credencial móvil opaca en SecureStore. Contrato documental del código parcial observado, 13-10-2026. Las brechas y objetivos futuros se identifican expresamente; no acredita pruebas ni API completa de MVP1."
   },
   "servers": [
@@ -5714,6 +5714,1361 @@
                     "mensaje"
                   ],
                   "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/local/file-fixtures/{id}/access": {
+      "post": {
+        "operationId": "MAR_M1_API_022",
+        "summary": "Emitir permiso de lectura de fixture ficticio privado",
+        "description": "B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Máximo300s o restante de sesión.10 emisiones/minuto/sesión, incluso entre objetos; reemisión revoca permiso anterior de sesión/fixture. Emisión de credencial limitada, sin operación de negocio duplicada ni Idempotency-Key. Limitador durable por sesión; reintento recibe nuevo permiso. No exponer existencia a otro titular.",
+        "security": [
+          {
+            "cookieSession": []
+          },
+          {
+            "mobileSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Web: origen HTTPS exacto configurado. Móvil: ausente."
+          },
+          {
+            "name": "x-marleva-client",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "native"
+              ]
+            },
+            "description": "Obligatorio móvil; no reemplaza autenticación."
+          },
+          {
+            "name": "x-csrf-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Obligatorio en mutaciones web con cookie; válido para sesión actual."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Permiso emitido; solo aquí se entrega secreto",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "capability": {
+                      "type": "string",
+                      "minLength": 32
+                    },
+                    "expires_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "fixture_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "required": [
+                    "capability",
+                    "expires_at",
+                    "fixture_id"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Formato incorrecto",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sesión inválida",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin/CSRF/capacidad no permitidos",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Inexistente, ajeno o no disponible: indistinguibles",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Campos inválidos",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Límite; Retry-After contiene segundos restantes reales",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "description": "Segundos restantes reales"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependencia caída; no entregar contenido inválido",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/local/file-fixtures/{id}/content": {
+      "get": {
+        "operationId": "MAR_M1_API_023",
+        "summary": "Leer contenido íntegro por API HTTPS",
+        "description": "B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Revalidar permiso ligado a cuenta/sesión/objeto y revocación. Leer/verificar MIME,bytes,sha256 antes de responder (máximo1MiB); no emitir bytes antes de validar. Sin acceso directo público a Storage.",
+        "security": [
+          {
+            "cookieSession": [],
+            "fixtureCapability": []
+          },
+          {
+            "mobileSession": [],
+            "fixtureCapability": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Web: origen HTTPS exacto configurado. Móvil: ausente."
+          },
+          {
+            "name": "x-marleva-client",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "native"
+              ]
+            },
+            "description": "Obligatorio móvil; no reemplaza autenticación."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Texto ficticio íntegro",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "X-Content-Type-Options": {
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "maxLength": 1048576
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Formato incorrecto",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sesión inválida",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin/CSRF/capacidad no permitidos",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Inexistente, ajeno o no disponible: indistinguibles",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Límite; Retry-After contiene segundos restantes reales",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "description": "Segundos restantes reales"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependencia caída; no entregar contenido inválido",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/local/file-fixtures/{id}": {
+      "delete": {
+        "operationId": "MAR_M1_API_024",
+        "summary": "Solicitar borrado durable de fixture privado",
+        "description": "B09 implementado en005; pruebas y límites en acta files-increment.json. Cuenta/sesión/titular actuales; no service_role al cliente. Clave por actor/operación, huella de cuerpo; misma clave/cuerpo conserva resultado, distinto409. Registrar intención y negar lecturas/revocar permisos en transacción antes de Storage.202 mientras pendiente;200 al confirmar. Repetición del titular con clave original devuelve estado durable incluso borrado; nuevo acceso no permitido. Trabajador conlease/reintento/reconciliación, objeto ausente confirma borrado. No eliminación de evidencia C14/M2.",
+        "security": [
+          {
+            "cookieSession": []
+          },
+          {
+            "mobileSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Web: origen HTTPS exacto configurado. Móvil: ausente."
+          },
+          {
+            "name": "x-marleva-client",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "native"
+              ]
+            },
+            "description": "Obligatorio móvil; no reemplaza autenticación."
+          },
+          {
+            "name": "x-csrf-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Obligatorio en mutaciones web con cookie; válido para sesión actual."
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "expected_version"
+                ],
+                "properties": {
+                  "expected_version": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Borrado confirmado",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "fixture_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "task_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "estado": {
+                      "type": "string",
+                      "enum": [
+                        "delete_pending",
+                        "deleted"
+                      ]
+                    },
+                    "version": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "fixture_id",
+                    "task_id",
+                    "estado",
+                    "version"
+                  ]
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Intención durable; lectura ya bloqueada",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "fixture_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "task_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "estado": {
+                      "type": "string",
+                      "enum": [
+                        "delete_pending",
+                        "deleted"
+                      ]
+                    },
+                    "version": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "fixture_id",
+                    "task_id",
+                    "estado",
+                    "version"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Formato incorrecto",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sesión inválida",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin/CSRF/capacidad no permitidos",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Inexistente, ajeno o no disponible: indistinguibles",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Versión o idempotencia incompatible",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Campos inválidos",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Límite; Retry-After contiene segundos restantes reales",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "description": "Segundos restantes reales"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependencia caída; no entregar contenido inválido",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "codigo": {
+                      "type": "string"
+                    },
+                    "mensaje": {
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "accion_recuperacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codigo",
+                    "mensaje",
+                    "request_id",
+                    "accion_recuperacion"
+                  ]
                 }
               }
             }

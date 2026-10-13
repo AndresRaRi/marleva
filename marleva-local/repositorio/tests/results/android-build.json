@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-13T22:12:13.691Z",
+  "chat": "MAR-CHAT-005",
+  "platform": "Android ARM64 debug",
+  "command": "gradlew assembleDebug -PreactNativeArchitectures=arm64-v8a --console=plain",
+  "exit": 0,
+  "result": "BUILD SUCCESSFUL in3m3s;630tareas",
+  "apk": {
+    "path": "apps/client/android/app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 89399324,
+    "sha256": "d6abce8db61cfc8941973015dc4dc7c5190c1f0cf937c3a75506ae1d4f9a6687"
+  },
+  "failures": [
+    "Primer intento denegado por socket local de Gradle en sandbox",
+    "Autolinking conservaba ruta previa al traslado, regenerado desde Expo CLI",
+    "Modo offline carecía de lint-gradle31.12.0; descarga de dependencia fijada y repetición exitosa"
+  ],
+  "limits": [
+    "APK debug requiere Metro; no build de publicación",
+    "No recorrido Android de005 aún",
+    "No iOS/Safari/dispositivo físico/accesibilidad acreditados",
+    "Avisos de SDK XML/deprecaciones transitorias en log, no homologación completa"
+  ]
+}

@@ -1,4 +1,4 @@
-%% MAR-M1-SEQ-011 | B09 | Diseño objetivo, no implementado
+%% MAR-M1-SEQ-011 | B09 | B09 backend implementado en005; límites en acta
 sequenceDiagram
     actor U as Titular con sesión
     participant API as API Nest M1
@@ -18,16 +18,17 @@ sequenceDiagram
         alt Proveedor caído o contenido inválido
             API-->>U: S080 503 recuperable
         else Integridad verificada
+            API->>DB: S085 revalidar permiso/sesión/estado después de leer, antes de responder
             API-->>U: S090 contenido HTTPS text/plain, no-store, nosniff
         end
     end
     U->>API: S100 borrar con versión e idempotencia
     API->>DB: S110 bloquear lecturas, revocar capacidades y guardar intención en transacción
-    W->>DB: S120 tomar intención pendiente
+    W->>DB: S120 reclamar intención por lease15s/intentos; cercar escrituras con esa lease
     W->>ST: S130 borrar objeto idempotentemente
     alt Fallo o resultado desconocido
         W->>DB: S135 conservar pendiente y reconciliar
     else Borrado confirmado
         W->>DB: S140 registrar borrado para restauración
     end
-    Note over API,W: Modelo y OpenAPI pendientes; sin endpoint o prueba runtime acreditados
+    Note over API,W: Seis IT backend reales y medición proporcional en005; sin pantalla ni restauración B12 acreditadas
