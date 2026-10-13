@@ -1,6 +1,6 @@
 # Marleva: estado y decisiones
 
-Fecha: 13-10-2026 America/Merida. Historial por Git, sin versiones documentales manuales. MAR-CHAT-004 abierto; M1 incompleta.
+Fecha: 13-10-2026 America/Merida. Historial por Git, sin versiones documentales manuales. MAR-CHAT-004 cerrado documentalmente el13-10-2026 America/Merida,14:25. Base/M1 incompleta; ejecución transferida a005 por abrir.
 
 Reglas [00](00_GUIA_PRINCIPAL_MARLEVA.md), diseño [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md); [entrada de lectura](../../README.md).
 
@@ -84,7 +84,7 @@ Entorno cambió durante cleanup: git/python lanzadores Apple requieren licencia 
 | MAR-CHAT-001 | Principios, referencias y organización final de fuentes | Actualizado y cerrado documentalmente el 12 de octubre de 2026. Fecha original de apertura no registrada. |
 | MAR-CHAT-002 | Alcance y diseño integral de MVP1 | Apertura estándar aquí: 12-10-2026, 14:05 America/Merida (hora de primera comprobación). Cerrado documentalmente el 12-10-2026, 17:43 America/Merida. El antecedente del mismo tema no consignó ID ni apertura estándar; se conserva su trabajo y no se inventa fecha anterior. |
 | MAR-CHAT-003 | Preparación de la implementación local de MVP1 | Abierto y cerrado documentalmente el12-10-2026 America/Merida. Primera hora comprobada del trabajo17:45:50; hora exacta de ficha no registrada. No desarrollo autorizado. |
-| MAR-CHAT-004 | Desarrollo local de base/M1, sujeto a autorización | Abierto el 12-10-2026 America/Merida; primera comprobación 17:54:24. En curso; A0 autorizado por confirmación explícita del usuario; revisión documental y ejecución parcial; servicios detenidos. |
+| MAR-CHAT-004 | Desarrollo local de base/M1, sujeto a autorización | Abierto el 12-10-2026 America/Merida; primera comprobación 17:54:24. Cerrado documentalmente13-10-2026,14:25 America/Merida: orden/Git/continuidad preparados. Base/M1 incompleta y servicios detenidos; A0 vigente para continuación005. |
 
 ## 6. Lista para después
 
@@ -92,30 +92,27 @@ Reparto propio, favoritos/reseñas/promociones/referidos, IA/mapas/chat general,
 
 ## 7. Continuidad y prompt completo
 
-004 abierto, sin FIN ni 005. Para nuevo chat comprobar ID disponible y adaptar objetivo/primer paso; toda lectura/Git/pruebas/límites se conserva.
+004 cerrado documentalmente;005 comprobado libre en este registro y propuesto, no creado. Título: Marleva — implementación integrada y pruebas de base/M1. Conservar autorizaciones y pendientes; cierre no acredita M1 completa.
 
 ```text
 PROYECTO: Marleva
-CHAT: MAR-CHAT-004; CONTINUACIÓN, abierto. ANTERIOR: MAR-CHAT-003.
-TEMA: base/M1 local autorizada, documentación y pruebas integradas.
-FECHA: comprobar fecha real America/Merida.
-RAÍZ GIT: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a
-OBJETIVO: continuar por la cola del protocolo hasta verificar base/M1; no cerrar por anuncios.
-ESTADO: C01–C26 vigentes, A0 y SDK Android/licencia autorizados. Git único en raíz con commits locales, sin remoto. Fuentes editables estables en entregables/fuentes_finales; código en marleva-local/repositorio. Sources/AGENTS raíz sincronizados de solo lectura. Herramientas y lockfile propios; servicios de negocio detenidos. M1 incompleta; contratos de avisos/cursor, migración objetivo, refactor y pruebas integradas pendientes. DATA001 físico y DATA002 objetivo son estados distintos. B09/recuperación MFA son contratos objetivo; B12 es plan no ejecutado. Solo iPhone físico; Xcode27.0 instalado/seleccionado y comprobación inicial pasada; runtimes/simuladores vacíos, builds/iOS físico y Android físico pendientes.
+CHAT: MAR-CHAT-005; comprobar registro antes de abrir. ANTERIOR: MAR-CHAT-004.
+TEMA: Implementación integrada y pruebas de base/M1.
+FECHA: registrar fecha real America/Merida.
+RAÍZ: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a
 
-1. Comprueba acceso y estado Git; lee README raíz, instrucciones del usuario y AGENTS aplicables.
-2. Lee completas y en orden las cuatro fuentes en entregables/fuentes_finales: 00_GUIA_PRINCIPAL_MARLEVA.md, 01_ESTADO_Y_DECISIONES_MARLEVA.md, 02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md, 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md.
-3. Inventaría desde raíz y lee restantes archivos propios accesibles, incluidos nuevos/modificados, por ruta/nombre. Declara lectura parcial/faltantes; no reconstruyas originales ni declares lectura de resúmenes, secretos o dependencias.
-4. Lee AGENTS del código, docs/proceso/PROCESO_DESARROLLO_MARLEVA.md y MATRIZ_CASOS_M1.md; después UC/SEQ/pasos, DBML/DDL, YAML/Swagger y pruebas del caso activo. B09/B12 según enlaces de matriz.
-5. Conserva autorizaciones y límites. Solo base/M1, PostgreSQL17, Supabase local/Auth/Storage, Prisma7, correo/HTTPS, fixtures y simulador aislado. Siete desarrollos, domicilio privado, demografía pausada. No cuentas externas, gasto, publicación, contratación, contacto, cobros, datos/dinero reales ni M2–M10 completos. Stripe referencia revisable; M6 simulado con pedidos en etapa posterior. Cambiar motor exige migración/pruebas. Tarifas/topes/fiscalidad/proveedor/privacidad/calendarios/operadores siguen pendientes antes de operación real.
-6. Ejecuta una tarea por dependencia: reglas/estados/errores/SEQ/datos/API/pruebas coherentes antes del código; luego incremento integrado. Revisión visual antes de modificar pantallas. No reabrir acuerdos por rutina ni repetir autorización A0/SDK.
-7. Cada cambio back/front: unitarias, integración de casos necesarios, performance proporcional, negativos/permisos/concurrencia/caídas, accesibilidad y regresión. Guardar evidencia con versiones/dataset/plataforma/esperado/obtenido/fallos; no mocks como integración real ni web/Expo Go como builds Android/iOS.
-8. Git único: un archivo estable por función, historial en commits; sin copias vN/fechas/ZIP de rutina. Derivados desde fuente, migraciones aplicadas inmutables. Ignorar secretos/dependencias/cachés/builds. Releer finales completos, comprobar enlaces/diff/ignorados, actualizar solo afectados y guardar commit local por incremento coherente.
-9. Informa avance real al menos cada 60 segundos durante ejecución. No confundir chat abierto, turno terminado o programación horaria con proceso continuo. Resuelve fallos y continúa tareas independientes; detener solo por pausa, decisión material o permiso/bloqueo extraordinario. Silencio no es aprobación.
-10. Entrega ubicación, SHA Git, acceso y subida real. Completar M1 solo tras 02 §16.4 y plataformas exigidas comprobadas; físicos pendientes no se acreditan. Usa plantillas00: INICIO una vez, CONTINUACIÓN al retomar, FIN solo cierre real con registro01 y prompt completo revisado. Para siguiente chat comprobar ID, no asignar005 por rutina; conservar este proceso y ajustar objetivo/estado/primer paso.
+1. Comprueba acceso y Git. Lee instrucciones del usuario, README raíz y AGENTS aplicables; después completas y en orden las fuentes estables en entregables/fuentes_finales: 00_GUIA_PRINCIPAL_MARLEVA.md, 01_ESTADO_Y_DECISIONES_MARLEVA.md, 02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md, 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md.
+2. Inventaría desde raíz y lee restantes archivos propios accesibles/nuevos/modificados por ruta/nombre. Declara faltantes o lectura parcial; no reconstruyas originales ni afirmes lectura de resúmenes, secretos o dependencias.
+3. Lee AGENTS del código y docs/proceso/PROCESO_DESARROLLO_MARLEVA.md y MATRIZ_CASOS_M1.md dentro de marleva-local/repositorio; luego UC/SEQ/pasos, DBML/DDL, YAML/Swagger y pruebas del caso. Documentación coherente antes del código; revisión visual antes de pantallas.
+4. C01–C26, desarrollo local A0 y SDKAndroid/licencia autorizados: conservar, no volver a pedirlos. M1 significa acceso/cuenta, sigue incompleta. Supabase ya gestiona OTP, renovación y MFA; no reconstruir autenticación existente. MAR-TODO-AUTH-001 pendiente de ALTA prioridad: evaluar Google/Supabase y reducción de lógica propia; implementación no aprobada. Dejarlo pendiente y avanzar independientes; no refactor dependiente sin cerrar estrategia.
+5. Git único en raíz, nombres estables, un archivo por función e historial por commits; sin copias vN/fechas/ZIP. Commits72b79a8 limpieza y76b34b5 TO DO; comprobar HEAD actual. Sources/AGENTS raíz sincronizados readonly; no modificar. Derivados desde fuente; migraciones aplicadas inmutables; secretos/dependencias/cachés/builds ignorados. No remoto/subida acreditados.
+6. Código/herramientas propios en marleva-local/repositorio. Servicios detenidos; arranque tras traslado pendiente. DATA001 físico8tablas yDATA002 objetivo13 no intercambiables. API14parciales, recuperación7objetivo yB09tresobjetivo; B12 plan no ejecutado. Pasaron10SQLaislados,9unitarias ytypecheck; no cobertura completa. Xcode27.0/build27A266a instalado/seleccionado ycomprobación inicial pasada; runtimes/simuladores vacíos. Solo iPhone físico, Android físico pendiente. No acreditar nativo conweb/ExpoGo.
+7. Primer paso: seguir cola del protocolo en tarea independiente de la estrategia de acceso; cerrar contrato/ramas de avisos y cursor. Después migración/refactor integrado, pruebas y entorno por dependencias; no nuevos módulos. Cada cambio back/front: unitarias, integración, negativos/permisos/concurrencia/caídas, performance proporcional, accesibilidad y regresión; registrar versiones/dataset/plataforma/esperado/obtenido/fallos. Restauración/repetibilidad y web/Android/iOS exigidos en02 §16.4 antes de M1 completa.
+8. Solo fixtures, PostgreSQL17, Supabase local/Auth/Storage, Prisma7, correo/HTTPS ysimulador aislado. Siete desarrollos, domicilio privado, demografía pausada. Sin cuentas externas,gasto,publicación,contratación,contactos,cobros,datos/dinero reales ni M2–M10 completos. Stripe referencia revisable; M6simulado conpedidos después. Cambiar motor exige migración/pruebas; tarifas/topes/fiscalidad/proveedor/privacidad/calendarios/operadores pendientes antes de operación real.
+9. Continúa tareas ordinarias por dependencia sin esperar confirmaciones; resuelve fallos y avanza independientes. Detén solo acción afectada por pausa,decisión material o permiso/bloqueo extraordinario. Informa avances reales almenos cada60segundos durante ejecución; chat abierto/turno terminado/programación horaria no equivalen a actividad continua. No silencio como aprobación.
+10. Relee finales completos, comprueba enlaces/diff/ignorados, actualiza solo fuentes afectadas y guarda commit local por incremento. Entrega ubicación,SHA,acceso/subida real ypendientes. Usa plantillas00: INICIO una vez, CONTINUACIÓN alretomar, FIN solo cierre real; registro01 yprompt completo revisado. No inventes resultados ni amplíes MVP1.
 
-PRIMER PASO: comprobar Git y seguir la cola. MAR-TODO-AUTH-001 pendiente de alta prioridad: evaluar Google/Supabase y reducción de lógica propia antes del refactor dependiente, sin aprobación de implementación. Continuar tareas independientes; C15 sigue vigente. No nuevas pantallas ni M2.
-ENTREGABLES: incremento comprobado, fuentes afectadas, pruebas/fallos y continuidad; sin resultados o aprobaciones inventados.
+ENTREGABLES: incremento integrado comprobado y evidencia por caso02 §16.4; fallos/límites/pendientes físicos explícitos. La continuidad horaria del004 quedó desactivada al cerrarlo; no hay automatización005 creada ni acceso futuro garantizado.
 ```
 
 ## 8. Resultado de cleanup
@@ -135,3 +132,9 @@ M1 significa acceso y cuenta. Código comprobado delega OTP/verifyOtp/refreshSes
 Google es alternativa/propuesta, no aprobación de cambioC15 ni autorización de cuentas externas. [Supabase Google](https://supabase.com/docs/guides/auth/social-login/auth-google) documenta web/nativo/Expo y configuraciónGoogleCloud/OAuth conclientID/secret/callback; [correo sin contraseña](https://supabase.com/docs/guides/auth/auth-email-passwordless) ya cubreOTP. Consulta puntual, no proveedor productivo contratado. Propuesta: mantener SupabaseAuth, reducir capa propia a requisitos necesarios y evaluar Google adicional sin excluir correo/noGoogle. Sustituir método/recuperación requiere decisión del usuario y coherencia contratos/datos/pruebas.
 
 Para cerrar el tema de orden/documentación de004: (1) commit de limpieza e inventario/enlaces comprobados; (2) pendiente de estrategia de acceso ya registrado como MAR-TODO-AUTH-001 de alta prioridad; entregar cierre y prompt de005 para implementación/pruebas con alcance intacto. No esperar M1 completa para cerrar un chat de preparación/corrección; tampoco presentar el cierre delchat comoM1terminada. M1 restante: contratos/ramas, migración/refactor integrado, pruebas de seguridad/concurrencia/caídas/avisos/archivos/recuperación/performance, builds/plataformas/accesibilidad y restauración/repetibilidad. No porcentaje ni fecha fiable sin cerrar estrategia y comprobar estas dependencias.
+
+## 10. Cierre documental de004 —13-10-2026,14:25 America/Merida
+
+Resultado: orden/lectura/proceso numerados, fuentes/instrucciones/código enGit único,31redundancias retiradas conhistorial preservado, prompt completo yTO DO prioritario registrados. Commits72b79a8/76b34b5 comprobados, árbol limpio antes de registrar cierre. Generación/contratos/tipado ylint delgenerador pasaron; originales preservados/enlaces locales comprobados. No nuevas pruebas de negocio/performance/builds/restauración. Base/M1 incompleta; se transfiere a005 propuesto, no chat creado.
+
+Continuidad horaria continuar-marleva-base-m1 desactivada para estechat cerrado: herramienta confirmó PAUSED. No abandono de autorización niM1completa; no continuación005 automática creada. Archivos locales, sinsubida ni remoto. Estado/licenciaXcode anterior es histórico; datos actuales enapartado9. Siguiente paso: abrir005 conprompt anterior ycontinuar tareas independientes delTO DO.
