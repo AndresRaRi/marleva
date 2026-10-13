@@ -46,6 +46,14 @@ Antes de operación real: tarifas/topes/fiscalidad/proveedor elegible/contratos/
 
 ## 3. Estado actual y dependencias
 
+### TO DO de alta prioridad: MAR-TODO-AUTH-001
+
+Estado: PENDIENTE. Prioridad: ALTA. Usuario confirma el13-10-2026 dejar pendiente la estrategia de acceso como TO DO; no aprueba implementación de Google ni sustituir C15.
+
+Acción: evaluar inicio con Google mediante Supabase y revisar qué lógica propia de autenticación puede reducirse usando capacidades existentes del proveedor. Comparar correo vigente frente a Google adicional, vinculación de cuentas, recuperación, permisos, web/Android/iOS, requisitos externos y pruebas. Responsable del análisis: asistente; decisión material del método: usuario. No crear cuentas ni configurar credenciales externas por este registro.
+
+Salida: recomendación concreta, cambios necesarios en secuencias/contratos/datos/pruebas y decisión registrada antes de implementar el cambio. Revisar antes del refactor de autenticación que dependa de esa estrategia. Mantener C15 vigente mientras tanto y continuar tareas independientes; este TO DO no bloquea el cierre documental del chat ni implica M1 completa. No duplicarlo en listas paralelas.
+
 | Área | Hecho | Pendiente |
 |---|---|---|
 | Git | Único en raíz; respaldo 7a0ec5a antes de cleanup; sin remoto/push | Commits por incremento, no copias documentales |
@@ -106,7 +114,7 @@ ESTADO: C01–C26 vigentes, A0 y SDK Android/licencia autorizados. Git único en
 9. Informa avance real al menos cada 60 segundos durante ejecución. No confundir chat abierto, turno terminado o programación horaria con proceso continuo. Resuelve fallos y continúa tareas independientes; detener solo por pausa, decisión material o permiso/bloqueo extraordinario. Silencio no es aprobación.
 10. Entrega ubicación, SHA Git, acceso y subida real. Completar M1 solo tras 02 §16.4 y plataformas exigidas comprobadas; físicos pendientes no se acreditan. Usa plantillas00: INICIO una vez, CONTINUACIÓN al retomar, FIN solo cierre real con registro01 y prompt completo revisado. Para siguiente chat comprobar ID, no asignar005 por rutina; conservar este proceso y ajustar objetivo/estado/primer paso.
 
-PRIMER PASO: comprobar última limpieza y Git; continuar contratos/ramas pendientes de M1 según la cola, sin nuevas pantallas ni M2.
+PRIMER PASO: comprobar Git y seguir la cola. MAR-TODO-AUTH-001 pendiente de alta prioridad: evaluar Google/Supabase y reducción de lógica propia antes del refactor dependiente, sin aprobación de implementación. Continuar tareas independientes; C15 sigue vigente. No nuevas pantallas ni M2.
 ENTREGABLES: incremento comprobado, fuentes afectadas, pruebas/fallos y continuidad; sin resultados o aprobaciones inventados.
 ```
 
@@ -126,4 +134,4 @@ M1 significa acceso y cuenta. Código comprobado delega OTP/verifyOtp/refreshSes
 
 Google es alternativa/propuesta, no aprobación de cambioC15 ni autorización de cuentas externas. [Supabase Google](https://supabase.com/docs/guides/auth/social-login/auth-google) documenta web/nativo/Expo y configuraciónGoogleCloud/OAuth conclientID/secret/callback; [correo sin contraseña](https://supabase.com/docs/guides/auth/auth-email-passwordless) ya cubreOTP. Consulta puntual, no proveedor productivo contratado. Propuesta: mantener SupabaseAuth, reducir capa propia a requisitos necesarios y evaluar Google adicional sin excluir correo/noGoogle. Sustituir método/recuperación requiere decisión del usuario y coherencia contratos/datos/pruebas.
 
-Para cerrar el tema de orden/documentación de004: (1) commit de limpieza e inventario/enlaces comprobados; (2) registrar decisión o pendiente explícito de estrategia de acceso y entregar prompt de005 para implementación/pruebas con alcance intacto. No esperar M1 completa para cerrar un chat de preparación/corrección; tampoco presentar el cierre delchat comoM1terminada. M1 restante: contratos/ramas, migración/refactor integrado, pruebas de seguridad/concurrencia/caídas/avisos/archivos/recuperación/performance, builds/plataformas/accesibilidad y restauración/repetibilidad. No porcentaje ni fecha fiable sin cerrar estrategia y comprobar estas dependencias.
+Para cerrar el tema de orden/documentación de004: (1) commit de limpieza e inventario/enlaces comprobados; (2) pendiente de estrategia de acceso ya registrado como MAR-TODO-AUTH-001 de alta prioridad; entregar cierre y prompt de005 para implementación/pruebas con alcance intacto. No esperar M1 completa para cerrar un chat de preparación/corrección; tampoco presentar el cierre delchat comoM1terminada. M1 restante: contratos/ramas, migración/refactor integrado, pruebas de seguridad/concurrencia/caídas/avisos/archivos/recuperación/performance, builds/plataformas/accesibilidad y restauración/repetibilidad. No porcentaje ni fecha fiable sin cerrar estrategia y comprobar estas dependencias.
