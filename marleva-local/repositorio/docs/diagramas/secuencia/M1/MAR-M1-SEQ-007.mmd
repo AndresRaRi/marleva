@@ -1,0 +1,19 @@
+%% MAR-M1-SEQ-007 | Segundo factor y permiso de operador | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-007 - Segundo factor y permiso de operador
+    U->>UI: S010 preparar o verificar factor
+    UI->>API: S020 operación sensible
+    API->>DB: S030 comprobar operador actual y autenticación reciente
+    API->>AUTH: S040 alta TOTP estándar o verificar código
+    API->>DB: S050 guardar tokens cifrados y auditoría
+    UI->>API: S060 solicitar operación de operador
+    API->>DB: S070 revisar permiso vigente
+    API->>AUTH: S080 comprobar AAL2
+    API-->>UI: S090 permiso o 403
+    Note over API,AUTH: S100 recuperación y revocación de factor con otro autorizado siguen pendientes; no botón público para quitar MFA

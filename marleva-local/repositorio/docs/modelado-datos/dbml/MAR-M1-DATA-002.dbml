@@ -1,0 +1,189 @@
+Project Marleva_M1_Objetivo {
+ database_type: 'PostgreSQL'
+ Note: 'MAR-M1-DATA-002. Modelo objetivo propuesto, NO implementado ni aplicado. No incluye M2–M10, Auth/Storage gestionados por Supabase ni credenciales. DDL generado desde este DBML, no aplicar completo a una base existente. Hay brechas de integridad identificadas en el protocolo; no es modelo íntegro de MVP1.'
+}
+Table marleva.Account {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ authId uuid [not null, unique, note: 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.']
+ email text [not null, unique]
+ state text [not null, default: 'active']
+ legacyOperator boolean [not null, default: false, note: 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.']
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Session {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ tokenHash text [not null, unique]
+ csrfHash text [not null]
+ providerTokens text [not null, note: 'Credenciales cifradas en servidor; nunca valores de ejemplo reales.']
+ createdAt timestamptz [not null, default: `now()`]
+ lastSeen timestamptz [not null, default: `now()`]
+ authenticatedAt timestamptz [not null, default: `now()`]
+ revokedAt timestamptz
+ refreshLease timestamptz
+ indexes { (id, accountId) [unique] }
+}
+Table marleva.Challenge {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ email text [not null]
+ origin text [not null]
+ state text [not null, default: 'sending']
+ attempts integer [not null, default: 0]
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ blockedUntil timestamptz
+ indexes {
+  (email, createdAt) [name: 'Challenge_email_createdAt_idx']
+  (origin, createdAt) [name: 'Challenge_origin_createdAt_idx']
+ }
+}
+Table marleva.EmailChange {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null, note: 'Modelo objetivo: FK obligatoria, sin borrado en cascada de cuentas.']
+ oldEmail text [not null]
+ newEmail text [not null]
+ providerTokens text [not null]
+ oldConfirmed boolean [not null, default: false]
+ newConfirmed boolean [not null, default: false]
+ state text [not null, default: 'sending']
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ attempts integer [not null, default: 0]
+ indexes { (accountId, state) [name: 'EmailChange_accountId_state_idx'] }
+}
+Table marleva.Notice {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ kind text [not null]
+ text text [not null]
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Outbox {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ reference text [not null, unique]
+ recipient text [not null]
+ subject text [not null]
+ text text [not null]
+ state text [not null, default: 'pending']
+ attempts integer [not null, default: 0]
+ dueAt timestamptz [not null, default: `now()`]
+ leaseUntil timestamptz
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Audit {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [note: 'Actor mínimo registrado; FK/conservación por finalidad por revisar antes de cierre.']
+ action text [not null]
+ resourceId uuid
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Development {
+ id integer [pk, not null]
+ name text [not null, unique, note: 'Catálogo de siete desarrollos; sin polígonos inferidos.']
+}
+Ref Session_accountId_fkey: marleva.Session.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref Notice_accountId_fkey: marleva.Notice.accountId > marleva.Account.id [delete: no action, update: no action]
+
+Enum marleva.RoleKey {
+ m1_operator
+ m1_access_admin
+}
+Enum marleva.RecoveryState {
+ requested
+ approved
+ executing
+ provider_pending
+ reenrollment
+ completed
+ rejected
+ expired
+}
+Table marleva.RoleAssignment {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ role marleva.RoleKey [not null]
+ grantedBy uuid [note: 'Nulo solo en bootstrap ficticio identificado; no alta pública ni autoasignación.']
+ grantedAt timestamptz [not null, default: `now()`]
+ revokedBy uuid
+ revokedAt timestamptz
+ reason text [not null]
+ version integer [not null, default: 1]
+ indexes { (accountId, role, revokedAt) }
+}
+Table marleva.MfaRecovery {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ requestedBy uuid [not null, note: 'Titular autenticado por correo; no privilegio por sesión de recuperación.']
+ approvedBy uuid [note: 'Otro administrador autorizado con AAL2 y autenticación reciente; nunca titular.']
+ state marleva.RecoveryState [not null, default: 'requested']
+ reason text [not null, note: 'Motivo acotado sin OTP, secreto TOTP o expediente vecinal.']
+ providerReference text
+ capabilitySessionId uuid [note: 'Sesión nueva del titular tras revocación; ningún permiso administrativo.']
+ capabilityExpiresAt timestamptz
+ capabilityAttempts integer [not null, default: 0]
+ capabilityConsumedAt timestamptz
+ factorId uuid
+ capabilityHash text [note: 'Solo hash; capacidad temporal limitada a enrolar nuevo factor, nunca administrar.']
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ completedAt timestamptz
+ version integer [not null, default: 1]
+ indexes { (accountId, state) }
+}
+Table marleva.PrivateFixture {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ objectKey text [not null, unique]
+ sha256 text [not null]
+ mimeType text [not null, default: 'text/plain']
+ bytes integer [not null]
+ state text [not null, default: 'available']
+ createdAt timestamptz [not null, default: `now()`]
+ deletedAt timestamptz
+ deleteRequestedAt timestamptz
+ version integer [not null, default: 1]
+ indexes { (id, accountId) [unique] }
+ Note: 'Solo prueba B09, no expediente M2. Acceso temporal tras autorización, sin URL almacenada ni bucket público.'
+}
+Ref EmailChange_accountId_target: marleva.EmailChange.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref RoleAssignment_account: marleva.RoleAssignment.accountId > marleva.Account.id
+Ref RoleAssignment_granted: marleva.RoleAssignment.grantedBy > marleva.Account.id
+Ref RoleAssignment_revoked: marleva.RoleAssignment.revokedBy > marleva.Account.id
+Ref Recovery_account: marleva.MfaRecovery.accountId > marleva.Account.id
+Ref Recovery_requester: marleva.MfaRecovery.requestedBy > marleva.Account.id
+Ref Recovery_approver: marleva.MfaRecovery.approvedBy > marleva.Account.id
+Ref Fixture_account: marleva.PrivateFixture.accountId > marleva.Account.id
+
+Ref Recovery_capability_session: marleva.MfaRecovery.capabilitySessionId > marleva.Session.id [delete: no action, update: no action]
+
+Table marleva.FixtureAccess {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ fixtureId uuid [not null]
+ accountId uuid [not null]
+ sessionId uuid [not null]
+ tokenHash text [not null, unique, note: 'Solo hash SHA256 de secreto aleatorio estándar; nunca URL ni secreto en logs.']
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ revokedAt timestamptz
+ indexes { (sessionId, createdAt) }
+ Note: 'B09 objetivo. Máximo300s; API revalida vigencia actual de sesión/titular y disponibilidad. Reemisión revoca anterior; límite10/min/sesión incluye revocados.'
+}
+Table marleva.FixtureDeletion {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ fixtureId uuid [not null, unique]
+ accountId uuid [not null]
+ idempotencyKey text [not null]
+ requestHash text [not null]
+ expectedVersion integer [not null]
+ state text [not null, default: 'pending']
+ attempts integer [not null, default: 0]
+ dueAt timestamptz [not null, default: `now()`]
+ leaseUntil timestamptz
+ createdAt timestamptz [not null, default: `now()`]
+ completedAt timestamptz
+ indexes { (accountId, idempotencyKey) [unique] }
+ Note: 'Intención durable de borrado. Pending bloquea lecturas desde commit. Conservar para reaplicar borrado tras restauración ficticia; calendario real pendiente.'
+}
+Ref FixtureAccess_fixture_owner: marleva.FixtureAccess.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)
+Ref FixtureAccess_session_owner: marleva.FixtureAccess.(sessionId, accountId) > marleva.Session.(id, accountId)
+Ref FixtureDeletion_fixture_owner: marleva.FixtureDeletion.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)

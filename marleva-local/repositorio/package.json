@@ -1,0 +1,45 @@
+{
+  "name": "marleva-local",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": "24.21.0"
+  },
+  "scripts": {
+    "build": "pnpm --filter @marleva/api build && pnpm --filter @marleva/client build",
+    "test": "pnpm test:unit && pnpm test:integration",
+    "typecheck": "pnpm --filter @marleva/api typecheck && pnpm --filter @marleva/client typecheck",
+    "contracts": "pnpm --filter @marleva/contracts generate",
+    "docs:generate": "node scripts/generate-documentation.mjs && pnpm contracts",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration/backend --exclude \"**/data-target.test.mjs\"",
+    "test:frontend:integration": "node tests/integration/frontend/M1/web-test.mjs",
+    "test:performance:backend": "node tests/performance/backend/M1/health.mjs",
+    "test:performance:frontend": "node tests/performance/frontend/M1/navigation.mjs",
+    "test:schema": "vitest run tests/integration/backend/M1/data-target.test.mjs",
+    "docs:target": "node scripts/generate-m1-target.mjs",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"apps/**/*.{ts,tsx,mjs,cjs,json}\" \"scripts/*.{mjs,cjs}\" \"tests/**/*.{ts,mjs}\" eslint.config.mjs .prettierrc.json package.json",
+    "quality": "pnpm typecheck && pnpm lint && pnpm format:check"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "13.1.0",
+    "@dbml/core": "10.3.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "@types/supertest": "7.2.1",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "otplib": "13.5.0",
+    "prettier": "3.9.10",
+    "supertest": "7.3.1",
+    "swagger-ui-dist": "5.33.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "5.0.4",
+    "yaml": "2.9.1"
+  }
+}

@@ -1,0 +1,33 @@
+%% MAR-M1-SEQ-011 | B09 | Diseño objetivo, no implementado
+sequenceDiagram
+    actor U as Titular con sesión
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant ST as Storage privado
+    participant W as Trabajador de borrado
+    U->>API: S010 solicitar acceso a fixture
+    API->>DB: S020 comprobar sesión, cuenta, titular y disponibilidad
+    alt Recurso ajeno, inexistente o borrado
+        API-->>U: S030 404 sin distinguir existencia
+    else Titular permitido
+        API->>DB: S040 persistir hash de capacidad ligada, máximo 5 minutos
+        API-->>U: S050 capacidad opaca, no-store
+        U->>API: S055 leer con sesión y capacidad en encabezado
+        API->>DB: S060 revalidar sesión, titular, recurso, capacidad y vencimiento
+        API->>ST: S070 leer objeto privado por adaptador
+        alt Proveedor caído o contenido inválido
+            API-->>U: S080 503 recuperable
+        else Integridad verificada
+            API-->>U: S090 contenido HTTPS text/plain, no-store, nosniff
+        end
+    end
+    U->>API: S100 borrar con versión e idempotencia
+    API->>DB: S110 bloquear lecturas, revocar capacidades y guardar intención en transacción
+    W->>DB: S120 tomar intención pendiente
+    W->>ST: S130 borrar objeto idempotentemente
+    alt Fallo o resultado desconocido
+        W->>DB: S135 conservar pendiente y reconciliar
+    else Borrado confirmado
+        W->>DB: S140 registrar borrado para restauración
+    end
+    Note over API,W: Modelo y OpenAPI pendientes; sin endpoint o prueba runtime acreditados

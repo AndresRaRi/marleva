@@ -1,0 +1,31 @@
+%% MAR-M1-SEQ-014 | Recuperación MFA | Objetivo NO implementado
+sequenceDiagram
+ actor T as Titular con correo verificado
+ actor O as Otro administrador autorizado
+ participant API as API M1
+ participant DB as PostgreSQL privado
+ participant AUTH as Proveedor Auth
+ T->>API: S010 solicitar recuperación con sesión OTP reciente
+ API->>DB: S020 verificar cuenta y reservar única recuperación
+ O->>API: S030 aprobar con AAL2 y autenticación reciente
+ API->>DB: S040 comprobar rol actual, versión y actor distinto del titular
+ alt Actor propio o sin permiso
+  API-->>O: S050 denegar sin modificar factor
+ else Aprobación válida
+  API->>DB: S060 revocar sesiones, auditar y guardar tarea única
+  API->>AUTH: S070 revocar factor por referencia estable
+  alt Caída o resultado incierto
+   API->>DB: S080 conservar provider_pending y conciliar
+  else Factor revocado comprobado
+   T->>API: S085 nuevo OTP y consultar recuperación propia
+   API->>DB: S090 emitir capacidad10min ligada a cuenta y nueva sesión
+   API-->>T: S100 reenrolamiento sin permisos administrativos
+   T->>API: S110 pedir enrolamiento con sesión y capacidad limitada
+   API->>AUTH: S115 enrolar nuevo TOTP con SDK estándar
+   T->>API: S117 verificar código y factor reservado
+   API->>AUTH: S118 verificar factor y consultar AAL
+   API->>DB: S120 consumir capacidad y completar una sola vez
+   T->>API: S130 nuevo OTP y AAL2 antes de operar
+  end
+ end
+ Note over API,DB: S140 capacidad vencida no revive sesiones ni factor; sin otro administrador no se omite aprobación

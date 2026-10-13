@@ -1,0 +1,83 @@
+{
+  "platform": "darwin-arm64",
+  "artifacts": [
+    {
+      "name": "node",
+      "version": "24.21.0",
+      "file": "node-v24.21.0-darwin-arm64.tar.gz",
+      "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz",
+      "sha256": "bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057",
+      "binary": "infra/local/tools/node-v24.21.0-darwin-arm64/bin/node",
+      "license": "MIT + licencias incluidas"
+    },
+    {
+      "name": "colima",
+      "version": "0.10.3",
+      "file": "colima-Darwin-arm64",
+      "url": "https://github.com/abiosoft/colima/releases/download/v0.10.3/colima-Darwin-arm64",
+      "sha256": "980ad8bf61a4ca370243f4cb41401a61276dcd2c2502bee7b9b86f9250169f34",
+      "binary": "infra/local/tools/bin/colima",
+      "license": "MIT"
+    },
+    {
+      "name": "lima",
+      "version": "2.2.1",
+      "file": "lima-2.2.1-Darwin-arm64.tar.gz",
+      "url": "https://github.com/lima-vm/lima/releases/download/v2.2.1/lima-2.2.1-Darwin-arm64.tar.gz",
+      "sha256": "9e9eacce88f37e185c346bad73aa6136f738d8cdf8c3bb23cd42b071824bc66e",
+      "binary": "infra/local/tools/bin/limactl",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "supabase",
+      "version": "2.120.0",
+      "file": "supabase_2.120.0_darwin_arm64.tar.gz",
+      "url": "https://github.com/supabase/cli/releases/download/v2.120.0/supabase_2.120.0_darwin_arm64.tar.gz",
+      "sha256": "3b8546cc61aeabab6fd1f68edc7f664ebdfa96bdd6a9b18d8d612708f430ae28",
+      "binary": "infra/local/tools/bin/supabase",
+      "license": "MIT declarada en packages/cli-darwin-arm64/package.json"
+    },
+    {
+      "name": "docker-cli",
+      "version": "29.3.1",
+      "file": "docker-29.3.1.tgz",
+      "url": "https://download.docker.com/mac/static/stable/aarch64/docker-29.3.1.tgz",
+      "sha256": "7a448b9d948157f4bcf29369755389049746297d1289a0607ea3d0a811d20e75",
+      "binary": "infra/local/tools/docker/docker",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "compose",
+      "version": "5.6.0",
+      "file": "docker-compose-darwin-aarch64",
+      "url": "https://github.com/docker/compose/releases/download/v5.6.0/docker-compose-darwin-aarch64",
+      "sha256": "bd714a42b46e51757fc1121085b3096b9064e3f80d3ca5a991e33f44df4f43c9",
+      "binary": "infra/local/docker-config/cli-plugins/docker-compose",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "jdk",
+      "version": "17.0.20.1+1",
+      "file": "OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.20.1_1.tar.gz",
+      "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.20.1_1.tar.gz",
+      "sha256": "196d13ba5f10414bef7f6a05a9b3f00edacb18ebacef2b99485db9e2ee18f0e8",
+      "binary": "infra/local/tools/jdk-17.0.20.1+1/Contents/Home/bin/java",
+      "license": "GPL-2.0 + Classpath Exception"
+    },
+    {
+      "name": "android-cli",
+      "version": "22.0",
+      "file": "commandlinetools-mac_arm64-15859902.zip",
+      "url": "https://dl.google.com/android/repository/commandlinetools-mac_arm64-15859902_latest.zip",
+      "sha256": "835b62a26162b229b441d1f6d4680383815a270809eb33522c0d480fa5002c4e",
+      "binary": "infra/local/tools/android-sdk/cmdline-tools/22.0/bin/sdkmanager",
+      "license": "Android SDK aceptada por usuario en MAR-CHAT-004"
+    }
+  ],
+  "pnpm": {
+    "version": "12.11.2",
+    "installation": "infra/local/tools/package-manager",
+    "lockfile": "infra/local/tools/package-manager/package-lock.json"
+  },
+  "policy": "Artefactos fijados; no instalar latest. Herramientas locales privadas, sin modificar runtime Codex."
+}

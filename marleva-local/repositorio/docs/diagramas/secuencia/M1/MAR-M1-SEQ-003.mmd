@@ -1,0 +1,23 @@
+%% MAR-M1-SEQ-003 | Consultar cuenta y renovar sesión | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-003 - Consultar cuenta y renovar sesión
+    UI->>API: S010 consultar cuenta con sesión
+    API->>DB: S020 revisar revocación máximo inactividad y estado
+    alt Sesión vencida o revocada
+     API-->>UI: S030 401 y volver a acceso
+    else Sesión vigente
+     alt Token proveedor cerca de vencer
+      API->>DB: S040 obtener lease de refresco por sesión
+      API->>AUTH: S050 renovar una sola vez
+      API->>DB: S060 guardar tokens cifrados y liberar lease
+     end
+     API->>AUTH: S070 validar identidad con biblioteca estándar
+     API->>DB: S080 comprobar permiso actual y revocación de nuevo
+     API-->>UI: S090 cuenta propia y acciones permitidas
+    end

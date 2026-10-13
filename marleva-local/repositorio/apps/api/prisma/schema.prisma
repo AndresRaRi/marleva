@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+  schemas = ["marleva"]
+}
+model Account {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  authId String @unique @db.Uuid
+  email String @unique
+  state String @default("active")
+  operator Boolean @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  sessions Session[]
+  notices Notice[]
+  @@schema("marleva")
+}
+model Session {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String @db.Uuid
+  account Account @relation(fields: [accountId], references: [id])
+  tokenHash String @unique
+  csrfHash String
+  providerTokens String
+  createdAt DateTime @default(now()) @db.Timestamptz
+  lastSeen DateTime @default(now()) @db.Timestamptz
+  authenticatedAt DateTime @default(now()) @db.Timestamptz
+  revokedAt DateTime? @db.Timestamptz
+  refreshLease DateTime? @db.Timestamptz
+  @@schema("marleva")
+}
+model Challenge {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email String
+  origin String
+  state String @default("sending")
+  attempts Int @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  expiresAt DateTime @db.Timestamptz
+  blockedUntil DateTime? @db.Timestamptz
+  @@index([email, createdAt])
+  @@index([origin, createdAt])
+  @@schema("marleva")
+}
+model EmailChange {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String @db.Uuid
+  oldEmail String
+  newEmail String
+  providerTokens String
+  oldConfirmed Boolean @default(false)
+  newConfirmed Boolean @default(false)
+  state String @default("sending")
+  createdAt DateTime @default(now()) @db.Timestamptz
+  expiresAt DateTime @db.Timestamptz
+  attempts Int @default(0)
+  @@index([accountId, state])
+  @@schema("marleva")
+}
+model Notice {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String @db.Uuid
+  account Account @relation(fields: [accountId], references: [id])
+  kind String
+  text String
+  createdAt DateTime @default(now()) @db.Timestamptz
+  @@schema("marleva")
+}
+model Outbox {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reference String @unique
+  recipient String
+  subject String
+  text String
+  state String @default("pending")
+  attempts Int @default(0)
+  dueAt DateTime @default(now()) @db.Timestamptz
+  leaseUntil DateTime? @db.Timestamptz
+  createdAt DateTime @default(now()) @db.Timestamptz
+  @@schema("marleva")
+}
+model Audit {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId String? @db.Uuid
+  action String
+  resourceId String? @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz
+  @@schema("marleva")
+}
+model Development {
+  id Int @id
+  name String @unique
+  @@schema("marleva")
+}

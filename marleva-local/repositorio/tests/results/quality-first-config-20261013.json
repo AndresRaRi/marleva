@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-13T11:19:51-06:00",
+  "chat": "MAR-CHAT-004",
+  "scope": "Herramientas de calidad; no refactor de negocio o pantalla",
+  "versions": {
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.71.2",
+    "prettier": "3.9.10",
+    "globals": "17.13.0",
+    "eslint-plugin-react-hooks": "7.1.1"
+  },
+  "typecheck": {
+    "api": true,
+    "client": true
+  },
+  "unitTests": {
+    "passed": 9,
+    "failed": 0,
+    "files": 3,
+    "durationMs": 381,
+    "source": "salida CLI11:18:37"
+  },
+  "lint": {
+    "errorCount": 11,
+    "warningCount": 0,
+    "files": [
+      {
+        "path": "apps/api/bootstrap.mjs",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 2,
+            "column": 9,
+            "ruleId": "no-unused-vars",
+            "message": "'readFile' is defined but never used.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "apps/api/src/account.service.ts",
+        "errors": 2,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 70,
+            "column": 9,
+            "ruleId": "prefer-const",
+            "message": "'s' is never reassigned. Use 'const' instead.",
+            "severity": 2
+          },
+          {
+            "line": 124,
+            "column": 11,
+            "ruleId": "@typescript-eslint/no-unused-vars",
+            "message": "'t' is assigned a value but never used.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "apps/client/app/index.tsx",
+        "errors": 3,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 2,
+            "column": 61,
+            "ruleId": "@typescript-eslint/no-unused-vars",
+            "message": "'Platform' is defined but never used.",
+            "severity": 2
+          },
+          {
+            "line": 8,
+            "column": 164,
+            "ruleId": "@typescript-eslint/no-explicit-any",
+            "message": "Unexpected any. Specify a different type.",
+            "severity": 2
+          },
+          {
+            "line": 11,
+            "column": 127,
+            "ruleId": "@typescript-eslint/no-explicit-any",
+            "message": "Unexpected any. Specify a different type.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "apps/client/src/api.ts",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 5,
+            "column": 75,
+            "ruleId": "@typescript-eslint/no-explicit-any",
+            "message": "Unexpected any. Specify a different type.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "scripts/generate-documentation.mjs",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 9,
+            "column": 618,
+            "ruleId": "no-unused-vars",
+            "message": "'verb' is assigned a value but never used.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "scripts/local.mjs",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 7,
+            "column": 150,
+            "ruleId": "no-empty",
+            "message": "Empty block statement.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "tests/integration/backend/M1/m1.test.mjs",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 7,
+            "column": 9,
+            "ruleId": "no-unused-vars",
+            "message": "'config' is defined but never used.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "path": "tests/integration/frontend/M1/web-test.mjs",
+        "errors": 1,
+        "warnings": 0,
+        "messages": [
+          {
+            "line": 16,
+            "column": 71,
+            "ruleId": "no-undef",
+            "message": "'document' is not defined.",
+            "severity": 2
+          }
+        ]
+      }
+    ]
+  },
+  "format": {
+    "passed": false,
+    "filesWithIssues": 33,
+    "source": "pnpmformat:check salidaCLI; no formato masivo aplicado"
+  },
+  "frozen": {
+    "exitCode": 0,
+    "before": "b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a",
+    "after": "b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a",
+    "unchanged": true,
+    "offline": true,
+    "ignoreScripts": true
+  },
+  "limits": [
+    "No todas las pruebasM1",
+    "No integraciónAPI nueva",
+    "No performance ni móvil",
+    "Defectos existentes pendientes; no se apagaron reglas"
+  ]
+}

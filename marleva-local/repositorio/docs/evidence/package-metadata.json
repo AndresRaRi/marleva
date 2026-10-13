@@ -1,0 +1,1127 @@
+[
+  {
+    "name": "expo",
+    "requested": "57.0.0",
+    "version": "57.0.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-dom": "*",
+      "react-native": "*",
+      "react-native-web": "*",
+      "@expo/dom-webview": "*",
+      "@expo/metro-runtime": "*",
+      "react-native-webview": "*"
+    },
+    "dist": {
+      "shasum": "67dbb996698acc1f65488d0827c0ca03de61b3dc",
+      "tarball": "https://registry.npmjs.org/expo/-/expo-57.0.0.tgz",
+      "fileCount": 417,
+      "integrity": "sha512-UMdpmbZcDpDPtYUlsPM6AUFfyaYjqUHLdW41n5SVIcg2n6KtqguFxcItu9i4faWK4bV92Xrb4/mgAcxmMEk05Q==",
+      "signatures": [
+        {
+          "sig": "MEYCIQDGv6YTn5+iRrFo2jmjhx9kC7enHT1JMfped+y9MJeGrAIhAMgbAhVze8ahLtt8UdkGECpHgSc87aEvOXZKP8QLrsBr",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 889627
+    }
+  },
+  {
+    "name": "react-native",
+    "requested": "0.86.3",
+    "version": "0.86.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "^19.2.3",
+      "@types/react": "^19.1.1",
+      "@react-native/jest-preset": "0.86.3"
+    },
+    "engines": {
+      "node": "^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0"
+    },
+    "dist": {
+      "shasum": "39f40d11dc2ca6d56262cdf1cb9e5ac1cfc8218b",
+      "tarball": "https://registry.npmjs.org/react-native/-/react-native-0.86.3.tgz",
+      "fileCount": 4575,
+      "integrity": "sha512-JR5s3bM9ezud+Mw24GlNXNfthqPIKwrQgPPJcam+L97t2sKjjEavhCzBn+fyqZZRcM5+XlhYxpTxVkK7e1n38Q==",
+      "signatures": [
+        {
+          "sig": "MEYCIQC3idmfljDIYIL0F5nrjHyG9LnflzUWWVvXYpr762uDcgIhAMsqgbxAlFg65W1yuERbzihBzDhHObR7UcX7WBNhsakt",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCYYI68cQQRM2XBhWIfiPnhBzuogM51zu9KlzM1t1qqogIgFelPcnNAqci0AK96TpD97gbyqNAHl1Y6TLcnbGNqTyE=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/react-native@0.86.3",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 20320139
+    }
+  },
+  {
+    "name": "react",
+    "requested": "19.2.3",
+    "version": "19.2.3",
+    "license": "MIT",
+    "engines": {
+      "node": ">=0.10.0"
+    },
+    "dist": {
+      "shasum": "d83e5e8e7a258cf6b4fe28640515f99b87cd19b8",
+      "tarball": "https://registry.npmjs.org/react/-/react-19.2.3.tgz",
+      "fileCount": 27,
+      "integrity": "sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==",
+      "signatures": [
+        {
+          "sig": "MEYCIQChHNO3NMwqkm+o17j681SehOKU/Kglmo9SI4kddJK+dwIhANcnHYlJgbillejhMJEDc5QTgUY2S3RkuSbIA38k6n/z",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 171604
+    }
+  },
+  {
+    "name": "react-dom",
+    "requested": "19.2.3",
+    "version": "19.2.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "^19.2.3"
+    },
+    "dist": {
+      "shasum": "f0b61d7e5c4a86773889fcc1853af3ed5f215b17",
+      "tarball": "https://registry.npmjs.org/react-dom/-/react-dom-19.2.3.tgz",
+      "fileCount": 43,
+      "integrity": "sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==",
+      "signatures": [
+        {
+          "sig": "MEUCIBXrQ8kx90h3EbMS5XrIpVeKXuIwXyH1gmDzfS5H8EhfAiEAvmv6d49E5xVOmFvOjTO5lY1Zr3AahHxJoj04zh9xaXc=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 7319413
+    }
+  },
+  {
+    "name": "react-native-web",
+    "requested": "0.21.0",
+    "version": "0.21.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "^18.0.0 || ^19.0.0",
+      "react-dom": "^18.0.0 || ^19.0.0"
+    },
+    "dist": {
+      "shasum": "90c122f94f9c907235235a1f18c0e541a4c30c67",
+      "tarball": "https://registry.npmjs.org/react-native-web/-/react-native-web-0.21.0.tgz",
+      "fileCount": 863,
+      "integrity": "sha512-S0mtV7wMPeet1kCRnrEmo1bTUJeFsKebleCbRwbBRBUg/BWS64bfsnnm+ArC+QtjlbZFSZmtvv8imzOIuOOa3Q==",
+      "signatures": [
+        {
+          "sig": "MEQCIHZEpr+s+FH5i5bCZNPXqVUUAKq/AUrtvlarzmlsBeksAiAqgPjXwWYRqUB8PqAn40/sxpLN4DSAfwsoL5ir3dJE7w==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 2978813
+    }
+  },
+  {
+    "name": "expo-router",
+    "requested": "57.0.26",
+    "version": "57.0.26",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react": "*",
+      "react-dom": "*",
+      "expo-linking": "^57.0.12",
+      "react-native": "*",
+      "@expo/log-box": "^57.0.4",
+      "expo-constants": "^57.0.21",
+      "react-native-web": "*",
+      "@expo/metro-runtime": "^57.0.16",
+      "react-native-screens": "^4.26.0",
+      "react-native-reanimated": "*",
+      "react-server-dom-webpack": "~19.0.4 || ~19.1.5 || ~19.2.4",
+      "react-native-gesture-handler": "*",
+      "@testing-library/react-native": ">= 13.2.0",
+      "react-native-safe-area-context": ">= 5.4.0"
+    },
+    "dist": {
+      "shasum": "60fe2dbaff1aaa3f752a5186aaebc2d821f508db",
+      "tarball": "https://registry.npmjs.org/expo-router/-/expo-router-57.0.26.tgz",
+      "fileCount": 2459,
+      "integrity": "sha512-iSF+LEbbvGkYGA2j8qWvF1woxrA7EWHZF+SNdTPR7dmi6myPOJsDGdwfWlXA74Gns8T7AuyfuDsxIsqEJ45BhQ==",
+      "signatures": [
+        {
+          "sig": "MEMCH3EfLiPuQDztBJZXyZuk8JoXnIo03MWIxZl1gt2iwP4CIH6M7wcSjxdCuAqk4r6eBeox4OLTK9bCTKIRTHs4lv4w",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIH8i/fPM9+kZpMG2WVO3rpYHWTr7HQAnTBcmnVi3qxOIAiEAmIIG8GQwgrTQvjE22Pg+KR4ZlAaYB05PjkZrTr0F26s=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 6194168
+    }
+  },
+  {
+    "name": "expo-secure-store",
+    "requested": "57.0.4",
+    "version": "57.0.4",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*"
+    },
+    "dist": {
+      "shasum": "a5eefc7490d1de26fd62e83bc5fdceacd94f5342",
+      "tarball": "https://registry.npmjs.org/expo-secure-store/-/expo-secure-store-57.0.4.tgz",
+      "fileCount": 77,
+      "integrity": "sha512-7zBA1RThURTXdP4w65kBzZNbcSsfArqVd+p+ETAnPRWXO8J296Qd0YaCVyRpJ0HSwlCnGdvOnqO+NgSreHsOhA==",
+      "signatures": [
+        {
+          "sig": "MEUCIDwnIpiVKfTt9Tet8/d4p11FOkqQLwtG3fyyFC2IcgUkAiEAg7apmQAk+vq0b0si/fVJkvnRMgtA5+PgjjhukF5gnrU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCnTguJW1L03y9qi4f0lSEg+8lnjkSnLmYe4rQ6JxvNnAIhALKKwIjSdtiCZ2jkNbM/pu0C2DIEYIDuLaTrruU0iqrP",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 220613
+    }
+  },
+  {
+    "name": "@nestjs/core",
+    "requested": "12.1.3",
+    "version": "12.1.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "rxjs": "^7.1.0",
+      "@nestjs/common": "^12.0.0",
+      "reflect-metadata": "^0.1.12 || ^0.2.0",
+      "@nestjs/websockets": "^12.0.0",
+      "@nestjs/microservices": "^12.0.0",
+      "@nestjs/platform-express": "^12.0.0"
+    },
+    "engines": {
+      "node": ">= 20"
+    },
+    "dist": {
+      "shasum": "7b733c127a64206184d79b7ff2c7f97102df728b",
+      "tarball": "https://registry.npmjs.org/@nestjs/core/-/core-12.1.3.tgz",
+      "fileCount": 403,
+      "integrity": "sha512-uHv2LPVewOnt5ZxSsDI11Vku9Gt1mdL0OWy/JOfXH1D5pV/HaPRGfreHPfYsO/bsyvZxdWVqFfAaFxvop6mFhw==",
+      "signatures": [
+        {
+          "sig": "MEUCIQCioL0RqYMlDrDAUkcSe3LRmG1b2EEUs5GMS+buQR3zTwIgd0tBNCHJRmTzSnifKxcAzFKewCrMR8zkWfENTzMsnPc=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCICjDuWnehK5ZhJpJfMjd/wnyDxxqfSgxNiq3axpwl6wnAiBxP7V2/UBl4AXKzBprsrKf//WQ/TC4Sm7JJCRS73ek0Q==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 695568
+    }
+  },
+  {
+    "name": "@nestjs/common",
+    "requested": "12.1.3",
+    "version": "12.1.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "rxjs": "^7.1.0",
+      "class-validator": ">=0.13.2",
+      "reflect-metadata": "^0.1.12 || ^0.2.0",
+      "class-transformer": ">=0.4.1"
+    },
+    "dist": {
+      "shasum": "d38c02115e7cf6add5f9b0dda80009e89df00405",
+      "tarball": "https://registry.npmjs.org/@nestjs/common/-/common-12.1.3.tgz",
+      "fileCount": 409,
+      "integrity": "sha512-A9grrnTGNE+sD77bwkHw89LNsrtsIv/tbnmzRsy3dlI5H4WgT6I4wiLSc4JLv8B5pOZttVi5iF/RW/5iZe997w==",
+      "signatures": [
+        {
+          "sig": "MEYCIQCLKG83LqJX9+7qMlaIw+gqTcXWSyMIiYKIFkzkhs8LKgIhAN96cKdB05VN0ttXHhgcm6TMPbGpOcmCKBjeFSrCGH8A",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQDe8omIQ+nYtyRd8/3N1qY/ibBnG8y1BsEg12zl2pP4/wIhAKgUvxnDUlV6BxQ/ERmI9RWjeVNblw2lNg1sMbYzUzAn",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 545081
+    }
+  },
+  {
+    "name": "@nestjs/platform-express",
+    "requested": "12.1.3",
+    "version": "12.1.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "@nestjs/core": "^12.0.0",
+      "@nestjs/common": "^12.0.0"
+    },
+    "dist": {
+      "shasum": "c9baa25e24d7117d48d7c3d2e71de96d4d794128",
+      "tarball": "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-12.1.3.tgz",
+      "fileCount": 54,
+      "integrity": "sha512-3C9tjF2VJOTAjl4ATZXksMFIbH4dwyX5EyZA+9SK3CreFr8FwOSMyha+YgAMSKECLlOIBhHUeYmTwT761iKlOQ==",
+      "signatures": [
+        {
+          "sig": "MEQCIDJSRvekqyr+h7gxdVe8pvMp5qQY0sCo6nlcb/SJgf1gAiAZgwys4ZuPJarmgSHUweYiHd3z5E41s/0JWp23crecaw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCICmgYAd4ySwoCoguseC6s5BvAPVLnyEcdu3iNVeQbB7gAiEAos4otD58IEPIuX5VVhkSs4y3xSAHeBC/PE8Aygz576A=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 72192
+    }
+  },
+  {
+    "name": "prisma",
+    "requested": "7.10.0",
+    "version": "7.10.0",
+    "license": "Apache-2.0",
+    "peerDependencies": {
+      "typescript": ">=5.4.0",
+      "better-sqlite3": ">=9.0.0"
+    },
+    "engines": {
+      "node": "^20.19 || ^22.12 || >=24.0"
+    },
+    "dist": {
+      "shasum": "f8fd28b6665620926f5124b278ada2e9f3d24bc3",
+      "tarball": "https://registry.npmjs.org/prisma/-/prisma-7.10.0.tgz",
+      "fileCount": 48,
+      "integrity": "sha512-o0ornyJOWgygVAzGCpr8PdXV8EJLHyVGDDUr/voBQt8Azzw8cYTByzzPGcA/m4tCkPcnJA8raEOv2CslsKhPEw==",
+      "signatures": [
+        {
+          "sig": "MEUCIQCF1xpa4qfMOHKxzJftqvaq+7ztM9VswZPCMpreFsvl3AIgCBsT8BV9onRUCTnPVcyK/G7BW2ou4CEwVRqyeq088+8=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCTRvGJH8D9qaoSWK1cZlIJhF2+i2Ywf+DRmKi+7V45ggIgIPiw+mRaM1vEL45SssPoupjHzB0/cMbqa5vMMXu4Lks=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 42043673
+    }
+  },
+  {
+    "name": "@prisma/client",
+    "requested": "7.10.0",
+    "version": "7.10.0",
+    "license": "Apache-2.0",
+    "peerDependencies": {
+      "prisma": "*",
+      "typescript": ">=5.4.0"
+    },
+    "engines": {
+      "node": "^20.19 || ^22.12 || >=24.0"
+    },
+    "dist": {
+      "shasum": "3fed90b7577a8110417c7a6af69f5dab0a385e98",
+      "tarball": "https://registry.npmjs.org/@prisma/client/-/client-7.10.0.tgz",
+      "fileCount": 75,
+      "integrity": "sha512-Ubw/QS9JGIBSBUsyxAUQuK/Jcu0Tsva7le7QbLd91Kix9yJvYDdj5QkwgEbbZniH80dd+sziQcALPc+HnvQC8Q==",
+      "signatures": [
+        {
+          "sig": "MEUCIHLfQFuuCm21iyviLDFek+rFKSdX8cx37/6g+Rhvs7vcAiEA0VJGXjk2tkWiNoOaxmLiYAoylOj/pE9UjE8c3imbHrM=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCWFsZTD3Ipm/9uEBhBAvof5YRwUdcpIUe2Gkh0poFE5gIgGzH6VHDscKGNHbmoTPm9OjOOkSIlQ8KuYH/hBx1HMGU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@prisma%2fclient@7.10.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 74458946
+    }
+  },
+  {
+    "name": "@prisma/adapter-pg",
+    "requested": "7.10.0",
+    "version": "7.10.0",
+    "license": "Apache-2.0",
+    "dist": {
+      "shasum": "8181c52b8406e7c8e9d6d52aa8b1e1f95aefa40e",
+      "tarball": "https://registry.npmjs.org/@prisma/adapter-pg/-/adapter-pg-7.10.0.tgz",
+      "fileCount": 7,
+      "integrity": "sha512-N7nwSor0HO1Kz6xBv0TPAjAPysKK0fac6p4fVN3ensLOuzc/83Fgmln5k92eK/cvzqdkSR/2kkAqlbcdwVrwpw==",
+      "signatures": [
+        {
+          "sig": "MEYCIQC7bj/0oK0AWh6VgR/glwaEokc1nHx2IdA26W7sOpmVVQIhAJ+/CiXHdQ+Dd75fpgvRyJSXWkYU4hJLrih6i8aFutpG",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIDKRO18tknKsmPANbXRTXEdnoi90PWG1HxEeuURbVV54AiEA0vWJhp9RUtwcyq0nbNVTY/nvRgLqrUCcAPFhroXb4SM=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@prisma%2fadapter-pg@7.10.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 72301
+    }
+  },
+  {
+    "name": "typescript",
+    "requested": "6.0.3",
+    "version": "6.0.3",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=14.17"
+    },
+    "dist": {
+      "shasum": "90251dc007916e972786cb94d74d15b185577d21",
+      "tarball": "https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz",
+      "fileCount": 140,
+      "integrity": "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==",
+      "signatures": [
+        {
+          "sig": "MEYCIQDv8tVB8x5z1EeS+UHLgSqOywErEEFERRmMNef6kTXsPQIhAMO+L+ktR6FwCDSc+z0KD68md8mvKukeVzgjuBhoie9i",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 24346827
+    }
+  },
+  {
+    "name": "@supabase/supabase-js",
+    "requested": "latest",
+    "version": "2.117.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "@opentelemetry/api": ">=1.0.0"
+    },
+    "engines": {
+      "node": ">=22.0.0"
+    },
+    "dist": {
+      "shasum": "ba75d3e7cc33065c65bccd013af5e6d8518424a5",
+      "tarball": "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.117.3.tgz",
+      "fileCount": 45,
+      "integrity": "sha512-K+f8PimXDunPWQ63CKRXaF5pbVPJxmfw5ryAnh0s9S9PkwcuqBjiSpIaqpF7KLDljeYwXIL85ST8QxaO0+XuvA==",
+      "signatures": [
+        {
+          "sig": "MEUCIQDl1sY2a0WNa+4e8qBl3WFpe5UHDalsW5zZ3Xd59E/ZAAIgYcw3r7FHy4dAziez7maLMDJIPgh3Fpb9qBZjj7ohL+4=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCv4DGPbCiwt5KSAIVDh9NWq2K2+ai0IEBReekV1lqk4AIhAP/PL+oRm1/+uDV+E4ZjHYRFumAlICPoHI0BEJuL7pI8",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@supabase%2fsupabase-js@2.117.3",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 649494
+    }
+  },
+  {
+    "name": "pg",
+    "requested": "latest",
+    "version": "8.23.1",
+    "license": "MIT",
+    "peerDependencies": {
+      "pg-native": ">=3.0.1"
+    },
+    "engines": {
+      "node": ">= 16.0.0"
+    },
+    "dist": {
+      "shasum": "e4848051a04aa2f968fd5671d075f89e5e7918b9",
+      "tarball": "https://registry.npmjs.org/pg/-/pg-8.23.1.tgz",
+      "fileCount": 20,
+      "integrity": "sha512-aL96AHANtWjPLDOLqnhx+ngp9+UK7ETEU8VJrDCGvsSSi/mGLcWYsS6Herg7lmaBJe4uwrfqsa7gTEFaSizDoQ==",
+      "signatures": [
+        {
+          "sig": "MEUCIQCaQ7YY2yU8gtOVUdpEmdwhMZX8RimNffuKliyHO8GPcQIgdnqtDpcBEkCylJPazoNxAcwG0J+2ErEXsbGHsceQDbQ=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCoTOteRl6SbOEx95tHOsn0FgIOYsb5wPdT77A0PUDC8wIgUGnJrpGJKdY8o6QUGoU0GRtQVHfVx3aHN7ChoRaAMmo=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 102632
+    }
+  },
+  {
+    "name": "@types/pg",
+    "requested": "latest",
+    "version": "8.23.1",
+    "license": "MIT",
+    "peerDependencies": {},
+    "dist": {
+      "shasum": "7e712ce02cf44ad100862127f10f52e9c6b9d227",
+      "tarball": "https://registry.npmjs.org/@types/pg/-/pg-8.23.1.tgz",
+      "fileCount": 9,
+      "integrity": "sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==",
+      "signatures": [
+        {
+          "sig": "MEYCIQCGT3gAmd1foe4h5A+yaOnvnGkX4FmiT1+tr47rnCz5NgIhAPlL7G9WIK6VVbn78dzvvjLpr92Qv7fs2EeVm3TegnYG",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIECf+CMs6DtJn1Pv5baTTBd3pydqnHoxUG1uqL+954wEAiBThLT81ktCMBVT/tLtxIL2fhUbe9UonwJn0yW8y9pIDw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 19802
+    }
+  },
+  {
+    "name": "@types/node",
+    "requested": "latest",
+    "version": "26.6.5",
+    "license": "MIT",
+    "peerDependencies": {},
+    "dist": {
+      "shasum": "cb35209e7767c503551b5fa42a48231c7441d979",
+      "tarball": "https://registry.npmjs.org/@types/node/-/node-26.6.5.tgz",
+      "fileCount": 109,
+      "integrity": "sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==",
+      "signatures": [
+        {
+          "sig": "MEUCICpys+wvg3B8d5GwZcaXjRtY1v/tZfhWxMGpWP4IOdAdAiEAgcy71FiMA4XW+gZuA1uwcohcHn4HX5XA7kP5acWz1ug=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIEiHeuNSZyMm4RJY9UUaiZV+sUiEfPPm3I+s3NOb0TLkAiAr2YOepe3DCFvKZJpzhpAhACkiMUzzfENI/Lh148EbgA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 2546175
+    }
+  },
+  {
+    "name": "@types/react",
+    "requested": "latest",
+    "version": "19.3.0",
+    "license": "MIT",
+    "peerDependencies": {},
+    "dist": {
+      "shasum": "3b3ce8d8c1627fb5ccd4dadd57ef445c5a153b77",
+      "tarball": "https://registry.npmjs.org/@types/react/-/react-19.3.0.tgz",
+      "fileCount": 18,
+      "integrity": "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==",
+      "signatures": [
+        {
+          "sig": "MEQCICO9E9W9sN+6oHDGno2fJYJ8YEsNOa01MoJJmauunAjGAiAVusL8FBYYoRgnVrnz0RY2KMSjP1OlJ7GunY0YhIr0GA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCG/2kbQCjMBz9wJNsFnPRUQFtQzxGIbkrwTxQ3ZYlQrwIhAKZAxRpE46wtsHz27OGDgRmXLV83Q5GivNToLaMzF7Q2",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 408108
+    }
+  },
+  {
+    "name": "reflect-metadata",
+    "requested": "latest",
+    "version": "0.2.2",
+    "license": "Apache-2.0",
+    "dist": {
+      "shasum": "400c845b6cba87a21f2c65c4aeb158f4fa4d9c5b",
+      "tarball": "https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.2.2.tgz",
+      "fileCount": 11,
+      "integrity": "sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==",
+      "signatures": [
+        {
+          "sig": "MEUCIQDubgmXoC2VuyxtKZNHZMEbo7XXz/yUvRRRbcr2L8LkeQIgJIlGSufMIWpjvIxKn+zJmnQ1RPmMRv/TLlsaQOOUTes=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "unpackedSize": 241158
+    }
+  },
+  {
+    "name": "rxjs",
+    "requested": "latest",
+    "version": "7.8.2",
+    "license": "Apache-2.0",
+    "dist": {
+      "shasum": "955bc473ed8af11a002a2be52071bf475638607b",
+      "tarball": "https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz",
+      "fileCount": 2277,
+      "integrity": "sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==",
+      "signatures": [
+        {
+          "sig": "MEQCIE267i0BwsqwUAllMgD7S6GXe0LzAGPe1d36zrviZiL/AiBy/PP9hlTkx9/W6akw19RFrxjtzvWAuoNVPm2XkRRt3Q==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 4497673
+    }
+  },
+  {
+    "name": "class-validator",
+    "requested": "latest",
+    "version": "0.15.1",
+    "license": "MIT",
+    "dist": {
+      "shasum": "002600c101bcebb16e7240870cb50535340c9600",
+      "tarball": "https://registry.npmjs.org/class-validator/-/class-validator-0.15.1.tgz",
+      "fileCount": 959,
+      "integrity": "sha512-LqoS80HBBSCVhz/3KloUly0ovokxpdOLR++Al3J3+dHXWt9sTKlKd4eYtoxhxyUjoe5+UcIM+5k9MIxyBWnRTw==",
+      "signatures": [
+        {
+          "sig": "MEYCIQD+IzU7JJ9/6ztDvPJLqtEB/yoftS07xY5nARcek4WlAAIhAPeKqQDQNMFpf6SNYzXhW4vIBezHDj7hazZkaxVIQmSz",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 5327191
+    }
+  },
+  {
+    "name": "class-transformer",
+    "requested": "latest",
+    "version": "0.5.1",
+    "license": "MIT",
+    "dist": {
+      "shasum": "24147d5dffd2a6cea930a3250a677addf96ab336",
+      "tarball": "https://registry.npmjs.org/class-transformer/-/class-transformer-0.5.1.tgz",
+      "fileCount": 252,
+      "integrity": "sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==",
+      "signatures": [
+        {
+          "sig": "MEQCIDFfjpTr989aSqoHSCfN1CLPWaTXqdfA9Qeqc8V6Os09AiAOzjUZPMJdM1Lr/08Lzfvic65/U1hsgUdtI68a3MM00A==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "unpackedSize": 776388,
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJhm+mpCRA9TVsSAnZWagAA/nQQAKJPqAQDJc78SqnaDd79\n/x9QXCMixeR2ErsFwwpa8r1bZyt3EMnkwKopc+a6sf5ShRK8PhcdsA8fHfRL\ntcxot2DlV0ENP3N81uh2qAfpL9t4lGYKdUt3fOKrdwxngCRcylWuhSI/tdlE\nxxx/YO6lHje3rbmoCRhsb+Po2XbYabuYFdFKrS4E3Su2rwDAHIQbca+n3O6f\nMjbThAcKgzqKpP2c/aqZR427pXalzfpvP9VgqRwcT+jdLUDByzuJ7xaC3h8b\n2zEiAHCfxnUNg8DVnIX6Yfx5r9U4CAtun703j12Q/9VCY+I6GANyW1Olutcm\nRHNFyPPxqc6odXda/4HQEWu+23nC4C3B1Ri7wny49+xWUE08RpH5aVN4oMNP\nNiusm6k4BDV4Ulbv4mXTedipwLtjzUpsax1UqciMksPK2Jz3DRoIBZReJxdz\ngLnn7KQ2rEnKZmFamjeqlPWzpr0VWCQEKVSIW6VahTxQa5CKeHdNoGvfJ0QX\nTqp69MQouCqka1/rS93mlrnLBuf3QTsX78dbze+hL87yco+Nf4c49Z+x7fjr\nYpwv8ZoK3XrSt+qtfFuyWGljSqEXWVMFFBnUH+ILke49UskL/Vrzh5wyuTAY\nUPGFYhEZYmb+fpsom+oXSpxtV7D9E5zi2+rqtB5z/cNP2CuDLe4JM2X/CTO9\n1S/R\r\n=YGs0\r\n-----END PGP SIGNATURE-----\r\n"
+    }
+  },
+  {
+    "name": "cookie-parser",
+    "requested": "latest",
+    "version": "1.4.7",
+    "license": "MIT",
+    "engines": {
+      "node": ">= 0.8.0"
+    },
+    "dist": {
+      "shasum": "e2125635dfd766888ffe90d60c286404fa0e7b26",
+      "tarball": "https://registry.npmjs.org/cookie-parser/-/cookie-parser-1.4.7.tgz",
+      "fileCount": 5,
+      "integrity": "sha512-nGUvgXnotP3BsjiLX2ypbQnWoGUPIIfHQNZkkC668ntrzGWEZVW70HDEB1qnNGMicPje6EttlIgzo51YSwNQGw==",
+      "signatures": [
+        {
+          "sig": "MEUCIQDgW0cH9Q0Xa9U004mPsYv2FS0n2A5oHldy90MiPR4W0QIgF02GujB2sEoA4FHyMMC+Grn64tutiftsUDS/9fb9JhE=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "unpackedSize": 12977
+    }
+  },
+  {
+    "name": "@types/cookie-parser",
+    "requested": "latest",
+    "version": "1.4.10",
+    "license": "MIT",
+    "peerDependencies": {
+      "@types/express": "*"
+    },
+    "dist": {
+      "shasum": "a045272a383a30597a01955d4f9c790018f214e4",
+      "tarball": "https://registry.npmjs.org/@types/cookie-parser/-/cookie-parser-1.4.10.tgz",
+      "fileCount": 5,
+      "integrity": "sha512-B4xqkqfZ8Wek+rCOeRxsjMS9OgvzebEzzLYw7NHYuvzb7IdxOkI0ZHGgeEBX4PUM7QGVvNSK60T3OvWj3YfBRg==",
+      "signatures": [
+        {
+          "sig": "MEYCIQD7CqNR34gaoXPjpkM7tEoyszbXQQwhKG56xTCgrCW0SwIhAJQz8fjKkjtbAUQQ43dN21pcBAQ2ir1Xo9YaTsAGK68m",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 5941
+    }
+  },
+  {
+    "name": "helmet",
+    "requested": "latest",
+    "version": "8.3.0",
+    "license": "MIT",
+    "engines": {
+      "node": ">=18.0.0"
+    },
+    "dist": {
+      "shasum": "3842eea921e7c7015d11f217910c710c434efb26",
+      "tarball": "https://registry.npmjs.org/helmet/-/helmet-8.3.0.tgz",
+      "fileCount": 9,
+      "integrity": "sha512-Qgpiaws3Sm30Av8Eah6sjMCZZwjlBu+E68rhpCWBshY1lb09HtLwj5GviX0OyQIn+ulUS0iX0AxN5n3tLZzz1w==",
+      "signatures": [
+        {
+          "sig": "MEUCICfpKALdh4IBU5OWjb0cxX2JpQLx6uyhRW6kJPSO0CRJAiEAq6LPiaL2nCXbird5blGmoR5cgSD/uKQcwqTyxce1/2A=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 105555
+    }
+  },
+  {
+    "name": "nodemailer",
+    "requested": "latest",
+    "version": "10.1.0",
+    "license": "MIT-0",
+    "engines": {
+      "node": ">=20.0.0"
+    },
+    "dist": {
+      "shasum": "315f81d5ebe08f0627e4539727b50c27e9730803",
+      "tarball": "https://registry.npmjs.org/nodemailer/-/nodemailer-10.1.0.tgz",
+      "fileCount": 161,
+      "integrity": "sha512-fXW8AulB25aOTuwfRYV6lqHyfz2VM4rr4SGXH03mE7x5znEUpzL5mu6anARUpZN7744Ziwkmr4AxSLPJsBQspg==",
+      "signatures": [
+        {
+          "sig": "MEQCIFA2pd6t9JUaAbA3IPDfs7n3MlNfmGSvOzDtO+W5+gYVAiBvthRkOqUcIO2iO5RgnNPFanEjV3uuhAvU4tvdECnFug==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIA3UOhnmxDXJRzqZNqpMpGnM/gwChHFX9MLUBWBikPZHAiEA9pPqL3tuhgjnQy5p2xbsKpd1fRiOlxLXkdxYUe6kcaU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/nodemailer@10.1.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 1659647
+    }
+  },
+  {
+    "name": "@types/nodemailer",
+    "requested": "latest",
+    "version": "8.0.2",
+    "license": "MIT",
+    "peerDependencies": {},
+    "dist": {
+      "shasum": "0f57798b2753dbad314f1ad9952713a4a9954f12",
+      "tarball": "https://registry.npmjs.org/@types/nodemailer/-/nodemailer-8.0.2.tgz",
+      "fileCount": 56,
+      "integrity": "sha512-c7M5ox8p0nEOfbJ2E9Qcmt8/QCu/VzsiAhzBiZbvky2PhKZDHpKB3sQHBM5MEZNkCfBOaS6S9//AGPRTNB7IaA==",
+      "signatures": [
+        {
+          "sig": "MEUCIGJ928JcskGOK6yut1Uedh5RrJ//MLih6feloksmoHW4AiEAsSpihDBDqaMXL/ZpBgghh7cKpbnTGY5lg1Ej4pFCY9A=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQDcLKnunTsqvGByoMLN4x++jkXgJR144HOvrGCf12wurAIgRb78MV3Tfz3OnVQHmoqXxxteJCQcm3zcgPP5iJSRqMY=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 87224
+    }
+  },
+  {
+    "name": "vitest",
+    "requested": "latest",
+    "version": "5.0.4",
+    "license": "MIT",
+    "peerDependencies": {
+      "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+      "jsdom": "*",
+      "happy-dom": "*",
+      "@vitest/ui": "5.0.4",
+      "@types/node": "^22.0.0 || >=24.0.0",
+      "@edge-runtime/vm": "*",
+      "@opentelemetry/api": "^1.9.0",
+      "@vitest/coverage-v8": "5.0.4",
+      "@vitest/browser-preview": "5.0.4",
+      "@vitest/coverage-istanbul": "5.0.4",
+      "@vitest/browser-playwright": "5.0.4",
+      "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+    },
+    "engines": {
+      "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+    },
+    "dist": {
+      "shasum": "bffa8d58f1d5cbeadc66d92a111a64603f2b44a6",
+      "tarball": "https://registry.npmjs.org/vitest/-/vitest-5.0.4.tgz",
+      "fileCount": 104,
+      "integrity": "sha512-z0WxZRV2Sg48wF0FSgMq3TFG8JS38/Qr96vZVZdX6+Em9raQTvnXQvdTFJe2m3rfyJnEHeHQ/snceIdi8D1pVg==",
+      "signatures": [
+        {
+          "sig": "MEUCIDfNHu26ZoNABxCSVqDQyX5A7FP9jdyeD1Kz31moHzQXAiEArR3m0pwrVN7YWAGBAHxT7IoFEmEf25oRp90P6M1ANZY=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/vitest@5.0.4",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 2813851
+    }
+  },
+  {
+    "name": "supertest",
+    "requested": "latest",
+    "version": "7.3.1",
+    "license": "MIT",
+    "engines": {
+      "node": ">=14.18.0"
+    },
+    "dist": {
+      "shasum": "8d82b957b3d058cbae2db0e56d0e9173f76928ff",
+      "tarball": "https://registry.npmjs.org/supertest/-/supertest-7.3.1.tgz",
+      "fileCount": 8,
+      "integrity": "sha512-vNaNCFoCR/edDbErQZp5KLNT8R4dSPHX7rlDLoE8hWLAm/878j6ShMbe8HK/E6RwwuhlSXVelXAIg9AxR5WWPw==",
+      "signatures": [
+        {
+          "sig": "MEUCIFObrJo1Y/Li+IfQZA+WUJr808AzzPz6TpnvJhXrSH9gAiEAiealq4JsP/QVqNtXNUSER/sZ1FrQQKbZaZ3JhPaH9TQ=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCIppN3GCQpZTJo0SMXzY6hVsA/MkGS7dw59IxBAvXvaQIgfxaJYhCxtdars3rA5S7n87IyRdiLYD3zNix9M1X73Yc=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 49110
+    }
+  },
+  {
+    "name": "@types/supertest",
+    "requested": "latest",
+    "version": "7.2.1",
+    "license": "MIT",
+    "peerDependencies": {},
+    "dist": {
+      "shasum": "165e99f10fd652027cf1eaa74b55081b6daa0965",
+      "tarball": "https://registry.npmjs.org/@types/supertest/-/supertest-7.2.1.tgz",
+      "fileCount": 10,
+      "integrity": "sha512-4CbBvoYVLHL7+yhbYrZET0vsvuyXTC05aRe7dNQkwMzm56auceoy6Yu3K50uZmwfHna1os3CMSgM/3QVkUtPTw==",
+      "signatures": [
+        {
+          "sig": "MEQCIE+iArx+LAvTKPnlZ3hzf8LVGyjDcVitVaBtdHLC/eTDAiAzWzjlUYTH91fgmNT1EQ2UUFfEj+lgsst5AzRG77gU3g==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 10671
+    }
+  },
+  {
+    "name": "openapi-typescript",
+    "requested": "latest",
+    "version": "7.13.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "typescript": "^5.x"
+    },
+    "dist": {
+      "shasum": "5d0dc5e95d648fba85b15351a0b91c5815d8360b",
+      "tarball": "https://registry.npmjs.org/openapi-typescript/-/openapi-typescript-7.13.0.tgz",
+      "fileCount": 105,
+      "integrity": "sha512-EFP392gcqXS7ntPvbhBzbF8TyBA+baIYEm791Hy5YkjDYKTnk/Tn5OQeKm5BIZvJihpp8Zzr4hzx0Irde1LNGQ==",
+      "signatures": [
+        {
+          "sig": "MEUCIQCDYOL27GnQ77WQxfUr0Mn7uSv4jntiiuFSzpdV64kvDgIgPh/OSHJp6s6mo5LwPzQE3yfGItLEwV2Bhvp86n3Ndfo=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/openapi-typescript@7.13.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 878193
+    }
+  },
+  {
+    "name": "@apidevtools/swagger-parser",
+    "requested": "latest",
+    "version": "13.1.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "openapi-types": ">=7"
+    },
+    "engines": {
+      "node": ">=22.19.0"
+    },
+    "dist": {
+      "shasum": "efc8ffcc573838e715d0bce83d917b79636ca172",
+      "tarball": "https://registry.npmjs.org/@apidevtools/swagger-parser/-/swagger-parser-13.1.0.tgz",
+      "fileCount": 9,
+      "integrity": "sha512-dkCuqCWh5U7u0aurmmc/qvel2KeKDxHTwVtUdYonndIpD7mXV6AVaWNdvaja2HAy628z7FT/Qdz8sCgzwhgwKg==",
+      "signatures": [
+        {
+          "sig": "MEYCIQDwxRuNvEQHKuWx2gDQbRvQib20Yr7BMdjoxqkRAoBbZQIhAOYodrYrPhqbttoPkHnmQ1AHb2znwa4WPS+I2eiCNYlj",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIFC4vFaLHJVOqa6GbjCrJI/nNMqYFYcFsCrwH/1K/IQDAiEAjokq0L7LYVzYTf/79omxS4RbjOFSDTq+m32anc26QW8=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@apidevtools%2fswagger-parser@13.1.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 56311
+    }
+  },
+  {
+    "name": "@playwright/test",
+    "requested": "latest",
+    "version": "1.64.0",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=20"
+    },
+    "dist": {
+      "shasum": "af51c4f1dd5f689b2ff16e6eacf27ac00843f239",
+      "tarball": "https://registry.npmjs.org/@playwright/test/-/test-1.64.0.tgz",
+      "fileCount": 11,
+      "integrity": "sha512-oTN9FNYuN6bqQMwiho6jJKLCG2/QOYCixGXuCjRmzOq23eODeukuY2XiAVoVpAECbuezMt1MHQjAiQxK8F+Y+g==",
+      "signatures": [
+        {
+          "sig": "MEUCIGwd51zzl/s8Ynfqb0g5X4T+qVJV9EBVQ/iTzmv37UcCAiEAh2l1BiEXafRIyIvzZNem1KBq9ghLXR3nlaCvwN0/ico=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIBopA8fVjn2UeqqCfyPot2liG+Devo2O0ihw6z9lbhgNAiB+H4G3cKuPWJRlL4qND+igTMpXrIR0QBLfyapqtbt5jQ==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@playwright%2ftest@1.64.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 28542
+    }
+  },
+  {
+    "name": "otplib",
+    "requested": "latest",
+    "version": "13.5.0",
+    "license": "MIT",
+    "dist": {
+      "shasum": "78b5d0d9edf83078d7fe37243bbcdd96d7a65d37",
+      "tarball": "https://registry.npmjs.org/otplib/-/otplib-13.5.0.tgz",
+      "fileCount": 28,
+      "integrity": "sha512-RpcC6aq4rANX6MverMuU3pqHVLgMPO7vl6qR8ga7YzoEHlPJknJ58cSVAaf3jBYnasiQVQHXXl2mj/4pYlsVEQ==",
+      "signatures": [
+        {
+          "sig": "MEUCIB1CpIQcFdGJaheohp3OdGf2lNK83VoZwBO8Je5gG5j4AiEAtd7b1Z7cpo9owmWl7FS/Q3aq00fIJOR0ew/F9RrLMUU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQDGQSVYR0tg1Ic39p6wdpqXlzAYdyiF1rPwRPLU6Id8cAIhAOKfxclvDYT++7FJgYKdtQs/vp7siJA5dAgby0hBxj/J",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/otplib@13.5.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 611630
+    }
+  },
+  {
+    "name": "expo-constants",
+    "requested": "latest",
+    "version": "57.0.21",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react-native": "*"
+    },
+    "dist": {
+      "shasum": "44867d264bec85147c808eba1d4635aad1e11d52",
+      "tarball": "https://registry.npmjs.org/expo-constants/-/expo-constants-57.0.21.tgz",
+      "fileCount": 54,
+      "integrity": "sha512-D5fV2GELYGbNkoiEVZZp5zrUXZDaAx6ZzErDzGirm3jCjOhaE8iU/GyJiB0ZQE+K4Bg8gY82nIQ/RZR8CJLVjA==",
+      "signatures": [
+        {
+          "sig": "MEUCIQDC0nUmd7WcA6mVMO2Y4OCJOI1lJ+fLr66LQj49TfZshgIgXpESMRLeZoZBHd/JQA/F/4ptaSBA+QLyt3leZdQ4bR8=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCHgLEftV9WBqzy0a8/L1UNes3Q2s4aP7SGP1m8vfAlqgIhAKaTxNCmaYzwX6o8vyC7ZPZRl/Xmn2yGglOgv30DPuJl",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 136789
+    }
+  },
+  {
+    "name": "expo-linking",
+    "requested": "latest",
+    "version": "57.0.12",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-native": "*"
+    },
+    "dist": {
+      "shasum": "52bad79a899369d178add7be591e7e7d128233b8",
+      "tarball": "https://registry.npmjs.org/expo-linking/-/expo-linking-57.0.12.tgz",
+      "fileCount": 104,
+      "integrity": "sha512-oKLva5FOBx4txZa9LFu6RaHGAy1lFCyoOM91uU9H+gZi1iskjuSxV12GgS9H+yGGe2aSLufh6IfwSWrjEIsOuA==",
+      "signatures": [
+        {
+          "sig": "MEQCICAOTNgUj/YBo9Jxl24S4CTkpSTZHSEi+jgqqyhJwpXrAiBBNzf9b+T72dBFZVGXOz7a/uyQhxIvmD6LyhYJJKSyXw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCOfMYmTTBZ7tggQk0uVevxpsEAheEa8/9ST5OTjptBCwIhAMI1mlVZY6Vp3QeU1oNs/xOx26gkp6NuHEY/OLSV6AIo",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 170752
+    }
+  },
+  {
+    "name": "react-native-safe-area-context",
+    "requested": "latest",
+    "version": "5.10.1",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-native": "*"
+    },
+    "dist": {
+      "shasum": "d05ecf41d18c1a748b49c40a700936e5235a172d",
+      "tarball": "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-5.10.1.tgz",
+      "fileCount": 183,
+      "integrity": "sha512-ax0T3cAHQIhuAjDQpJ9C1Le96aRiM9PF+Kmgg7Y8+mD7QJMEIx04cG0eG3EGUTdvymgOkCrkakgZFwuOIuNQGw==",
+      "signatures": [
+        {
+          "sig": "MEYCIQCwNZQE06LKJc3M/ATqcbC5usp/IT7NOF4gQ2apkoz50AIhAKk5CSYcaXZXYzfnWOzFuk28yOmfQMHl0767btX+8sSE",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQDmI9opF1NrSw3f1eBEx4RIQAGIElAZrxpqFoyn8ug4ewIhAPJIpziYWnKWaEdI0P5+wTDc4dj0RjxKeeXVU0NNxbIG",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/react-native-safe-area-context@5.10.1",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 249302
+    }
+  },
+  {
+    "name": "react-native-screens",
+    "requested": "latest",
+    "version": "4.29.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-native": "*"
+    },
+    "dist": {
+      "shasum": "ed13a4842d0b9e8d9b22592e5c186feb7b94a8ae",
+      "tarball": "https://registry.npmjs.org/react-native-screens/-/react-native-screens-4.29.0.tgz",
+      "fileCount": 1847,
+      "integrity": "sha512-zDZtvt0pU/eIWCLHwA48OMaC+jIfz7HJI0Kbdiywgh9xBY8rjV00zFlD6KIBxlmDFOzLrF0XvUwN+Xtnu/4V5Q==",
+      "signatures": [
+        {
+          "sig": "MEQCIG0ABv3fK8iWXEY7KNaJIHTf3S06nuffmtbAoQy/oPmvAiBDICyuXLQli1YnLlET3yqiHebdvtf6vnqLZ6lX3RfMYA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIHlwJHC3WFtPky6HHS+T1ZnL/8C0yxEvTgzr5kD3KjUzAiEAhBgXsbAy3s3d8OIoKjBHZTFKFa8zxokBU6UHSF+Y/qU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/react-native-screens@4.29.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 3658253
+    }
+  },
+  {
+    "name": "expo-status-bar",
+    "requested": "latest",
+    "version": "57.0.1",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react": "*",
+      "react-native": "*"
+    },
+    "dist": {
+      "shasum": "0a8ec1657fcd0987f9612ca411a0c3d002f0eaf0",
+      "tarball": "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-57.0.1.tgz",
+      "fileCount": 59,
+      "integrity": "sha512-Xwaq1gAoVRWx5dPG5VhT5RSbnI9OilhZnO5qoPBnUaBAa5VzRzfdS8q0/bsPt0jR2DKLtGuP0bQ6efMJ4RIMDg==",
+      "signatures": [
+        {
+          "sig": "MEYCIQCIvif0OviOurUYV4e4Fu7nFr8cCs1AtZl5lPrxCUAkYQIhAP7YD7BotxBfqUh3cN5zlxQPICOd7Y5D1jf63qVarreg",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 44681
+    }
+  },
+  {
+    "name": "jest-expo",
+    "requested": "latest",
+    "version": "57.0.6",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react-native": "*",
+      "react-server-dom-webpack": "~19.0.4 || ~19.1.5 || ~19.2.4",
+      "@react-native/jest-preset": "^0.86.3"
+    },
+    "dist": {
+      "shasum": "732c81522b3df30c1e303b5619f8e37d59f9a2f5",
+      "tarball": "https://registry.npmjs.org/jest-expo/-/jest-expo-57.0.6.tgz",
+      "fileCount": 41,
+      "integrity": "sha512-lqYEl7aYVJqwTdBBDFcF+DaQIq10luNAFa2ESdpp9P0Ufde11Vmqm+cSR4Pu5m3dcrEJf9S2l4SQmlBTDin7Ag==",
+      "signatures": [
+        {
+          "sig": "MEUCIBjEYwl5veYEp6qMLZ6W9n5JUf9I+uDuj06KYhgs0zigAiEApyQvGbxWEDz9/lJoq52CFepRMI8ReiDOmiMhPli0ZwQ=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQCQ20/qaPjxS/4e/Zj02DkS9tvNXdFVyf9fxNGirbEjMwIhAMHk2Cswkarf3y9+DWMfSp/b3+KI3W9kvyoaYhWwUOAX",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "unpackedSize": 140562
+    }
+  }
+]

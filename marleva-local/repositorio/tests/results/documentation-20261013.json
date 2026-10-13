@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-13T15:08:26.430Z",
+  "scope": "Solo documentación; no runtime/DB viva/móviles/performance",
+  "contractVersion": "0.2.0",
+  "operations": 14,
+  "checks": {
+    "generationDeterministic": true,
+    "useCaseAndSequenceLinks": true,
+    "nonDeferrableForeignKeys": 2
+  },
+  "sha256": {
+    "docs/modelado-datos/ddl/MAR-M1-DATA-001.sql": "9072d78e90794e3a464d4b5ddfb292621ed8213ef81723dac2f4effbf0987319",
+    "docs/apis/M1/openapi.json": "cb222280130c343ca1a649af6980f81927b4c58702bfac198975ad846ee3f840",
+    "docs/apis/M1/swagger.html": "1bd16d73e2ec1a04f50f2055068e194f75e8b72a9efc6dacf917f193669997f5",
+    "packages/contracts/generated.ts": "b92beaa5a3bbcf7f3b024a528c62d555c0ec417e27d8c6ffb70adb5c96d1a72e"
+  }
+}

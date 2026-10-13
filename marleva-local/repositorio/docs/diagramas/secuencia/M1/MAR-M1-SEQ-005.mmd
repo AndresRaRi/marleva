@@ -1,0 +1,18 @@
+%% MAR-M1-SEQ-005 | Iniciar cambio de correo | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-005 - Iniciar cambio de correo
+    U->>UI: S010 solicitar nuevo correo
+    UI->>API: S020 enviar cambio autenticado reciente
+    API->>DB: S030 comprobar correo distinto conflicto y cambio activo
+    API->>DB: S040 reservar cambio con expiración
+    API->>AUTH: S050 iniciar cambio con doble confirmación habilitada
+    AUTH->>MAIL: S060 emitir códigos diferentes a ambos buzones
+    API->>DB: S070 guardar cambio abierto
+    API-->>UI: S080 ID y pasos de comprobación
+    Note over API,AUTH: S090 confirmación automática de correo debe estar deshabilitada para exigir ambos buzones

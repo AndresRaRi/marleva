@@ -1,0 +1,19 @@
+%% MAR-M1-SEQ-010 | Dependencias y configuración local | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-010 - Dependencias y configuración local
+    UI->>API: S010 solicitar salud o tarea
+    API->>DB: S020 comprobar PostgreSQL
+    API->>AUTH: S030 comprobar identidad y almacenamiento
+    API->>MAIL: S040 comprobar capturador
+    alt Dependencia caída o configuración inválida
+     API-->>UI: S050 503 o rechazo de arranque con recuperación
+    else Salud válida
+     API-->>UI: S060 local y pagos simulados
+    end
+    Note over API,DB: S070 modo real y destinos externos están bloqueados

@@ -1,0 +1,11 @@
+{
+  "otp_seconds": 600,
+  "resend_seconds": 60,
+  "max_attempts": 5,
+  "pause_seconds": 900,
+  "user_max_seconds": 2592000,
+  "user_idle_seconds": 604800,
+  "operator_max_seconds": 28800,
+  "operator_idle_seconds": 1800,
+  "reauth_seconds": 300
+}

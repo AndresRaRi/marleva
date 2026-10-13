@@ -1,0 +1,221 @@
+{
+  "sha": "c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+  "node_id": "C_kwDOA-tE4doAKGMyNjljNmU2ZDBlOTY0ZjJjOGMwMWI0MjVkNWY0ZGUwOGQ2ZGNiYWM",
+  "commit": {
+    "author": {
+      "name": "nishan (o^▽^o)",
+      "email": "nishanbende@gmail.com",
+      "date": "2026-10-12T18:47:44Z"
+    },
+    "committer": {
+      "name": "nishan (o^▽^o)",
+      "email": "nishanbende@gmail.com",
+      "date": "2026-10-12T18:49:51Z"
+    },
+    "message": "[ui][android] Fix MenuView opening detached above a bottom anchor (#51412)\n\nFixes - https://github.com/expo/expo/issues/51392\n\nOn Android, the community `MenuView` opens well above its anchor when\nthe anchor is near the bottom of the screen.\n\nThis is a Compose bug, not an expo-ui one. Plain Compose repro:\nhttps://github.com/intergalacticspacehighway/compose-dropdownmenu-edge-to-edge-repro\n\n- Compose `Popup` (`AndroidPopup.android.kt`, `updatePosition()`) passes\nthe width and height of `getWindowVisibleDisplayFrame` as `windowSize`\nand drops its status bar offset. The anchor comes from\n`positionInWindow()`, which in an edge-to-edge window starts at the top\nof the screen. So the window bottom that the menu sees is too high by\nthe status bar height.\n- Material3 `DropdownMenuPositionProvider` only accepts a position with\n`y + menuHeight <= windowSize.height - 48dp`. For an anchor near the\nbottom, \"above the anchor\" fails this check and the menu is pinned to\nthe window edge, away from the anchor.\n- With `PopupProperties(clippingEnabled = false)`, `windowSize` comes\nfrom the full window bounds, which matches the anchor's coordinates.\nCompose's KDoc for `clippingEnabled` says: \"Setting this to false will\nallow windows to be accurately positioned.\"\n- Still present in the latest `material3 1.5.0-beta01` / `ui 1.12.0`,\nand the source is unchanged in `ui 1.13.0-beta01`.\n\nChanges:\n\n- Jetpack Compose `DropdownMenu`: new `properties` prop\n(`PopupProperties`: `focusable`, `dismissOnBackPress`,\n`dismissOnClickOutside`, `clippingEnabled`), passed to Material3\n`DropdownMenu`. Defaults match Material3, so existing `DropdownMenu`\nbehavior does not change.\n- Community `MenuView` passes `{ clippingEnabled: false }`.\n\nPlain Compose repro (no React Native), Medium Phone emulator, API 37.1,\n1080x2400, edge-to-edge, `material3 1.5.0-alpha17` (same as `@expo/ui`).\nBounds in px from `positionOnScreen()` / `getLocationOnScreen()`:\n\n| Anchor | `clippingEnabled` | Anchor | Menu | Gap |\n| --- | --- | --- | --- | --- |\n| bottom | `true` (default) | 2182..2253 | 1665..2085 | **97px** |\n| bottom | `false` | 2182..2253 | 1762..2182 | 0 |\n| 100dp above bottom | either | 1919..1990 | 1499..1919 | 0 |\n| middle | either | 1133..1204 | 1204..1624 | 0 |\n\nSame result on `material3 1.5.0-beta01`.\n\n| `clippingEnabled = true` | `clippingEnabled = false` |\n| :--: | :--: |\n| <img\nsrc=\"https://raw.githubusercontent.com/intergalacticspacehighway/compose-dropdownmenu-edge-to-edge-repro/main/screenshots/bottom-clipping-true.png\"\nwidth=\"270\"> | <img\nsrc=\"https://raw.githubusercontent.com/intergalacticspacehighway/compose-dropdownmenu-edge-to-edge-repro/main/screenshots/bottom-clipping-false.png\"\nwidth=\"270\"> |\n\n- `./gradlew :expo-ui:compileDebugKotlin` in bare-expo passes.\n- oxlint and oxfmt pass on the changed TS files; `tsc -p\npackages/expo-ui` reports no errors in `@expo/ui`.\n- Not yet run: this branch in bare-expo on a device.\n\n- [x] I added a `changeset` for user-facing changes to published\npackages (see\n[.changeset/README.md](https://github.com/expo/expo/blob/main/.changeset/README.md)).\n- [x] This diff will work correctly for `npx expo prebuild` & EAS Build\n(eg: updated a module plugin).\n- [ ] Conforms with the [Documentation Writing Style\nGuide](https://github.com/expo/expo/blob/main/guides/Expo%20Documentation%20Writing%20Style%20Guide.md)\n\n(cherry picked from commit 8d5bef561384475b61fb0e2a781b25ef54df47be)",
+    "tree": {
+      "sha": "368b1679427162cebb8c8328e0afaf44137bab9d",
+      "url": "https://api.github.com/repos/expo/expo/git/trees/368b1679427162cebb8c8328e0afaf44137bab9d"
+    },
+    "url": "https://api.github.com/repos/expo/expo/git/commits/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/expo/expo/commits/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+  "html_url": "https://github.com/expo/expo/commit/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+  "comments_url": "https://api.github.com/repos/expo/expo/commits/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/comments",
+  "author": {
+    "login": "intergalacticspacehighway",
+    "id": 23293248,
+    "node_id": "MDQ6VXNlcjIzMjkzMjQ4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/23293248?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/intergalacticspacehighway",
+    "html_url": "https://github.com/intergalacticspacehighway",
+    "followers_url": "https://api.github.com/users/intergalacticspacehighway/followers",
+    "following_url": "https://api.github.com/users/intergalacticspacehighway/following{/other_user}",
+    "gists_url": "https://api.github.com/users/intergalacticspacehighway/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/intergalacticspacehighway/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/intergalacticspacehighway/subscriptions",
+    "organizations_url": "https://api.github.com/users/intergalacticspacehighway/orgs",
+    "repos_url": "https://api.github.com/users/intergalacticspacehighway/repos",
+    "events_url": "https://api.github.com/users/intergalacticspacehighway/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/intergalacticspacehighway/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "intergalacticspacehighway",
+    "id": 23293248,
+    "node_id": "MDQ6VXNlcjIzMjkzMjQ4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/23293248?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/intergalacticspacehighway",
+    "html_url": "https://github.com/intergalacticspacehighway",
+    "followers_url": "https://api.github.com/users/intergalacticspacehighway/followers",
+    "following_url": "https://api.github.com/users/intergalacticspacehighway/following{/other_user}",
+    "gists_url": "https://api.github.com/users/intergalacticspacehighway/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/intergalacticspacehighway/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/intergalacticspacehighway/subscriptions",
+    "organizations_url": "https://api.github.com/users/intergalacticspacehighway/orgs",
+    "repos_url": "https://api.github.com/users/intergalacticspacehighway/repos",
+    "events_url": "https://api.github.com/users/intergalacticspacehighway/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/intergalacticspacehighway/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "7c31995bb3c79aed368f29d2dd51bf7f34a16476",
+      "url": "https://api.github.com/repos/expo/expo/commits/7c31995bb3c79aed368f29d2dd51bf7f34a16476",
+      "html_url": "https://github.com/expo/expo/commit/7c31995bb3c79aed368f29d2dd51bf7f34a16476"
+    }
+  ],
+  "stats": {
+    "total": 122,
+    "additions": 113,
+    "deletions": 9
+  },
+  "files": [
+    {
+      "sha": "49432a3183258f8ca207c7ec4af8346bc1156ef1",
+      "filename": "packages/expo-ui/CHANGELOG.md",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0,
+      "changes": 2,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2FCHANGELOG.md",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2FCHANGELOG.md",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2FCHANGELOG.md?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -8,6 +8,8 @@\n \n ### 🐛 Bug fixes\n \n+- [Android] Fix the community `MenuView` opening detached above its anchor near the bottom of the screen, and add a `properties` prop to the Jetpack Compose `DropdownMenu`. ([#51412](https://github.com/expo/expo/pull/51412) by [@nishan](https://github.com/intergalacticspacehighway))\n+\n ### 💡 Others\n \n ## 57.0.23 — 2026-10-12"
+    },
+    {
+      "sha": "fe05cb3ba4c6d41254dd519a46bc65027f836a0e",
+      "filename": "packages/expo-ui/android/src/main/java/expo/modules/ui/menu/DropdownMenu.kt",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 1,
+      "changes": 9,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenu.kt",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenu.kt",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenu.kt?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -5,6 +5,7 @@ import androidx.compose.material3.DropdownMenu\n import androidx.compose.material3.MenuDefaults\n import androidx.compose.runtime.Composable\n import androidx.compose.ui.unit.dp\n+import androidx.compose.ui.window.PopupProperties\n import expo.modules.kotlin.views.FunctionalComposableScope\n import expo.modules.ui.UIComposableScope\n import expo.modules.ui.ModifierRegistry\n@@ -27,7 +28,13 @@ fun FunctionalComposableScope.DropdownMenuContent(\n       containerColor = props.color?.composeOrNull ?: MenuDefaults.containerColor,\n       shadowElevation = props.shadowElevation?.dp ?: MenuDefaults.ShadowElevation,\n       expanded = props.expanded,\n-      onDismissRequest = onDismissRequest\n+      onDismissRequest = onDismissRequest,\n+      properties = PopupProperties(\n+        focusable = props.properties.focusable,\n+        dismissOnBackPress = props.properties.dismissOnBackPress,\n+        dismissOnClickOutside = props.properties.dismissOnClickOutside,\n+        clippingEnabled = props.properties.clippingEnabled\n+      )\n     ) {\n       itemsSlotView?.let {\n         with(UIComposableScope()) {"
+    },
+    {
+      "sha": "b47721abdd630ab4a81e6440d9a581be72d5f352",
+      "filename": "packages/expo-ui/android/src/main/java/expo/modules/ui/menu/DropdownMenuRecords.kt",
+      "status": "modified",
+      "additions": 13,
+      "deletions": 1,
+      "changes": 14,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenuRecords.kt",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenuRecords.kt",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fandroid%2Fsrc%2Fmain%2Fjava%2Fexpo%2Fmodules%2Fui%2Fmenu%2FDropdownMenuRecords.kt?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -1,7 +1,10 @@\n package expo.modules.ui.menu\n \n import android.graphics.Color\n+import expo.modules.kotlin.records.Field\n+import expo.modules.kotlin.records.Record\n import expo.modules.kotlin.types.Enumerable\n+import expo.modules.kotlin.types.OptimizedRecord\n import expo.modules.kotlin.views.ComposeProps\n import expo.modules.ui.ModifierList\n import expo.modules.kotlin.views.OptimizedComposeProps\n@@ -11,11 +14,20 @@ enum class ActivationMethod(val value: String) : Enumerable {\n   LONG_PRESS(\"longPress\")\n }\n \n+@OptimizedRecord\n+data class ExpoPopupProperties(\n+  @Field val focusable: Boolean = true,\n+  @Field val dismissOnBackPress: Boolean = true,\n+  @Field val dismissOnClickOutside: Boolean = true,\n+  @Field val clippingEnabled: Boolean = true\n+) : Record\n+\n @OptimizedComposeProps\n data class DropdownMenuProps(\n   val activationMethod: ActivationMethod = ActivationMethod.SINGLE_PRESS,\n   val expanded: Boolean = false,\n   val color: Color? = null,\n   val modifiers: ModifierList = emptyList(),\n-  val shadowElevation: Float? = null\n+  val shadowElevation: Float? = null,\n+  val properties: ExpoPopupProperties = ExpoPopupProperties()\n ) : ComposeProps"
+    },
+    {
+      "sha": "2451b5b037f4a1a513d57c0237b17210638b657f",
+      "filename": "packages/expo-ui/build/community/menu/MenuView.android.d.ts.map",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fcommunity%2Fmenu%2FMenuView.android.d.ts.map",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fcommunity%2Fmenu%2FMenuView.android.d.ts.map",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fbuild%2Fcommunity%2Fmenu%2FMenuView.android.d.ts.map?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -1 +1 @@\n-{\"version\":3,\"file\":\"MenuView.android.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../src/community/menu/MenuView.android.tsx\"],\"names\":[],\"mappings\":\"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAG/B,OAAO,KAAK,EAAc,kBAAkB,EAAE,gBAAgB,EAAqB,MAAM,SAAS,CAAC;AA4InG;;;;;;;;;GASG;AACH,wBAAgB,QAAQ,CAAC,KAAK,EAAE,kBAAkB,GAAG;IAAE,GAAG,CAAC,EAAE,KAAK,CAAC,GAAG,CAAC,gBAAgB,CAAC,CAAA;CAAE,2CAuEzF\"}\n\\ No newline at end of file\n+{\"version\":3,\"file\":\"MenuView.android.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../src/community/menu/MenuView.android.tsx\"],\"names\":[],\"mappings\":\"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAG/B,OAAO,KAAK,EAAc,kBAAkB,EAAE,gBAAgB,EAAqB,MAAM,SAAS,CAAC;AAmJnG;;;;;;;;;GASG;AACH,wBAAgB,QAAQ,CAAC,KAAK,EAAE,kBAAkB,GAAG;IAAE,GAAG,CAAC,EAAE,KAAK,CAAC,GAAG,CAAC,gBAAgB,CAAC,CAAA;CAAE,2CA0EzF\"}\n\\ No newline at end of file"
+    },
+    {
+      "sha": "2d396483842f7bf83069908c9c040406ae4e287b",
+      "filename": "packages/expo-ui/build/jetpack-compose/DropdownMenu/index.d.ts",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 1,
+      "changes": 9,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -1,6 +1,6 @@\n import type { ReactNode } from 'react';\n import type { StyleProp, ViewStyle, ColorValue } from 'react-native';\n-import type { ModifierConfig } from '../../types';\n+import type { ModifierConfig, PopupProperties } from '../../types';\n /**\n  * Props of the `DropdownMenu` component.\n  */\n@@ -30,6 +30,12 @@ export interface DropdownMenuProps {\n      * @platform android\n      */\n     shadowElevation?: number;\n+    /**\n+     * Properties for the popup window of the dropdown menu.\n+     *\n+     * @platform android\n+     */\n+    properties?: PopupProperties;\n     /**\n      * Optional styles to apply to the `DropdownMenu`.\n      */\n@@ -72,4 +78,5 @@ declare namespace DropdownMenu {\n }\n export { DropdownMenu };\n export { DropdownMenuItem } from './DropdownMenuItem';\n+export type { PopupProperties };\n //# sourceMappingURL=index.d.ts.map\n\\ No newline at end of file"
+    },
+    {
+      "sha": "0cd8075850655a4caa545033087f7e55c3d98979",
+      "filename": "packages/expo-ui/build/jetpack-compose/DropdownMenu/index.d.ts.map",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts.map",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts.map",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fbuild%2Fjetpack-compose%2FDropdownMenu%2Findex.d.ts.map?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -1 +1 @@\n-{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../src/jetpack-compose/DropdownMenu/index.tsx\"],\"names\":[],\"mappings\":\"AACA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AACvC,OAAO,KAAK,EAAE,SAAS,EAAE,SAAS,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAGrE,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,aAAa,CAAC;AAclD;;GAEG;AACH,MAAM,WAAW,iBAAiB;IAChC;;;OAGG;IACH,QAAQ,EAAE,SAAS,CAAC;IAEpB;;OAEG;IACH,QAAQ,CAAC,EAAE,OAAO,CAAC;IAEnB;;;OAGG;IACH,gBAAgB,CAAC,EAAE,MAAM,IAAI,CAAC;IAE9B;;OAEG;IACH,KAAK,CAAC,EAAE,UAAU,CAAC;IAEnB;;;;;OAKG;IACH,eAAe,CAAC,EAAE,MAAM,CAAC;IAEzB;;OAEG;IACH,KAAK,CAAC,EAAE,SAAS,CAAC,SAAS,CAAC,CAAC;IAE7B;;OAEG;IACH,SAAS,CAAC,EAAE,cAAc,EAAE,CAAC;CAC9B;AAYD;;;GAGG;AACH,wBAAgB,KAAK,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAOnD;yBAPe,KAAK;;;AAUrB;;GAEG;AACH,wBAAgB,OAAO,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAErD;yBAFe,OAAO;;;AAKvB;;GAEG;AACH,wBAAgB,OAAO,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAErD;AAED,iBAAS,YAAY,CAAC,KAAK,EAAE,iBAAiB,2CAW7C;kBAXQ,YAAY;;;;;AAiBrB,OAAO,EAAE,YAAY,EAAE,CAAC;AACxB,OAAO,EAAE,gBAAgB,EAAE,MAAM,oBAAoB,CAAC\"}\n\\ No newline at end of file\n+{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../src/jetpack-compose/DropdownMenu/index.tsx\"],\"names\":[],\"mappings\":\"AACA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AACvC,OAAO,KAAK,EAAE,SAAS,EAAE,SAAS,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAGrE,OAAO,KAAK,EAAE,cAAc,EAAE,eAAe,EAAE,MAAM,aAAa,CAAC;AAcnE;;GAEG;AACH,MAAM,WAAW,iBAAiB;IAChC;;;OAGG;IACH,QAAQ,EAAE,SAAS,CAAC;IAEpB;;OAEG;IACH,QAAQ,CAAC,EAAE,OAAO,CAAC;IAEnB;;;OAGG;IACH,gBAAgB,CAAC,EAAE,MAAM,IAAI,CAAC;IAE9B;;OAEG;IACH,KAAK,CAAC,EAAE,UAAU,CAAC;IAEnB;;;;;OAKG;IACH,eAAe,CAAC,EAAE,MAAM,CAAC;IAEzB;;;;OAIG;IACH,UAAU,CAAC,EAAE,eAAe,CAAC;IAE7B;;OAEG;IACH,KAAK,CAAC,EAAE,SAAS,CAAC,SAAS,CAAC,CAAC;IAE7B;;OAEG;IACH,SAAS,CAAC,EAAE,cAAc,EAAE,CAAC;CAC9B;AAaD;;;GAGG;AACH,wBAAgB,KAAK,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAOnD;yBAPe,KAAK;;;AAUrB;;GAEG;AACH,wBAAgB,OAAO,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAErD;yBAFe,OAAO;;;AAKvB;;GAEG;AACH,wBAAgB,OAAO,CAAC,KAAK,EAAE;IAAE,QAAQ,EAAE,SAAS,CAAA;CAAE,2CAErD;AAED,iBAAS,YAAY,CAAC,KAAK,EAAE,iBAAiB,2CAW7C;kBAXQ,YAAY;;;;;AAiBrB,OAAO,EAAE,YAAY,EAAE,CAAC;AACxB,OAAO,EAAE,gBAAgB,EAAE,MAAM,oBAAoB,CAAC;AAGtD,YAAY,EAAE,eAAe,EAAE,CAAC\"}\n\\ No newline at end of file"
+    },
+    {
+      "sha": "513c6a03dcc836d39d1f36368e277a674abb8496",
+      "filename": "packages/expo-ui/build/types.d.ts",
+      "status": "modified",
+      "additions": 27,
+      "deletions": 0,
+      "changes": 27,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -44,4 +44,31 @@ export type DialogProperties = {\n      */\n     decorFitsSystemWindows?: boolean;\n };\n+/**\n+ * Properties for the popup window, matching `PopupProperties` in Compose.\n+ */\n+export type PopupProperties = {\n+    /**\n+     * Whether the popup is focusable. When `true`, the popup receives IME events and key presses,\n+     * such as the back button.\n+     * @default true\n+     */\n+    focusable?: boolean;\n+    /**\n+     * Whether the popup can be dismissed by pressing the back button. Has no effect when `focusable` is `false`.\n+     * @default true\n+     */\n+    dismissOnBackPress?: boolean;\n+    /**\n+     * Whether the popup can be dismissed by clicking outside of its bounds.\n+     * @default true\n+     */\n+    dismissOnClickOutside?: boolean;\n+    /**\n+     * Whether the popup window is clipped to the screen boundaries. Set to `false` to let it extend\n+     * beyond them, which positions the popup accurately.\n+     * @default true\n+     */\n+    clippingEnabled?: boolean;\n+};\n //# sourceMappingURL=types.d.ts.map\n\\ No newline at end of file"
+    },
+    {
+      "sha": "865beda11b55234f956c6ffbc02af88812c3f243",
+      "filename": "packages/expo-ui/build/types.d.ts.map",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts.map",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts.map",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fbuild%2Ftypes.d.ts.map?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -1 +1 @@\n-{\"version\":3,\"file\":\"types.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../src/types.ts\"],\"names\":[],\"mappings\":\"AAAA;;GAEG;AACH,MAAM,MAAM,SAAS,CAAC,IAAI,SAAS,MAAM,EAAE,IAAI,IAAI,MAAM,CACvD,IAAI,EACJ,IAAI,SAAS,MAAM,GACf,CAAC,CAAC,KAAK,EAAE;IAAE,WAAW,EAAE,IAAI,CAAA;CAAE,KAAK,IAAI,CAAC,GAAG,SAAS,GACpD,CAAC,MAAM,IAAI,CAAC,GAAG,SAAS,CAC7B,CAAC;AAEF;;;GAGG;AACH,MAAM,WAAW,cAAc;IAC7B,KAAK,EAAE,MAAM,CAAC;IACd,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC;CACxB;AAED;;;GAGG;AACH,MAAM,MAAM,YAAY,GAAG,cAAc,CAAC;AAE1C;;GAEG;AACH,MAAM,MAAM,gBAAgB,GAAG;IAC7B;;;OAGG;IACH,kBAAkB,CAAC,EAAE,OAAO,CAAC;IAC7B;;;OAGG;IACH,qBAAqB,CAAC,EAAE,OAAO,CAAC;IAChC;;;OAGG;IACH,uBAAuB,CAAC,EAAE,OAAO,CAAC;IAClC;;;;OAIG;IACH,sBAAsB,CAAC,EAAE,OAAO,CAAC;CAClC,CAAC\"}\n\\ No newline at end of file\n+{\"version\":3,\"file\":\"types.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../src/types.ts\"],\"names\":[],\"mappings\":\"AAAA;;GAEG;AACH,MAAM,MAAM,SAAS,CAAC,IAAI,SAAS,MAAM,EAAE,IAAI,IAAI,MAAM,CACvD,IAAI,EACJ,IAAI,SAAS,MAAM,GACf,CAAC,CAAC,KAAK,EAAE;IAAE,WAAW,EAAE,IAAI,CAAA;CAAE,KAAK,IAAI,CAAC,GAAG,SAAS,GACpD,CAAC,MAAM,IAAI,CAAC,GAAG,SAAS,CAC7B,CAAC;AAEF;;;GAGG;AACH,MAAM,WAAW,cAAc;IAC7B,KAAK,EAAE,MAAM,CAAC;IACd,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC;CACxB;AAED;;;GAGG;AACH,MAAM,MAAM,YAAY,GAAG,cAAc,CAAC;AAE1C;;GAEG;AACH,MAAM,MAAM,gBAAgB,GAAG;IAC7B;;;OAGG;IACH,kBAAkB,CAAC,EAAE,OAAO,CAAC;IAC7B;;;OAGG;IACH,qBAAqB,CAAC,EAAE,OAAO,CAAC;IAChC;;;OAGG;IACH,uBAAuB,CAAC,EAAE,OAAO,CAAC;IAClC;;;;OAIG;IACH,sBAAsB,CAAC,EAAE,OAAO,CAAC;CAClC,CAAC;AAEF;;GAEG;AACH,MAAM,MAAM,eAAe,GAAG;IAC5B;;;;OAIG;IACH,SAAS,CAAC,EAAE,OAAO,CAAC;IACpB;;;OAGG;IACH,kBAAkB,CAAC,EAAE,OAAO,CAAC;IAC7B;;;OAGG;IACH,qBAAqB,CAAC,EAAE,OAAO,CAAC;IAChC;;;;OAIG;IACH,eAAe,CAAC,EAAE,OAAO,CAAC;CAC3B,CAAC\"}\n\\ No newline at end of file"
+    },
+    {
+      "sha": "dfc5a6502b1341d4970575f5fe7a163e8462b938",
+      "filename": "packages/expo-ui/src/community/menu/MenuView.android.tsx",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 2,
+      "changes": 14,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Fcommunity%2Fmenu%2FMenuView.android.tsx",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Fcommunity%2Fmenu%2FMenuView.android.tsx",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fsrc%2Fcommunity%2Fmenu%2FMenuView.android.tsx?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -13,6 +13,10 @@ import { Icon } from '../../jetpack-compose/Icon';\n import { RNHostView } from '../../jetpack-compose/RNHostView';\n import { Text as ComposeText } from '../../jetpack-compose/Text';\n import { useMaterialColors } from '../../jetpack-compose/colors';\n+import type { PopupProperties } from '../../types';\n+\n+// Clipped popups drop the status bar offset, so edge-to-edge menus near the bottom detach from the anchor.\n+const POPUP_PROPERTIES: PopupProperties = { clippingEnabled: false };\n \n function actionId(action: MenuAction): string {\n   return action.id ?? action.title;\n@@ -82,7 +86,10 @@ function MenuActionItem({ action, onPressAction, dismissAll, destructiveColor }:\n       );\n     }\n     return (\n-      <DropdownMenu expanded={submenuExpanded} onDismissRequest={() => setSubmenuExpanded(false)}>\n+      <DropdownMenu\n+        expanded={submenuExpanded}\n+        onDismissRequest={() => setSubmenuExpanded(false)}\n+        properties={POPUP_PROPERTIES}>\n         <DropdownMenu.Trigger>\n           <DropdownMenuItem\n             enabled={!attributes?.disabled}\n@@ -191,7 +198,10 @@ export function MenuView(props: MenuComponentProps & { ref?: React.Ref<MenuCompo\n   return (\n     <View style={style} testID={testID}>\n       <Host colorScheme={colorScheme} matchContents>\n-        <DropdownMenu expanded={expanded} onDismissRequest={dismissAll}>\n+        <DropdownMenu\n+          expanded={expanded}\n+          onDismissRequest={dismissAll}\n+          properties={POPUP_PROPERTIES}>\n           <DropdownMenu.Trigger>\n             <RNHostView matchContents>\n               <Pressable"
+    },
+    {
+      "sha": "ecd06cb1db3677e04bca1e9111eeb42e6a5e42db",
+      "filename": "packages/expo-ui/src/jetpack-compose/DropdownMenu/index.tsx",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 1,
+      "changes": 13,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Fjetpack-compose%2FDropdownMenu%2Findex.tsx",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Fjetpack-compose%2FDropdownMenu%2Findex.tsx",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fsrc%2Fjetpack-compose%2FDropdownMenu%2Findex.tsx?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';\n import type { StyleProp, ViewStyle, ColorValue } from 'react-native';\n \n import { PresentedContent } from '../../PresentedContentContext';\n-import type { ModifierConfig } from '../../types';\n+import type { ModifierConfig, PopupProperties } from '../../types';\n import { createViewModifierEventListener } from '../modifiers/utils';\n \n const MenuNativeView: React.ComponentType<NativeMenuProps> = requireNativeView(\n@@ -51,6 +51,13 @@ export interface DropdownMenuProps {\n    */\n   shadowElevation?: number;\n \n+  /**\n+   * Properties for the popup window of the dropdown menu.\n+   *\n+   * @platform android\n+   */\n+  properties?: PopupProperties;\n+\n   /**\n    * Optional styles to apply to the `DropdownMenu`.\n    */\n@@ -67,6 +74,7 @@ type NativeMenuProps = {\n   onDismissRequest?: () => void;\n   color?: ColorValue;\n   shadowElevation?: number;\n+  properties?: PopupProperties;\n   style?: StyleProp<ViewStyle>;\n   modifiers?: ModifierConfig[];\n   children?: ReactNode;\n@@ -120,3 +128,6 @@ DropdownMenu.Items = Items;\n \n export { DropdownMenu };\n export { DropdownMenuItem } from './DropdownMenuItem';\n+\n+// Re-exported so the docs generator includes PopupProperties on the DropdownMenu API page.\n+export type { PopupProperties };"
+    },
+    {
+      "sha": "47f591f17b702f561afa8da506479eded4109819",
+      "filename": "packages/expo-ui/src/types.ts",
+      "status": "modified",
+      "additions": 28,
+      "deletions": 0,
+      "changes": 28,
+      "blob_url": "https://github.com/expo/expo/blob/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Ftypes.ts",
+      "raw_url": "https://github.com/expo/expo/raw/c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac/packages%2Fexpo-ui%2Fsrc%2Ftypes.ts",
+      "contents_url": "https://api.github.com/repos/expo/expo/contents/packages%2Fexpo-ui%2Fsrc%2Ftypes.ts?ref=c269c6e6d0e964f2c8c01b425d5f4de08d6dcbac",
+      "patch": "@@ -50,3 +50,31 @@ export type DialogProperties = {\n    */\n   decorFitsSystemWindows?: boolean;\n };\n+\n+/**\n+ * Properties for the popup window, matching `PopupProperties` in Compose.\n+ */\n+export type PopupProperties = {\n+  /**\n+   * Whether the popup is focusable. When `true`, the popup receives IME events and key presses,\n+   * such as the back button.\n+   * @default true\n+   */\n+  focusable?: boolean;\n+  /**\n+   * Whether the popup can be dismissed by pressing the back button. Has no effect when `focusable` is `false`.\n+   * @default true\n+   */\n+  dismissOnBackPress?: boolean;\n+  /**\n+   * Whether the popup can be dismissed by clicking outside of its bounds.\n+   * @default true\n+   */\n+  dismissOnClickOutside?: boolean;\n+  /**\n+   * Whether the popup window is clipped to the screen boundaries. Set to `false` to let it extend\n+   * beyond them, which positions the popup accurately.\n+   * @default true\n+   */\n+  clippingEnabled?: boolean;\n+};"
+    }
+  ]
+}

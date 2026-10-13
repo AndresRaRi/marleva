@@ -1,0 +1,22 @@
+%% MAR-M1-SEQ-001 | Solicitar código | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-001 - Solicitar código
+    U->>UI: S010 escribir correo ficticio
+    UI->>API: S020 solicitar desafío
+    API->>DB: S030 bloquear por correo y comprobar espera/origen
+    alt Espera o pausa vigente
+     DB-->>API: S040 límite
+     API-->>UI: S050 429 y recuperación
+    else Puede continuar
+     API->>DB: S060 invalidar anteriores y reservar desafío
+     API->>AUTH: S070 solicitar OTP estándar
+     AUTH->>MAIL: S080 enviar código solo al capturador
+     API->>DB: S090 guardar desafío abierto
+     API-->>UI: S100 ID y mensaje genérico
+    end

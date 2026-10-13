@@ -1,0 +1,22 @@
+%% MAR-M1-SEQ-008 | Consultar y entregar avisos durables | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-008 - Consultar y entregar avisos durables
+    API->>DB: S010 guardar evento aviso y outbox en transacción
+    API-->>UI: S020 estado de cuenta disponible
+    API->>DB: S030 worker reclama tarea por lease
+    API->>MAIL: S040 SMTP local con referencia estable
+    alt Capturador caído
+     API->>DB: S050 conservar tarea y reintentar sin repetir negocio
+    else Entregado
+     API->>DB: S060 marcar envío
+    end
+    UI->>API: S070 consultar avisos propios
+    API->>DB: S080 leer hasta50 avisos propios recientes; cursor actual null
+    API-->>UI: S090 lista o vacío
+    Note over API,MAIL: S100 prueba de caída/reinicio completa pendiente; SMTP no garantiza exactly-once por sí solo

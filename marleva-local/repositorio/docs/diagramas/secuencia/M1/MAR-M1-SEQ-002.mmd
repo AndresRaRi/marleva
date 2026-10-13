@@ -1,0 +1,26 @@
+%% MAR-M1-SEQ-002 | Verificar código y abrir cuenta | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-002 - Verificar código y abrir cuenta
+    U->>UI: S010 escribir código
+    UI->>API: S020 verificar desafío
+    API->>DB: S030 reclamar intento único y vigencia
+    alt Inválido usado vencido o bloqueado
+     API-->>UI: S040 401 y solicitar nuevo código
+    else Intento válido
+     API->>AUTH: S050 verificar OTP estándar
+     alt Código incorrecto
+      API->>DB: S060 guardar fallo y pausa al quinto intento
+      API-->>UI: S070 error recuperable
+     else Identidad verificada
+      API->>DB: S080 comprobar desafío más reciente y cuenta activa
+      API->>DB: S090 guardar cuenta sesión revocable y auditoría
+      API-->>UI: S100 cookie web segura o credencial móvil opaca
+      UI->>UI: S110 retomar acción interna aún sujeta a permiso
+     end
+    end

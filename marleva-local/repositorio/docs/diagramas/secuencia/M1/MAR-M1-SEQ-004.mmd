@@ -1,0 +1,16 @@
+%% MAR-M1-SEQ-004 | Salir de sesión actual o todas | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-004 - Salir de sesión actual o todas
+    U->>UI: S010 elegir salida actual o total
+    UI->>API: S020 enviar mutación con cookie CSRF u opaca móvil
+    API->>DB: S030 validar sesión y reautenticación para salida total
+    API->>DB: S040 revocar y auditar atómicamente
+    API-->>UI: S050 eliminar cookie actual y confirmar revocación
+    UI->>UI: S060 borrar credencial móvil y mostrar acceso
+    Note over API,DB: S070 futuras solicitudes rechazan sesión revocada aunque JWT siga vivo

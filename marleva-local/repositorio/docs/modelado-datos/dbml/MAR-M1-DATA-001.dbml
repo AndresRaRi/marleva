@@ -1,0 +1,84 @@
+Project Marleva_M1 {
+ database_type: 'PostgreSQL'
+ Note: 'MAR-M1-DATA-001. Modelo físico M1 existente, en revisión. No incluye M2–M10, Auth/Storage gestionados por Supabase ni credenciales. DDL generado desde este DBML, no aplicar completo a una base existente. Hay brechas de integridad identificadas en el protocolo; no es modelo íntegro de MVP1.'
+}
+Table marleva.Account {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ authId uuid [not null, unique, note: 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.']
+ email text [not null, unique]
+ state text [not null, default: 'active']
+ operator boolean [not null, default: false, note: 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.']
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Session {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ tokenHash text [not null, unique]
+ csrfHash text [not null]
+ providerTokens text [not null, note: 'Credenciales cifradas en servidor; nunca valores de ejemplo reales.']
+ createdAt timestamptz [not null, default: `now()`]
+ lastSeen timestamptz [not null, default: `now()`]
+ authenticatedAt timestamptz [not null, default: `now()`]
+ revokedAt timestamptz
+ refreshLease timestamptz
+}
+Table marleva.Challenge {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ email text [not null]
+ origin text [not null]
+ state text [not null, default: 'sending']
+ attempts integer [not null, default: 0]
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ blockedUntil timestamptz
+ indexes {
+  (email, createdAt) [name: 'Challenge_email_createdAt_idx']
+  (origin, createdAt) [name: 'Challenge_origin_createdAt_idx']
+ }
+}
+Table marleva.EmailChange {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null, note: 'Brecha MAR-M1-BUG-002: relación lógica con Account sin FK en migración aplicada; revisar y migrar antes de cierre.']
+ oldEmail text [not null]
+ newEmail text [not null]
+ providerTokens text [not null]
+ oldConfirmed boolean [not null, default: false]
+ newConfirmed boolean [not null, default: false]
+ state text [not null, default: 'sending']
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ attempts integer [not null, default: 0]
+ indexes { (accountId, state) [name: 'EmailChange_accountId_state_idx'] }
+}
+Table marleva.Notice {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ kind text [not null]
+ text text [not null]
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Outbox {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ reference text [not null, unique]
+ recipient text [not null]
+ subject text [not null]
+ text text [not null]
+ state text [not null, default: 'pending']
+ attempts integer [not null, default: 0]
+ dueAt timestamptz [not null, default: `now()`]
+ leaseUntil timestamptz
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Audit {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [note: 'Actor mínimo registrado; FK/conservación por finalidad por revisar antes de cierre.']
+ action text [not null]
+ resourceId uuid
+ createdAt timestamptz [not null, default: `now()`]
+}
+Table marleva.Development {
+ id integer [pk, not null]
+ name text [not null, unique, note: 'Catálogo de siete desarrollos; sin polígonos inferidos.']
+}
+Ref Session_accountId_fkey: marleva.Session.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref Notice_accountId_fkey: marleva.Notice.accountId > marleva.Account.id [delete: no action, update: no action]

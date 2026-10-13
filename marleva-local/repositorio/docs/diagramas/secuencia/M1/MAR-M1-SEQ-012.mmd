@@ -1,0 +1,20 @@
+%% MAR-M1-SEQ-012 | Simulador de pagos aislado | Estado: partial
+sequenceDiagram
+    actor U as Usuario
+    participant UI as Cliente Expo
+    participant API as API Nest M1
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    participant MAIL as Capturador local
+    Note over UI,API: MAR-M1-SEQ-012 - Simulador de pagos aislado
+    U->>API: S010 harness crea identificador ficticio importe y escenario
+    API->>API: S020 devolver resultado determinista por mismo ID
+    alt Evento externo o cuerpo contradictorio
+     API-->>U: S030 rechazar
+    else Evento interno válido
+     API->>API: S040 deduplicar evento conservar confirmado y conciliar tardío
+     API-->>U: S050 estado simulado
+    end
+    U->>API: S060 reembolso de fixture confirmado
+    API-->>U: S070 mismo reembolso sin segunda operación
+    Note over API,AUTH: Cero llamadas a pasarela; no pedido M6 ni venta

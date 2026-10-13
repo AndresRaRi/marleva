@@ -1,0 +1,23 @@
+%% MAR-M1-SEQ-013 | Restaurar base y archivos sin revivir accesos | Estado: objetivo no ejecutado
+sequenceDiagram
+    actor U as Usuario
+    participant API as API Nest M1 y herramientas locales
+    participant DB as PostgreSQL privado
+    participant AUTH as Supabase Auth y Storage
+    Note over API,DB: Objetivo B12; origen y destino separados; sin clientes hasta comprobar
+    U->>API: S001 identificar origen y destino aislado
+    API->>DB: S005 preparar fixtures A/B roles sesiones y aviso
+    API->>API: S008 pausar escrituras para punto consistente
+    API->>DB: S010 respaldo privado PG Auth metadata y estado
+    API->>AUTH: S020 respaldo de objetos con hashes
+    API->>DB: S030 registrar borrado posterior fuera de copia
+    API->>DB: S040 restaurar DB solo en destino aislado
+    API->>AUTH: S050 restaurar objetos y comparar hashes
+    API->>AUTH: S055 reaplicar borrados antes de acceso
+    API->>DB: S060 revocar sesiones y capacidades restauradas
+    API->>AUTH: S065 revocar accesos proveedor con método comprobado
+    API->>DB: S070 cotejar IDs relaciones estados y hashes
+    U->>API: S072 probar permisos A/B OTP nuevo y trabajador
+    API->>DB: S075 ensayo migración interrumpida en otro destino desechable
+    API-->>U: S080 acta duración recursos fallos y limpieza identificada
+    Note over API,DB: No ejecutar sobre origen; ensayo no ejecutado
