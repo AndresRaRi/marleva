@@ -66,6 +66,7 @@ model Notice {
   kind String
   text String
   createdAt DateTime @default(now()) @db.Timestamptz
+  @@index([accountId, createdAt, id])
   @@schema("marleva")
 }
 model Outbox {

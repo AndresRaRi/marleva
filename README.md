@@ -29,6 +29,6 @@ El modelo físico y el objetivo tienen funciones distintas hasta completar la mi
 
 ## 4. Continuidad
 
-MAR-CHAT-004 cerrado documentalmente; MAR-CHAT-005 propuesto para continuar. M1 incompleta. Prompt completo en 01 y plantillas en 00. Chat abierto no significa proceso ejecutándose. FIN solo al cerrar realmente el tema; guardar, hacer commit y subir son acciones distintas.
+MAR-CHAT-004 cerrado documentalmente; MAR-CHAT-005 en continuación con incremento UC008 comprobado. M1 incompleta. Prompt completo en 01 y plantillas en 00. Chat abierto no significa proceso ejecutándose. FIN solo al cerrar realmente el tema; guardar, hacer commit y subir son acciones distintas.
 
 Git de CommandLineTools está disponible. Xcode 27.0 está instalado y seleccionado; comprobación inicial pasada. Runtimes y dispositivos de simulador todavía vacíos. Builds y pruebas físicas pendientes.

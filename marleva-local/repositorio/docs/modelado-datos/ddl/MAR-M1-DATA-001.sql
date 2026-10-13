@@ -88,6 +88,8 @@ CREATE INDEX "Challenge_origin_createdAt_idx" ON "marleva"."Challenge" ("origin"
 
 CREATE INDEX "EmailChange_accountId_state_idx" ON "marleva"."EmailChange" ("accountId", "state");
 
+CREATE INDEX "Notice_accountId_createdAt_id_idx" ON "marleva"."Notice" ("accountId", "createdAt", "id");
+
 COMMENT ON COLUMN "marleva"."Account"."authId" IS 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.';
 
 COMMENT ON COLUMN "marleva"."Account"."operator" IS 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.';

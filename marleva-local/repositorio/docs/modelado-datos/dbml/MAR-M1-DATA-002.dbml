@@ -57,6 +57,7 @@ Table marleva.Notice {
  kind text [not null]
  text text [not null]
  createdAt timestamptz [not null, default: `now()`]
+ indexes { (accountId, createdAt, id) [name: 'Notice_accountId_createdAt_id_idx'] }
 }
 Table marleva.Outbox {
  id uuid [pk, not null, default: `gen_random_uuid()`]

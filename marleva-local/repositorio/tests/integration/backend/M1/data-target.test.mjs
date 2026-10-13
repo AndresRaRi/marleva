@@ -175,3 +175,27 @@ it('MAR-M1-IT-BE-123 | SEQ011:S110 | borrado durable válido y estado incompleto
     ).ok,
   ).toBe(true);
 });
+
+it('MAR-M1-IT-BE-108-F | SEQ008:S080 | nueva migración sobre002 conserva registros y rollback aislado', () => {
+  const old = readFileSync(
+    root + 'apps/api/prisma/migrations/202610120002_m1_tables/migration.sql',
+    'utf8',
+  );
+  const migration = readFileSync(
+    root + 'apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql',
+    'utf8',
+  );
+  const result =
+    sql(`BEGIN; DROP SCHEMA marleva CASCADE; CREATE SCHEMA marleva; CREATE ROLE marleva_api; CREATE TABLE marleva._prisma_migrations(id text); ${old}
+    INSERT INTO marleva."Account"(id,"authId",email) VALUES ('${a}','${a}','migration@example.test');
+    INSERT INTO marleva."Notice"("accountId",kind,text) VALUES ('${a}','fixture','ficticio');
+    ${migration}
+    SELECT count(*) FROM marleva."Notice";
+    SELECT count(*) FROM pg_indexes WHERE schemaname='marleva' AND indexname='Notice_accountId_createdAt_id_idx';
+    ROLLBACK;`);
+  expect(result.ok).toBe(true);
+  expect(result.output).toContain('1\n1');
+  expect(
+    sql("SELECT count(*) FROM information_schema.tables WHERE table_schema='marleva';").output,
+  ).toBe('13');
+});

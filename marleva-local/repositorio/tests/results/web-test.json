@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-13T21:09:27.651Z",
+  "browser": "155.0.8059.40",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "cases": {
+    "https": true,
+    "otp": true,
+    "account": true,
+    "cookie": true,
+    "noLocalStorage": true,
+    "keyboardFocus": true,
+    "logout": true
+  },
+  "pageErrors": []
+}

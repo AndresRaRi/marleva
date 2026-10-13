@@ -178,6 +178,8 @@ CREATE INDEX "Challenge_origin_createdAt_idx" ON "marleva"."Challenge" ("origin"
 
 CREATE INDEX "EmailChange_accountId_state_idx" ON "marleva"."EmailChange" ("accountId", "state");
 
+CREATE INDEX "Notice_accountId_createdAt_id_idx" ON "marleva"."Notice" ("accountId", "createdAt", "id");
+
 CREATE INDEX ON "marleva"."RoleAssignment" ("accountId", "role", "revokedAt");
 
 CREATE INDEX ON "marleva"."MfaRecovery" ("accountId", "state");

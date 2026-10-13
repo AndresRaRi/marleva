@@ -147,7 +147,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Listado actual: hasta50 avisos propios más recientes; next_cursor siempre null. Paginación real del objetivo02 aún pendiente, no simularla como existente. */
+        /** @description UC008:S070–S090. Contrato del incremento local: avisos propios, orden createdAt DESC/id DESC; limit entero 1–50, defecto24. Cursor base64url canónico v1 ligado a cuenta y frontera UTC con seis decimales e ID; no credencial ni autorización. Consulta viva, no snapshot: avisos nuevos se ven al refrescar la primera página. Borrado de la fila frontera no invalida continuación. Una consulta lee limit+1; última página y vacío devuelven null. Cuenta del cursor distinta, formato inválido, repetición de parámetros o parámetros desconocidos:422 PAGINACION. Autenticación vigente antes de interpretar cursor; no leer avisos ajenos. Caída PG/Auth:503 o401 según contrato vigente, sin responder vacío por fallo. No cambia negocio, leído ni correo. */
         get: operations["MAR_M1_API_009"];
         put?: never;
         post?: never;
@@ -335,7 +335,8 @@ export interface components {
                 /** Format: date-time */
                 createdAt: string;
             }[];
-            next_cursor: null;
+            /** @description Frontera exacta del último aviso devuelto si existe otro; null al terminar. */
+            next_cursor: string | null;
         };
     };
     responses: never;
@@ -1830,7 +1831,12 @@ export interface operations {
     };
     MAR_M1_API_009: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Representación decimal sin signos ni ceros iniciales. Repeticiones rechazadas. */
+                limit?: number;
+                /** @description next_cursor previo; no contiene OTP ni credenciales. Ligado a cuenta, validado en servidor. No concede acceso por conocerlo. */
+                cursor?: string;
+            };
             header?: {
                 /** @description Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con Origin se rechaza; no es autorización por CORS. */
                 Origin?: "https://localhost:8443";
@@ -1863,7 +1869,8 @@ export interface operations {
                             /** Format: date-time */
                             createdAt: string;
                         }[];
-                        next_cursor: null;
+                        /** @description Frontera exacta del último aviso devuelto si existe otro; null al terminar. */
+                        next_cursor: string | null;
                     };
                 };
             };
@@ -1957,7 +1964,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Campos inválidos */
+            /** @description PAGINACION: query/cursor inválido o de otra cuenta; sin revelar datos ajenos. Reiniciar desde primera página. */
             422: {
                 headers: {
                     /** @description Datos privados no almacenables */

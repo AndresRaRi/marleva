@@ -1,50 +1,351 @@
-import {describe,it,expect,beforeAll,afterAll} from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import supertest from 'supertest';
-import {createRequire} from 'node:module';
-const pg=createRequire(new URL('../../../../apps/api/package.json',import.meta.url))('pg');
-import {readFile} from 'node:fs/promises';
-import {request as httpsRequest} from 'node:https';
-import {config} from '../../../../apps/api/dist/config.js';
-process.loadEnvFile(new URL('../../../../.env',import.meta.url));
-const db=new pg.Pool({connectionString:process.env.DATABASE_URL}),http=supertest('http://127.0.0.1:3000');
-const origin='https://localhost:8443';const run=Date.now();let sequence=0;
-const fixture=()=>`m1-${run}-${sequence++}@example.test`;
-const native=(r)=>r.set('x-marleva-client','native');
+import { createRequire } from 'node:module';
+const pg = createRequire(new URL('../../../../apps/api/package.json', import.meta.url))('pg');
+import { readFile } from 'node:fs/promises';
+import { request as httpsRequest } from 'node:https';
+process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+const db = new pg.Pool({ connectionString: process.env.DATABASE_URL }),
+  http = supertest('http://127.0.0.1:3000');
+const origin = 'https://localhost:8443';
+const run = Date.now();
+let sequence = 0;
+const fixture = () => `m1-${run}-${sequence++}@example.test`;
+const native = (r) => r.set('x-marleva-client', 'native');
 // Each run owns this synthetic prefix. Prior runs must not consume the next
 // run's origin quota. Preserve their records but separate their test origin.
-beforeAll(async()=>{
- if(process.env.APP_MODE!=='local'||new URL(process.env.DATABASE_URL).hostname!=='127.0.0.1')throw new Error('Local fixtures only');
- await db.query('UPDATE marleva."Challenge" SET origin=\'previous-test-run\' WHERE email LIKE \'m1-%@example.test\'');
+beforeAll(async () => {
+  if (
+    process.env.APP_MODE !== 'local' ||
+    new URL(process.env.DATABASE_URL).hostname !== '127.0.0.1'
+  )
+    throw new Error('Local fixtures only');
+  await db.query(
+    "UPDATE marleva.\"Challenge\" SET origin='previous-test-run' WHERE email LIKE 'm1-%@example.test'",
+  );
 });
-async function call(path,method='get',body,token){let r=native(http[method](path));if(token)r=r.set('Authorization',`Bearer ${token}`);return body===undefined?r:r.send(body);}
-async function captured(address,after=0,subject='Código de acceso Marleva local'){for(let i=0;i<100;i++){const list=await(await fetch(process.env.MAILPIT_URL+'/api/v1/messages')).json();const item=list.messages.find(m=>m.Subject===subject&&m.To.some(t=>t.Address===address)&&new Date(m.Created).getTime()>=after);if(item){const msg=await(await fetch(process.env.MAILPIT_URL+'/api/v1/message/'+item.ID)).json();const value=(msg.Text+' '+msg.HTML).match(/\b\d{6}\b/);if(value)return value[0];}await new Promise(r=>setTimeout(r,100));}throw new Error('No llegó el código ficticio al capturador local');}
-async function challenge(address){const time=Date.now();const r=await call('/v1/auth/challenges','post',{correo:address});expect(r.status).toBe(201);return {id:r.body.challenge_id,otp:await captured(address,time)};}
-async function login(address=fixture()){const c=await challenge(address),r=await call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:c.otp});expect(r.status).toBe(201);return {address,token:r.body.session_token,account:r.body.cuenta,csrf:r.body.csrf_token};}
-afterAll(async()=>db.end());
-describe('M1 integración real local PG17/Auth/correo/API',()=>{
- it('MAR-M1-IT-BE-001 | UC010/SEQ010:S020-S060 | HTTPS valida certificado y readiness todas las dependencias',async()=>{const ca=await readFile(new URL('../../../../infra/local/secrets/ca.crt',import.meta.url));const result=await new Promise((resolve,reject)=>{httpsRequest(origin+'/health/ready',{ca},r=>{let data='';r.on('data',b=>data+=b);r.on('end',()=>resolve({status:r.statusCode,data:JSON.parse(data)}));}).on('error',reject).end();});expect(result.status).toBe(200);expect(result.data.status).toBe('ready');});
- it('MAR-M1-IT-BE-002 | UC002/SEQ002:S030-S090 | dos verificaciones concurrentes consumen el código una sola vez',async()=>{const c=await challenge(fixture());const results=await Promise.all([call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:c.otp}),call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:c.otp})]);expect(results.map(r=>r.status).sort()).toEqual([201,401]);const again=await call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:c.otp});expect(again.status).toBe(401);});
- it('MAR-M1-IT-BE-003 | UC001/SEQ001:S100 | nuevo y existente reciben salida genérica sin revelar cuenta',async()=>{const a=await call('/v1/auth/challenges','post',{correo:fixture()}),b=await call('/v1/auth/challenges','post',{correo:fixture()});expect(a.status).toBe(201);expect(b.status).toBe(201);expect(a.body.mensaje).toBe(b.body.mensaje);expect(Object.keys(a.body)).toEqual(Object.keys(b.body));});
- it('MAR-M1-IT-BE-004 | UC001/SEQ001:S030-S060 | reenvío espera60s; caducidad rechaza; cinco fallos bloquean15min',async()=>{const address=fixture(),c=await challenge(address);expect((await call('/v1/auth/challenges','post',{correo:address})).status).toBe(429);const wrong=c.otp==='000000'?'111111':'000000';for(let i=0;i<5;i++)expect((await call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:wrong})).status).toBe(401);expect((await call('/v1/auth/verifications','post',{challenge_id:c.id,codigo:c.otp})).status).toBe(401);const row=(await db.query('SELECT attempts,"blockedUntil" FROM marleva."Challenge" WHERE id=$1',[c.id])).rows[0];expect(row.attempts).toBe(5);expect(+row.blockedUntil-Date.now()).toBeGreaterThan(890000);const d=await challenge(fixture());await db.query('UPDATE marleva."Challenge" SET "expiresAt"=now()-interval \'1 second\' WHERE id=$1',[d.id]);expect((await call('/v1/auth/verifications','post',{challenge_id:d.id,codigo:d.otp})).status).toBe(401);});
- it('MAR-M1-IT-BE-005 | UC004/SEQ004:S020-S070 | cookie web HttpOnly/Secure y CSRF en salida; credencial no aparece en cuerpo',async()=>{const c=await challenge(fixture());const r=await http.post('/v1/auth/verifications').set('Origin',origin).send({challenge_id:c.id,codigo:c.otp});expect(r.status).toBe(201);expect(r.body.session_token).toBeUndefined();const cookie=r.headers['set-cookie'][0];expect(cookie).toContain('HttpOnly');expect(cookie).toContain('Secure');expect(cookie).toContain('SameSite=Strict');const header=cookie.split(';')[0];expect((await http.delete('/v1/auth/sessions/current').set('Origin',origin).set('Cookie',header)).status).toBe(403);expect((await http.delete('/v1/auth/sessions/current').set('Origin',origin).set('Cookie',header).set('x-csrf-token',r.body.csrf_token)).status).toBe(200);expect((await http.get('/v1/me').set('Cookie',header)).status).toBe(401);});
- it('MAR-M1-IT-BE-006 | UC003/SEQ003:S020-S090 | A no puede atribuirse permisos; salida y vencimiento revocan acceso',async()=>{const a=await login(),b=await login();expect((await call('/v1/me','get',undefined,a.token)).body.id).toBe(a.account.id);expect(a.account.id).not.toBe(b.account.id);expect((await call('/v1/operator/access','get',undefined,a.token)).status).toBe(403);expect((await call('/v1/auth/mfa/enrollments','post',{},a.token)).status).toBe(403);await db.query('UPDATE marleva."Session" SET "lastSeen"=now()-interval \'8 days\' WHERE "accountId"=$1',[a.account.id]);expect((await call('/v1/me','get',undefined,a.token)).status).toBe(401);expect((await call('/v1/auth/sessions','delete',undefined,b.token)).status).toBe(200);expect((await call('/v1/me','get',undefined,b.token)).status).toBe(401);});
- it('MAR-M1-IT-BE-007 | UC007/SEQ007:S030-S090 | rol actual se revisa y operador sin MFA no opera; sesión operador vence30min',async()=>{const a=await login();await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1',[a.account.id]);expect((await call('/v1/operator/access','get',undefined,a.token)).status).toBe(403);await db.query('UPDATE marleva."Session" SET "lastSeen"=now()-interval \'31 minutes\' WHERE "accountId"=$1',[a.account.id]);expect((await call('/v1/me','get',undefined,a.token)).status).toBe(401);});
- it('MAR-M1-IT-BE-008 | UC011/SEQ011:S030 | esquema privado no expuesto; rol API sin DDL y sin leer Auth',async()=>{for(const sql of ['CREATE TABLE marleva.should_not_exist (id int)','SELECT id FROM auth.users LIMIT 1']){let refused=false;try{await db.query(sql);}catch{refused=true;}expect(refused).toBe(true);}const r=await fetch(process.env.SUPABASE_URL+'/rest/v1/Account',{headers:{apikey:process.env.SUPABASE_ANON_KEY}});expect(r.status).not.toBe(200);});
- it('MAR-M1-IT-BE-009 | UC012/SEQ012:S030 | datos reales y webhook externo no tienen vía habilitada',async()=>{expect((await call('/v1/auth/challenges','post',{correo:'real@gmail.com'})).status).toBe(422);expect((await call('/v1/payments/provider-events','post',{})).status).toBe(404);});
+async function call(path, method = 'get', body, token) {
+  let r = native(http[method](path));
+  if (token) r = r.set('Authorization', `Bearer ${token}`);
+  return body === undefined ? r : r.send(body);
+}
+async function captured(address, after = 0, subject = 'Código de acceso Marleva local') {
+  for (let i = 0; i < 100; i++) {
+    const list = await (await fetch(process.env.MAILPIT_URL + '/api/v1/messages')).json();
+    const item = list.messages.find(
+      (m) =>
+        m.Subject === subject &&
+        m.To.some((t) => t.Address === address) &&
+        new Date(m.Created).getTime() >= after,
+    );
+    if (item) {
+      const msg = await (
+        await fetch(process.env.MAILPIT_URL + '/api/v1/message/' + item.ID)
+      ).json();
+      const value = (msg.Text + ' ' + msg.HTML).match(/\b\d{6}\b/);
+      if (value) return value[0];
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  throw new Error('No llegó el código ficticio al capturador local');
+}
+async function challenge(address) {
+  const time = Date.now();
+  const r = await call('/v1/auth/challenges', 'post', { correo: address });
+  expect(r.status).toBe(201);
+  return { id: r.body.challenge_id, otp: await captured(address, time) };
+}
+async function login(address = fixture()) {
+  const c = await challenge(address),
+    r = await call('/v1/auth/verifications', 'post', { challenge_id: c.id, codigo: c.otp });
+  expect(r.status).toBe(201);
+  return { address, token: r.body.session_token, account: r.body.cuenta, csrf: r.body.csrf_token };
+}
+afterAll(async () => db.end());
+describe('M1 integración real local PG17/Auth/correo/API', () => {
+  it('MAR-M1-IT-BE-001 | UC010/SEQ010:S020-S060 | HTTPS valida certificado y readiness todas las dependencias', async () => {
+    const ca = await readFile(new URL('../../../../infra/local/secrets/ca.crt', import.meta.url));
+    const result = await new Promise((resolve, reject) => {
+      httpsRequest(origin + '/health/ready', { ca }, (r) => {
+        let data = '';
+        r.on('data', (b) => (data += b));
+        r.on('end', () => resolve({ status: r.statusCode, data: JSON.parse(data) }));
+      })
+        .on('error', reject)
+        .end();
+    });
+    expect(result.status).toBe(200);
+    expect(result.data.status).toBe('ready');
+  });
+  it('MAR-M1-IT-BE-002 | UC002/SEQ002:S030-S090 | dos verificaciones concurrentes consumen el código una sola vez', async () => {
+    const c = await challenge(fixture());
+    const results = await Promise.all([
+      call('/v1/auth/verifications', 'post', { challenge_id: c.id, codigo: c.otp }),
+      call('/v1/auth/verifications', 'post', { challenge_id: c.id, codigo: c.otp }),
+    ]);
+    expect(results.map((r) => r.status).sort()).toEqual([201, 401]);
+    const again = await call('/v1/auth/verifications', 'post', {
+      challenge_id: c.id,
+      codigo: c.otp,
+    });
+    expect(again.status).toBe(401);
+  });
+  it('MAR-M1-IT-BE-003 | UC001/SEQ001:S100 | nuevo y existente reciben salida genérica sin revelar cuenta', async () => {
+    const existing = (
+      await db.query('SELECT email FROM marleva."Account" ORDER BY "createdAt" ASC LIMIT 1')
+    ).rows[0];
+    expect(existing).toBeDefined();
+    const a = await call('/v1/auth/challenges', 'post', { correo: fixture() }),
+      b = await call('/v1/auth/challenges', 'post', { correo: existing.email });
+    expect(a.status).toBe(201);
+    expect(b.status).toBe(201);
+    expect(a.body.mensaje).toBe(b.body.mensaje);
+    expect(Object.keys(a.body)).toEqual(Object.keys(b.body));
+  });
+  it('MAR-M1-IT-BE-004 | UC001/SEQ001:S030-S060 | reenvío espera60s; caducidad rechaza; cinco fallos bloquean15min', async () => {
+    const address = fixture(),
+      c = await challenge(address);
+    expect((await call('/v1/auth/challenges', 'post', { correo: address })).status).toBe(429);
+    const wrong = c.otp === '000000' ? '111111' : '000000';
+    for (let i = 0; i < 5; i++)
+      expect(
+        (await call('/v1/auth/verifications', 'post', { challenge_id: c.id, codigo: wrong }))
+          .status,
+      ).toBe(401);
+    expect(
+      (await call('/v1/auth/verifications', 'post', { challenge_id: c.id, codigo: c.otp })).status,
+    ).toBe(401);
+    const row = (
+      await db.query('SELECT attempts,"blockedUntil" FROM marleva."Challenge" WHERE id=$1', [c.id])
+    ).rows[0];
+    expect(row.attempts).toBe(5);
+    expect(+row.blockedUntil - Date.now()).toBeGreaterThan(890000);
+    const d = await challenge(fixture());
+    await db.query(
+      'UPDATE marleva."Challenge" SET "expiresAt"=now()-interval \'1 second\' WHERE id=$1',
+      [d.id],
+    );
+    expect(
+      (await call('/v1/auth/verifications', 'post', { challenge_id: d.id, codigo: d.otp })).status,
+    ).toBe(401);
+  });
+  it('MAR-M1-IT-BE-005 | UC004/SEQ004:S020-S070 | cookie web HttpOnly/Secure y CSRF en salida; credencial no aparece en cuerpo', async () => {
+    const c = await challenge(fixture());
+    const r = await http
+      .post('/v1/auth/verifications')
+      .set('Origin', origin)
+      .send({ challenge_id: c.id, codigo: c.otp });
+    expect(r.status).toBe(201);
+    expect(r.body.session_token).toBeUndefined();
+    const cookie = r.headers['set-cookie'][0];
+    expect(cookie).toContain('HttpOnly');
+    expect(cookie).toContain('Secure');
+    expect(cookie).toContain('SameSite=Strict');
+    const header = cookie.split(';')[0];
+    expect(
+      (await http.delete('/v1/auth/sessions/current').set('Origin', origin).set('Cookie', header))
+        .status,
+    ).toBe(403);
+    expect(
+      (
+        await http
+          .delete('/v1/auth/sessions/current')
+          .set('Origin', origin)
+          .set('Cookie', header)
+          .set('x-csrf-token', r.body.csrf_token)
+      ).status,
+    ).toBe(200);
+    expect((await http.get('/v1/me').set('Cookie', header)).status).toBe(401);
+  });
+  it('MAR-M1-IT-BE-006 | UC003/SEQ003:S020-S090 | A no puede atribuirse permisos; salida y vencimiento revocan acceso', async () => {
+    const a = await login(),
+      b = await login();
+    expect((await call('/v1/me', 'get', undefined, a.token)).body.id).toBe(a.account.id);
+    expect(a.account.id).not.toBe(b.account.id);
+    expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
+    expect((await call('/v1/auth/mfa/enrollments', 'post', {}, a.token)).status).toBe(403);
+    await db.query(
+      'UPDATE marleva."Session" SET "lastSeen"=now()-interval \'8 days\' WHERE "accountId"=$1',
+      [a.account.id],
+    );
+    expect((await call('/v1/me', 'get', undefined, a.token)).status).toBe(401);
+    expect((await call('/v1/auth/sessions', 'delete', undefined, b.token)).status).toBe(200);
+    expect((await call('/v1/me', 'get', undefined, b.token)).status).toBe(401);
+  });
+  it('MAR-M1-IT-BE-007 | UC007/SEQ007:S030-S090 | rol actual se revisa y operador sin MFA no opera; sesión operador vence30min', async () => {
+    const a = await login();
+    await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1', [a.account.id]);
+    expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
+    await db.query(
+      'UPDATE marleva."Session" SET "lastSeen"=now()-interval \'31 minutes\' WHERE "accountId"=$1',
+      [a.account.id],
+    );
+    expect((await call('/v1/me', 'get', undefined, a.token)).status).toBe(401);
+  });
+  it('MAR-M1-IT-BE-008 | UC011/SEQ011:S030 | esquema privado no expuesto; rol API sin DDL y sin leer Auth', async () => {
+    for (const sql of [
+      'CREATE TABLE marleva.should_not_exist (id int)',
+      'SELECT id FROM auth.users LIMIT 1',
+    ]) {
+      let refused = false;
+      try {
+        await db.query(sql);
+      } catch {
+        refused = true;
+      }
+      expect(refused).toBe(true);
+    }
+    const r = await fetch(process.env.SUPABASE_URL + '/rest/v1/Account', {
+      headers: { apikey: process.env.SUPABASE_ANON_KEY },
+    });
+    expect(r.status).not.toBe(200);
+  });
+  it('MAR-M1-IT-BE-009 | UC012/SEQ012:S030 | datos reales y webhook externo no tienen vía habilitada', async () => {
+    expect((await call('/v1/auth/challenges', 'post', { correo: 'real@gmail.com' })).status).toBe(
+      422,
+    );
+    expect((await call('/v1/payments/provider-events', 'post', {})).status).toBe(404);
+  });
 });
-it('MAR-M1-IT-BE-010 | UC006/SEQ006:S030-S090 | cambio de correo exige ambos buzones, conserva ID y revoca sesiones',async()=>{
- const a=await login(),next=fixture(),time=Date.now();const change=await call('/v1/auth/email-changes','post',{correo:next},a.token);expect(change.status).toBe(201);
- const oldCode=await captured(a.address,time,'Cambio de correo Marleva local'),newCode=await captured(next,time,'Cambio de correo Marleva local');
- expect((await call(`/v1/auth/email-changes/${change.body.id}/confirmations`,'post',{correo:a.address,codigo:oldCode},a.token)).status).toBe(201);
- expect((await call('/v1/me','get',undefined,a.token)).body.correo).toBe(a.address);
- const result=await call(`/v1/auth/email-changes/${change.body.id}/confirmations`,'post',{correo:next,codigo:newCode},a.token);expect({status:result.status,codigo:result.body.codigo}).toMatchObject({status:201});expect(result.body.estado).toBe('completo');expect((await call('/v1/me','get',undefined,a.token)).status).toBe(401);
- const row=(await db.query('SELECT id,email FROM marleva."Account" WHERE id=$1',[a.account.id])).rows[0];expect(row.id).toBe(a.account.id);expect(row.email).toBe(next);
- expect((await db.query('SELECT count(*)::int AS n FROM marleva."Notice" WHERE "accountId"=$1',[a.account.id])).rows[0].n).toBe(1);
+it('MAR-M1-IT-BE-010 | UC006/SEQ006:S030-S090 | cambio de correo exige ambos buzones, conserva ID y revoca sesiones', async () => {
+  const a = await login(),
+    next = fixture(),
+    time = Date.now();
+  const change = await call('/v1/auth/email-changes', 'post', { correo: next }, a.token);
+  expect(change.status).toBe(201);
+  const oldCode = await captured(a.address, time, 'Cambio de correo Marleva local'),
+    newCode = await captured(next, time, 'Cambio de correo Marleva local');
+  expect(
+    (
+      await call(
+        `/v1/auth/email-changes/${change.body.id}/confirmations`,
+        'post',
+        { correo: a.address, codigo: oldCode },
+        a.token,
+      )
+    ).status,
+  ).toBe(201);
+  expect((await call('/v1/me', 'get', undefined, a.token)).body.correo).toBe(a.address);
+  const result = await call(
+    `/v1/auth/email-changes/${change.body.id}/confirmations`,
+    'post',
+    { correo: next, codigo: newCode },
+    a.token,
+  );
+  expect({ status: result.status, codigo: result.body.codigo }).toMatchObject({ status: 201 });
+  expect(result.body.estado).toBe('completo');
+  expect((await call('/v1/me', 'get', undefined, a.token)).status).toBe(401);
+  const row = (await db.query('SELECT id,email FROM marleva."Account" WHERE id=$1', [a.account.id]))
+    .rows[0];
+  expect(row.id).toBe(a.account.id);
+  expect(row.email).toBe(next);
+  expect(
+    (
+      await db.query('SELECT count(*)::int AS n FROM marleva."Notice" WHERE "accountId"=$1', [
+        a.account.id,
+      ])
+    ).rows[0].n,
+  ).toBe(1);
 });
-it('MAR-M1-IT-BE-011 | UC007/SEQ007:S030-S090 | TOTP estándar eleva AAL; revocar el rol quita permiso con JWT aún vivo',async()=>{
- const {generate}=await import('otplib');const a=await login();await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1',[a.account.id]);
- const factor=await call('/v1/auth/mfa/enrollments','post',{},a.token);expect(factor.status).toBe(201);const token=await generate({secret:factor.body.totp.secret});
- expect((await call('/v1/auth/mfa/verifications','post',{factor_id:factor.body.id,codigo:token},a.token)).status).toBe(201);
- expect((await call('/v1/operator/access','get',undefined,a.token)).status).toBe(200);
- await db.query('UPDATE marleva."Account" SET operator=false WHERE id=$1',[a.account.id]);expect((await call('/v1/operator/access','get',undefined,a.token)).status).toBe(403);
+it('MAR-M1-IT-BE-011 | UC007/SEQ007:S030-S090 | TOTP estándar eleva AAL; revocar el rol quita permiso con JWT aún vivo', async () => {
+  const { generate } = await import('otplib');
+  const a = await login();
+  await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1', [a.account.id]);
+  const factor = await call('/v1/auth/mfa/enrollments', 'post', {}, a.token);
+  expect(factor.status).toBe(201);
+  const token = await generate({ secret: factor.body.totp.secret });
+  expect(
+    (
+      await call(
+        '/v1/auth/mfa/verifications',
+        'post',
+        { factor_id: factor.body.id, codigo: token },
+        a.token,
+      )
+    ).status,
+  ).toBe(201);
+  expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(200);
+  await db.query('UPDATE marleva."Account" SET operator=false WHERE id=$1', [a.account.id]);
+  expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
 });
+
+// UC008: actual API/Auth/PostgreSQL; only this run's accounts and notices are modified.
+it('MAR-M1-IT-BE-108-A | SEQ008:S075-S090 | cursor exacto, cuenta propia, inserciones y frontera borrada', async () => {
+  const a = await login(),
+    b = await login();
+  await db.query(
+    `INSERT INTO marleva."Notice"(id,"accountId",kind,text,"createdAt") SELECT gen_random_uuid(),$1::uuid,'cursor.fixture','ficticio','2026-10-13T10:00:00Z'::timestamptz + (g%3)*interval '1 microsecond' FROM generate_series(1,73) g`,
+    [a.account.id],
+  );
+  await db.query(
+    `INSERT INTO marleva."Notice"("accountId",kind,text) VALUES ($1,'private.b','ajeno')`,
+    [b.account.id],
+  );
+  const expected = (
+    await db.query(
+      'SELECT id FROM marleva."Notice" WHERE "accountId"=$1 ORDER BY "createdAt" DESC,id DESC',
+      [a.account.id],
+    )
+  ).rows.map((r) => r.id);
+  const first = await call('/v1/notifications?limit=24', 'get', undefined, a.token);
+  expect(first.status).toBe(200);
+  expect(first.body.items).toHaveLength(24);
+  expect(first.headers['cache-control']).toBe('no-store');
+  expect(first.body.next_cursor).toBeTypeOf('string');
+  const denied = await call(
+    '/v1/notifications?cursor=' + first.body.next_cursor,
+    'get',
+    undefined,
+    b.token,
+  );
+  expect(denied.status).toBe(422);
+  expect(denied.body.codigo).toBe('PAGINACION');
+  expect(denied.body.items).toBeUndefined();
+  for (const query of [
+    'limit=0',
+    'limit=51',
+    'limit=1&limit=2',
+    'cursor=bad',
+    'accountId=' + b.account.id,
+  ])
+    expect((await call('/v1/notifications?' + query, 'get', undefined, a.token)).status).toBe(422);
+  expect((await call('/v1/notifications?cursor=bad')).status).toBe(401);
+  const seen = first.body.items.map((r) => r.id);
+  const boundary = seen.at(-1);
+  await db.query('DELETE FROM marleva."Notice" WHERE id=$1 AND "accountId"=$2', [
+    boundary,
+    a.account.id,
+  ]);
+  const inserted = (
+    await db.query(
+      `INSERT INTO marleva."Notice"("accountId",kind,text) VALUES ($1,'new.fixture','nuevo') RETURNING id`,
+      [a.account.id],
+    )
+  ).rows[0].id;
+  let cursor = first.body.next_cursor;
+  while (cursor) {
+    const page = await call(
+      '/v1/notifications?limit=24&cursor=' + cursor,
+      'get',
+      undefined,
+      a.token,
+    );
+    expect(page.status).toBe(200);
+    expect(page.body.items.every((r) => r.accountId === a.account.id)).toBe(true);
+    seen.push(...page.body.items.map((r) => r.id));
+    cursor = page.body.next_cursor;
+  }
+  expect(seen).toEqual(expected);
+  expect(new Set(seen).size).toBe(73);
+  expect(seen).not.toContain(inserted);
+  expect((await call('/v1/notifications', 'get', undefined, a.token)).body.items[0].id).toBe(
+    inserted,
+  );
+  const empty = await login();
+  expect((await call('/v1/notifications', 'get', undefined, empty.token)).body).toEqual({
+    items: [],
+    next_cursor: null,
+  });
+  await call('/v1/auth/sessions/current', 'delete', undefined, a.token);
+  expect((await call('/v1/notifications', 'get', undefined, a.token)).status).toBe(401);
+}, 30000);

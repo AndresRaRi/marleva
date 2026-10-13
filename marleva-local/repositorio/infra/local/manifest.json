@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-13T00:52:33.633Z",
+  "date": "2026-10-13T21:17:10.830Z",
   "os": {
     "platform": "darwin",
     "arch": "arm64",
@@ -84,7 +84,7 @@
   },
   "lockfile": {
     "file": "pnpm-lock.yaml",
-    "sha256": "ae3fa84c2dba92dccfdf620c8ec8fac3f7eba1b009a490e403fd038b9db56db0"
+    "sha256": "b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a"
   },
   "gradleWrapper": "distributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-9.3.1-bin.zip\nnetworkTimeout=10000\nvalidateDistributionUrl=true\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\n\ndistributionSha256Sum=b266d5ff6b90eada6dc3b20cb090e3731302e553a27c5d3e4df1f0d76beaff06\n",
   "sdks": [
@@ -253,6 +253,21 @@
       "status": "running",
       "ports": {
         "3000/tcp": null
+      },
+      "volumes": []
+    },
+    {
+      "name": "supabase_realtime_marleva-m1",
+      "image": "public.ecr.aws/supabase/realtime:v2.140.10",
+      "imageId": "sha256:f704b3222e3c772610865e016153d606a3f94f0a55a7548a903b3f6d7f3f8270",
+      "repoDigests": [
+        "public.ecr.aws/supabase/realtime@sha256:f704b3222e3c772610865e016153d606a3f94f0a55a7548a903b3f6d7f3f8270"
+      ],
+      "platform": "linux/arm64",
+      "status": "running",
+      "health": "healthy",
+      "ports": {
+        "4000/tcp": null
       },
       "volumes": []
     },

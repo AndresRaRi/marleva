@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-13T20:41:04.317Z",
+  "chat": "MAR-CHAT-005",
+  "target": "local marleva-m1 localhost54322",
+  "migration": "202610130001_notice_cursor",
+  "priorTables": 9,
+  "noticesBefore": 1,
+  "noticesAfter": 1,
+  "indexes": [
+    {
+      "indexdef": "CREATE INDEX \"Notice_accountId_createdAt_id_idx\" ON marleva.\"Notice\" USING btree (\"accountId\", \"createdAt\", id)"
+    }
+  ],
+  "exit": 0,
+  "scope": "Index only; DATA002 recovery/storage not applied"
+}

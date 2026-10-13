@@ -9,14 +9,25 @@ sequenceDiagram
     Note over UI,API: MAR-M1-SEQ-008 - Consultar y entregar avisos durables
     API->>DB: S010 guardar evento aviso y outbox en transacción
     API-->>UI: S020 estado de cuenta disponible
-    API->>DB: S030 worker reclama tarea por lease
+    API->>DB: S030 reclama tarea por estado/dueAt/intentos/lease vencido; aumenta intento y guarda lease15s
+    Note over API,DB: S035 terminal failed sin enviar si24h cumplidas; finalización/reintento exige misma lease para excluir trabajador viejo
     API->>MAIL: S040 SMTP local con referencia estable
     alt Capturador caído
-     API->>DB: S050 conservar tarea y reintentar sin repetir negocio
+     API->>DB: S050 conservar tarea; esperas 1/5/30min; tras24h failed
+    else Envío confirmado pero caída antes de guardar sent
+     Note over API,MAIL: S055 vence lease y reenvía con mismo Message-ID; SMTP puede duplicar entrega, nunca negocio
     else Entregado
      API->>DB: S060 marcar envío
     end
     UI->>API: S070 consultar avisos propios
-    API->>DB: S080 leer hasta50 avisos propios recientes; cursor actual null
-    API-->>UI: S090 lista o vacío
-    Note over API,MAIL: S100 prueba de caída/reinicio completa pendiente; SMTP no garantiza exactly-once por sí solo
+    API->>API: S075 sesión vigente y query estricta; cursor v1 de misma cuenta
+    API->>DB: S080 leer limit+1 propios por createdAt DESC/id DESC; frontera UTC exacta con microsegundos
+    API->>API: S085 devolver máximo limit; cursor solo si hay siguiente fila
+    API-->>UI: S090 lista o vacío; next_cursor o null
+    alt Cursor inválido o cuenta distinta
+     API-->>UI: S095 422 PAGINACION; reiniciar primera página sin datos ajenos
+    else DB o identidad caídas
+     API-->>UI: S097 error recuperable; nunca vacío fingido
+    end
+    Note over API,MAIL: S100 SMTP/lease/caída/reinicio probados en005; UI/nativo pendientes; SMTP no garantiza exactly-once
+    Note over UI,DB: Consulta viva sin snapshot; nuevos avisos se consultan desde primera página. Borrar frontera no impide seguir.

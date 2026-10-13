@@ -1,6 +1,6 @@
 # Proceso de desarrollo y auditoría de Marleva
 
-Historial por Git. Fecha: 13-10-2026 America/Merida. MAR-CHAT-004 continúa abierto. Instrucción vigente del usuario: documentación revisable antes de desarrollo; pruebas para cada cambio de backend/frontend; instalaciones correctas, homogéneas y sin componentes sin identificar. No acredita implementación completa ni conformidad con estándares.
+Historial por Git. Fecha: 13-10-2026 America/Merida. MAR-CHAT-005 continúa;004 cerrado en538c351. Los apartados de auditoría004 son históricos. Instrucción vigente del usuario: documentación revisable antes de desarrollo; pruebas para cada cambio de backend/frontend; instalaciones correctas, homogéneas y sin componentes sin identificar. No acredita implementación completa ni conformidad con estándares.
 
 ## Lectura obligatoria antes de cada proceso o cambio
 
@@ -275,3 +275,11 @@ P02calidad ejecutada: herramientas exactas instaladas; frozenoffline conservó l
 4. Cada proceso usa pasos estables Sxxx y trazabilidad de la matriz; cada tarea sigue las ocho puertas de este protocolo. Entrada, salida, fallos y evidencia identificados.
 5. Avances reales al menos cada 60 segundos durante ejecución; resolver fallos y continuar tareas independientes. Chat abierto no acredita un proceso continuo.
 6. Revisar diferencias e ignorados, releer finales y guardar commit local por incremento coherente. Fuentes e instrucciones incluidas en el mismo Git; remoto/subida separados.
+
+## Continuación MAR-CHAT-005 —13-10-2026
+
+HEAD inicial538c351 confirma cierre004; las referencias previas a004 abierto son históricas. Tarea activaP03/P06: UC008/BUG005 independiente de MAR-TODO-AUTH-001; no refactor OTP/sesión/Google. Diseño cerrado de query/cursor en YAML0.3.0, SEQ008 y matriz. Componentes concretos: DTOquery valida; dominio codifica frontera; ListNotices coordina; puerto limita consulta propia; repositorio Prisma/SQL preserva microsegundos; controller autentica con servicio existente y delega. Ninguna pantalla nueva ni capa vacía. Migración003 solo índice; ensayar antes de aplicar al negocio. DATA001 no se presenta como estado nuevo hasta cotejo vivo.
+
+Worker existente no satisface aún toda rama objetivo: reintenta después de24h si ya due y no controla propietario delease; corregir con prueba de caídas/lease antes de acreditar B08. SMTP después de enviar antes decommit puede entregar doble; Message-ID estable no garantiza deduplicación. No crear endpoint operativo o decidir retención real por este diseño.
+
+Resultado UC008 en005: query/cursor y entrega durable extraídos, índice nuevo ensayado/aplicado y pruebas del incremento pasadas, según matriz y actas notices-*.json. Las brechas de worker mencionadas antes fueron corregidas en este incremento; B08 completo todavía depende de UI y otros casos. No declarar P02/P03/P06 completos para toda M1. Continuar con B09 por documentación/autorización/concurrencia, conservar pausa de estrategia Auth y revisión visual. Fuentes actualizadas solo en01, sin subida acreditada.

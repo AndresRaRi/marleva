@@ -93,7 +93,6 @@ export class AccountService {
   }
   recent(p:Principal){if(Date.now()-+p.session.authenticatedAt>limits.reauth_seconds*1000)fail(403,'REAUTENTICAR','Verifica tu correo otra vez para continuar','Inicia una nueva sesión con código');}
   async logout(p:Principal,all=false){if(all)this.recent(p);await this.db.$transaction(async tx=>{await tx.session.updateMany({where:all?{accountId:p.account.id}:{id:p.session.id},data:{revokedAt:new Date()}});await tx.audit.create({data:{accountId:p.account.id,action:all?'session.revoked_all':'session.revoked',resourceId:p.session.id}});});return {estado:'sesion_revocada'};}
-  async notices(p:Principal){return {items:await this.db.notice.findMany({where:{accountId:p.account.id},orderBy:{createdAt:'desc'},take:50}),next_cursor:null};}
   async emailChange(p:Principal,newAddress:unknown){
     this.recent(p);const next=email(newAddress);if(next===p.account.email)fail(422,'CORREO_IGUAL','Escribe un correo diferente');
     const conflict=await this.db.account.findUnique({where:{email:next}});if(conflict)fail(409,'CAMBIO_NO_DISPONIBLE','No se puede usar ese correo');

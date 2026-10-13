@@ -1,0 +1,24 @@
+{
+  "id": "MAR-M1-PF-BE-108",
+  "chat": "MAR-CHAT-005",
+  "date": "2026-10-13T20:39:54.037Z",
+  "sequence": "MAR-M1-SEQ-008:S080",
+  "scope": "Real Prisma repository/PG17 in disposable destination; no HTTP/Auth/SMTP/frontend capacity claim",
+  "image": "public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108",
+  "hardware": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "memoryBytes": 17179869184
+  },
+  "versions": {
+    "node": "v24.21.0",
+    "prisma": "7.10.0"
+  },
+  "groups": [],
+  "resources": [],
+  "expected": "No incorrect/foreign pages or unexpected errors; proposed local p95<=500ms at concurrency5, not pilot commitment",
+  "passed": false,
+  "failure": "Isolated PostgreSQL unavailable",
+  "cleaned": true,
+  "finishedAt": "2026-10-13T20:40:14.944Z"
+}

@@ -29,3 +29,5 @@ Restricciones PostgreSQL complementarias en [SQL objetivo](ddl/MAR-M1-DATA-002.s
 Conciliación13-10-2026: DATA001 físico8tablas; DATA002 objetivo13tablas/DDL complementado, no aplicado. B09 ya tiene capacidades, versión/intención durable y YAML objetivo; implementación/migración/pruebas API pendientes; leer [especificación parcial](../apis/M1/CONTRATO_B09_ARCHIVOS_PRIVADOS.md).
 
 Actualización B09: FixtureAccess yFixtureDeletion, FKscompuestas de titular/sesión/objeto, TTL≤300s/estados/hash.10SQL114–123 pasaron en destino desechable; no validación completa de API/Storage ni migración aplicada.
+
+13-10-2026,005: índice Notice(accountId,createdAt,id) en DATA002 y nueva migración202610130001_notice_cursor. Ensayo aislado sobre002 y rollback pasaron; aplicado solo índice a marleva-m1, conteo1aviso antes/después eindexdef cotejados. DATA001 ahora registra índice físico; continúan8tablas negocio (+_prisma_migrations técnica), sinroles/recuperación/Storage objetivo aplicados. DDLsnapshot se regenera, no aplicado íntegro. Actas notices-migration.json ynotices-migration-local.json en tests/results.

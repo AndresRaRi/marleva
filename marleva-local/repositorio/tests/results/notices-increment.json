@@ -1,0 +1,157 @@
+{
+  "chat": "MAR-CHAT-005",
+  "date": "2026-10-13T21:18:34.332Z",
+  "timezone": "America/Merida",
+  "headAtStart": "538c351129b1b1b73540083b72981733848392e8",
+  "topic": "Independent UC008 notifications/cursor and durable SMTP delivery",
+  "designed": [
+    "SEQ008 stable steps",
+    "API009 query/cursor/errors YAML0.3.0",
+    "Notice index DBML/DDL and new migration",
+    "outbox24h/backoff/lease fencing and test matrix"
+  ],
+  "implemented": [
+    "ListNotices/query/cursor/repository/controller",
+    "DeliverOutbox/policy/repository/SMTP adapter",
+    "202610130001_notice_cursor applied locally after isolated rehearsal"
+  ],
+  "evidence": [
+    {
+      "file": "notices-unit.json",
+      "sha256": "b165c45bbd0d71dc1a8c38ab18d7b419bce8a5ea866c017240e010b7dc415c13",
+      "passed": 16,
+      "failed": 0,
+      "success": true
+    },
+    {
+      "file": "notices-migration.json",
+      "sha256": "240e744048dc2ffa21edc48a8df68bc9deff598a55f179b21206ac501f8405d8",
+      "passed": 11,
+      "failed": 0,
+      "success": true
+    },
+    {
+      "file": "notices-integration.json",
+      "sha256": "07fbb589e77d1758d0e1f63bfe4df5bc9e083ac97b6ea90a3c2903a29dd88dbb",
+      "passed": 12,
+      "failed": 0,
+      "success": true
+    },
+    {
+      "file": "notices-outbox.json",
+      "sha256": "228f6eba34764b3114538c641994ca2f5dffa1fde73c3b178322b700b01b003a",
+      "passed": 5,
+      "failed": 0,
+      "success": true
+    }
+  ],
+  "commands": [
+    "pnpm docs:generate",
+    "pnpm docs:target",
+    "pnpm --filter @marleva/api build",
+    "pnpm typecheck",
+    "pnpm test:unit --reporter=json --outputFile=tests/results/notices-unit.json",
+    "MARLEVA_SCHEMA_CHECK=1 pnpm test:schema --reporter=json --outputFile=tests/results/notices-migration.json",
+    "pnpm test:integration --reporter=json --outputFile=tests/results/notices-integration.json",
+    "MARLEVA_OUTBOX_CHECK=1 pnpm test:outbox --reporter=json --outputFile=tests/results/notices-outbox.json",
+    "MARLEVA_PERFORMANCE_LOCAL=1 node tests/performance/backend/M1/notices.mjs",
+    "pnpm test:frontend:integration",
+    "pnpm install --frozen-lockfile --offline --ignore-scripts"
+  ],
+  "commandContext": "Run with scripts/tool from marleva-local/repositorio, local fixtures only; environment/credentials not logged",
+  "versions": {
+    "node": "24.21.0",
+    "pnpm": "12.11.2",
+    "postgres": "17.11",
+    "prisma": "7.10.0",
+    "nest": "12.1.3",
+    "supabaseCLI": "2.120.0"
+  },
+  "datasets": {
+    "api": "Separate synthetic A/B accounts;73notices with ties/microseconds, insertion/deleted boundary, empty and revoked account",
+    "performance": "Disposable PG17;100accounts/34990notices; first-page repository workload,10/50/1000 peraccount;10s warmup/60s at1/5/10",
+    "outbox": "Disposable PG17+actual local SMTP;failed/restarted server,concurrent/stale leases,injected postSMTP interruption,24h expiration;30jobs proportional measurement"
+  },
+  "expected": "No missing/duplicate notices in unchanged keyset; no foreign account data; invalid query422 and unauthenticated401; no lost durable job or business duplication; old lease cannot overwrite current",
+  "observed": "All listed suites passed; Chrome regression passed; performance repository and worker reports contain measurements",
+  "failures": [
+    {
+      "stage": "unit first run",
+      "passed": 12,
+      "failed": 1,
+      "cause": "Cursor encoder preserved caller property order",
+      "correction": "Explicit canonical field order",
+      "evidence": "CLI output14:34:03; no first JSON claimed"
+    },
+    {
+      "stage": "API first run",
+      "passed": 11,
+      "failed": 1,
+      "cause": "Synthetic md5 UUID had different version shape",
+      "correction": "Use actual gen_random_uuid default",
+      "evidence": "notices-integration-first-failure.json"
+    },
+    {
+      "stage": "performance first run",
+      "cause": "Isolated PostgreSQL not reachable on published port",
+      "correction": "Listen on container interface; still publish only127.0.0.1",
+      "evidence": "notices-performance-first-failure.json"
+    },
+    {
+      "stage": "service start first attempt",
+      "cause": "workdir one level too deep selected default supabase project",
+      "correction": "Stopped default environment preserving volumes; correct infra/local+marleva-private, no reset of original",
+      "residue": "Stopped default project volumes retained; not removed as user-owned scope uncertain"
+    }
+  ],
+  "quality": {
+    "newAndChangedHarnessLint": true,
+    "newFilesFormat": true,
+    "typecheckApi": true,
+    "typecheckClient": true,
+    "globalLintRemainingErrors": 8,
+    "globalQualityApproved": false
+  },
+  "platform": {
+    "chrome": {
+      "date": "2026-10-13T21:09:27.651Z",
+      "browser": "155.0.8059.40",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "cases": {
+        "https": true,
+        "otp": true,
+        "account": true,
+        "cookie": true,
+        "noLocalStorage": true,
+        "keyboardFocus": true,
+        "logout": true
+      },
+      "pageErrors": []
+    },
+    "xcode": "27.0 build27A266a; selected /Applications/Xcode.app/Contents/Developer",
+    "simulatorRuntimes": [],
+    "simulatorProbe": "Initial sandbox probe failed; escalated read-only probe succeeded with empty list",
+    "nativeBuilds": "Not executed in005",
+    "physicalTests": "Pending"
+  },
+  "limits": [
+    "M1 incomplete; no visual design approval or pagination UI implemented",
+    "Reading inventory partial byfile;N never claimed read; dependencies/private content excluded",
+    "Google/Auth strategy remains pending; OTP/session implementation not refactored",
+    "Recovery/B09 DATA002 remain objective not applied",
+    "Repository performance excludesHTTP/Auth/frontend;resource snapshots are not continuous peaks",
+    "SMTP may deliver duplicate email after uncertain acceptance; one task/business operation preserved",
+    "No platform accessibility certification, restoration/B12 or pilot RPO/RTO",
+    "Local fixtures/no real data,money,third-party contacts,publish,remote orFuentes upload"
+  ],
+  "next": "P03/P06 independent B09 authorization/concurrency contract review; preserve authentication strategy pause and UI review gate",
+  "git": {
+    "commit": "SHA supplied only after actual local commit",
+    "scope": "Exclude pre-existing AGENTS/sources changes and ignored secrets/tools/builds",
+    "remote": "none"
+  },
+  "lockfileSha256": "b32a42d82f79064ef2d1baca07585a3422a8cd8a0edeb171df58af445d42854a"
+}

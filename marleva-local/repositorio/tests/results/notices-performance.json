@@ -1,0 +1,147 @@
+{
+  "id": "MAR-M1-PF-BE-108",
+  "chat": "MAR-CHAT-005",
+  "date": "2026-10-13T20:40:59.937Z",
+  "sequence": "MAR-M1-SEQ-008:S080",
+  "scope": "Real Prisma repository/PG17 in disposable destination; no HTTP/Auth/SMTP/frontend capacity claim",
+  "image": "public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108",
+  "hardware": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "memoryBytes": 17179869184
+  },
+  "versions": {
+    "node": "v24.21.0",
+    "prisma": "7.10.0"
+  },
+  "groups": [
+    {
+      "concurrency": 1,
+      "warmupMs": 10000,
+      "durationMs": 60000.397750000004,
+      "datasets": [
+        {
+          "size": 10,
+          "requests": 30482,
+          "p50": 0.5881250000020373,
+          "p95": 1.0318330000009155,
+          "p99": 1.7194579999995767
+        },
+        {
+          "size": 50,
+          "requests": 29585,
+          "p50": 0.6090000000003783,
+          "p95": 1.0480830000014976,
+          "p99": 1.7840410000026168
+        },
+        {
+          "size": 1000,
+          "requests": 29585,
+          "p50": 0.6094169999996666,
+          "p95": 1.0538330000017595,
+          "p99": 1.7751659999994445
+        }
+      ],
+      "unexpectedErrors": 0,
+      "incorrect": 0,
+      "requestsPerSecond": 1494.19009476483
+    },
+    {
+      "concurrency": 5,
+      "warmupMs": 10000,
+      "durationMs": 60000.67091699998,
+      "datasets": [
+        {
+          "size": 10,
+          "requests": 107637,
+          "p50": 0.787041000003228,
+          "p95": 1.6227079999953276,
+          "p99": 3.1485830000019632
+        },
+        {
+          "size": 50,
+          "requests": 104471,
+          "p50": 0.8132089999999152,
+          "p95": 1.6647499999962747,
+          "p99": 3.1690420000086306
+        },
+        {
+          "size": 1000,
+          "requests": 104472,
+          "p50": 0.8137910000077682,
+          "p95": 1.6606250000040745,
+          "p99": 3.1325829999987036
+        }
+      ],
+      "unexpectedErrors": 0,
+      "incorrect": 0,
+      "requestsPerSecond": 5276.274334297543
+    },
+    {
+      "concurrency": 10,
+      "warmupMs": 10000,
+      "durationMs": 60000.97270799999,
+      "datasets": [
+        {
+          "size": 10,
+          "requests": 151225,
+          "p50": 1.2015839999949094,
+          "p95": 2.230457999976352,
+          "p99": 3.696750000002794
+        },
+        {
+          "size": 50,
+          "requests": 146777,
+          "p50": 1.2295830000075512,
+          "p95": 2.259124999982305,
+          "p99": 3.6865410000027623
+        },
+        {
+          "size": 1000,
+          "requests": 146777,
+          "p50": 1.231166999990819,
+          "p95": 2.2572499999951106,
+          "p99": 3.721292000001995
+        }
+      ],
+      "unexpectedErrors": 0,
+      "incorrect": 0,
+      "requestsPerSecond": 7412.8631574783985
+    }
+  ],
+  "resources": [
+    {
+      "concurrency": 1,
+      "container": "{\"BlockIO\":\"0B / 86.4MB\",\"CPUPerc\":\"1.73%\",\"Container\":\"marleva-notices-pf-1791924059937\",\"ID\":\"9516bfd34d03\",\"MemPerc\":\"5.05%\",\"MemUsage\":\"38.75MiB / 768MiB\",\"Name\":\"marleva-notices-pf-1791924059937\",\"NetIO\":\"53MB / 316MB\",\"PIDs\":\"7\"}",
+      "nodeRss": 227950592,
+      "connections": 7
+    },
+    {
+      "concurrency": 5,
+      "container": "{\"BlockIO\":\"0B / 86.6MB\",\"CPUPerc\":\"1.67%\",\"Container\":\"marleva-notices-pf-1791924059937\",\"ID\":\"9516bfd34d03\",\"MemPerc\":\"6.00%\",\"MemUsage\":\"46.09MiB / 768MiB\",\"Name\":\"marleva-notices-pf-1791924059937\",\"NetIO\":\"241MB / 1.44GB\",\"PIDs\":\"11\"}",
+      "nodeRss": 261373952,
+      "connections": 11
+    },
+    {
+      "concurrency": 10,
+      "container": "{\"BlockIO\":\"0B / 86.9MB\",\"CPUPerc\":\"0.00%\",\"Container\":\"marleva-notices-pf-1791924059937\",\"ID\":\"9516bfd34d03\",\"MemPerc\":\"7.18%\",\"MemUsage\":\"55.11MiB / 768MiB\",\"Name\":\"marleva-notices-pf-1791924059937\",\"NetIO\":\"504MB / 3GB\",\"PIDs\":\"16\"}",
+      "nodeRss": 283344896,
+      "connections": 16
+    }
+  ],
+  "expected": "No incorrect/foreign pages or unexpected errors; proposed local p95<=500ms at concurrency5, not pilot commitment",
+  "postgres": "17.11",
+  "dataset": {
+    "accounts": 100,
+    "sizes": [
+      10,
+      50,
+      1000
+    ],
+    "rows": 34990,
+    "isolated": true
+  },
+  "passed": true,
+  "cleaned": true,
+  "finishedAt": "2026-10-13T20:44:36.423Z"
+}
