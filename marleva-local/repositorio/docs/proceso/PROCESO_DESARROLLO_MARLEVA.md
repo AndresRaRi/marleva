@@ -4,6 +4,8 @@ Historial por Git. Fecha: 13-10-2026 America/Merida. MAR-CHAT-005 continúa;004 
 
 ## Lectura obligatoria antes de cada proceso o cambio
 
+Plan aprobado el 14-10: reglas en 00 y ADR001; no nuevo permiso por tarea ordinaria. Calidad local primero: corregir seis errores, tipado/formato global y regresión cliente/API. Cobertura V8 con paquete de la misma versión Vitest 5.0.4, fuente TS incluyendo archivos no importados; objetivo 80% en lógica de negocio, informar alcance y carencias sin excluir AccountService para aparentar cumplimiento. Reportes LCOV/JSON privados ignorados y resumen público sin datos personales. Sonar local: docs oficiales consultadas el 14-10 siguen soportando TS≤5.9.3; proyecto compila TS 6.0.3. No rebajar compilador del proyecto; probar configuración de análisis compatible por separado antes de acreditar análisis. Recursos comprobados: host 16 GiB / VM ≈5.77 GiB, compartir memoria con Supabase exige medir antes de mantener otro servicio. No SonarCloud ni deploy externo por este paso.
+
 1. Instrucciones vigentes del usuario y AGENTS.md aplicable.
 2. [00 Guía](../../../../entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md), [01 Estado](../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md), [02 Diseño](../../../../entregables/fuentes_finales/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), [03 Evidencia](../../../../entregables/fuentes_finales/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
 3. Este documento; registro de procesos/casos del módulo; diagramas afectados; modelo DBML y DDL; OpenAPI YAML; pruebas y resultados pertinentes.
@@ -16,7 +18,7 @@ Si hay una contradicción entre diseño, diagrama, modelo, API o código, regist
 | ID | Requisito/observación | Contraste con fuentes y archivos | Estado y salida necesaria |
 |---|---|---|---|
 | R01 | Saber dónde está el proyecto | 02 §16 A3 preveía marleva-local; ubicación actual marleva-local/repositorio | Reubicación hecha; rutas y arranque tras traslado por verificar |
-| R02 | Carpeta específica para el repositorio | Antes no había .git; ahora existe .git local en repositorio | Sin remoto, commits o subida |
+| R02 | Carpeta específica para el repositorio | Auditoría inicial: faltaba Git. Estado vigente: Git único en raíz y origin configurado | Sincronización según 00 §13; historial en commits |
 | R03 | Saber dónde está gitignore | Existe .gitignore en raíz del repositorio | Exclusiones de .env, claves, herramientas, dependencias, Prisma generado y APK comprobadas con git check-ignore; revisión completa de publicables pendiente |
 | R04 | Instalaciones correctas y homologadas | 02 A1–A5/16.2; manifiesto y toolchain existentes | Herramientas verificadas parcialmente; reinstalación limpia y estado tras traslado pendientes |
 | R05 | Documentación lista antes de desarrollar | 00 §7 y C08 ya lo exigían; 02 documental no reemplaza contratos/diagramas revisables | Se avanzó demasiado pronto; se detiene implementación para cerrar esta revisión |
@@ -273,7 +275,7 @@ P02calidad ejecutada: herramientas exactas instaladas; frozenoffline conservó l
 2. Git está en la raíz, no en marleva-local/repositorio. Las referencias históricas a Git sin commits son antecedentes superados; estado vigente en 01.
 3. Un archivo estable por función. Conservar antecedentes en Git, sin copias numeradas ni ZIP. Derivados se generan desde fuente; no reescribir migraciones ni eliminar actas de corridas distintas.
 4. Cada proceso usa pasos estables Sxxx y trazabilidad de la matriz; cada tarea sigue las ocho puertas de este protocolo. Entrada, salida, fallos y evidencia identificados.
-5. Avances reales al menos cada 60 segundos durante ejecución; resolver fallos y continuar tareas independientes. Chat abierto no acredita un proceso continuo.
+5. Comunicación según00§4; resolver fallos y continuar dependencias.
 6. Revisar diferencias e ignorados, releer finales y guardar commit local por incremento coherente. Fuentes e instrucciones incluidas en el mismo Git; remoto/subida separados.
 
 ## Continuación MAR-CHAT-005 —13-10-2026
@@ -286,6 +288,6 @@ Resultado UC008 en005: query/cursor y entrega durable extraídos, índice nuevo 
 
 ## Reglas nuevas del usuario —13-10-2026
 
-Leer y aplicar00 §13 antes de cada proceso. README se coteja al inicio/fin; Git local se actualiza por incremento y con commit final de chat. Sin remoto por decisión actual: no pull/push. Instructivo por módulo en docs/revision/Mn con capturas reales y pasos; revisión local del usuario antes de aceptación. Porcentajes de implementación/aceptación con criterios estables de matriz/02, sin puntuar parciales como completos. Responsabilidades/SOLID/Docker y pipeline local comprobables; Flyway/PDM/Sonar se evalúan antes de adoptar, un dueño por esquema. Esta referencia evita duplicar la guía.
+Aplicar la guía 00 antes de cada proceso. Allí viven las reglas de README, revisión local, instructivos, calidad y sincronización Git (§13). El avance funcional vive únicamente en docs/avance.md. Las decisiones técnicas vigentes están en ADR001. Este apartado enlaza las reglas; no mantiene otra copia.
 
 Resultado B09 en005: contrato/secuencia/modelo previos al código; casos/puertos/repositorio/adaptador/controller separados. Tres tablas e invariantes aplicadas mediante migración nueva ensayada. Pruebas y límites en files-increment.json; colas independientes con Promise.allSettled evitan que un fallo de borrado bloquee correo/reconciliación. DATA00111tablas frente13objetivo. Recuperación/B12 y plataformas pendientes; revisión del instructivo aceptada como tarea del usuario, no diseño aprobado.

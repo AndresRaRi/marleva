@@ -1,11 +1,8 @@
 # Marleva: estado y decisiones
 
-Fecha: 14-10-2026 America/Merida. Historial por Git, sin versiones documentales manuales. MAR-CHAT-004 cerrado documentalmente el13-10-2026 America/Merida,14:25. Base/M1 incompleta; MAR-CHAT-005 continúa con incrementos locales UC008, B09, cuota OTP y Android emulado.
-
-Reglas [00](00_GUIA_PRINCIPAL_MARLEVA.md), diseño [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md); [entrada de lectura](../../README.md).
+Fecha: 14 de octubre de 2026, America/Merida. MAR-CHAT-005 continúa. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
 
 ## 1. Decisiones confirmadas
-
 
 | ID | Decisión | Fuente y límite |
 |---|---|---|
@@ -30,175 +27,81 @@ Reglas [00](00_GUIA_PRINCIPAL_MARLEVA.md), diseño [02](02_MVP1_ALCANCE_Y_DISENO
 | C19 (B5 efectivo, vigente y revisable) | Comisión por pedido completado; corte semanal, transferencia agrupada, 72 h para pagar; aviso y pausa solo de pedidos nuevos en efectivo ante deuda vencida no disputada; pedidos abiertos/ayuda conservados | Usuario confirmó opción 1 y pidió análisis/revisión posterior, 12-10-2026. Tope monetario con tarifa antes del piloto; sin cargos automáticos a tarjeta. |
 | C20 (B6 costos, vigente y revisable) | Reembolso procedente sin descuentos ocultos al comprador; costo de pasarela no recuperado al oferente si cancela/incumple o comprador cancela antes de inicio; a Marleva por error propio | Usuario: «Sí, esta distribución revisable», 12-10-2026. Verificar contrato/cuotas de proveedor antes de operar; no garantía de cero pérdida. No aprueba política de cancelación/cierre. |
 | C21 (B6, vigente y revisable) | Devolución completa antes de iniciar preparación/atención; revisión manual después, respetando derechos y sin multas automáticas. Productos: código privado al entregar/recoger o confirmación del comprador. Servicios: confirmación del comprador. Ausencia/discrepancia a operador; sin cierre por silencio | Usuario: «Sí, adoptar esta política revisable», 12-10-2026 en MAR-CHAT-002. No modifica C20 ni aprueba tarifas, proveedor o operación real. |
-| C22 (B7, base de datos) | PostgreSQL como motor central de MVP1; requisito del usuario de facilitar su sustitución futura | Usuario: «Ok, decidido Postesql, con posibilidad de cambiarlo facilmente», 12-10-2026. Se registra PostgreSQL. El asistente concreta portabilidad en02 y aclara que cambiar hosting es distinto de cambiar motor: este último requiere migración, adaptación y pruebas, sin garantizar cambio automático. No confirma Nest, cliente móvil, proveedor, gasto o programación. |
+| C22 (B7, base de datos) | PostgreSQL como motor central de MVP1; requisito del usuario de facilitar su sustitución futura | Usuario: «Ok, decidido Postesql, con posibilidad de cambiarlo facilmente», 12-10-2026. Se registra PostgreSQL. El asistente concreta portabilidad en 02 y aclara que cambiar hosting es distinto de cambiar motor: este último requiere migración, adaptación y pruebas, sin garantizar cambio automático. No confirma Nest, cliente móvil, proveedor, gasto o programación. |
 | C23 (B7, backend) | NestJS + TypeScript para API separada y backend modular de MVP1, con PostgreSQL C22 | Usuario: «si, vamos por ese», respuesta del 12-10-2026 a pregunta específica sobre NestJS + TypeScript. No confirma React Native/Expo, proveedor, versión exacta, gasto o desarrollo. |
 | C24 (B7, cliente) | React Native + Expo + TypeScript para cliente compartido Android/iOS/web, con API NestJS separada y PostgreSQL | Usuario: «Ok, dale!», tras evaluación de arquitectura y recomendación concreta. No aprueba proveedor, exclusiones pendientes, gasto, publicación o programación; se conserva encargo documental. |
-| C25 (línea base funcional) | Límite inicial revisable M1–M10 y exclusiones de sección1 de02; Android/iOS/web compartidos incluidos | Usuario: «Sí, confirmar este límite inicial». No autoriza código ni operación real; Stripe no confirmado: pide comparación con Mercado Pago antes. |
+| C25 (línea base funcional) | Límite inicial revisable M1–M10 y exclusiones de sección 1 de 02; Android/iOS/web compartidos incluidos | Usuario: «Sí, confirmar este límite inicial». No autoriza código ni operación real; Stripe no confirmado: pide comparación con Mercado Pago antes. |
 | C26 (B7, referencia de pagos) | Stripe Connect como referencia documental revisable para integración de pagos; cobros directos al oferente y comisión separada, depósitos agrupados cuando permitido | Usuario: «si», a pregunta final específica después de comparar Stripe/Mercado Pago. No contratación, cuentas, elegibilidad, tarifas o cobros reales aprobados. Integración sustituible; antes de operar verificar contrato/costos/saldos mexicanos. |
 
-No presentar aprobación de toda una tabla de diseño por aprobación de una capacidad. Cambios futuros: guardar fecha, quién decidió, fuente, motivo, consecuencia y condición de revisión en este registro.
+C01–C26 conservadas. Las fuentes de cada fila registran su confirmación original: C15 concreta el correo, C23/C24 el stack y C26 la referencia Stripe; esas decisiones posteriores resuelven las propuestas previas sin reabrirlas. Registrar cambios solo por decisión real, con fuente/motivo/consecuencia. El plan técnico aprobado conserva Prisma como gestor de migraciones de marleva, Supabase como gestor de sus esquemas y el contrato OpenAPI YAML como fuente única; [ADR001](../../marleva-local/repositorio/docs/adr/001-consolidacion-tecnica.md). Manual único en docs/revision. Sin cambio de stack o de método de acceso.
 
 ## 2. Autorizaciones y límites
 
-A0 confirmada explícitamente el 12-10-2026: herramientas gratuitas elegibles/dependencias/imágenes/servicios y construcción/pruebas base/M1 web/Android/iOS, datos ficticios/simulador aislado. SDK Android/licencia autorizados. No volver a pedirlos. Xcode27.0 instalado y seleccionado; comprobación inicial pasó el13-10. Solo iPhone físico; simuladores aún sin runtime. No cuentas externas, gasto, publicación, contratos, contactos, cobros ni datos/dinero reales. C01–C26 vigentes; siete desarrollos/domicilio privado/demografía pausada. M2–M10 completos fuera de esta etapa; M6 simulado con pedidos después.
+A0, autorización de desarrollo local, confirmada el 12 de octubre de 2026: herramientas gratuitas elegibles, dependencias/imágenes, servicios y construcción/pruebas de base/M1 en web, Android e iOS con datos ficticios y simulador aislado. SDK Android y licencia autorizados. No volver a pedirlos. Xcode 27 está instalado y seleccionado; comprobación inicial pasó. Runtime iOS y prueba física siguen pendientes.
 
-Antes de operación real: tarifas/topes/fiscalidad/proveedor elegible/contratos/costos/saldos, privacidad/calendarios/backups, operadores/soporte y pruebas. Stripe referencia revisable; cambiar motor requiere migración/adaptación/pruebas. Diseño visual no aprobado; procesos antes de propuesta/pantallas.
+El usuario aprobó el plan técnico auditado y pidió cerrar cada brecha y resolver contradicciones. También indicó el repositorio GitHub y autorizó commit/push de la rama de trabajo. No eliminar archivos sin confirmación. Revisión de código antes de integrar a main por el usuario o segundo agente. Esta tarea corrige documentos; los cambios técnicos preparados se conservan y prueban en su rama.
 
-## 3. Estado actual y dependencias
+No cuentas externas, gasto, despliegue, contratación, contactos, cobros ni datos/dinero reales. M2–M10 completos fuera de la etapa de implementación base/M1. Conservar siete desarrollos, privacidad, demografía pausada y Stripe como referencia documental revisable. Antes del piloto: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, revisores/soporte y pruebas.
 
-### TO DO de alta prioridad: MAR-TODO-AUTH-001
+## 3. Estado actual
 
-Estado: PENDIENTE. Prioridad: ALTA. Usuario confirma el13-10-2026 dejar pendiente la estrategia de acceso como TO DO; no aprueba implementación de Google ni sustituir C15.
+El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la única fuente de porcentajes; aquí se enlaza, no se replica.
 
-Acción: evaluar inicio con Google mediante Supabase y revisar qué lógica propia de autenticación puede reducirse usando capacidades existentes del proveedor. Comparar correo vigente frente a Google adicional, vinculación de cuentas, recuperación, permisos, web/Android/iOS, requisitos externos y pruebas. Responsable del análisis: asistente; decisión material del método: usuario. No crear cuentas ni configurar credenciales externas por este registro.
-
-Salida: recomendación concreta, cambios necesarios en secuencias/contratos/datos/pruebas y decisión registrada antes de implementar el cambio. Revisar antes del refactor de autenticación que dependa de esa estrategia. Mantener C15 vigente mientras tanto y continuar tareas independientes; este TO DO no bloquea el cierre documental del chat ni implica M1 completa. No duplicarlo en listas paralelas.
-
-| Área | Hecho | Pendiente |
+| Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Único en raíz; respaldo 7a0ec5a antes de cleanup; sin remoto/push | Commits por incremento, no copias documentales |
-| Base | Arranque005 comprobado en marleva-m1/red marleva-private; Node24.21.0/pnpm12.11.2; puertoslocalhost | Repetibilidad/restauración y builds nativos pendientes |
-| Arquitectura | UC008 extraído: controller/query/casos/puertos/reglas/repositorios/SMTP; cliente separado | Resto AccountService/cliente y arquitectura M1 todavía parciales |
-| Datos/API | DATA001: 11 tablas de negocio; DATA002: 13 objetivo. API canónica 0.4.0: 17 operaciones, incluido cursor y B09 aplicado | Recovery: 7 operaciones objetivo. Retención, roles y autorización restantes pendientes |
-| Pruebas | Actas005 notices/files/otp: unitarias/SQL/API/SMTP/mediciones parciales; typecheck API/cliente, Chrome y recorrido básico Android pasaron | Lint global falló con8errores en medición anterior; dos variables corregidas después, sin nueva aprobación global. Visual/Safari/iOS/físicos/recuperación y cobertura completa pendientes |
-| B12 | Copia parcial, borrado reaplicado, caída Storage, credenciales antiguas denegadas y OTP nuevo con IDs/permisos conservados. Origen intacto;23UT y prueba de atributos pasaron | Copia perdió atributos: reparación limitada del destino registrada; copia completa con helper corregido pasó. MFA/cliente/cola/migración/repetibilidad/PF restantes; no B12 completa |
-| Móviles | APK debug ARM64 recompilado y recorrido Android API36 a1080×1920 pasó14-10; actas android-build/test | Otros flujos Android,320×640, iOS/accesibilidad/físicos; emulador no equivale a físico |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git, verificado sin referencias al configurarlo. Rama codex/fix-quality-and-rules | Al iniciar git pull --ff-only; al cerrar commit y push de la rama. Rama nueva crea upstream al primer push; main requiere revisión |
+| Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Instalación limpia y arranque reproducible completos; conservar volúmenes y secretos ignorados |
+| Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
+| Datos/contrato | Modelo físico: 11 tablas de negocio y cuatro migraciones aplicadas. Objetivo: 13 tablas. Contrato canónico: 17 operaciones; recuperación: siete operaciones objetivo | Roles/recuperación aún no aplicados. No editar migraciones ni intercambiar modelo físico/objetivo |
+| Acceso/cuenta | OTP, sesión, salida actual/total, cambio de correo y segundo factor básico implementados; pruebas API y recorridos básicos web/Android | Casos restantes, renovación/recuperación completas, accesibilidad y plataformas |
+| Avisos/archivos | Cursor por cuenta, correo durable y B09 de archivos ficticios privados implementados/probados en backend | Paginación del cliente, operación y recuperación restante; sin expediente M2 |
+| Recuperación B12 | Copia física corregida conserva filas/contenido/atributos; otro destino probó borrado posterior, caída Storage, revocación y OTP nuevo. Migración ficticia transaccional interrumpida/reaplicada | Cola restaurada, operador/MFA, cliente/plataformas, repetibilidad y medición completa. No mezclar resultados de destinos diferentes |
+| Calidad | Tipado/lint/formato y pruebas de regresión pasaron. Cobertura de lógica medida supera el objetivo global del 80%; hooks locales activos; commit 643971e y [acta](../../marleva-local/repositorio/tests/results/quality-increment.json) | Sonar/CI, límites de complejidad y calidad completa por componente; ver actas y alcance, sin certificación |
+| Revisión local | Instructivo M1 con capturas reales web/Android; usuario revisará y enviará observaciones | Aceptación visual pendiente; propuesta visual nueva primero |
 
-Cola única en [protocolo](../../marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md), casos en [matriz M1](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md), ensayo [B12](../../marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md). No duplicar cola ni acreditar sintaxis como operación. Evidencias históricas anteriores al traslado no describen estado vivo.
+Actas: [B09](../../marleva-local/repositorio/tests/results/files-increment.json), [cuota/Android](../../marleva-local/repositorio/tests/results/otp-android-increment.md), [B12 proveedor](../../marleva-local/repositorio/tests/results/recovery-provider.json), [copia con atributos](../../marleva-local/repositorio/tests/results/recovery-copy-with-attributes.json), [migración interrumpida](../../marleva-local/repositorio/tests/results/recovery-migration.json). Las corridas fallidas se conservan en tests/results. Los detalles técnicos están en protocolo/matriz, no en una bitácora duplicada aquí.
 
-## 4. Acceso, lectura y limpieza
+## 4. Acceso y fuentes
 
-Fuentes canónicas editables en entregables/fuentes_finales; sources/ y AGENTS raíz son referencias sincronizadas readonly preservadas y versionadas, excepción de duplicación no conjunto activo. No subida a Fuentes ni remoto. ZIP/antecedentes editables redundantes retirados después de respaldo 7a0ec5a, recuperables por Git; funciones en 00–03. JSON API único derivado en packages/contracts/openapi.json. Migraciones/DDL/modelo físico frente objetivo y actas de corridas distintas no son duplicados; conservar diferencias y fallos.
+Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a. Código/herramientas: marleva-local/repositorio. Fuentes editables: entregables/fuentes_finales. sources/ y AGENTS raíz son espejos readonly, sin modificación propia. Guardar/commit/push no significa subir a Fuentes o sustituir configuración compartida.
 
-Originales ausentes: enfoque/arquitectura/informe como archivos, investigación pública/comercial, planos/auditoría geoespacial. Informe conservado en 03 no es nueva verificación; contexto/plan antecedentes recuperables en Git. No historial remoto completo ni ejemplos DBML/YAML accesibles. Inventario distingue lectura real/metadatos/categorías excluidas; no afirmar lectura de dependencias/binarios.
+[Inventario](../../marleva-local/repositorio/docs/proceso/inventario-auditoria.json): lectura general parcial; dependencias, secretos y binarios de tercero excluidos. Originales ausentes: enfoque/arquitectura/informe como archivos, investigación comercial/geoespacial y ejemplos DBML/YAML. No reconstruirlos. Antecedentes en Git, incluidas revisiones y pruebas anteriores al traslado.
 
-Antecedente de004: continuación programada continuar-marleva-base-m1, después desactivada al cierre. No hay automatización005 ni ejecución permanente. Turno finalizado no sigue ejecutando. Informar avances reales durante ejecución, resolver fallos y continuar independientes; no aprobación por silencio.
+## 5. Registro de chats e historial
 
-Antecedente del cleanup, superado por comprobación de Xcode en§9: entorno cambió durante cleanup: git/python lanzadores Apple requieren licencia Xcode no aceptada. Git/Python CommandLineTools independientes funcionan; se usan para esta tarea sin aceptar licencia por usuario. Xcode/build iOS/licencia siguen por comprobar; la consulta previa de ausencia en Applications es histórica.
+| Chat | Estado / ubicación del cierre |
+|---|---|
+| MAR-CHAT-001–003 | Cerrados; antecedentes en Git y evidencia 03 |
+| MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit538c351 |
+| MAR-CHAT-005 | Abierto; implementación/pruebas base/M1 y corrección de fuentes. No equivale a M1 terminada |
 
-## 5. Registro de chats
+Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android),a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores. No hay automatización activa de este chat ni trabajo garantizado cuando termina un turno.
 
+## 6. Pendientes y decisiones del usuario
 
-| ID | Tema | Fecha y estado |
+| ID / prioridad | Pendiente | Regla / acción |
 |---|---|---|
-| MAR-CHAT-001 | Principios, referencias y organización final de fuentes | Actualizado y cerrado documentalmente el 12 de octubre de 2026. Fecha original de apertura no registrada. |
-| MAR-CHAT-002 | Alcance y diseño integral de MVP1 | Apertura estándar aquí: 12-10-2026, 14:05 America/Merida (hora de primera comprobación). Cerrado documentalmente el 12-10-2026, 17:43 America/Merida. El antecedente del mismo tema no consignó ID ni apertura estándar; se conserva su trabajo y no se inventa fecha anterior. |
-| MAR-CHAT-003 | Preparación de la implementación local de MVP1 | Abierto y cerrado documentalmente el12-10-2026 America/Merida. Primera hora comprobada del trabajo17:45:50; hora exacta de ficha no registrada. No desarrollo autorizado. |
-| MAR-CHAT-004 | Desarrollo local de base/M1, sujeto a autorización | Abierto el 12-10-2026 America/Merida; primera comprobación17:54:24. Cerrado documentalmente13-10-2026,14:25; commit538c351 comprobado en005. Base/M1 incompleta; A0 vigente. |
-| MAR-CHAT-005 | Implementación integrada y pruebas de base/M1 | CONTINUACIÓN14-10-2026 America/Merida tras créditos. Incrementos UC008/B09/cuota OTP/Android emulado; permanece abierto, no M1 completa. |
+| MAR-TODO-AUTH-001 / Alta | Evaluar Google/Supabase y reducción de lógica propia | Usuario pidió dejarlo pendiente. No implementar Google ni bloquear tareas independientes |
+| MAR-TODO-UI-001 / Alta | Propuesta de diseño visual antes de pantallas nuevas | Paleta, tipografía, librería compatible con Expo y 2–3 pantallas clave comparadas con referentes de 00 §5; revisión del usuario antes de implementar |
+| MAR-TODO-B12-PILOTO / Alta | Decidir qué recuperación exige el piloto y qué puede esperar | Presentar pregunta de tres líneas. No reducir por silencio los criterios vigentes de M1/B12 |
+| Revisión / Alta | Observaciones del instructivo y revisión de código antes de main | Usuario o segundo agente autorizado revisa código; aceptación de pantallas corresponde al usuario |
+| Activación real | Tarifas/proveedor/fiscalidad/privacidad/operación | Decisiones y comprobaciones previas al piloto, sin inventar valores ni activar servicios |
 
-## 6. Lista para después
+Para después, fuera del alcance: reparto propio, favoritos/reseñas/promociones/referidos, IA/mapas/chat general, monedero/crédito/agenda y apps Swift/Kotlin independientes.
 
-Reparto propio, favoritos/reseñas/promociones/referidos, IA/mapas/chat general, monedero/crédito/agenda automática y apps Swift/Kotlin independientes: fuera del límite inicial C25. No incorporarlos por rutina.
+## 7. Prompt de continuidad
 
-## 7. Continuidad y prompt completo
-
-004 cerrado documentalmente, confirmado por HEAD inicial538c351;005 continúa por solicitud expresa del usuario y referencia recuperada. Título: Marleva — implementación integrada y pruebas de base/M1. Conservar autorizaciones y pendientes; cierre no acredita M1 completa.
-
-```text
-PROYECTO: Marleva
-CHAT: MAR-CHAT-005; CONTINUACIÓN, conservar ID y comprobar registro. ANTERIOR: MAR-CHAT-004.
+PROYECTO: Marleva. CHAT: MAR-CHAT-005, CONTINUACIÓN; conservar ID. ANTERIOR: MAR-CHAT-004.
 TEMA: Implementación integrada y pruebas de base/M1.
-FECHA: registrar fecha real America/Merida.
-RAÍZ: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a
+RAÍZ: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a.
+FECHA: comprobar fecha real America/Merida.
 
-1. Comprueba acceso y Git. Lee instrucciones del usuario, README raíz y AGENTS aplicables; después completas y en orden las fuentes estables en entregables/fuentes_finales: 00_GUIA_PRINCIPAL_MARLEVA.md, 01_ESTADO_Y_DECISIONES_MARLEVA.md, 02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md, 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md.
-2. Inventaría desde raíz y lee restantes archivos propios accesibles/nuevos/modificados por ruta/nombre. Declara faltantes o lectura parcial; no reconstruyas originales ni afirmes lectura de resúmenes, secretos o dependencias.
-3. Lee AGENTS del código y docs/proceso/PROCESO_DESARROLLO_MARLEVA.md y MATRIZ_CASOS_M1.md dentro de marleva-local/repositorio; luego UC/SEQ/pasos, DBML/DDL, YAML/Swagger y pruebas del caso. Documentación coherente antes del código; revisión visual antes de pantallas.
-4. C01–C26, desarrollo local A0 y SDKAndroid/licencia autorizados: conservar, no volver a pedirlos. M1 significa acceso/cuenta, sigue incompleta. Supabase ya gestiona OTP, renovación y MFA; no reconstruir autenticación existente. MAR-TODO-AUTH-001 pendiente de ALTA prioridad: evaluar Google/Supabase y reducción de lógica propia; implementación no aprobada. Dejarlo pendiente y avanzar independientes; no refactor dependiente sin cerrar estrategia.
-5. Git único en raíz, nombres estables, un archivo por función e historial por commits; sin copias vN/fechas/ZIP. Comprobar HEAD actual y commits del incremento;86f553a guarda cuota OTP/Android. Sources/AGENTS raíz sincronizados readonly; no modificar ni incluir sus cambios previos en commits propios. Derivados desde fuente; migraciones aplicadas inmutables; secretos/dependencias/cachés/builds ignorados. Solo Git local por decisión del usuario, sin remoto/subida.
-6. Código/herramientas propios en marleva-local/repositorio. Comprobar estado vivo antes de usar. DATA001 físico11 tablas de negocio y DATA002 objetivo13 no son intercambiables; historial Prisma no cuenta como negocio. API canónica17 operaciones parciales, incluido cursor/B09; recuperación7 operaciones objetivo. B12 parcial: proveedor del baseline1791995970112 probó borrado/caída/revocación/OTP/permisos; nueva copia1792005044662 preservó contenido/atributos y filas. Leer actas recovery-provider/copy-with-attributes y procedimiento; no mezclar pruebas de distintos destinos. Origen reanudado, nuevo PG detenido. Android emulado API36 a1080×1920 probó acceso/error/OTP/cuenta/reinicio/salida; otros flujos/320×640/físicos pendientes. Xcode27.0 instalado/seleccionado, comprobación inicial pasada; runtimes vacíos, iOS no probado. No acreditar físico con emulador ni nativo con web/Expo Go.
-7. Primer paso: comprobar commits, actas y archivos nuevos/modificados. No repetir UC008/B09/cuota/Android sin cambios o fallos nuevos. Continuar B12 con casos restantes113-F/H, operador/MFA, FE/PF y repetibilidad. recovery-copy.json identifica baseline/proveedor; recovery-copy-with-attributes.json identifica segunda copia corregida, no su API. No repetir el harness mutante sobre el destino ya revocado/borrado sin preparar restauración aislada. Dataset ficticio/credenciales/ledger están privados ignorados; comprobar acceso, no asumir. No sobrescribir baseline/ledger después del borrado ni reemplazar dataset activo; conservar backups y limpiar solo IDs/claves propios al terminar. Después casos restantes, recuperación MFA independiente, calidad y plataformas según dependencias. Mantener Google/Supabase pendiente; refactor dependiente de esa estrategia no aprobado. Usuario revisará instructivo, observaciones/aceptación pendientes; ninguna nueva pantalla sin revisión. Cada cambio back/front: unitarias, integración, negativos/permisos/concurrencia/caídas, performance proporcional, accesibilidad y regresión con versiones/dataset/plataforma/esperado/obtenido/fallos. Restauración/repetibilidad y web/Android/iOS de02 §16.4 antes de M1 completa.
-8. Solo fixtures, PostgreSQL17, Supabase local/Auth/Storage, Prisma7, correo/HTTPS ysimulador aislado. Siete desarrollos, domicilio privado, demografía pausada. Sin cuentas externas,gasto,publicación,contratación,contactos,cobros,datos/dinero reales ni M2–M10 completos. Stripe referencia revisable; M6simulado conpedidos después. Cambiar motor exige migración/pruebas; tarifas/topes/fiscalidad/proveedor/privacidad/calendarios/operadores pendientes antes de operación real.
-9. Continúa tareas ordinarias por dependencia sin esperar confirmaciones; resuelve fallos y avanza independientes. Detén solo acción afectada por pausa,decisión material o permiso/bloqueo extraordinario. Informa avances reales almenos cada60segundos durante ejecución; chat abierto/turno terminado/programación horaria no equivalen a actividad continua. No silencio como aprobación.
-10. Aplica00 §13: revisar README al inicio/fin de proceso/chat, instructivo con capturas reales/revisión local, porcentaje por módulo con criterios/evidencia y commit final claro. Sin remoto por elección del usuario: verificar commits, no pull/push. Flyway/PDM/Sonar siguen en evaluación, un dueño por esquema y migraciones inmutables. Relee finales completos, comprueba enlaces/diff/ignorados, actualiza solo fuentes afectadas y guarda commit local por incremento. Entrega ubicación,SHA,acceso/subida real ypendientes. Usa plantillas00: INICIO una vez, CONTINUACIÓN alretomar, FIN solo cierre real; registro01 yprompt completo revisado. No inventes resultados ni amplíes MVP1.
-
-ENTREGABLES: incremento integrado comprobado y evidencia por caso02 §16.4; fallos/límites/pendientes físicos explícitos. La continuidad horaria del004 quedó desactivada al cerrarlo; no hay automatización005 creada ni acceso futuro garantizado.
-```
-
-## 8. Resultado de cleanup
-
-Solicitud del usuario13-10: todo Git, archivo único por función, pasos/lectura/prompts simples y avance visible. Historial antiguo del estado y lecturas se conserva en 7a0ec5a, no repetido aquí. Fuentes/instrucciones/código bajo Git local; Git es historial. Cleanup no acredita M1 ni pruebas nuevas de negocio. SHA final/verificaciones en entrega.
-
-Verificación del cleanup: generación DBML/DDL y YAML/JSON/Swagger válida; contratos/tipos generados y typecheck API/cliente pasaron. ESLint del generador modificado pasó; no nueva prueba de negocio/integración/performance. Derivados existentes conservan contenido, no reaparece JSON duplicado ni se sobrescribe índiceAPI. Eliminados31archivos redundantes/reservas; recuperables en7a0ec5a. Secretos/dependencias/builds ignorados, originales sincronizados intactos. Acta en tests/results/cleanup-git.json; Git conserva historial, no nuevo paqueteZIP. Descriptor comercial/marca/dominio/cuentas siguen propuestos o no verificados.
-
-## 9. Revisión tras interrupción por créditos —13-10-2026
-
-Git comprobado: el corte dejó limpieza staged/modificada, sin commit final; solo7a0ec5a existía. No describir limpieza como finalizada hasta guardar y comprobar el commit.
-
-Xcode actual: /Applications/Xcode.app/Contents/Developer, versión27.0/build27A266a. xcodebuild -checkFirstLaunchStatus exit0; simctl list runtimes/devices available exit0 conlistas vacías después de permiso de entorno. Primera consulta simctl falló por sandbox, no por ausencia comprobada deXcode. No descargar runtimes ni acreditar build/recorrido físico por esta consulta. La dependencia previa de licencia bloqueando herramientas es histórica, superada por comprobación inicial actual; no afirmar revisión legal de términos.
-
-M1 significa acceso y cuenta. Código comprobado delega OTP/verifyOtp/refreshSession/updateUser yMFA a @supabase/supabase-js; no genera motor de identidad propio. APIMarleva conserva permisos por recurso, sesiones/revocación propias y coordinación de avisos. Usuario solicita reducir retrabajo/delegar; revisar qué controles propios son necesarios antes de continuar refactor, sin eliminarlos a ciegas.
-
-Google es alternativa/propuesta, no aprobación de cambioC15 ni autorización de cuentas externas. [Supabase Google](https://supabase.com/docs/guides/auth/social-login/auth-google) documenta web/nativo/Expo y configuraciónGoogleCloud/OAuth conclientID/secret/callback; [correo sin contraseña](https://supabase.com/docs/guides/auth/auth-email-passwordless) ya cubreOTP. Consulta puntual, no proveedor productivo contratado. Propuesta: mantener SupabaseAuth, reducir capa propia a requisitos necesarios y evaluar Google adicional sin excluir correo/noGoogle. Sustituir método/recuperación requiere decisión del usuario y coherencia contratos/datos/pruebas.
-
-Para cerrar el tema de orden/documentación de004: (1) commit de limpieza e inventario/enlaces comprobados; (2) pendiente de estrategia de acceso ya registrado como MAR-TODO-AUTH-001 de alta prioridad; entregar cierre y prompt de005 para implementación/pruebas con alcance intacto. No esperar M1 completa para cerrar un chat de preparación/corrección; tampoco presentar el cierre delchat comoM1terminada. M1 restante: contratos/ramas, migración/refactor integrado, pruebas de seguridad/concurrencia/caídas/avisos/archivos/recuperación/performance, builds/plataformas/accesibilidad y restauración/repetibilidad. No porcentaje ni fecha fiable sin cerrar estrategia y comprobar estas dependencias.
-
-## 10. Cierre documental de004 —13-10-2026,14:25 America/Merida
-
-Resultado: orden/lectura/proceso numerados, fuentes/instrucciones/código enGit único,31redundancias retiradas conhistorial preservado, prompt completo yTO DO prioritario registrados. Commits72b79a8/76b34b5 comprobados, árbol limpio antes de registrar cierre. Generación/contratos/tipado ylint delgenerador pasaron; originales preservados/enlaces locales comprobados. No nuevas pruebas de negocio/performance/builds/restauración. Base/M1 incompleta; se transfiere a005 propuesto, no chat creado.
-
-Continuidad horaria continuar-marleva-base-m1 desactivada para estechat cerrado: herramienta confirmó PAUSED. No abandono de autorización niM1completa; no continuación005 automática creada. Archivos locales, sinsubida ni remoto. Estado/licenciaXcode anterior es histórico; datos actuales enapartado9. Siguiente paso: abrir005 conprompt anterior ycontinuar tareas independientes delTO DO.
-
-## Incremento UC008 de 005 — resultado histórico anterior a B09
-
-Motivo: continuar el encargo, primero con UC008, independiente de la estrategia de acceso. Acceso a raíz, HEAD inicial538c351 y cierre004 comprobados. README, AGENTS,00–03, protocolo y matriz leídos completos. La lectura general restante es parcial por volumen y formatos; registro por archivo en [inventario](../../marleva-local/repositorio/docs/proceso/inventario-auditoria.json). N no significa leído. Fuentes sincronizadas y antecedentes Git no acreditados completos; dependencias, herramientas, secretos y binarios de tercero excluidos. No se infiere contenido ausente. Los cambios sincronizados de AGENTS/sources ya existían al abrir y quedan fuera del commit propio.
-
-| Estado | Resultado y límite |
-|---|---|
-| Diseñado | Query, cursor, ramas SMTP y lease trazados en SEQ008, matriz y YAML0.3.0 antes del código. |
-| Implementado | API009 con página24/máximo50, cursor de cuenta con microsegundos e índice nuevo. Casos ListNotices y DeliverOutbox, puertos, repositorios y SMTP separados. OTP/Google no refactorizados. |
-| Probado |16 unitarias;11 SQL en PG17 aislado, incluida migración sobre002 y rollback;12 API/Auth/PG/correo;4 integraciones de outbox y una medición proporcional del trabajador. Typecheck API/cliente, generación y lint/formato de archivos nuevos pasaron. No cobertura completa M1. |
-| Rendimiento observado | Repositorio PG17:100 cuentas ficticias,34990 avisos,10/50/1000 por cuenta;10s de calentamiento y60s a1/5/10 consultas concurrentes. Cero errores/páginas incorrectas; p95 a5 entre1.62 y1.67ms. No incluye HTTP/Auth/frontend. CPU/RAM son muestras posteriores, no picos continuos. Trabajador:30 tareas ficticias, dos trabajadores y SMTP real; medición proporcional sin compromiso productivo. |
-| Cliente | Chrome: regresión de acceso/cuenta/cookie/foco/salida pasó. Ninguna pantalla modificada. Botón de página siguiente, lectores, Safari y builds nativos no acreditados. |
-| Calidad restante | Lint global8 errores previos fuera del incremento; formato general y separación completa todavía pendientes. No se apagaron reglas. |
-
-Actas: [unitarias](../../marleva-local/repositorio/tests/results/notices-unit.json), [SQL aislado](../../marleva-local/repositorio/tests/results/notices-migration.json), [migración local](../../marleva-local/repositorio/tests/results/notices-migration-local.json), [integración API](../../marleva-local/repositorio/tests/results/notices-integration.json), [outbox/SMTP](../../marleva-local/repositorio/tests/results/notices-outbox.json), [rendimiento de consulta](../../marleva-local/repositorio/tests/results/notices-performance.json) y [medición del trabajador](../../marleva-local/repositorio/tests/results/notices-worker-performance.json). Fechas, comandos, versiones, resultados y límites del incremento en [acta conjunta](../../marleva-local/repositorio/tests/results/notices-increment.json).
-
-Fallos y correcciones: primera unitaria cursor12/13 por orden JSON; codificación canónica corregida. Primera integración11/12 por UUID ficticio de forma distinta; ahora usa gen_random_uuid del esquema. Primera medición no alcanzó PG aislado; escucha interna corregida, puerto publicado solo en localhost. Reportes iniciales conservados. El arranque CLI con carpeta equivocada creó un entorno local llamado supabase; se detuvo con volúmenes conservados, sin reset al original. El arranque válido usa infra/local, proyecto marleva-m1 y red marleva-private, con puertos127.0.0.1.
-
-SMTP puede aceptar un correo antes de una caída que impida guardar la confirmación. Se probó una sola tarea y ausencia de repetición de negocio; no entrega única garantizada del correo. La nueva migración202610130001_notice_cursor añade solo un índice: conservó el aviso anterior. DATA001 registra ese índice cotejado; las tablas de recuperación/archivos de DATA002 siguen sin aplicar.
-
-Pendientes: panel operativo B08, B09/Recovery/B12, casos restantes, calidad general, Safari/Android/iOS/físicos y revisión visual. MAR-TODO-AUTH-001 permanece PENDIENTE/ALTA; Google no implementado ni aprobado por silencio. M1 incompleta, MAR-CHAT-005 abierto.
-
-Entrega local en esta raíz; vigencia e historial por Git. Remoto y subida a Fuentes no efectuados. Para actualizar Fuentes, reemplazar01 por este archivo estable;00/02/03 no modificados en005. Texto de configuración [INSTRUCCIONES_FINALES_PARA_PEGAR.txt](../INSTRUCCIONES_FINALES_PARA_PEGAR.txt) sin cambios; no sustituirlo por un resumen. Continuidad: prompt completo de§7 y revisión B09 por dependencias del protocolo. Sin FIN ni nuevo ID.
-
-## Instrucciones y commit confirmados —13-10-2026
-
-Incremento UC008 guardado en commitcd0a0193b761f6a4a2108eec0c84377d16e9bbc2: feat(M1/UC008): paginar avisos y asegurar reintentos de correo.57 archivos; AGENTS raíz y sources excluidos. Usuario confirma mantener solo Git local hasta crear repo; no descargar/subir cambios inexistentes. Nuevas reglas oficiales en00 §13: README, instructivo/revisión local, porcentajes con evidencia, commits y calidad/Docker/CIlocal. Actualizar también configuración editable; originales sincronizados intactos. Google/Supabase sigue PENDIENTE; no bloquea B09 ni documentación/pruebas independientes. Flyway/PDM/Sonar propuestos, no adoptados; Prisma continúa dueño de migraciones.
-
-## B09 implementado y probado localmente — 13-10-2026; 005 continúa
-
-La nueva migración 202610130002_private_fixtures se ensayó sobre las migraciones anteriores antes de aplicarse localmente. Añade tres tablas, vínculos de titular/sesión y restricciones. Conservó los registros anteriores. DATA001 refleja 11 tablas de negocio; DATA002 mantiene 13 como objetivo. Roles y recuperación no están aplicados. OpenAPI 0.4.0 incluye 17 operaciones; las siete de recuperación siguen separadas como objetivo.
-
-| Estado | Resultado |
-|---|---|
-| Implementado | Emitir permiso temporal, leer archivo privado y pedir borrado. Casos, puertos, repositorio Prisma, adaptador Storage y controlador separados. |
-| Acceso | Titular, sesión, objeto y permiso se revalidan también después de leer Storage. Permiso de hasta 300 segundos y sesión restante; diez emisiones por minuto y sesión, incluidas las revocadas. |
-| Integridad | Texto ficticio de hasta 1 MiB; MIME, tamaño y SHA256 comprobados antes de responder. Sin pantalla de documentos ni expedientes M2. |
-| Borrado | Intención y revocación antes del proveedor; reintento durable, lease de 15 segundos y confirmación de ausencia. La obligación no se descarta por vencer. |
-| Pruebas | 18 unitarias, 12 SQL aisladas, seis integraciones B09 reales, 12 de regresión API y cinco de regresión outbox pasaron. Tipado API/cliente y lint de cambios pasaron. |
-| Medición | 1 KiB y 1 MiB a 1/5/10 concurrentes: seis combinaciones sin errores; p95 aproximado de 30–538 ms. Ensayo corto de repositorio/Storage, sin HTTP/Auth ni capacidad productiva. RAM solo del proceso lector. |
-
-Evidencia: [acta B09](../../marleva-local/repositorio/tests/results/files-increment.json). Fallos preservados: resultado void de Prisma, confirmación NoSuchKey de Storage, ruta incorrecta de salida en el test y cuota real antes de medir. Corregidos y repetidos. Las pruebas adelantan el reloj de leases y el reintento de su fixture; Storage sí se detuvo/reinició realmente. Las colas progresan independientemente. La limpieza conserva registros ficticios con borrado confirmado, sin dejarlos disponibles con un objeto eliminado.
-
-El usuario confirmó que revisará el [instructivo M1](../../marleva-local/repositorio/docs/revision/M1/INSTRUCTIVO_M1.md), con seis capturas reales, y enviará observaciones. La revisión sigue pendiente. M1 está incompleta por recuperación MFA, B12, plataformas, accesibilidad, casos restantes y calidad global. No hay porcentaje fiable hasta auditar los criterios funcionales; no se cuentan archivos o pruebas como funciones completas. M2–M10 no tienen módulos implementados; el simulador no acredita M6.
-
-Las reglas nuevas están en 00 §13; README e instructivo actualizados. Para reemplazar Fuentes: 00, 01 y 03; 02 no cambió. Configuración editable: INSTRUCCIONES_FINALES_PARA_PEGAR.txt. AGENTS raíz y sources son referencias sincronizadas y quedan fuera del commit propio. Solo local, sin subida ni remoto. MAR-CHAT-005 permanece abierto.
-
-Android en005: recompilación debug ARM64 terminó con BUILD SUCCESSFUL, exit0 y APK con hash en tests/results/android-build.json. Autolinking regenerado por ruta anterior; dependencia fijada faltante descargada. No acredita recorrido, iOS, accesibilidad ni dispositivo físico. Chrome repetido pasó; capturas de cuenta y cambio de correo ahora muestran secciones distintas.
-
-## Continuación 14-10-2026 tras interrupción por créditos
-
-HEAD local comprobado: 5c0324093f6117b86d8900c49459f4cb57856c37. B09 y APK guardados. La corrección independiente de cuota OTP quedó sin commit: 19 unitarias y dos integraciones pasaron; tipado API/cliente y lint de archivos nuevos comprobados al retomar. Serializa por origen antes de reservar, calcula ventana móvil30/h y comunica segundos reales. No cambia C15 ni la estrategia Google/Supabase, que sigue pendiente. Otras rutas conservan la brecha de Retry-After documentada.
-
-Servicios locales y emulador comprobados activos. Recorrido Android retomado; no darlo por terminado antes del acta final. B12 solo preparación/dry-run, todavía sin backup/restauración. Revisión visual del usuario pendiente; originales sincronizados preservados.
-Resultado del incremento14-10-2026:19UT,12IT API de regresión y2IT cuota pasaron con el compilado final. PF cuota a1/5/10 concurrentes:0 errores inesperados,30 reservas conservadas; p95 aproximado4.90/18.71/28.56ms solo AccountService/PG. Recorrido Android emulado pasó a1080×1920 efectiva: acceso/error/OTP/cuenta, persistencia tras reinicio, salida y reinicio sin sesión revocada. Cinco capturas reales añadidas al instructivo. Actualizar cuenta conserva UI; no acredita renovación del proveedor por sí sola.320×640 y demás flujos/plataformas/accesibilidad siguen pendientes. [Acta y límites](../../marleva-local/repositorio/tests/results/otp-android-increment.md). Preparación B12 continúa; no ensayo acreditado. No cierre de005 ni aceptación visual.
-
-Cuota/Android guardados en86f553a. Después se ejecutó la primera fase B12: copia completa PG17 y Storage con parada normal, origen reanudado, destino internal sin puertos y luego detenido. Primera corrida con Storage vacío no acreditó contenido; segunda con3 textos conocidos/dos titulares comprobó igualdad de filas e identidad y hashes. Tres guardias unitarias y lint de helpers pasaron. Actas [copia](../../marleva-local/repositorio/tests/results/recovery-copy.json), [permisos previos](../../marleva-local/repositorio/tests/results/recovery-source.json), [borrado posterior](../../marleva-local/repositorio/tests/results/recovery-after-copy.json). Backup/credenciales/ledger privados ignorados, sin subida. Objeto posterior borrado realmente en origen, todavía por reaplicar en destino.113-A–H/FE/PF completos no acreditados; se continúa con proveedor/API/revocación según procedimiento. M1 incompleta,005 abierto.
-
-Continuación14-10, fase B12 proveedor: primera copia guardada en a37d02c. El ensayo detectó pérdida de atributos extendidos por cp BusyBox; hashes/filas no prueban fidelidad completa. Reparación limitada solo de tres fixtures del destino, sin tocar backups/origen, permitió probar borrado posterior, caída Storage, revocación y OTP nuevo con IDs/permisos conservados. Actas recovery-provider.json/recovery-metadata-repair.json/recovery-xattrs.json.23UT y lint del incremento pasaron; helper de preservación probado aisladamente. Falta nueva copia completa, MFA/cola/migración/plataformas/repetibilidad/PF113. Google sigue pendiente, usuario todavía revisa instructivo, M1 incompleta y005 abierto.
-
-Repetición14-10 completada: recovery-copy-with-attributes.json,18.399s total y6.971s tramo PG/copia, no RTO. Nuevo destino1792005044662:1978 archivos PG,2 objetos vivos/2048bytes, filas/digests/relaciones idénticos y atributos binarios iguales origen→backup→trabajo. Origen reanudado y PG del nuevo destino detenido, sin puertos. Baseline/proveedor anterior1791995970112 conservados por separado; la fase API del anterior no acredita API del nuevo. No B12 completa ni PF113.
-
-113-H parcial14-10 pasó: migración SQL ficticia con BEGIN/COMMIT explícitos interrumpida después de DDL/DML mediante pg_terminate_backend de su sesión identificada. Tabla/fila nuevas revertidas, aviso previo intacto; misma candidata reaplicada y validada. PG desechable sin red/puertos eliminado con su volumen; cuatro migraciones originales conservan SHA256 y origen ready200 antes/después. recovery-migration.json. No acredita runner Prisma, migraciones no transaccionales ni crash del servidor; sin nueva lógica de aplicación y sin PF113.
+1. Verifica acceso, registro de chat, rama, HEAD, cambios y origin. Ejecuta git pull --ff-only de la rama de trabajo. Sin upstream, comprueba referencias y configura seguimiento en el primer push; no descartes cambios ni inventes sincronización.
+2. Lee instrucciones, README y AGENTS. Después lee 00, 01, 02 y 03 completas y en orden. Inventaría desde raíz y lee nuevos/modificados. Declara faltantes y lectura parcial; no reconstruyas originales ni divulges secretos.
+3. Lee el protocolo técnico, matriz M1 y ADR001. Luego casos/secuencias/pasos, datos, contrato y pruebas del cambio. Documentación coherente antes de código; propuesta/revisión visual antes de pantallas.
+4. Conserva C01–C26, A0, SDK Android y decisiones actuales. Prisma gestiona marleva; Supabase sus esquemas. YAML es canónico. Google queda pendiente. No nuevas cuentas/gasto/despliegue/contactos/cobros/datos reales ni M2–M10 completos.
+5. Consulta docs/avance.md para implementación/aceptación por criterios. No copies porcentajes a 01 ni cuentes archivos/tests como funciones. No declares M1 completa por un incremento.
+6. Continúa la dependencia pendiente de la matriz. No repitas pruebas sin cambio/fallo nuevo. Distingue destinos B12 y conserva backups/ledger privados. Revisión visual y decisión del piloto siguen pendientes; avanzar en trabajo independiente.
+7. Ejecuta pruebas pertinentes, corrige fallos y documenta evidencia/límites. Mantén README útil. No cambies SQL aplicado ni elimines archivos sin confirmación.
+8. Relee finales, comprueba enlaces/diff/ignorados y guarda commits claros. Al cerrar, commit y push de la rama; coteja SHA remoto/local. Antes de main exige revisión de código. CI GitHub Actions: lint→pruebas→build, sin despliegue.
+9. Usa el formato de 00 §14 y sus plantillas de chat cuando corresponda. Entrega archivos/SHA/acceso/subida real y siguiente acción. FIN solo al cerrar el tema. No prometer ejecución o acceso futuro inexistentes.
