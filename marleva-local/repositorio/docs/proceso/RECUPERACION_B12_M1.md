@@ -2,6 +2,20 @@
 
 Fecha: 14-10-2026 America/Merida. Historial por Git, MAR-CHAT-005. Procedimiento objetivo con primera fase parcial ejecutada; B12 no completa. Lectura obligatoria para UC013 junto a [matriz M1](MATRIZ_CASOS_M1.md), [protocolo](PROCESO_DESARROLLO_MARLEVA.md), 02 §16.4, SEQ013 y contratos B09/recuperación MFA.
 
+## Prioridad aprobada para el piloto: opción A
+
+Decisión B12-PILOTO-A, 14-10-2026, MAR-CHAT-005. El usuario respondió «Aprueno A» a la separación de pruebas propuesta. Cambia la prioridad de entrega, no convierte casos pendientes en resultados.
+
+| Momento | Comprobaciones exigidas | Trazabilidad |
+|---|---|---|
+| Antes del piloto | Restauración consistente de datos, identidad y archivos; integridad; destino bloqueado ante copia incompleta; permisos propios/ajenos/públicos; borrados no reaparecen; sesiones y capacidades antiguas rechazadas | IT-BE-113-A–E/G, SEQ013:S001–S070 |
+| Antes del piloto | Reinicio seguro, avisos pendientes recuperados sin repetir negocio y nueva autenticación del cliente conservando una acción interna autorizada | IT-BE-113-F, IT-FE-113-A, SEQ013:S072; plataformas aplicables por separado |
+| Antes del piloto | Recuperación del acceso de operadores con segundo factor, otro autorizado y sin autorrevisión | UC014 y pruebas de recuperación MFA de la matriz; no cubierto por OTP de usuario normal |
+| Antes del piloto | Prueba básica de interrupción/corrección de actualización y recuperación; medir duración y pérdida observada del ensayo, repetir el procedimiento esencial | IT-BE-113-H básico y PF-BE-113-A básico; la prueba SQL aislada existente no acredita runner Prisma ni recuperación integral |
+| Después del piloto | Ensayos prolongados de capacidad y escenarios avanzados de caída/migración | Mantener pendientes en B12; definir cada variante antes de ejecutarla |
+
+El piloto solo puede superar esta puerta cuando existan resultados verificables de todas las comprobaciones esenciales. No se difieren controles de pérdida de datos, permisos, revocación, borrados ni recuperación MFA. Esta decisión no autoriza despliegue, datos reales o activación comercial. M1/B12 permanecen incompletos y sus porcentajes no aumentan por aprobar una prioridad.
+
 ## Condiciones para ejecutar
 
 Origen y destino deben estar identificados por proyecto, contenedores, volúmenes y puertos distintos. El destino empieza sin acceso de clientes. Usar solo fixtures y versiones/digests del origen comprobados. No ejecutar reset, restauración o migración contra una dirección desconocida. No basta cambiar el nombre de una carpeta: también separar estado de Supabase, claves, volúmenes y endpoints.

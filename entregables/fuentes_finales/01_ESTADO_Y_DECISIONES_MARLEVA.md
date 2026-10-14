@@ -41,6 +41,8 @@ A0, autorización de desarrollo local, confirmada el 12 de octubre de 2026: herr
 
 El usuario aprobó el plan técnico auditado y pidió cerrar cada brecha y resolver contradicciones. También indicó el repositorio GitHub y autorizó commit/push de la rama de trabajo. No eliminar archivos sin confirmación. Revisión de código antes de integrar a main por el usuario o segundo agente. Esta tarea corrige documentos; los cambios técnicos preparados se conservan y prueban en su rama.
 
+Decisión B12-PILOTO-A, 14-10-2026: el usuario respondió «Aprueno A». Exigir recuperación esencial antes del piloto; diferir ensayos prolongados de capacidad y escenarios avanzados de caída/migración. Detalle y trazabilidad en [procedimiento B12](../../marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md). No declara B12 ni M1 completos y no autoriza activar el piloto.
+
 No cuentas externas, gasto, despliegue, contratación, contactos, cobros ni datos/dinero reales. M2–M10 completos fuera de la etapa de implementación base/M1. Conservar siete desarrollos, privacidad, demografía pausada y Stripe como referencia documental revisable. Antes del piloto: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, revisores/soporte y pruebas.
 
 ## 3. Estado actual
@@ -83,7 +85,7 @@ Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (c
 |---|---|---|
 | MAR-TODO-AUTH-001 / Alta | Evaluar Google/Supabase y reducción de lógica propia | Usuario pidió dejarlo pendiente. No implementar Google ni bloquear tareas independientes |
 | MAR-TODO-UI-001 / Alta | Propuesta de diseño visual antes de pantallas nuevas | Paleta, tipografía, librería compatible con Expo y 2–3 pantallas clave comparadas con referentes de 00 §5; revisión del usuario antes de implementar |
-| MAR-TODO-B12-PILOTO / Alta | Decidir qué recuperación exige el piloto y qué puede esperar | Presentar pregunta de tres líneas. No reducir por silencio los criterios vigentes de M1/B12 |
+| MAR-TODO-B12-PILOTO / Alta | Decisión A aprobada; ejecutar y cerrar recuperación esencial antes del piloto | Alcance en procedimiento B12. Pruebas prolongadas y escenarios avanzados quedan pendientes posteriores, sin acreditar B12 completo |
 | Revisión / Alta | Observaciones del instructivo y revisión de código antes de main | Usuario o segundo agente autorizado revisa código; aceptación de pantallas corresponde al usuario |
 | Activación real | Tarifas/proveedor/fiscalidad/privacidad/operación | Decisiones y comprobaciones previas al piloto, sin inventar valores ni activar servicios |
 
@@ -101,7 +103,7 @@ FECHA: comprobar fecha real America/Merida.
 3. Lee el protocolo técnico, matriz M1 y ADR001. Luego casos/secuencias/pasos, datos, contrato y pruebas del cambio. Documentación coherente antes de código; propuesta/revisión visual antes de pantallas.
 4. Conserva C01–C26, A0, SDK Android y decisiones actuales. Prisma gestiona marleva; Supabase sus esquemas. YAML es canónico. Google queda pendiente. No nuevas cuentas/gasto/despliegue/contactos/cobros/datos reales ni M2–M10 completos.
 5. Consulta docs/avance.md para implementación/aceptación por criterios. No copies porcentajes a 01 ni cuentes archivos/tests como funciones. No declares M1 completa por un incremento.
-6. Continúa la dependencia pendiente de la matriz. No repitas pruebas sin cambio/fallo nuevo. Distingue destinos B12 y conserva backups/ledger privados. Revisión visual y decisión del piloto siguen pendientes; avanzar en trabajo independiente.
+6. Continúa la dependencia pendiente de la matriz. No repitas pruebas sin cambio/fallo nuevo. Distingue destinos B12 y conserva backups/ledger privados. Revisión visual pendiente; aplicar B12-PILOTO-A aprobado, priorizando recuperación esencial y registrando pruebas avanzadas diferidas.
 7. Ejecuta pruebas pertinentes, corrige fallos y documenta evidencia/límites. Mantén README útil. No cambies SQL aplicado ni elimines archivos sin confirmación.
 8. Relee finales, comprueba enlaces/diff/ignorados y guarda commits claros. Al cerrar, commit y push de la rama; coteja SHA remoto/local. Antes de main exige revisión de código. CI GitHub Actions: lint→pruebas→build, sin despliegue.
 9. Usa el formato de 00 §14 y sus plantillas de chat cuando corresponda. Entrega archivos/SHA/acceso/subida real y siguiente acción. FIN solo al cerrar el tema. No prometer ejecución o acceso futuro inexistentes.
