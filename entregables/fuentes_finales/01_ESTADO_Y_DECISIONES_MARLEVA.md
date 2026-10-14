@@ -49,7 +49,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git, verificado sin referencias al configurarlo. Rama codex/fix-quality-and-rules; commit documental 31ddbf1. Primer push intentado el 14-10: bloqueado por credenciales HTTPS ausentes | Autenticar GitHub y repetir push con upstream. Al iniciar git pull --ff-only; al cerrar commit y push de la rama. Rama nueva crea upstream al primer push; main requiere revisión |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git, verificado sin referencias al configurarlo. Rama codex/fix-quality-and-rules; commits documentales 31ddbf1/899b939 subidos el 14-10 tras autenticación del usuario; upstream configurado y pull --ff-only confirmó actualización | Al iniciar git pull --ff-only; al cerrar commit y push de la rama. Rama nueva crea upstream al primer push; main requiere revisión |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Instalación limpia y arranque reproducible completos; conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 11 tablas de negocio y cuatro migraciones aplicadas. Objetivo: 13 tablas. Contrato canónico: 17 operaciones; recuperación: siete operaciones objetivo | Roles/recuperación aún no aplicados. No editar migraciones ni intercambiar modelo físico/objetivo |
