@@ -3,9 +3,9 @@ import {
   fileHash,
   fileExpiry,
   verifyFile,
-} from '../../../../apps/api/dist/modules/m1/domain/file-policy.js';
-import { deletionInput } from '../../../../apps/api/dist/modules/m1/presentation/dtos/file-request.js';
-import { ReadPrivateFile } from '../../../../apps/api/dist/modules/m1/application/use-cases/read-private-file.js';
+} from '../../../../apps/api/src/modules/m1/domain/file-policy.ts';
+import { deletionInput } from '../../../../apps/api/src/modules/m1/presentation/dtos/file-request.ts';
+import { ReadPrivateFile } from '../../../../apps/api/src/modules/m1/application/use-cases/read-private-file.ts';
 it('MAR-M1-UT-BE-111-A | SEQ011:S030/S080 | TTL limitado por sesión e integridad antes de respuesta', () => {
   const now = new Date('2026-10-13T12:00:00Z');
   expect(+fileExpiry(now, new Date(+now + 600000)) - +now).toBe(300000);

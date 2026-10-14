@@ -1,6 +1,22 @@
 -- GENERADO desde MAR-M1-DATA-001.dbml. Solo revisión; no aplicar completo sobre base existente.
 CREATE SCHEMA "marleva";
 
+CREATE TYPE "marleva"."RoleKey" AS ENUM (
+  'm1_operator',
+  'm1_access_admin'
+);
+
+CREATE TYPE "marleva"."RecoveryState" AS ENUM (
+  'requested',
+  'approved',
+  'executing',
+  'provider_pending',
+  'reenrollment',
+  'completed',
+  'rejected',
+  'expired'
+);
+
 CREATE TABLE "marleva"."Account" (
   "id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
   "authId" uuid UNIQUE NOT NULL,
@@ -122,6 +138,45 @@ CREATE TABLE "marleva"."FixtureDeletion" (
   "completedAt" timestamptz
 );
 
+CREATE TABLE "marleva"."RoleAssignment" (
+  "id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
+  "accountId" uuid NOT NULL,
+  "role" marleva."RoleKey" NOT NULL,
+  "grantedBy" uuid,
+  "grantedAt" timestamptz NOT NULL DEFAULT (now()),
+  "revokedBy" uuid,
+  "revokedAt" timestamptz,
+  "reason" text NOT NULL,
+  "version" integer NOT NULL DEFAULT 1
+);
+
+CREATE TABLE "marleva"."MfaRecovery" (
+  "id" uuid PRIMARY KEY NOT NULL DEFAULT (gen_random_uuid()),
+  "accountId" uuid NOT NULL,
+  "requestedBy" uuid NOT NULL,
+  "approvedBy" uuid,
+  "state" marleva."RecoveryState" NOT NULL DEFAULT 'requested',
+  "reason" text NOT NULL,
+  "providerReference" text,
+  "requestKey" text NOT NULL,
+  "requestHash" text NOT NULL,
+  "approvedAt" timestamptz,
+  "operations" jsonb NOT NULL DEFAULT ('{}'::jsonb),
+  "providerState" jsonb NOT NULL DEFAULT ('{}'::jsonb),
+  "leaseToken" uuid,
+  "leaseUntil" timestamptz,
+  "capabilitySessionId" uuid,
+  "capabilityExpiresAt" timestamptz,
+  "capabilityAttempts" integer NOT NULL DEFAULT 0,
+  "capabilityConsumedAt" timestamptz,
+  "factorId" uuid,
+  "capabilityHash" text,
+  "createdAt" timestamptz NOT NULL DEFAULT (now()),
+  "expiresAt" timestamptz NOT NULL,
+  "completedAt" timestamptz,
+  "version" integer NOT NULL DEFAULT 1
+);
+
 CREATE UNIQUE INDEX "Session_id_accountId_key" ON "marleva"."Session" ("id", "accountId");
 
 CREATE INDEX "Challenge_email_createdAt_idx" ON "marleva"."Challenge" ("email", "createdAt");
@@ -137,6 +192,12 @@ CREATE UNIQUE INDEX "PrivateFixture_id_accountId_key" ON "marleva"."PrivateFixtu
 CREATE INDEX "FixtureAccess_sessionId_createdAt_idx" ON "marleva"."FixtureAccess" ("sessionId", "createdAt");
 
 CREATE UNIQUE INDEX "FixtureDeletion_accountId_idempotencyKey_key" ON "marleva"."FixtureDeletion" ("accountId", "idempotencyKey");
+
+CREATE INDEX ON "marleva"."RoleAssignment" ("accountId", "role", "revokedAt");
+
+CREATE INDEX ON "marleva"."MfaRecovery" ("accountId", "state");
+
+CREATE UNIQUE INDEX "MfaRecovery_accountId_requestKey_key" ON "marleva"."MfaRecovery" ("accountId", "requestKey");
 
 COMMENT ON COLUMN "marleva"."Account"."authId" IS 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.';
 
@@ -158,6 +219,22 @@ COMMENT ON COLUMN "marleva"."FixtureAccess"."tokenHash" IS 'Solo hash SHA256 de 
 
 COMMENT ON TABLE "marleva"."FixtureDeletion" IS 'Intención durable de borrado. Pending bloquea lecturas desde commit. Conservar para reaplicar borrado tras restauración ficticia; calendario real pendiente.';
 
+COMMENT ON COLUMN "marleva"."RoleAssignment"."grantedBy" IS 'Nulo solo en bootstrap ficticio identificado; no alta pública ni autoasignación.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."requestedBy" IS 'Titular autenticado por correo; no privilegio por sesión de recuperación.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."approvedBy" IS 'Otro administrador autorizado con AAL2 y autenticación reciente; nunca titular.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."reason" IS 'Motivo acotado sin OTP, secreto TOTP o expediente vecinal.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."operations" IS 'Resultados idempotentes estructurados; respuestas privadas solo cifradas y vigentes.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."providerState" IS 'Referencias estables y tarea durable; tokens solo cifrados.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."capabilitySessionId" IS 'Sesión nueva del titular tras revocación; ningún permiso administrativo.';
+
+COMMENT ON COLUMN "marleva"."MfaRecovery"."capabilityHash" IS 'Solo hash; capacidad temporal limitada a enrolar nuevo factor, nunca administrar.';
+
 ALTER TABLE "marleva"."Session" ADD CONSTRAINT "Session_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 ALTER TABLE "marleva"."Notice" ADD CONSTRAINT "Notice_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
@@ -170,8 +247,48 @@ ALTER TABLE "marleva"."FixtureAccess" ADD CONSTRAINT "FixtureAccess_session_owne
 
 ALTER TABLE "marleva"."FixtureDeletion" ADD CONSTRAINT "FixtureDeletion_fixture_owner" FOREIGN KEY ("fixtureId", "accountId") REFERENCES "marleva"."PrivateFixture" ("id", "accountId") NOT DEFERRABLE;
 
+ALTER TABLE "marleva"."RoleAssignment" ADD CONSTRAINT "RoleAssignment_account" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."RoleAssignment" ADD CONSTRAINT "RoleAssignment_granted" FOREIGN KEY ("grantedBy") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."RoleAssignment" ADD CONSTRAINT "RoleAssignment_revoked" FOREIGN KEY ("revokedBy") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."MfaRecovery" ADD CONSTRAINT "Recovery_account" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."MfaRecovery" ADD CONSTRAINT "Recovery_requester" FOREIGN KEY ("requestedBy") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."MfaRecovery" ADD CONSTRAINT "Recovery_approver" FOREIGN KEY ("approvedBy") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."MfaRecovery" ADD CONSTRAINT "Recovery_capability_session" FOREIGN KEY ("capabilitySessionId") REFERENCES "marleva"."Session" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
 ALTER TABLE marleva."PrivateFixture" ADD CONSTRAINT fixture_size CHECK (bytes BETWEEN 1 AND 1048576), ADD CONSTRAINT fixture_hash CHECK (sha256 ~ '^[0-9a-f]{64}$'), ADD CONSTRAINT fixture_mime CHECK ("mimeType"='text/plain'), ADD CONSTRAINT fixture_version CHECK (version>0), ADD CONSTRAINT fixture_deleted CHECK ((state='available' AND "deletedAt" IS NULL AND "deleteRequestedAt" IS NULL) OR (state='delete_pending' AND "deletedAt" IS NULL AND "deleteRequestedAt" IS NOT NULL AND "deleteRequestedAt">="createdAt") OR (state='deleted' AND "deletedAt" IS NOT NULL AND "deleteRequestedAt" IS NOT NULL AND "deletedAt">="deleteRequestedAt" AND "deleteRequestedAt">="createdAt"));
 CREATE UNIQUE INDEX fixture_access_active ON marleva."FixtureAccess" ("fixtureId","sessionId") WHERE "revokedAt" IS NULL;
 ALTER TABLE marleva."FixtureAccess" ADD CONSTRAINT fixture_access_hash CHECK ("tokenHash" ~ '^[0-9a-f]{64}$'), ADD CONSTRAINT fixture_access_dates CHECK ("expiresAt">"createdAt" AND "expiresAt"<="createdAt"+interval '300 seconds' AND ("revokedAt" IS NULL OR "revokedAt">="createdAt"));
 ALTER TABLE marleva."FixtureDeletion" ADD CONSTRAINT fixture_deletion_hash CHECK ("requestHash" ~ '^[0-9a-f]{64}$'), ADD CONSTRAINT fixture_deletion_key CHECK (length("idempotencyKey") BETWEEN 16 AND 128), ADD CONSTRAINT fixture_deletion_version CHECK ("expectedVersion">0), ADD CONSTRAINT fixture_deletion_attempts CHECK (attempts>=0), ADD CONSTRAINT fixture_deletion_state CHECK (state IN ('pending','processing','completed')), ADD CONSTRAINT fixture_deletion_completed CHECK ((state='completed')=("completedAt" IS NOT NULL)), ADD CONSTRAINT fixture_deletion_dates CHECK ("completedAt" IS NULL OR "completedAt">="createdAt");
+
+CREATE UNIQUE INDEX role_assignment_active ON marleva."RoleAssignment" ("accountId", role) WHERE "revokedAt" IS NULL;
+
+CREATE UNIQUE INDEX recovery_active ON marleva."MfaRecovery" ("accountId") WHERE state IN ('requested','approved','executing','provider_pending','reenrollment');
+
+CREATE UNIQUE INDEX recovery_capability_hash ON marleva."MfaRecovery" ("capabilityHash") WHERE "capabilityHash" IS NOT NULL;
+
+ALTER TABLE marleva."RoleAssignment" ADD CONSTRAINT role_version CHECK (version>0), ADD CONSTRAINT role_revocation CHECK (("revokedAt" IS NULL AND "revokedBy" IS NULL) OR ("revokedAt" IS NOT NULL AND "revokedAt">="grantedAt" AND "revokedBy" IS NOT NULL)), ADD CONSTRAINT role_no_self_grant CHECK ("grantedBy" IS NULL OR "grantedBy"<>"accountId");
+
+ALTER TABLE marleva."MfaRecovery" ADD CONSTRAINT recovery_version CHECK (version>0), ADD CONSTRAINT recovery_owner CHECK ("requestedBy"="accountId"), ADD CONSTRAINT recovery_reviewer CHECK ("approvedBy" IS NULL OR "approvedBy"<>"accountId"), ADD CONSTRAINT recovery_expiry CHECK ("expiresAt">"createdAt"), ADD CONSTRAINT recovery_approval CHECK (state NOT IN ('approved','executing','provider_pending','reenrollment','completed') OR "approvedBy" IS NOT NULL), ADD CONSTRAINT recovery_completed CHECK ((state='completed')=("completedAt" IS NOT NULL)), ADD CONSTRAINT capability_attempts CHECK ("capabilityAttempts" BETWEEN 0 AND 5), ADD CONSTRAINT capability_binding CHECK (("capabilityHash" IS NULL AND "capabilitySessionId" IS NULL AND "capabilityExpiresAt" IS NULL) OR ("capabilityHash" IS NOT NULL AND "capabilitySessionId" IS NOT NULL AND "capabilityExpiresAt" IS NOT NULL AND "capabilityExpiresAt">"createdAt" AND "capabilityExpiresAt"<="expiresAt")), ADD CONSTRAINT capability_consumed CHECK ("capabilityConsumedAt" IS NULL OR ("capabilityHash" IS NOT NULL AND "capabilityConsumedAt"<="capabilityExpiresAt"));
+
+ALTER TABLE marleva."MfaRecovery" ADD CONSTRAINT recovery_json CHECK (jsonb_typeof(operations)='object' AND jsonb_typeof("providerState")='object'), ADD CONSTRAINT recovery_request_hash CHECK ("requestHash" ~ '^[0-9a-f]{64}$'), ADD CONSTRAINT recovery_request_key CHECK (length("requestKey") BETWEEN 1 AND 128), ADD CONSTRAINT recovery_lease CHECK (("leaseToken" IS NULL)=("leaseUntil" IS NULL));
+
+CREATE FUNCTION marleva.project_operator_role() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+ UPDATE marleva."Account" SET operator=EXISTS(SELECT 1 FROM marleva."RoleAssignment" WHERE "accountId"=COALESCE(NEW."accountId",OLD."accountId") AND "revokedAt" IS NULL)
+ WHERE id=COALESCE(NEW."accountId",OLD."accountId");
+ RETURN COALESCE(NEW,OLD);
+END; $$;
+CREATE TRIGGER role_operator_projection AFTER INSERT OR UPDATE OR DELETE ON marleva."RoleAssignment" FOR EACH ROW EXECUTE FUNCTION marleva.project_operator_role();
+CREATE FUNCTION marleva.guard_operator_projection() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+ NEW.operator=EXISTS(SELECT 1 FROM marleva."RoleAssignment" WHERE "accountId"=NEW.id AND "revokedAt" IS NULL);
+ RETURN NEW;
+END; $$;
+CREATE TRIGGER account_operator_projection BEFORE INSERT OR UPDATE OF operator ON marleva."Account" FOR EACH ROW EXECUTE FUNCTION marleva.guard_operator_projection();
 

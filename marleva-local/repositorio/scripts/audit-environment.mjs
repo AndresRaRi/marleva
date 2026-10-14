@@ -1,16 +1,142 @@
-import {spawnSync} from 'node:child_process';import {readFile,writeFile,readdir} from 'node:fs/promises';import {createHash} from 'node:crypto';import path from 'node:path';import os from 'node:os';
-const root=path.resolve(new URL('..',import.meta.url).pathname);process.chdir(root);
-function run(command,args){const r=spawnSync(command,args,{encoding:'utf8',cwd:root});if(r.status!==0)throw new Error(`Audit failed: ${path.basename(command)} ${args[0]??''}`);return r.stdout.trim();}
-const tool=path.join(root,'scripts/tool');const execute=(...args)=>run(tool,args);
-const sha=async file=>createHash('sha256').update(await readFile(file)).digest('hex');
-const artifacts=[];for(const name of await readdir('infra/local/downloads'))if(/\.(tar\.gz|tgz|zip)$/.test(name)||['colima-Darwin-arm64','docker-compose-darwin-aarch64'].includes(name))artifacts.push({file:'infra/local/downloads/'+name,sha256:await sha('infra/local/downloads/'+name)});
-const names=execute('docker','ps','-a','--format','{{.Names}}').split('\n').filter(n=>n.endsWith('_marleva-m1'));
-const containers=[];for(const name of names){const info=JSON.parse(execute('docker','inspect','--format','{{json .}}',name))[0]??JSON.parse(execute('docker','inspect','--format','{{json .}}',name));
- const image=JSON.parse(execute('docker','image','inspect','--format','{{json .}}',info.Image));
- const ports=info.NetworkSettings.Ports;for(const bindings of Object.values(ports??{}))for(const b of bindings??[])if(b.HostIp!=='127.0.0.1')throw new Error('Non-loopback service binding found');
- containers.push({name,image:info.Config.Image,imageId:image.Id,repoDigests:image.RepoDigests,platform:image.Os+'/'+image.Architecture,status:info.State.Status,health:info.State.Health?.Status,ports,volumes:info.Mounts.filter(m=>m.Type==='volume').map(m=>({name:m.Name,destination:m.Destination}))});
+import { spawnSync } from 'node:child_process';
+import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
+import os from 'node:os';
+const root = path.resolve(new URL('..', import.meta.url).pathname);
+process.chdir(root);
+function run(command, args) {
+  const r = spawnSync(command, args, { encoding: 'utf8', cwd: root });
+  if (r.status !== 0) throw new Error(`Audit failed: ${path.basename(command)} ${args[0] ?? ''}`);
+  return r.stdout.trim();
 }
-const wrapper=await readFile('apps/client/android/gradle/wrapper/gradle-wrapper.properties','utf8');
-const sdks=[];for(const component of ['cmdline-tools/22.0','platform-tools','platforms/android-36','build-tools/36.0.0','build-tools/35.0.0','emulator','system-images/android-36/google_apis/arm64-v8a','ndk/27.1.12297006'])try{const props=await readFile('infra/local/tools/android-sdk/'+component+'/source.properties','utf8');sdks.push({component,properties:Object.fromEntries(props.split('\n').filter(l=>l.includes('=')).map(l=>[l.slice(0,l.indexOf('=')),l.slice(l.indexOf('=')+1)]))});}catch{/* Not installed is explicit in the known component list comparison. */}
-const manifest={date:new Date().toISOString(),os:{platform:os.platform(),arch:os.arch(),release:os.release(),memoryBytes:os.totalmem()},versions:{node:execute('node','--version'),pnpm:execute('pnpm','--version'),colima:execute('colima','version').split('\n')[0],lima:execute('limactl','--version'),supabase:execute('supabase','--version'),docker:JSON.parse(execute('docker','version','--format','{{json .}}')),compose:execute('docker','compose','version'),postgres:execute('docker','exec','supabase_db_marleva-m1','psql','-U','postgres','-d','postgres','-tAc','SHOW server_version;')},lockfile:{file:'pnpm-lock.yaml',sha256:await sha('pnpm-lock.yaml')},gradleWrapper:wrapper,sdks,artifacts,containers,globalState:{colimaProfile:'marleva',colimaRoot:'~/.colima',supabaseCliState:'~/.supabase',adbState:'~/.android',certificate:'Marleva Local Development CA, login keychain, generated local only'},limitations:['Xcode/iOS no comprobados','Android físico no disponible según usuario','Restauración aislada todavía pendiente','M1 no completo']};
-await writeFile('infra/local/manifest.json',JSON.stringify(manifest,null,2)+'\n');console.log(`Auditoría guardada: ${containers.length} servicios, ${artifacts.length} artefactos; puertos loopback verificados.`);
+const tool = path.join(root, 'scripts/tool');
+const execute = (...args) => run(tool, args);
+const sha = async (file) =>
+  createHash('sha256')
+    .update(await readFile(file))
+    .digest('hex');
+const artifacts = [];
+for (const name of await readdir('infra/local/downloads'))
+  if (
+    /\.(tar\.gz|tgz|zip)$/.test(name) ||
+    ['colima-Darwin-arm64', 'docker-compose-darwin-aarch64'].includes(name)
+  )
+    artifacts.push({
+      file: 'infra/local/downloads/' + name,
+      sha256: await sha('infra/local/downloads/' + name),
+    });
+const names = execute('docker', 'ps', '-a', '--format', '{{.Names}}')
+  .split('\n')
+  .filter((n) => n.endsWith('_marleva-m1'));
+const containers = [];
+for (const name of names) {
+  const info =
+    JSON.parse(execute('docker', 'inspect', '--format', '{{json .}}', name))[0] ??
+    JSON.parse(execute('docker', 'inspect', '--format', '{{json .}}', name));
+  const image = JSON.parse(
+    execute('docker', 'image', 'inspect', '--format', '{{json .}}', info.Image),
+  );
+  const ports = info.NetworkSettings.Ports;
+  for (const bindings of Object.values(ports ?? {}))
+    for (const b of bindings ?? [])
+      if (b.HostIp !== '127.0.0.1') throw new Error('Non-loopback service binding found');
+  containers.push({
+    name,
+    image: info.Config.Image,
+    imageId: image.Id,
+    repoDigests: image.RepoDigests,
+    platform: image.Os + '/' + image.Architecture,
+    status: info.State.Status,
+    health: info.State.Health?.Status,
+    ports,
+    volumes: info.Mounts.filter((m) => m.Type === 'volume').map((m) => ({
+      name: m.Name,
+      destination: m.Destination,
+    })),
+  });
+}
+const wrapper = await readFile(
+  'apps/client/android/gradle/wrapper/gradle-wrapper.properties',
+  'utf8',
+);
+const sdks = [];
+for (const component of [
+  'cmdline-tools/22.0',
+  'platform-tools',
+  'platforms/android-36',
+  'build-tools/36.0.0',
+  'build-tools/35.0.0',
+  'emulator',
+  'system-images/android-36/google_apis/arm64-v8a',
+  'ndk/27.1.12297006',
+])
+  try {
+    const props = await readFile(
+      'infra/local/tools/android-sdk/' + component + '/source.properties',
+      'utf8',
+    );
+    sdks.push({
+      component,
+      properties: Object.fromEntries(
+        props
+          .split('\n')
+          .filter((l) => l.includes('='))
+          .map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1)]),
+      ),
+    });
+  } catch {
+    /* Not installed is explicit in the known component list comparison. */
+  }
+const manifest = {
+  date: new Date().toISOString(),
+  os: {
+    platform: os.platform(),
+    arch: os.arch(),
+    release: os.release(),
+    memoryBytes: os.totalmem(),
+  },
+  versions: {
+    node: execute('node', '--version'),
+    pnpm: execute('pnpm', '--version'),
+    colima: execute('colima', 'version').split('\n')[0],
+    lima: execute('limactl', '--version'),
+    supabase: execute('supabase', '--version'),
+    docker: JSON.parse(execute('docker', 'version', '--format', '{{json .}}')),
+    compose: execute('docker', 'compose', 'version'),
+    postgres: execute(
+      'docker',
+      'exec',
+      'supabase_db_marleva-m1',
+      'psql',
+      '-U',
+      'postgres',
+      '-d',
+      'postgres',
+      '-tAc',
+      'SHOW server_version;',
+    ),
+  },
+  lockfile: { file: 'pnpm-lock.yaml', sha256: await sha('pnpm-lock.yaml') },
+  gradleWrapper: wrapper,
+  sdks,
+  artifacts,
+  containers,
+  globalState: {
+    colimaProfile: 'marleva',
+    colimaRoot: '~/.colima',
+    supabaseCliState: '~/.supabase',
+    adbState: '~/.android',
+    certificate: 'Marleva Local Development CA, login keychain, generated local only',
+  },
+  limitations: [
+    'Xcode/iOS no comprobados',
+    'Android físico no disponible según usuario',
+    'Restauración aislada todavía pendiente',
+    'M1 no completo',
+  ],
+};
+await writeFile('infra/local/manifest.json', JSON.stringify(manifest, null, 2) + '\n');
+console.log(
+  `Auditoría guardada: ${containers.length} servicios, ${artifacts.length} artefactos; puertos loopback verificados.`,
+);

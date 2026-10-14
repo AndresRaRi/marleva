@@ -1,0 +1,18 @@
+{
+  "id": "MAR-M1-IT-BE-113-F",
+  "date": "2026-10-14T21:05:42.642Z",
+  "cases": {
+    "snapshotAndRestoredQueueIdentical": true,
+    "postgresRestartPreservesQueue": true,
+    "smtpDownPreservesJobsAndExpiredFails": true
+  },
+  "limits": [
+    "PG dump/restore de marleva en bases ficticias aisladas; no recuperación integral Auth/Storage/MFA/cliente",
+    "Reloj adelanta 60s para backoff del dataset",
+    "SMTP puede repetir entrega tras aceptación sin ACK; no exactamente una vez"
+  ],
+  "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108",
+  "result": "FAIL",
+  "error": "Expected values to be strictly equal:\n\n1 !== 2\n",
+  "cleanup": "Contenedor propio --rm detenido; dump privado conservado; capturador destino activo"
+}

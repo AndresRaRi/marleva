@@ -1,2 +1,17 @@
-import {it,expect} from 'vitest';import {PaymentSimulator} from '../../../../apps/api/dist/payment-simulator.js';
-it('MAR-M1-UT-BE-001 | SEQ012:S020-S070 | B10 harness aislado: éxito/error/duplicado/desorden/tardío/reembolso sin red',()=>{const s=new PaymentSimulator();expect(s.create('a',100,'success').state).toBe('confirmed');expect(s.create('a',100,'success').state).toBe('confirmed');expect(()=>s.create('a',200,'success')).toThrow();expect(s.create('b',100,'error').state).toBe('failed');expect(s.create('c',100,'late').state).toBe('pending');expect(()=>s.event('evt','c','confirmed')).toThrow();expect(s.event('evt','c','confirmed',true).state).toBe('confirmed');expect(s.event('evt','c','confirmed',true).state).toBe('confirmed');expect(s.event('old','c','failed',true).state).toBe('confirmed');expect(s.refund('c').state).toBe('refunded');expect(s.refund('c').state).toBe('refunded');expect(s.event('late','c','confirmed',true).state).toBe('refunded');});
+import { it, expect } from 'vitest';
+import { PaymentSimulator } from '../../../../apps/api/src/payment-simulator.ts';
+it('MAR-M1-UT-BE-001 | SEQ012:S020-S070 | B10 harness aislado: éxito/error/duplicado/desorden/tardío/reembolso sin red', () => {
+  const s = new PaymentSimulator();
+  expect(s.create('a', 100, 'success').state).toBe('confirmed');
+  expect(s.create('a', 100, 'success').state).toBe('confirmed');
+  expect(() => s.create('a', 200, 'success')).toThrow();
+  expect(s.create('b', 100, 'error').state).toBe('failed');
+  expect(s.create('c', 100, 'late').state).toBe('pending');
+  expect(() => s.event('evt', 'c', 'confirmed')).toThrow();
+  expect(s.event('evt', 'c', 'confirmed', true).state).toBe('confirmed');
+  expect(s.event('evt', 'c', 'confirmed', true).state).toBe('confirmed');
+  expect(s.event('old', 'c', 'failed', true).state).toBe('confirmed');
+  expect(s.refund('c').state).toBe('refunded');
+  expect(s.refund('c').state).toBe('refunded');
+  expect(s.event('late', 'c', 'confirmed', true).state).toBe('refunded');
+});

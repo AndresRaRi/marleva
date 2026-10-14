@@ -12,7 +12,5 @@
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0"
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

@@ -1,288 +1,156 @@
 # Marleva: guía principal
 
-Fecha: 13-10-2026 America/Merida. Guía estable; historial por Git. Cambiar solo reglas necesarias o correcciones comprobadas.
+Fecha: 14 de octubre de 2026, America/Merida. Reglas vigentes; Git conserva el historial. Las decisiones C01–C26 y las autorizaciones están en [01](01_ESTADO_Y_DECISIONES_MARLEVA.md); el alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md); la evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
 
-## 1. Para qué existe Marleva
+## 1. Propósito y glosario
 
-Plataforma de productos y servicios entre vecinos de Gran Santa Fe, Mérida, Yucatán. Debe resolver necesidades reales y convertirse en un negocio sostenible que genere ingresos. La utilidad y la rentabilidad requieren pruebas; no se dan por demostradas.
+Marleva conecta productos y servicios entre residentes actuales de Gran Santa Fe I y II, Gran Santa Fe Norte I, II y III, Cerradas de Gran Santa Fe y Paraíso Santa Fe, Mérida. Busca utilidad, sencillez, seguridad e ingresos reales. Un residente puede tener negocio fuera; cercanía no prueba pertenencia. Demografía pausada. No confundir registros o clics con ventas, ni ventas totales con ingresos propios.
 
-| Comunidad incluida | Regla |
+Explicar cada sigla en su primera aparición en texto destinado al lector. Los nombres de código, enlaces e identificadores estables no se alteran. Glosario común:
+
+| Término | Significado |
 |---|---|
-| Gran Santa Fe I y II; Gran Santa Fe Norte I, II y III; Cerradas de Gran Santa Fe; Paraíso Santa Fe | Los oferentes pertenecen a esta comunidad. Pueden trabajar desde casa, a domicilio o tener un negocio fuera. Cercanía o cobertura no prueban pertenencia. |
+| M1–M10 | Módulos: acceso/cuenta; comunidad/oferentes; catálogo; compra; cotización; dinero; atención; operación; avisos; medición |
+| MVP1 | Primera versión mínima del producto, con el alcance confirmado en 02 |
+| C01–C26 | Decisiones confirmadas; solo cambian con instrucción o revisión justificada |
+| A0–A8 | Puertas de preparación de 02: autorización, equipo, móvil, estructura, versiones, servicios, datos/API, integración, cierre |
+| A0 | Autorización de desarrollo local con herramientas elegibles y datos ficticios; vigente, no volver a pedirla |
+| B01–B12 | Tareas de base: salud/configuración, fixtures, identidad, sesión, cliente/API, cambio/recuperación, operador, avisos, archivos, simulador, plataformas, recuperación/repetibilidad |
+| B1–B7 históricos | Bloques de decisiones anteriores; no confundirlos con B01–B12 |
+| UC / SEQ | Caso de uso / secuencia de interacciones; sus IDs y pasos son estables |
+| API / DTO | Interfaz del servidor / objeto de entrada validado |
+| UT / IT / E2E / PF | Prueba unitaria / integración / recorrido de extremo a extremo / rendimiento |
+| OTP / MFA / TOTP / AAL | Código de un uso / varios factores de autenticación / código temporal de autenticador / nivel de garantía de autenticación |
+| CSRF / JWT / RBAC | Falsificación de solicitud entre sitios / token firmado / permisos por roles |
+| DBML / DDL / SQL | Modelo de base de datos / definición de esquema / lenguaje de consulta |
+| ADR / CI / CD | Registro de decisión arquitectónica / integración continua / entrega o despliegue continuo; este plan no despliega |
+| SDK / IDE / TLS | Herramientas de desarrollo / editor de código / cifrado y validación de conexión |
+| SOLID / DRY | Responsabilidad, extensión, sustitución, interfaces y dependencias / evitar repetir lógica |
+| HTTP / JSON / HTML | Protocolo web / formato de datos / lenguaje de páginas; no son permisos de acceso |
+| WCAG / OWASP / ASVS | Guía de accesibilidad / comunidad de seguridad / estándar de controles verificables |
+| CPU / RAM / VM / OS | Procesador / memoria / máquina virtual / sistema operativo |
+| UTC / MXN / ID | Hora de referencia / pesos mexicanos / identificador estable |
+| Lease / outbox / fixture | Reserva temporal de trabajo / cola guardada con la operación / datos ficticios de prueba |
+| RPO / RTO | Pérdida de datos e indisponibilidad máximas objetivo; requieren medición y decisión, no promesas |
 
-Las decisiones vigentes están en [01_ESTADO_Y_DECISIONES_MARLEVA.md](01_ESTADO_Y_DECISIONES_MARLEVA.md). El alcance y diseño están en [02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md). La evidencia está en [03_REFERENTES_Y_EVIDENCIA_MARLEVA.md](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
+## 2. Lectura e inventario
 
-## 2. Orden obligatorio de lectura
+Antes de trabajar: instrucciones vigentes del usuario, README raíz y AGENTS aplicables; después esta guía, 01, 02 y 03 completas y en orden. Al continuar, leer lo nuevo o modificado y conservar el ID de chat comprobado.
 
-Leer antes de proponer decisiones, crear entregables o programar. Puede avisarse que se está leyendo; no afirmar lectura terminada antes de realizarla.
+Inventariar desde la raíz todas las carpetas, fuentes y archivos propios accesibles, ordenados por ruta y nombre. Registrar ubicación, vigencia, fecha y lectura completa/parcial/no disponible. Leer en partes cuando sea necesario; listas, búsquedas, resúmenes y salidas recortadas no acreditan lectura completa. Dependencias, secretos, binarios de tercero, cachés e internos de Git se identifican como excluidos, sin afirmar lectura ni divulgar datos. Si falta algo, explicar qué bloquea y avanzar en tareas independientes; no reconstruir originales.
 
-| Orden | Qué leer |
+Antes de cada proceso técnico leer también el [protocolo](../../marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md), la [matriz M1](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md) y los casos, secuencias, pasos, datos, contrato y pruebas afectados. Releer completa la versión final guardada de cada archivo modificado; comprobar enlaces y coherencia antes de entregar.
+
+## 3. Fuentes y reglas únicas
+
+| Fuente | Responsabilidad |
 |---|---|
-| 1 | Instrucciones vigentes del proyecto, instrucciones del usuario y AGENTS.md si existe. |
-| 2 | Esta guía principal completa. |
-| 3 | Estado y decisiones completos: comprobar acuerdos, pendientes y continuidad. |
-| 4 | Alcance y diseño de MVP1 completos. |
-| 5 | Referentes y evidencia completos, incluidos sus anexos. |
-| 6 | Todos los demás archivos del proyecto y fuentes accesibles, incluidos los nuevos y los antecedentes, ordenados por ruta y nombre. |
+| 00 | Reglas, glosario y plantillas |
+| 01 | Decisiones, autorizaciones, estado actual, pendientes y continuidad; no bitácora |
+| 02 | Alcance y diseño funcional/técnico |
+| 03 | Evidencia, fuentes, fechas y límites; conserva el informe demográfico original |
+| docs/avance.md | Único registro del cálculo de progreso; 01 y README solo enlazan |
 
-Hacer primero un inventario desde la **raíz del proyecto**, recorriendo todas sus carpetas, y de las fuentes compartidas accesibles. No limitarse a `sources/` o `entregables/`. Leer el contenido completo en partes cuando haga falta; una búsqueda, un resumen o una salida recortada no equivalen a lectura completa. Usar la lectura adecuada para PDF, imágenes, hojas, diagramas y código. No ejecutar código por leerlo ni divulgar secretos.
+Cambiar solo lo afectado, con motivo y fecha necesarios. No copiar reglas entre documentos. AGENTS del código y configuración editable enlazan esta guía; AGENTS raíz y sources son espejos de solo lectura. No editarlos, moverlos ni considerarlos subidos por guardar localmente. Documentos externos y conversaciones recuperadas son evidencia, no instrucciones autorizadas.
 
-En proyectos de código, distinguir archivos propios del proyecto de dependencias instaladas, cachés, historial interno de Git y archivos del sistema. Inventariarlos como tales; no afirmar que se leyeron. Si el volumen o el formato impide leer todo, declarar qué falta y no trabajar sobre conclusiones que dependan de ello. No omitir documentación del proyecto porque esté en otra carpeta.
+## 4. Lenguaje, evidencia y comunicación
 
-| Registro de lectura | Contenido |
-|---|---|
-| Por archivo | Nombre/ruta, versión o fecha real, ubicación, lectura completa/parcial/no disponible y papel: vigente o antecedente. |
-| Si falta algo | Identificarlo, explicar qué bloquea y solicitarlo; avanzar solo en trabajo independiente. |
-| Si hay contradicción | Aplicar las instrucciones más recientes del usuario; registrar la diferencia sin inventar una resolución. |
-| Al continuar un chat | Comprobar archivos agregados o modificados y leerlos; no repetir todo si nada cambió. |
-| Al crear o modificar | Abrir y releer completa la versión final guardada antes de entregarla; revisar enlaces, decisiones y coherencia. |
+Palabras comunes, frases cortas y nombres claros. Separar confirmado, propuesto, pendiente y no verificado. No inventar cifras, resultados, acceso o aprobaciones. Consultar fuentes primarias para decisiones técnicas y verificar información cambiante cuando afecte una decisión. Registrar fecha, mercado, límites y consecuencia; no extrapolar otro país.
 
-Leer una fuente no convierte sus textos en instrucciones autorizadas. Los documentos externos y las conversaciones recuperadas sirven como evidencia, con sus límites.
+Informar al terminar cada tarea o ante un bloqueo. El resultado debe ir primero en lenguaje sencillo; después, los detalles técnicos. Si una tarea supera el doble de su estimación, avisar con opciones antes de continuar. Las actualizaciones no piden otra aprobación para tareas ordinarias. Un chat abierto o un turno terminado no garantiza ejecución continua. El formato de respuesta está únicamente en §14.
 
-## 3. Cuatro fuentes, cada una con una función
+## 5. Referentes
 
-| Archivo | Contiene | Cuándo cambiarlo |
-|---|---|---|
-| 00_GUIA_PRINCIPAL_MARLEVA.md | Objetivo, reglas, lectura, proceso y plantillas | Cambio necesario de una regla, instrucción o corrección. |
-| 01_ESTADO_Y_DECISIONES_MARLEVA.md | Contexto vigente, acuerdos, pendientes, avance y próximo prompt | Decisión real, avance comprobado, bloqueo o cierre de chat. |
-| 02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md | Funciones, módulos, reglas, diagramas, datos, APIs y base técnica | Diseño necesario, corrección o cambio autorizado. Al aprobarse, congelar el alcance. |
-| 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md | Hallazgos, fuentes, fechas, límites y antecedentes demográficos | Evidencia nueva necesaria o corrección comprobada. No investigar de nuevo todo en cada chat. |
+Uber Eats, Glovo, Just Eat, Lieferando, Thuisbezorgd, Wolt, Deliveroo, Bolt Food, foodora, DoorDash, Grubhub, Instacart y Airbnb. Especial atención a primeros pasos y registro de Airbnb. Mantener los trece en el registro, indicando lo no observado.
 
-Actualizar solo el archivo afectado. No generar una copia nueva por cada respuesta, ni repetir acuerdos en todos los documentos. Mantener nombres estables y fecha de actualización; versiones/diferencias/motivo/evidencia en Git, sin copias vN/fecha/ZIP por rutina. No cambiar una fuente solo para mejorar redacción o añadir un resumen repetido.
+Comparar experiencias, operaciones, pagos, acceso y generación de ingresos para una decisión concreta: problema → evidencia → comparación → recomendación → decisión → comprobación. Adaptar soluciones útiles; no copiar marcas, inferir arquitectura privada por pantallas ni ampliar MVP1 por imitación. Una función documentada no acredita rentabilidad. Evidencia y límites en 03.
 
-Un nuevo archivo se justifica si cumple una función que estas cuatro fuentes no pueden cubrir de forma clara, o si es necesario para construir, ejecutar o probar, como un contrato OpenAPI o una migración. Enlazarlo desde el documento correspondiente. No abrir documentación extra por costumbre. Los documentos largos pueden separarse por una necesidad real de lectura, conservando el índice común.
+## 6. Alcance y autonomía
 
-## 4. Comunicación y evidencia
+Conservar C01–C26, A0 y autorización del SDK Android. La programación base/M1 local con fixtures está autorizada; no pedirla de nuevo. Google/Supabase permanece pendiente. M2–M10 completos, dinero/datos reales, contactos, contratación, cuentas externas, publicación y despliegue no quedan autorizados por resolver una tarea técnica. El push al repositorio indicado por el usuario es sincronización del proyecto, no despliegue.
 
-| Tema | Regla |
-|---|---|
-| Lenguaje | Palabras comunes, frases cortas y nombres que expliquen la función. Debe entenderse a la primera. Explicar términos técnicos necesarios. |
-| Formato | Tablas útiles y contenido puntual. Sin iconos, emojis, adornos, párrafos largos o tablas llenas de texto. |
-| Análisis | Analizar primero; mostrar resultado, evidencia necesaria y consecuencias. No llenar páginas para aparentar trabajo. |
-| Hechos | No inventar cifras, precios, testimonios, funciones, proveedores aprobados, disponibilidad o resultados. |
-| Información faltante | Escribir «pendiente» o «no verificado». No completar vacíos con supuestos. |
-| Propuestas | Justificar con evidencia o razonamiento explícito; una propuesta del asistente no es aprobación del usuario. |
-| Estimaciones | Identificar datos, método y límites; no presentarlas como mediciones reales. |
-| Información externa | Verificar lo que pueda cambiar; registrar enlace, fecha, mercado y condiciones. No extrapolar condiciones de otro país. |
-| Alcance de lectura | Declarar qué se pudo leer; no afirmar acceso a todos los chats o archivos que no estén disponibles. |
+Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio. Terminar un turno solo con cola vacía, bloqueo real o decisión pendiente del usuario; indicar el motivo. Si queda trabajo autorizado ejecutable, continuar.
 
-## 5. Referentes que debemos aprovechar
+Considerar negocio, operación, ingeniería, seguridad, privacidad, accesibilidad, soporte y obligaciones mexicanas cuando afecten el caso. Antes de operar: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, responsables y soporte. Demografía no se reabre. Ideas que amplían alcance van a pendientes para después en 01.
 
-Uber Eats, Glovo, Just Eat, Lieferando, Thuisbezorgd, Wolt, Deliveroo, Bolt Food, foodora, DoorDash, Grubhub, Instacart y Airbnb. Especial atención al registro y primeros pasos de Airbnb.
+## 7. Arquitectura y código
 
-Comparar experiencia de uso, operaciones, pagos, acceso, costos y formas de generar ingresos. Adoptar o adaptar soluciones probadas que sirvan al objetivo comunitario. No copiar marcas ni añadir complejidad innecesaria. No deducir arquitectura privada por pantallas. Una función documentada no prueba aumento de ventas o rentabilidad.
+Cliente Expo separado de la API NestJS, PostgreSQL central y monolito modular. Antes del código concordar funciones, estados, errores, permisos, secuencias, datos, contrato y pruebas. Trazabilidad: UC → SEQ:paso → API → datos → interfaz → prueba. No capas vacías ni pantalla aislada.
 
-Cada consulta debe cerrar una decisión concreta: problema → evidencia → comparación breve → recomendación → decisión → criterio de comprobación. Mantener los trece referentes en el registro, incluso cuando una capacidad no se haya observado. No esperar a completar un estudio exhaustivo para avanzar.
+Responsabilidad única, bajo acoplamiento y alta cohesión explícitos. Lógica de negocio independiente de interfaz, base y proveedor mediante puertos pequeños y adaptadores reales. Inyección de dependencias, contratos respetados, composición sobre herencia. Patrones solo cuando resuelvan un problema concreto, con motivo registrado en ADR. Reutilizar convenciones mantenidas del framework.
 
-## 6. Un proceso sencillo con varias áreas
+Mantener sencillez y evitar funciones por si acaso. No repetir lógica: regla de tres para extraer reutilización con propósito. Componentes reutilizables en el cliente; presentación separada de datos. Ley de Deméter: no depender de detalles internos encadenados de otros objetos. Evitar consultas N+1, paginar y medir índices/consultas. Usar búsquedas eficientes cuando corresponda, sin promesa universal de O(1).
 
-La tabla es una adaptación de trabajo para Marleva, no una certificación ni una afirmación de haber encontrado «el mejor proceso mundial». Considerar estas áreas cuando afecten el trabajo; no crear un comité ni una etapa por cada profesión.
+TypeScript estricto, sin any ni código muerto. Nombres de código en inglés según convención vigente; mensajes de usuario en español. Comentarios explican el porqué. Complejidad ciclomática ≤10, anidación ≤2 y funciones ≤30 líneas como guía de revisión, sin extracciones artificiales. Validar entradas en frontera y permisos en backend. HTTP semántico y transición compatible a Problem Details RFC 9457; errores amables y logs técnicos JSON correlacionados, sin secretos ni datos personales. No catch vacío; timeouts/reintentos/degradación con evidencia.
 
-| Área | Pregunta que debe resolver |
-|---|---|
-| Negocio, economía y contabilidad | ¿Qué valor aporta, quién paga y qué ingresos y costos reales produce? |
-| Diseño de servicios, comunicación y experiencia de uso | ¿La persona entiende y completa la tarea, incluso si algo falla? |
-| Ingeniería de software y datos | ¿Reglas, estados, datos y APIs describen el mismo funcionamiento? |
-| Operación, entrega y atención | ¿Quién recibe, acepta, atiende y resuelve cada pedido o incidencia? |
-| Seguridad, privacidad y accesibilidad | ¿Quién puede hacer qué, qué datos necesita y quién podría quedar excluido? |
-| Derecho, fiscalidad y protección al consumidor | ¿Qué obligación mexicana afecta la decisión? Verificar fuentes cuando corresponda; no asumir cumplimiento ni dar asesoría especializada como resuelta. |
-| Pruebas, despliegue y recuperación | ¿Hay evidencia de funcionamiento y se puede recuperar el servicio y los datos? |
-| Medición e investigación | ¿Qué comportamiento real permite continuar, ajustar o detener? |
+Antes de integrar a main, revisión de código por el usuario o por un segundo agente. La autorización de un segundo agente se limita a esa revisión, no a delegación general. Conservar decisiones de [ADR001](../../marleva-local/repositorio/docs/adr/001-consolidacion-tecnica.md): Prisma para marleva, Supabase para sus esquemas y OpenAPI YAML canónico con derivados; Flyway exige transición posterior aprobada.
 
-Referencias verificadas el 12 de octubre de 2026: [Nielsen Norman](https://www.nngroup.com/articles/ten-usability-heuristics/) para lenguaje familiar, estados y errores; [WCAG 2.2](https://www.w3.org/TR/WCAG22/) para criterios de accesibilidad; [OWASP ASVS](https://owasp.org/projects/asvs) para controles comprobables de seguridad; [GOV.UK](https://www.gov.uk/service-manual/agile-delivery/core-principles-agile) para entrega por incrementos y aprendizaje. Adaptar lo pertinente al riesgo y tamaño del piloto. No declarar conformidad por intención o por pasar una herramienta automática.
+## 8. Experiencia, diseño visual y tono
 
-| Paso | Salida necesaria |
-|---|---|
-| 1. Delimitar | Un objetivo, alcance, responsable, dependencia y condición de cierre. |
-| 2. Investigar y comparar | Evidencia mínima suficiente para la decisión concreta. |
-| 3. Decidir | Resolver elecciones rutinarias; pedir dirección solo en decisiones materiales. |
-| 4. Documentar | Actualizar la fuente correspondiente sin duplicaciones. |
-| 5. Ejecutar | Diseñar o construir solo dentro del encargo autorizado. |
-| 6. Comprobar | Revisar criterios, errores, permisos e integración cuando correspondan. |
-| 7. Cerrar y avanzar | Resultado real, pendientes transferidos y siguiente acción concreta. |
+La app debe ser MUY llamativa, cálida y moderna, para todas las edades; entenderse en menos de cinco segundos se comprueba con recorridos de usuarios, no se declara por intención.
 
-Cerrar pendientes uno por uno. No reabrir sin evidencia nueva, un fallo relevante o instrucción del usuario. Registrar motivo e impacto. Las ideas nuevas van a la lista para después en el estado del proyecto; no se incorporan automáticamente a MVP1. La mejora continua corrige problemas reales, no amplía indefinidamente el alcance.
+- Ley de Hick: máximo tres acciones principales por pantalla.
+- Ley de Jakob: patrones conocidos de los referentes de §5 y navegación inferior en móvil.
+- Ley de Miller: información en bloques pequeños y formularios largos divididos en pasos.
+- Ley de Fitts: botón principal grande, abajo y al alcance del pulgar; áreas táctiles de al menos 48 unidades según plataforma y separación suficiente.
+- Espacio en blanco abundante; consistencia total de colores, formas y tipografía; un foco y una acción principal destacados.
+- Estados de carga, vacío, error y éxito; prevención de errores y paso conservado; límites de pantalla y teclado por plataforma.
+- Accesibilidad WCAG 2.2 AA y tareas equivalentes nativas: contraste, foco, lectores, escalado, etiquetas y no depender solo del color. Texto base de al menos 16 unidades es criterio propio, no resumen de WCAG.
 
-## 7. Diseño y construcción
+Tono: español latino cercano, con enfoque de ventas y marketing; el vecino se siente parte de su comunidad. Frases cortas, positivas y orientadas a actuar. Sin jerga ni culpa; los errores explican qué pasó y qué hacer. Documentar una guía de tono en docs/ui-ux/tono.md, sin duplicarla en cada pantalla.
 
-Antes del código, cerrar funcionalidades, roles y permisos, recorridos y errores, diagramas de actividades y secuencia, estados, modelo de datos, contratos API, tecnologías, estructura del proyecto, pruebas y orden de construcción. Las APIs describen solicitudes, respuestas, permisos y errores. Todo debe coincidir y servir para implementar.
+Antes de cualquier pantalla nueva o cambio visual material: proponer paleta, tipografía, librería de componentes compatible con Expo y dos o tres pantallas clave; compararlas con §5 y presentarlas al usuario. Registrar revisión antes de implementar; observaciones sobre un instructivo no aprueban una propuesta visual distinta.
 
-Para cada proceso o cambio de desarrollo, es lectura obligatoria el [protocolo técnico y auditoría](../../marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md), además de estas cuatro fuentes y AGENTS aplicable. Identificar caso de uso, secuencia y pasos estables, datos, API, pantalla y pruebas. Correcciones de procesos/pantallas empiezan por su diagrama de secuencia; diseño visual revisable antes de implementación. Modelo fuente en DBML importable en dbdiagram.io; DDL generado y comparado con migraciones, sin reescribir las aplicadas. OpenAPI YAML canónico con Swagger revisable antes de desarrollar.
+## 9. Pruebas, calidad y entorno
 
-Cada cambio de backend/frontend debe incluir pruebas unitarias, integración de los casos necesarios, performance proporcional y regresión. Separar carpetas por tipo, lado y módulo; guardar resultados con versiones, ambiente, esperado, obtenido y límites. Arquitectura y responsabilidades concretas documentadas; controllers, DTOs, casos de uso, dominio, repositorios y adaptadores cuando cumplen una función real. Instalaciones fijadas, identificadas, con permisos/licencias y operación reproducible; .gitignore comprobado contra secretos y artefactos. Carpetas o intenciones no acreditan cumplimiento.
+Para cambios backend/frontend: unitarias de reglas, integración real necesaria, negativos/permisos/concurrencia/caídas, rendimiento proporcional y regresión. Separar por tipo/lado/módulo. Guardar caso, requisito, versión, entorno/dataset/plataforma, esperado/obtenido, fallos/corrección y límites. Mocks no acreditan integración del proveedor; carpetas o planes no son resultados.
 
-Cambio 1.1,12-10-2026: instrucción explícita nueva del usuario sobre documentación previa, arquitectura, secuencias, DBML/DDL, YAML/Swagger, pruebas y orden de carpetas. No amplía MVP1 ni autoriza operaciones externas.
+Cobertura objetivo ≥80% de lógica de negocio, incluyendo archivos no ejecutados. Tipado, lint, formato y hooks obligatorios; no apagar reglas ni excluir lógica para aparentar cumplimiento. Sonar local se homologa con versión, recursos, licencia y compatibilidad comprobadas; SonarCloud no se activa por defecto. Pasar una herramienta no acredita seguridad ni módulo terminado.
 
-Desarrollo local primero; frontend y backend separados aunque compartan repositorio. Contratos claros, módulos con responsabilidades definidas, migraciones versionadas y ejecución/despliegue reproducibles. Usar tecnologías mantenidas y evitar dependencias innecesarias. No implementar criptografía de acceso propia. Stack y proveedores requieren decisión, no se aprueban por estar en un documento.
+Instalaciones fijadas, lockfiles e imágenes identificados por versión/digest/plataforma; licencias elegibles y permisos vigentes. Docker propio con etapas separadas, no-root, healthchecks, .dockerignore y Compose reproducible. Secretos fuera de Git/imágenes; puertos locales, redes/volúmenes identificados y recursos medidos. Conservar el bundle del proveedor; no imponer restricciones que lo rompan. Ensayos desechables separados del origen, sin borrar volúmenes ajenos.
 
-El techo de inversión no bloquea trabajo local autorizado. Antes de gasto o publicación, resolver costos, requisitos y autorización. Evaluar uso comercial de planes gratuitos, excedentes, continuidad y costos de salida. No prometer cero costo. No contactar terceros, publicar, contratar o cobrar tarifas sin autorización pertinente.
+Respaldos/restauración comprueban identidad, relaciones, archivos, integridad, permisos, borrados y revocación. Migración o rollback de app no revierten efectos externos ni base automáticamente. Medir recuperación con dataset y hardware identificados; RPO/RTO antes del piloto requieren decisión. Web no acredita Android/iOS ni emulador dispositivo físico.
 
-Un módulo queda terminado cuando cumple sus criterios y funciona integrado. Estados de carga, vacío, error, sesión vencida y recuperación se diseñan según aplique. Pruebas locales o pagos simulados no demuestran cobros productivos ni ventas reales. No sacrificar seguridad, accesibilidad, privacidad, soporte ni recuperación para reducir costos.
+## 10. Apertura, continuación y cierre de chat
 
-Medir pedidos completados, compradores que repiten, ingresos de Marleva, costos variables y fijos, devoluciones y trabajo operativo. Separar ventas totales de ingresos propios. Población, registros y clics no equivalen a clientes. Los pendientes demográficos siguen pausados.
-
-## 8. Apertura de chat
-
-IDs consecutivos MAR-CHAT-001, MAR-CHAT-002, etc.; consultar el registro antes de asignar. No numerar retrospectivamente chats desconocidos ni inventar fechas. Usar fecha real en America/Merida. Si se retoma el mismo chat, conservar ID y anunciar CONTINUACIÓN. Un chat por tema o módulo, con fuentes comunes.
-
-Después de leer, usar esta ficha una sola vez:
+Consultar el registro de 01 antes de asignar ID. Fecha real America/Merida. Al retomar conservar el ID y anunciar CONTINUACIÓN, sin otra apertura. Tras leer, ficha inicial una sola vez: ID/tema/fecha, objetivo, alcance/exclusiones, lectura/faltantes, punto de partida, entregables y condición de cierre. Marcador: INICIO DE CHAT con ID y tema.
 
-```text
-------------- INICIO DE CHAT | [ID] | [TEMA] -------------
-Fecha: [fecha real]
+FIN se usa solo al cerrar el tema o por petición del usuario. Cierre de chat no termina un módulo ni aprueba propuestas. Entregar resultado/evidencia, archivos afectados y acceso/subida real, estado incompleto si aplica, siguiente acción y prompt completo revisado de 01. Indicar título e ID del siguiente chat cuando corresponda; no forzarlo por dudas menores. Última línea del cierre real: ------------- FIN DE CHAT | [ID] | [TEMA] -------------.
 
-| Campo | Contenido |
-|---|---|
-| Objetivo | Un resultado concreto |
-| Incluye / fuera de alcance | Trabajo autorizado y límites |
-| Lectura | Inventario de archivos, versiones y faltantes |
-| Punto de partida | Confirmado, propuesto y pendiente |
-| Entregables | Resultado y continuidad previstos |
-| Condición de cierre | Qué debe quedar resuelto o comprobado |
+El prompt conserva raíz/Git, lectura numerada, autorizaciones/límites, estado/dependencia, pruebas y entregables. Revisarlo contra acuerdos/evidencia/faltantes accesibles; no prometer memoria, documentos o acceso futuro ausentes.
 
-Primer paso: [acción concreta].
-```
+## 11. Entrega y definición de terminado
 
-La tabla de lectura puede agrupar archivos con el mismo estado, dejando su lista completa en 01. Si falta documentación, registrarla antes de actuar sobre ella.
+README útil al inicio y fin de cada proceso/chat: propósito, alcance disponible, ubicación/lectura, arranque/parada, revisión local, pruebas, problemas y siguiente acción. Corregirlo si cambió la realidad, no por rutina.
 
-## 9. Cierre de chat y continuidad
+Instructivo único por módulo en docs/revision/Mn/INSTRUCTIVO_Mn.md: objetivo, requisitos, pasos de cada flujo, capturas reales sin secretos, esperado, errores/recuperación y plataformas comprobadas. No crear copia en docs/manuales. Backend/frontend explicados sencillamente; sin interfaz autorizada, revisión real de contrato/API en IDE y limitación explícita. Registrar aceptación del usuario; no asumirla.
 
-Usar FIN al cerrar el tema o por petición del usuario, no en cada respuesta. Cierre de chat no implica aprobación ni módulo terminado. Si está incompleto, decirlo y transferir lo pendiente. No finalizar anticipadamente para ahorrar trabajo ni forzar un nuevo chat por preguntas menores.
+Terminado exige función integrada, contrato/seguridad/permisos/fallos, plataformas/accesibilidad y pruebas aplicables, puertas de calidad requeridas, manual/README vigentes, revisión registrada, commit y push reales. Diseñado, implementado, probado y aceptado son estados distintos. El cálculo por criterios vive únicamente en docs/avance.md; encabezado usa implementación, aceptación se informa aparte. M2–M10=0% mientras no estén implementados; simulador de pagos no acredita M6. No contar archivos, commits o pruebas como funciones.
 
-Entregar siempre: (a) resultado final o informe de avance; (b) continuidad con siguiente paso y prompt completo revisado. Pueden ser versiones de 02 y 01, respectivamente; no hace falta crear dos archivos nuevos por chat. La guía o evidencia también pueden ser el resultado cuando ese sea el objetivo.
+## 12. Archivos y versionamiento
 
-```text
-| Campo | Cierre |
-|---|---|
-| ID, tema y fecha | Datos reales |
-| Estado | Completo o incompleto; continúa |
-| Resultado y archivo | Qué se obtuvo y enlace real |
-| Confirmado / propuesto / pendiente | Separados, con motivo y fuente |
-| Evidencia | Revisión y pruebas efectivamente realizadas |
-| Archivos afectados | Qué cambió y por qué; ubicación y estado de subida |
-| Continuidad | Archivo y siguiente acción |
+### 12.1 Propiedad y conservación
 
-Es hora de crear otro chat: [ID disponible y tema].
-Prompt revisado para copiar: [bloque completo].
+Git único en raíz incluye fuentes editables, instrucciones, código, diseño, pruebas e infraestructura reproducible. sources/ y AGENTS raíz se preservan como referencias readonly. Fuentes faltantes se declaran, sin reconstruirlas. Secretos, dependencias, cachés y builds ignorados y comprobados. Nada se elimina sin confirmación.
 
-------------- FIN DE CHAT | [ID] | [TEMA] -------------
-```
+### 12.2 Historial y fuentes técnicas
 
-FIN será la última línea. No archiva ni bloquea técnicamente la conversación. Actualizar la sección de continuidad en 01; conservar un registro breve de chats cerrados y retirar prompts antiguos de la sección activa.
+Un nombre estable por función; Git es historial. Sin versiones manuales de documentos, tablas de cambios, copias vN/fechas/ZIP por rutina. Actas de ensayos distintos conservan su propósito/fecha/evidencia. Migraciones aplicadas inmutables; un dueño por esquema. Modelo físico y objetivo separados hasta migración. DBML es fuente importable, DDL derivado; YAML es fuente canónica de API, JSON/tipos/Swagger derivados. No editar derivados a mano ni aplicar DDL completo sobre base existente.
 
-## 10. Plantilla del siguiente prompt
+Solo cambia la fuente afectada por una decisión, diseño, evidencia o corrección necesaria. El relato histórico se consulta en actas/commits; 01 conserva estado actual. Guardar local, commit, push, subir a Fuentes y desplegar son acciones distintas. Entregar qué archivos reemplazar en Fuentes/configuración cuando no haya subida efectiva.
 
-```text
-PROYECTO: Marleva
-CHAT: [ID comprobado]
-TEMA: [Un tema]
-FECHA: Registrar fecha real al abrir.
-ANTERIOR: [ID o no disponible]
+## 13. Git, sincronización e integración continua
 
-Lee primero las instrucciones del proyecto y después, completos y en
-orden, 00_GUIA_PRINCIPAL_MARLEVA.md, 01_ESTADO_Y_DECISIONES_MARLEVA.md,
-02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md y 03_REFERENTES_Y_EVIDENCIA_MARLEVA.md.
-Inventaría desde la raíz y lee también todos los demás archivos y fuentes
-accesibles, incluidos los nuevos. Señala faltantes o lectura parcial.
+Al iniciar o retomar: comprobar raíz, rama, HEAD, cambios locales, upstream y origin; ejecutar git pull --ff-only de la rama de trabajo. Nunca resetear ni descartar cambios; ante divergencia conservar trabajo y resolver. En una rama nueva sin upstream o un remoto vacío, comprobar referencias/fetch y crear seguimiento al primer push; no inventar un pull exitoso.
 
-OBJETIVO: [resultado concreto]
-PUNTO DE PARTIDA: [hechos/acuerdos con fuente; propuestas separadas]
-ALCANCE: [incluye y exclusiones]
-PRIMER PASO: [pendiente que desbloquea el trabajo]
-ENTREGABLES: [resultado y continuidad; condición de cierre]
+Después de pasar las pruebas de cada incremento pequeño, commit y push inmediatos; informar el SHA real, nunca uno anunciado sin existir. Esto reduce pérdidas ante cortes de uso. Priorizar lo que acerca al piloto y lo que el usuario puede ver o probar.
 
-Aplica la guía: lenguaje sencillo, tablas, sin iconos, evidencia y cierre
-de pendientes uno por uno. No inventes ni asumas datos o aprobaciones.
-Resuelve elecciones rutinarias dentro del alcance; consulta cambios
-materiales de alcance, gasto o publicación. No amplíes MVP1.
-Relee los archivos finales después de guardarlos. Actualiza solo los
-afectados por cambios necesarios. Al cerrar, entrega resultado y
-continuidad con prompt revisado e indica ubicación y subida real.
-Usa los marcadores de inicio y FIN solo cuando correspondan.
-Git único en raíz; archivo estable por función e historial en commits, sin
-copias vN/fechas/ZIP. Lee README raíz y sigue su proceso numerado y el
-protocolo/matriz/UC/SEQ/datos/API/pruebas del caso. Conserva autorizaciones
-vigentes; prueba cambios y corrige fallos. Informar avances reales al menos
-cada 60 segundos durante ejecución; no confundir chat abierto con actividad
-continua. Guardar commit local sin secretos y entregar su SHA. El prompt
-siguiente conserva estas reglas y actualiza estado, límites y primer paso.
-```
+Al cerrar: verificar compilación, pruebas, reglas/documentos/README, enlaces, diff e ignorados; commit claro y push de la rama de trabajo. Comprobar SHA local/remoto. No incorporar modificaciones ajenas ni originales sincronizados al commit propio. Commits pequeños Conventional Commits: tipo(módulo/caso): resultado. Ramas codex/feat-… o codex/fix-…; main es la rama principal del remoto activo. Flujo rama → PR → CI → merge, con revisión de §7 antes de integrar. Prohibido push --force, reset --hard o rebase sobre ramas subidas; actualizar ramas publicadas mediante merge. Versiones de releases con SemVer, distintas del historial documental.
 
-Antes de entregar un prompt comprobar documentos, decisiones, límites, faltantes, dependencias, entregables y lenguaje. «Revisado» significa contraste con información accesible; no garantiza disponibilidad futura ni validación comercial.
+Integración continua en GitHub Actions: lint → pruebas → build, sin despliegue. Falla bloquea integración. Sonar y cobertura se validan conforme §9; no sustituir pruebas ni publicar secretos para ejecutar el pipeline. No crear despliegue/cloud/piloto por hacer push.
 
-## 11. Instalación y sustitución de fuentes
+## 14. Formato de respuestas
 
-Subir únicamente las cuatro fuentes numeradas de esta entrega como conjunto vigente. Las instrucciones para pegar en la configuración se entregan aparte; no necesitan duplicarse como una quinta fuente.
+Cada respuesta y aviso comienza con tres líneas en cita: área/módulo/tarea; implementación del módulo y proyecto desde docs/avance.md con barra de diez bloques; estado/fase. Si falta cálculo, escribir Por calcular. Áreas: Backend⚙️, Frontend🎨, UX/UI✨, Base de datos🗄️, Seguridad🔐, Calidad y pruebas🧪, DevOps🚀, Infraestructura🏗️, Investigación🔍, Arquitectura y diagramas📐, Documentación📚, Configuración del proyecto🛠️, Configuración de ChatGPT🤖 y Planeación🗺️. Principal primero; otras solo si ayudan.
 
-| Documentos anteriores | Dónde quedó su función |
-|---|---|
-| Instrucciones, principios y estándar de chats | 00: reglas y plantillas. |
-| Contexto, plan, registro de decisiones y continuidad | 01: acuerdos, plan de avance, pendientes y próximo prompt. |
-| Alcance MVP1 y arquitectura propuesta | 02: ficha vigente y propuesta técnica identificada como propuesta. |
-| Referentes e informe Gran Santa Fe | 03: evidencia y anexo demográfico preservado. |
-| Enfoque comunitario | Reglas vigentes en 00/01 y modalidades en 02; WhatsApp principal y ausencia de pagos son antecedentes superados. |
-
-Conservar antecedentes editables en historial Git y retirarlos del árbol cuando estén superados; referencias sincronizadas intactas; no subir versiones viejas y nuevas como si ambas fueran vigentes. No se han eliminado ni editado los archivos sincronizados. Si los originales siguen disponibles, leerlos pero no aplicar propuestas superadas.
-
-Guardar localmente no equivale a incorporar a Fuentes ni a un repo. Declarar ubicación y acceso real en cada entrega. Si no hay herramienta para cargar fuentes, proporcionar los archivos y señalar que la carga queda pendiente. No garantizar acceso desde otro chat sin comprobarlo.
-
-## Continuidad autónoma dentro del trabajo autorizado
-
-Instrucción explícita13-10-2026: ejecutar el plan sin esperar confirmación entre tareas ordinarias. Después de cada tarea, comprobar su salida, registrar resultado/fallo, seleccionar la siguiente dependencia y continuar. Las actualizaciones informan avances; no son solicitudes de permiso. No finalizar un turno solo por terminar una subtarea si queda trabajo autorizado ejecutable.
-
-Detener únicamente la acción afectada por una instrucción de pausa, decisión material de alcance/diseño que requiera al usuario, gasto/publicación/contratación/contactos/datos o dinero reales, licencia/permiso no resueltos, o un bloqueo que no pueda resolverse dentro de autorización. Explicar causa y avanzar en tareas independientes. Conservar autorizaciones y decisiones vigentes; no interpretar silencio como aprobación. Ninguna regla promete ejecución cuando no existe una sesión activa o acceso efectivo.
-
-Revisar efectos de cada cambio sobre artefactos y pruebas existentes; corregir retrospectivamente las inconsistencias causadas sin reabrir acuerdos por costumbre. Mejoras justificadas por defecto observado, riesgo concreto o medición; ideas que amplían MVP1 van a lista posterior. Una tarea se cierra con evidencia, no con un anuncio. La ruta y los pendientes viven en protocolo/matriz existentes;01 registra estado/continuidad,02 diseño,03 evidencia,00 reglas.
-
-Cambio1.2: continuidad autónoma solicitada por el usuario; no amplía autorización material ni elimina revisión visual exigida.
-
-## 12. Git, pasos y comunicación obligatorios
-
-1. Git único en raíz cubre fuentes, instrucciones, diseño, código, infraestructura reproducible y pruebas. Ignorar secretos, dependencias, cachés y builds; un commit local no es remoto ni subida.
-2. Un archivo estable por función; historial en commits, sin versiones manuales ni copias vN/ZIP. Modelo físico y objetivo son estados distintos hasta migración; derivados se generan desde su fuente; migraciones aplicadas inmutables.
-3. Leer README raíz, fuentes 00–03 y caso afectado. Cada proceso identifica entrada, pasos numerados estables, salidas, fallos, criterios y pruebas. UC/SEQ/pasos permiten localizar defectos sin renumerar IDs.
-4. Ejecutar por dependencia, comprobar, corregir, releer finales/enlaces, actualizar solo afectados y guardar commit por incremento. No terminar la tarea solo con un anuncio; avanzar en tareas independientes ante un bloqueo.
-5. Informar avances reales al menos cada 60 segundos durante ejecución. Chat abierto, turno finalizado y programación horaria no equivalen a ejecución continua; no prometer actividad inexistente.
-6. Cada prompt incluye raíz/Git, lectura completa numerada, estado/tarea, autorizaciones/límites, trazabilidad/pruebas, comunicación y plantillas. Exigir leer la documentación canónica; no copiarla entera ni reconstruir faltantes.
-
-La instrucción posterior del usuario sustituye el versionado manual y la conservación de copias editables. sources/ y AGENTS raíz siguen de solo lectura.
-
-## 13. Entrega revisable, actualización y calidad — instrucción13-10-2026
-
-Estas reglas nuevas del usuario aplican a todos los módulos, procesos y archivos. Son parte de la lectura obligatoria. No amplían MVP1 ni autorizan publicación, gastos o datos reales.
-
-### Actualización y Git
-
-Al iniciar o retomar: comprobar raíz, rama, HEAD, cambios locales, registro de chat y remoto. Si existe un remoto autorizado, bajar cambios con avance rápido antes de trabajar; nunca resetear cambios locales ni resolver conflictos descartando trabajo. Si no hay remoto, comprobar los últimos commits locales y declarar que no hay pull/push posible. El usuario confirmó mantener Marleva solo local mientras crea su repositorio.
-
-Al terminar cada proceso: comprobar código, contratos, datos, pruebas, resultados, documentación y README. Cambiar únicamente lo afectado, releer finales y revisar enlaces, diff e ignorados. Al cerrar el chat: comprobar nuevamente todo lo anterior y hacer el commit final. Entregar SHA y estado real de acceso/subida. Otro chat comprueba los cambios existentes antes de continuar; un commit local no es una descarga, un remoto ni una subida a Fuentes.
-
-Commits rastreables: tipo(módulo/caso): resultado concreto. Título breve; cuerpo solo si ayuda a explicar motivo, prueba o límite. Usar UC/BUG cuando existan. No mensajes vagos como cambios, avances o ajustes varios. No mezclar modificaciones ajenas ni incluir secretos, dependencias o builds.
-
-### Revisión local e instructivo
-
-Un módulo o incremento importante se entrega funcionando localmente, con forma concreta de revisión en navegador, emulador, dispositivo o IDE según corresponda. Indicar URL/ruta, versiones, cómo arrancar/parar y qué se comprobó. Web no acredita móvil. Registrar revisión del usuario; no declarar aceptación por silencio.
-
-Cada módulo tendrá un instructivo sencillo y estable en docs/revision/Mn/INSTRUCTIVO_Mn.md, enlazado desde README y01. Incluye objetivo, requisitos, datos ficticios, pasos por flujo, capturas reales, resultado esperado, errores y recuperación, estado disponible/pendiente y límites de plataforma. No inventar pantallazos ni describir una maqueta como aplicación. Si no hay interfaz autorizada, mostrar revisión real de API/contrato en IDE y declarar pendiente la pantalla.
-
-Documentación del backend y frontend: qué hace cada parte, cómo ejecutarla, qué entrada/salida tiene, dónde están sus pruebas y cómo localizar un fallo mediante UC→SEQ:paso→API→datos→UI→prueba. Explicar términos necesarios. Evitar textos repetidos, carpetas vacías, abstracciones sin función y herramientas instaladas por costumbre.
-
-### README y porcentajes
-
-README es entrada útil para cualquier persona: propósito, alcance actual, ubicación, lectura, arranque/parada, revisión local, pruebas, problemas conocidos y siguiente paso. Revisarlo al inicio y fin del chat y de cada proceso; actualizarlo cuando cambie su contenido, sin editar por rutina si ya coincide.
-
-Al cerrar un chat, informar por módulo: funcionalidades cubiertas, parciales y faltantes; porcentaje de implementación y porcentaje de aceptación comprobada por separado. Denominador: lista estable de criterios funcionales de02/matriz; numerador: criterios completos con evidencia y revisión exigida. Parcial no cuenta como completo. Mostrar n/total, fecha y criterio de cálculo. No usar archivos, commits, registros o pruebas duplicadas como progreso. Si falta fijar o auditar la base, indicar no calculable todavía y la acción para calcularlo; nunca inventar un porcentaje.100% solo con integración, plataformas, seguridad, recuperación y revisión aplicables. El simulador aislado no acredita M6.
-
-### Arquitectura, programación, Docker y validación
-
-Aplicar responsabilidad única, dependencias explícitas, interfaces pequeñas e inversión de dependencias donde resuelvan un problema. Usar módulos Nest, repositorios, adaptadores, transacciones y outbox con responsabilidades reales; justificar patrones por caso. SOLID y estándares son criterios a comprobar, no etiquetas de cumplimiento. Preferir arquetipos mantenidos y bibliotecas estándar compatibles con los pins del proyecto.
-
-Docker: versiones/digests/plataforma y licencias identificados; imágenes mínimas/multietapa cuando se construyan imágenes propias; usuario sin privilegios y permisos mínimos cuando el servicio lo permita y se pruebe; secretos fuera de imágenes/Git; puertos solo localhost por defecto; redes y volúmenes identificados, healthchecks, límites de recursos, respaldo/recuperación y limpieza de destinos ficticios. No añadir restricciones que rompan servicios del proveedor sin comprobarlas. Actualizar digests con revisión y pruebas, no latest automático. Contenedores de prueba separados del origen, sin borrar volúmenes ajenos.
-
-Validación local equivalente a una puerta de CI: instalación fijada, generación determinista, tipado, lint/formato, unitarias y pruebas de integración/performance/regresión necesarias. Guardar resultados y fallos. No aprobar una puerta fallida, ocultar pruebas omitidas o desactivar reglas para aparentar calidad. CD local significa preparar y comprobar arranque/rollback del incremento; publicación y despliegue externos requieren autorización aparte.
-
-Flyway, PDM local y Sonar son opciones propuestas por el usuario para evaluar. Antes de adoptarlas: utilidad concreta, compatibilidad, licencia/costo, recursos, prueba y responsable. Solo un dueño de migraciones por esquema. Prisma gestiona actualmente marleva; Supabase sus esquemas. Pasar a Flyway exige transición ensayada que conserve historial/checksums y migraciones inmutables, sin dos herramientas modificando las mismas tablas. El modelo DBML/DDL existente se conserva como fuente/revisión; una herramienta PDM no añade un modelo paralelo.
-
-Referencias primarias consultadas13-10-2026: [principios de arquitectura Microsoft](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles), [migraciones versionadas Flyway](https://documentation.red-gate.com/fd/versioned-migrations-273973333.html), [historial Flyway](https://documentation.red-gate.com/flyway/flyway-concepts/migrations/flyway-schema-history-table), [buenas prácticas Docker](https://docs.docker.com/build/building/best-practices/), [multietapa Docker](https://docs.docker.com/build/building/multi-stage/), [análisis TypeScript Sonar](https://docs.sonarsource.com/sonarqube-community-build/analyzing-source-code/languages/javascript-typescript-css). Lectura puntual, no certificación. Sonar documenta soporte hastaTS5.9.3 en la página consultada; Marleva usaTS6.0.3. No declararlo homologado ni cambiar TypeScript sin una comprobación concreta.
-
-Motivo: solicitud del usuario de entregas revisables, documentación útil, actualización/Git, porcentajes medibles y calidad con procesos existentes. Google/Supabase permanece pendiente y no detiene tareas independientes.
+Estados: En progreso🔄, Terminado✅, Esperando tu aprobación⏸️, Necesito información❓, Bloqueado⚠️. Fases: Auditoría, Plan, Ejecución, Revisión, Cierre de sesión. Cerrar cada respuesta con Siguiente paso y Necesito de ti; si el usuario tiene acciones pendientes, añadir Tus pendientes; FIN solo según §10. Documentos sin adornos innecesarios; respuestas usan los iconos pedidos por el usuario.

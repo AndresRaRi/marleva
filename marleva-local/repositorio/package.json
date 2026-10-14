@@ -24,7 +24,8 @@
     "format:check": "prettier --check \"apps/**/*.{ts,tsx,mjs,cjs,json}\" \"scripts/*.{mjs,cjs}\" \"tests/**/*.{ts,mjs}\" eslint.config.mjs .prettierrc.json package.json",
     "quality": "pnpm typecheck && pnpm lint && pnpm format:check",
     "test:files": "vitest run tests/integration/backend/M1/files.test.mjs",
-    "test:quota": "vitest run tests/integration/backend/M1/otp-quota.test.mjs"
+    "test:quota": "vitest run tests/integration/backend/M1/otp-quota.test.mjs",
+    "test:coverage": "vitest run --config vitest.coverage.config.mjs --coverage"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "13.1.0",
@@ -33,6 +34,7 @@
     "@playwright/test": "1.64.0",
     "@types/node": "24.19.2",
     "@types/supertest": "7.2.1",
+    "@vitest/coverage-v8": "5.0.4",
     "eslint": "10.12.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.13.0",

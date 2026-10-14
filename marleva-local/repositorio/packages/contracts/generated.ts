@@ -302,6 +302,125 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/mfa-recoveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Titular con sesiónOTP reciente solicita. Un proceso activo por cuenta; cuerpo reason acotado. No requiere AAL2 del factor perdido ni concede permiso. Un titular con OTP nuevo puede reanudar el proceso provider_pending sin crear otro; credencial cifrada de tarea actualizada. Detalle en CONTRATO_RECUPERACION_MFA.md. */
+        post: operations["MAR_M1_API_015"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Consulta titular u otro administrador autorizado, proyección mínima. No secretos/capacidad/hash/factor ajeno. */
+        get: operations["MAR_M1_API_016"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}/approvals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Otro m1_access_admin actual, AAL2 y autenticación≤5min; mismo actor titular denegado. Version y clave idempotente. Revoca sesiones antes de tarea del proveedor; no devolver capacidad a administrador. */
+        post: operations["MAR_M1_API_017"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}/capabilities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Titular con nuevo OTP reciente posterior a revocación. State=reenrollment; emisión única10min ligada a sesión; reemitir invalida anterior. No permiso para roles/otros recursos. */
+        post: operations["MAR_M1_API_018"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}/enrollments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sesión titular y capacidad vigente ligada; un factor por recuperación; idempotencia/conciliación tras caídas. SDK Auth estándar en servidor; respuesta privada no-store, nunca logs. */
+        post: operations["MAR_M1_API_019"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}/verifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sesión/capacidad vigentes, factor reservado y código seis cifras. Cinco fallos invalidan capacidad y exigen nuevo OTP/capacidad. Provider verifica/AAL; completar una sola vez, revocar sesiones y capacidad; nuevoOTP/AAL2 para operar. */
+        post: operations["MAR_M1_API_020"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/{id}/rejections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Otro administrador actual/AAL2/reciente sin conflicto rechaza solo requested; motivo acotado auditado. No cancela a ciegas tarea externa ya ejecutando. */
+        post: operations["MAR_M1_API_021"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3185,6 +3304,1346 @@ export interface operations {
                         codigo: string;
                         mensaje: string;
                         /** Format: uuid */
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_015: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Actor/operación: mismo cuerpo devuelve proceso; cuerpo distinto409 */
+                "Idempotency-Key": string;
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Estado del proceso; aceptación no significa factor recuperado */
+            202: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_016: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Estado del proceso; aceptación no significa factor recuperado */
+            200: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_017: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Actor/operación: mismo cuerpo devuelve proceso; cuerpo distinto409 */
+                "Idempotency-Key": string;
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Estado del proceso; aceptación no significa factor recuperado */
+            202: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_018: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+                /** @description Actor/operación/cuerpo: reintento mismo resultado, cuerpo distinto409; no repetir efecto externo. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Respuesta de operación; comprobar estado final */
+            201: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        capability: string;
+                        /** Format: date-time */
+                        expires_at: string;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_019: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+                /** @description Actor/operación/cuerpo: reintento mismo resultado, cuerpo distinto409; no repetir efecto externo. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Respuesta de operación; comprobar estado final */
+            201: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        factor_id: string;
+                        uri: string;
+                        qr_code: string;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_020: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+                /** @description Actor/operación/cuerpo: reintento mismo resultado, cuerpo distinto409; no repetir efecto externo. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                    /** Format: uuid */
+                    factor_id: string;
+                    codigo: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Respuesta de operación; comprobar estado final */
+            201: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_021: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+                /** @description Obligatorio cookie web, no en Bearer móvil. */
+                "x-csrf-token"?: string;
+                /** @description Actor/operación/cuerpo: reintento mismo resultado, cuerpo distinto409; no repetir efecto externo. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expected_version: number;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Respuesta de operación; comprobar estado final */
+            200: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                        version: number;
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
                         request_id: string;
                         accion_recuperacion: string;
                     };

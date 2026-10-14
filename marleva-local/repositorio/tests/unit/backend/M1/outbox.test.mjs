@@ -1,9 +1,9 @@
 import { it, expect, vi } from 'vitest';
-import { DeliverOutbox } from '../../../../apps/api/dist/modules/m1/application/use-cases/deliver-outbox.js';
+import { DeliverOutbox } from '../../../../apps/api/src/modules/m1/application/use-cases/deliver-outbox.ts';
 import {
   deliveryExpired,
   deliveryRetryAt,
-} from '../../../../apps/api/dist/modules/m1/domain/outbox-policy.js';
+} from '../../../../apps/api/src/modules/m1/domain/outbox-policy.ts';
 const now = new Date('2030-01-01T00:00:00Z');
 it('MAR-M1-UT-BE-108-E | SEQ008:S035/S050 | frontera24h y backoff1/5/30min', () => {
   expect(deliveryExpired(new Date(+now - 86400000), now)).toBe(true);

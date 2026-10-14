@@ -1,6 +1,65 @@
-import {request} from 'node:https';import {readFile,writeFile} from 'node:fs/promises';import {performance} from 'node:perf_hooks';import path from 'node:path';
-const root=path.resolve(new URL('../../../..',import.meta.url).pathname);process.chdir(root);
-if(process.env.MARLEVA_PERFORMANCE_LOCAL!=='1')throw new Error('Solo ejecutar después de revisar plan: MARLEVA_PERFORMANCE_LOCAL=1');
-const ca=await readFile('infra/local/secrets/ca.crt'),samples=[],errors=[];const started=Date.now();
-for(const concurrency of [1,5,10]){const until=Date.now()+5000;await Promise.all(Array.from({length:concurrency},async()=>{while(Date.now()<until){const start=performance.now();try{const status=await new Promise((resolve,reject)=>{request('https://localhost:8443/health/ready',{ca,timeout:5000},r=>{r.resume();r.on('end',()=>resolve(r.statusCode));}).on('timeout',function(){this.destroy(new Error('timeout'));}).on('error',reject).end();});samples.push({concurrency,ms:performance.now()-start,status});}catch{errors.push({concurrency,kind:'network'});}}}));}
-const percentile=(v,p)=>v.slice().sort((a,b)=>a-b)[Math.min(v.length-1,Math.floor(v.length*p))];const report={id:'MAR-M1-PF-BE-001',sequence:'MAR-M1-SEQ-010:S020-S060',date:new Date().toISOString(),scope:'Solo readiness, no capacidad de cuenta/pedidos ni producción',dataset:'sin datos reales',durationMs:Date.now()-started,concurrency:[1,5,10],groups:[1,5,10].map(c=>{const a=samples.filter(s=>s.concurrency===c);const ms=a.map(s=>s.ms);return {concurrency:c,requests:a.length,p50:percentile(ms,.5),p95:percentile(ms,.95),p99:percentile(ms,.99),non200:a.filter(s=>s.status!==200).length};}),errors:errors.length,thresholds:'Pendientes de revisión; medición de base'};await writeFile('tests/results/performance-backend.json',JSON.stringify(report,null,2));console.log('Medición local guardada; no prueba capacidad de negocio.');
+import { request } from 'node:https';
+import { readFile, writeFile } from 'node:fs/promises';
+import { performance } from 'node:perf_hooks';
+import path from 'node:path';
+const root = path.resolve(new URL('../../../..', import.meta.url).pathname);
+process.chdir(root);
+if (process.env.MARLEVA_PERFORMANCE_LOCAL !== '1')
+  throw new Error('Solo ejecutar después de revisar plan: MARLEVA_PERFORMANCE_LOCAL=1');
+const ca = await readFile('infra/local/secrets/ca.crt'),
+  samples = [],
+  errors = [];
+const started = Date.now();
+for (const concurrency of [1, 5, 10]) {
+  const until = Date.now() + 5000;
+  await Promise.all(
+    Array.from({ length: concurrency }, async () => {
+      while (Date.now() < until) {
+        const start = performance.now();
+        try {
+          const status = await new Promise((resolve, reject) => {
+            request('https://localhost:8443/health/ready', { ca, timeout: 5000 }, (r) => {
+              r.resume();
+              r.on('end', () => resolve(r.statusCode));
+            })
+              .on('timeout', function () {
+                this.destroy(new Error('timeout'));
+              })
+              .on('error', reject)
+              .end();
+          });
+          samples.push({ concurrency, ms: performance.now() - start, status });
+        } catch {
+          errors.push({ concurrency, kind: 'network' });
+        }
+      }
+    }),
+  );
+}
+const percentile = (v, p) =>
+  v.slice().sort((a, b) => a - b)[Math.min(v.length - 1, Math.floor(v.length * p))];
+const report = {
+  id: 'MAR-M1-PF-BE-001',
+  sequence: 'MAR-M1-SEQ-010:S020-S060',
+  date: new Date().toISOString(),
+  scope: 'Solo readiness, no capacidad de cuenta/pedidos ni producción',
+  dataset: 'sin datos reales',
+  durationMs: Date.now() - started,
+  concurrency: [1, 5, 10],
+  groups: [1, 5, 10].map((c) => {
+    const a = samples.filter((s) => s.concurrency === c);
+    const ms = a.map((s) => s.ms);
+    return {
+      concurrency: c,
+      requests: a.length,
+      p50: percentile(ms, 0.5),
+      p95: percentile(ms, 0.95),
+      p99: percentile(ms, 0.99),
+      non200: a.filter((s) => s.status !== 200).length,
+    };
+  }),
+  errors: errors.length,
+  thresholds: 'Pendientes de revisión; medición de base',
+};
+await writeFile('tests/results/performance-backend.json', JSON.stringify(report, null, 2));
+console.log('Medición local guardada; no prueba capacidad de negocio.');

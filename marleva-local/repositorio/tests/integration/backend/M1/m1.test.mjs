@@ -174,7 +174,10 @@ describe('M1 integración real local PG17/Auth/correo/API', () => {
   });
   it('MAR-M1-IT-BE-007 | UC007/SEQ007:S030-S090 | rol actual se revisa y operador sin MFA no opera; sesión operador vence30min', async () => {
     const a = await login();
-    await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1', [a.account.id]);
+    await db.query(
+      `INSERT INTO marleva."RoleAssignment"("accountId",role,reason) VALUES ($1,'m1_operator','Fixture de integración')`,
+      [a.account.id],
+    );
     expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
     await db.query(
       'UPDATE marleva."Session" SET "lastSeen"=now()-interval \'31 minutes\' WHERE "accountId"=$1',
@@ -250,7 +253,10 @@ it('MAR-M1-IT-BE-010 | UC006/SEQ006:S030-S090 | cambio de correo exige ambos buz
 it('MAR-M1-IT-BE-011 | UC007/SEQ007:S030-S090 | TOTP estándar eleva AAL; revocar el rol quita permiso con JWT aún vivo', async () => {
   const { generate } = await import('otplib');
   const a = await login();
-  await db.query('UPDATE marleva."Account" SET operator=true WHERE id=$1', [a.account.id]);
+  await db.query(
+    `INSERT INTO marleva."RoleAssignment"("accountId",role,reason) VALUES ($1,'m1_operator','Fixture de integración')`,
+    [a.account.id],
+  );
   const factor = await call('/v1/auth/mfa/enrollments', 'post', {}, a.token);
   expect(factor.status).toBe(201);
   const token = await generate({ secret: factor.body.totp.secret });
@@ -265,7 +271,10 @@ it('MAR-M1-IT-BE-011 | UC007/SEQ007:S030-S090 | TOTP estándar eleva AAL; revoca
     ).status,
   ).toBe(201);
   expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(200);
-  await db.query('UPDATE marleva."Account" SET operator=false WHERE id=$1', [a.account.id]);
+  await db.query(
+    `UPDATE marleva."RoleAssignment" SET "revokedAt"=now(),"revokedBy"=$1 WHERE "accountId"=$1 AND "revokedAt" IS NULL`,
+    [a.account.id],
+  );
   expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
 });
 

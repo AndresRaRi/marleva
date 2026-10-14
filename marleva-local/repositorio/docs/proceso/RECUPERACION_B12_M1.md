@@ -2,6 +2,20 @@
 
 Fecha: 14-10-2026 America/Merida. Historial por Git, MAR-CHAT-005. Procedimiento objetivo con primera fase parcial ejecutada; B12 no completa. Lectura obligatoria para UC013 junto a [matriz M1](MATRIZ_CASOS_M1.md), [protocolo](PROCESO_DESARROLLO_MARLEVA.md), 02 §16.4, SEQ013 y contratos B09/recuperación MFA.
 
+## Prioridad aprobada para el piloto: opción A
+
+Decisión B12-PILOTO-A, 14-10-2026, MAR-CHAT-005. El usuario respondió «Aprueno A» a la separación de pruebas propuesta. Cambia la prioridad de entrega, no convierte casos pendientes en resultados.
+
+| Momento | Comprobaciones exigidas | Trazabilidad |
+|---|---|---|
+| Antes del piloto | Restauración consistente de datos, identidad y archivos; integridad; destino bloqueado ante copia incompleta; permisos propios/ajenos/públicos; borrados no reaparecen; sesiones y capacidades antiguas rechazadas | IT-BE-113-A–E/G, SEQ013:S001–S070 |
+| Antes del piloto | Reinicio seguro, avisos pendientes recuperados sin repetir negocio y nueva autenticación del cliente conservando una acción interna autorizada | IT-BE-113-F, IT-FE-113-A, SEQ013:S072; plataformas aplicables por separado |
+| Antes del piloto | Recuperación del acceso de operadores con segundo factor, otro autorizado y sin autorrevisión | UC014 y pruebas de recuperación MFA de la matriz; no cubierto por OTP de usuario normal |
+| Antes del piloto | Prueba básica de interrupción/corrección de actualización y recuperación; medir duración y pérdida observada del ensayo, repetir el procedimiento esencial | IT-BE-113-H básico y PF-BE-113-A básico; la prueba SQL aislada existente no acredita runner Prisma ni recuperación integral |
+| Después del piloto | Ensayos prolongados de capacidad y escenarios avanzados de caída/migración | Mantener pendientes en B12; definir cada variante antes de ejecutarla |
+
+El piloto solo puede superar esta puerta cuando existan resultados verificables de todas las comprobaciones esenciales. No se difieren controles de pérdida de datos, permisos, revocación, borrados ni recuperación MFA. Esta decisión no autoriza despliegue, datos reales o activación comercial. M1/B12 permanecen incompletos y sus porcentajes no aumentan por aprobar una prioridad.
+
 ## Condiciones para ejecutar
 
 Origen y destino deben estar identificados por proyecto, contenedores, volúmenes y puertos distintos. El destino empieza sin acceso de clientes. Usar solo fixtures y versiones/digests del origen comprobados. No ejecutar reset, restauración o migración contra una dirección desconocida. No basta cambiar el nombre de una carpeta: también separar estado de Supabase, claves, volúmenes y endpoints.
@@ -83,7 +97,7 @@ Plan previo al código: reutilizar solo el destino identificado en recovery-copy
 
 Antes de servir API: reaplicar ledger del objeto posterior mediante los casos B09 y Storage real del destino; impedir lectura mientras pendiente y confirmar ausencia. Revocar sesiones/capacidades Marleva restauradas y sesiones/refresh del proveedor en destino; generar claves JWT/API distintas para el proveedor/gateway. Probar rechazo de credenciales antiguas con control positivo en origen, sin invalidar origen. Mantener IDs/cuentas/factores y objetos conservados; registrar las diferencias esperadas. Identidades normales A/B con sesión nueva de proveedor para probar permisos reales de API/Storage. No adoptar estrategia Google ni reconstruir Auth.
 
-La fase no acredita recuperación administrativa MFA, interfaz/Safari/nativos, repetibilidad completa, interrupción de migración, cola de correo ni performance113. No reutilizar SMTP del origen para afirmar recuperación de la cola en destino: el config actual de Marleva fija54325; esa dependencia requiere ajuste documentado/pruebas antes de113-F. Puertas de acceso y tareas restantes continúan explícitas.
+La fase no acredita recuperación administrativa MFA, interfaz/Safari/nativos, repetibilidad completa, interrupción de migración, cola de correo ni performance113. En esa fase histórica SMTP seguía fijado a 54325 y la cola no se ensayó. El incremento 113-F posterior permite 54425 y comprueba el capturador del destino; no atribuirlo al ensayo anterior. Puertas de acceso y tareas restantes continúan explícitas.
 
 Rotación del destino: CLI Supabase2.120.0 genera nueva clave ES256; JWTSecret/clave simétrica y claves API también distintos, JWK privado solo en Auth y JWKS compatible en Storage. Se conserva cualquier configuración de cifrado de datos del proveedor; no confundirla con firma JWT. [Guía oficial de claves self-hosted](https://supabase.com/docs/guides/self-hosting/self-hosted-auth-keys) distingue API keys, claves de sesión ES256 y compatibilidad HS256: rotar solo API keys no revoca las sesiones. Reemplazar las claves antiguas del gateway y de verificación del destino, sin modificar origen. Supabase sigue emitiendo tokens de usuario; helper solo prepara claves de configuración del proveedor local desechable.
 
@@ -94,3 +108,25 @@ Resultado fase proveedor14-10: recovery-provider.json pasó once controles/ramas
 Repetición14-10 completada: recovery-copy-with-attributes.json,18.399s total y6.971s tramo PG/copia, no RTO. Nuevo destino1792005044662:1978 archivos PG,2 objetos vivos/2048bytes, filas/digests/relaciones idénticos y atributos binarios iguales origen→backup→trabajo. Origen reanudado y PG del nuevo destino detenido, sin puertos. Baseline/proveedor anterior1791995970112 conservados por separado; la fase API del anterior no acredita API del nuevo. No B12 completa ni PF113.
 
 113-H parcial14-10 pasó: migración SQL ficticia con BEGIN/COMMIT explícitos interrumpida después de DDL/DML mediante pg_terminate_backend de su sesión identificada. Tabla/fila nuevas revertidas, aviso previo intacto; misma candidata reaplicada y validada. PG desechable sin red/puertos eliminado con su volumen; cuatro migraciones originales conservan SHA256 y origen ready200 antes/después. recovery-migration.json. No acredita runner Prisma, migraciones no transaccionales ni crash del servidor; sin nueva lógica de aplicación y sin PF113.
+
+## Plan 113-F: cola restaurada y correo aislado del destino
+
+14-10-2026, antes del código. UC013/SEQ013:S070–S072 y UC008/SEQ008:S030–S060. Configuración permite únicamente SMTP 127.0.0.1 en puertos 54325 (origen) o 54425 (capturador del destino); no acepta proveedor externo. Unitarias prueban ambos destinos y rechazo de host/puerto ajenos.
+
+Ensayo separado con PG17 por imagen fijada y dos bases ficticias propias: sembrar cuenta/cambio completado/aviso/outbox, obtener pg_dump consistente y restaurarlo en la segunda base vacía. Probar cola pending, sending con lease vencida y mensaje caducado; caída/reinicio del capturador del destino y nuevos procesos de entrega. Cotejar que cuenta/cambio/aviso conservan IDs/valores y no repiten negocio. Captura real en destino; ningún mensaje en capturador del origen. Prueba de envío aceptado antes del ACK documenta posible repetición de correo, sin promesa exactly-once. Detener el capturador solo durante este ensayo y restaurarlo en finally; conservar dump privado ignorado. Acta por rama y duración/dataset, sin sustituir restauración integral Auth/Storage, UI o MFA por este caso. No cambia pantallas, consultas del negocio ni contratos públicos; rendimiento proporcional es la duración de esta cola mínima, no capacidad productiva.
+
+## Plan UC014: prueba del proveedor para recuperación de operador
+
+14-10-2026, antes del ensayo. SEQ014:S040/S060/S070/S115/S118/S130. En el proveedor del destino ya aislado, preparar únicamente dos operadores ficticios nuevos y variantes del revisor sin permiso. Comprobar rechazo de revisión propia, actor sin permiso, AAL1 y autenticación vieja antes de borrar factores. La prueba del SDK necesita separar un permiso administrativo actual de la bandera operator: el adaptador de permisos será un puerto y la prueba no acreditará la tabla/gestión de roles runtime.
+
+Después de revisión distinta/AAL2/reciente, revocar sesiones Marleva del titular y refresh del proveedor, borrar el factor perdido por su ID estable y cotejar ausencia. Nuevo OTP real del capturador del destino conserva cuenta; AAL1 no opera; nuevo TOTP verificado permite operar. Revocar permiso vuelve a denegar aunque JWT siga vivo. Secretos y credenciales solo privados o en memoria; acta pública sin ellos. Este ensayo cierra una dependencia del proveedor, no las siete operaciones HTTP, idempotencia, cola durable, capacidad limitada, interfaz ni recuperación administrativa completa. Antes de esos endpoints resolver persistencia/repetición de respuestas privadas e incertidumbre de enrolamiento en contrato/modelo; no generar migración apresurada ni acreditar UC014 por el SDK.
+
+## Resultado del incremento 14-10: cola y proveedor del operador
+
+MAR-M1-IT-BE-113-F pasó: pg_dump/restauración conservó exactamente tres trabajos, cuenta, cambio completado y aviso. Reinicio PG y procesos nuevos de entrega conservaron la cola; SMTP caído dejó dos trabajos pendientes, el caducado falló sin envío. Reintento respetó los backoffs de 1 y 5 minutos mediante reloj explícito; dos mensajes llegaron únicamente al destino, segunda ejecución no repitió entrega ni transición del negocio. Duración 5484 ms del ensayo mínimo, no RTO ni capacidad productiva. Acta recovery-outbox.json.
+
+Fallos del harness corregidos: espera debía comprobar servidor TCP definitivo, reinicio reasignó el puerto aleatorio de Docker y el trabajo sending ya intentado requería backoff de 5 minutos. Último fallo público en recovery-outbox-failure.json; logs de cada intento en carpetas privadas distintas. Regresión outbox: cinco casos pasaron, incluido envío aceptado antes de ACK persistido, con posible repetición de correo expresamente conservada.
+
+MAR-M1-IT-BE-114-PROVIDER pasó en el proveedor del destino histórico: rechazo de autorrevisión/permiso ausente/AAL1/autenticación vieja, revocación Marleva y refresh del proveedor, ausencia comprobada del factor perdido, OTP real conserva cuenta, TOTP nuevo habilita operación y revocar permiso vuelve a denegar con JWT vivo. Puerto de permiso administrativo usa fixture explícito; no acredita RoleAssignment runtime. Acta recovery-operator-provider.json. No abrió endpoints de recuperación ni modificó el origen. Los dos operadores ficticios del ensayo quedaron suspendidos sin factores/permiso y con sesiones revocadas.
+
+UC014 avanzó posteriormente a persistencia de roles/proceso y siete operaciones integradas. El contrato precisa respuestas cifradas, capacidad de diez minutos, tarea y conciliación; no usa el puerto ficticio en runtime. Resultados en recovery-api.json y recovery-schema.json; detalles de implementación en CONTRATO_RECUPERACION_MFA.md. Las pantallas requieren propuesta/revisión visual previa. B12/M1 no completos; Google permanece pendiente.

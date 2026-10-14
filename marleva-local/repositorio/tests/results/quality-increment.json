@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-14T20:29:11.721Z",
+  "scope": "Corrección de seis errores ESLint, formato global, tipos cliente y unitarias de reglas",
+  "quality": {
+    "typecheck": true,
+    "lint": true,
+    "format": true
+  },
+  "unit": {
+    "total": 67,
+    "passed": 67,
+    "failed": 0
+  },
+  "api": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0
+  },
+  "web": "Chrome real PASS en web-test.json",
+  "build": {
+    "api": true,
+    "web": true
+  },
+  "coverage": "coverage-summary.json",
+  "limits": [
+    "Sin cambios visuales aprobados nuevos",
+    "No puerta Sonar/CI ni M1 completa",
+    "Primer informe de cobertura no instrumentaba compilado; unitarias ahora importan fuente, integraciones conservan compilado"
+  ]
+}

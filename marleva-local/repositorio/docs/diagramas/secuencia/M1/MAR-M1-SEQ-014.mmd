@@ -1,4 +1,4 @@
-%% MAR-M1-SEQ-014 | Recuperación MFA | Objetivo NO implementado
+%% MAR-M1-SEQ-014 | Recuperación MFA | Integración en curso; no prueba de ejecución
 sequenceDiagram
  actor T as Titular con correo verificado
  actor O as Otro administrador autorizado
@@ -12,7 +12,7 @@ sequenceDiagram
  alt Actor propio o sin permiso
   API-->>O: S050 denegar sin modificar factor
  else Aprobación válida
-  API->>DB: S060 revocar sesiones, auditar y guardar tarea única
+  API->>DB: S060 revocar sesiones, auditar y guardar tarea única con referencias y lease
   API->>AUTH: S070 revocar factor por referencia estable
   alt Caída o resultado incierto
    API->>DB: S080 conservar provider_pending y conciliar
@@ -21,7 +21,9 @@ sequenceDiagram
    API->>DB: S090 emitir capacidad10min ligada a cuenta y nueva sesión
    API-->>T: S100 reenrolamiento sin permisos administrativos
    T->>API: S110 pedir enrolamiento con sesión y capacidad limitada
+   API->>AUTH: S112 reservar operación idempotente y nombre de factor estable
    API->>AUTH: S115 enrolar nuevo TOTP con SDK estándar
+   API->>DB: S116 guardar factor y respuesta privada cifrada
    T->>API: S117 verificar código y factor reservado
    API->>AUTH: S118 verificar factor y consultar AAL
    API->>DB: S120 consumir capacidad y completar una sola vez

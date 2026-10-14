@@ -1,11 +1,10 @@
 openapi: 3.1.1
 info:
   title: Marleva M1 local
-  version: 0.4.0
-  description: Datos ficticios; sin pagos reales. Cookie web con CSRF y origen
-    exacto. Credencial móvil opaca en SecureStore. Contrato documental del
-    código parcial observado, 13-10-2026. Las brechas y objetivos futuros se
-    identifican expresamente; no acredita pruebas ni API completa de MVP1.
+  version: 0.5.0
+  description: Contrato del backend local, 14-10-2026. Incluye las siete
+    operaciones de recuperación MFA; pruebas de aceptación y pantallas
+    pendientes. Datos ficticios, sin despliegue.
 servers:
   - url: https://localhost:8443
 paths:
@@ -2485,6 +2484,20 @@ paths:
     $ref: ./openapi-objetivo-archivos.yaml#/paths/~1v1~1local~1file-fixtures~1{id}~1content
   /v1/local/file-fixtures/{id}:
     $ref: ./openapi-objetivo-archivos.yaml#/paths/~1v1~1local~1file-fixtures~1{id}
+  /v1/auth/mfa-recoveries:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries
+  /v1/auth/mfa-recoveries/{id}:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}
+  /v1/auth/mfa-recoveries/{id}/approvals:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1approvals
+  /v1/auth/mfa-recoveries/{id}/capabilities:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1capabilities
+  /v1/auth/mfa-recoveries/{id}/enrollments:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1enrollments
+  /v1/auth/mfa-recoveries/{id}/verifications:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1verifications
+  /v1/auth/mfa-recoveries/{id}/rejections:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1rejections
 components:
   schemas:
     Account:
@@ -2715,3 +2728,7 @@ components:
     mobileSession:
       type: http
       scheme: bearer
+    recoveryCapability:
+      type: apiKey
+      in: header
+      name: x-recovery-capability

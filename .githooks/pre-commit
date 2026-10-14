@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+task_root=$(git rev-parse --show-toplevel)
+cd "$task_root/marleva-local/repositorio"
+./scripts/tool pnpm quality
+./scripts/tool pnpm test:unit
+./scripts/tool pnpm test:coverage

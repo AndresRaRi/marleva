@@ -150,3 +150,62 @@ model FixtureDeletion {
   @@unique([accountId, idempotencyKey])
   @@schema("marleva")
 }
+
+enum RoleKey {
+ m1_operator
+ m1_access_admin
+ @@schema("marleva")
+}
+enum RecoveryState {
+ requested
+ approved
+ executing
+ provider_pending
+ reenrollment
+ completed
+ rejected
+ expired
+ @@schema("marleva")
+}
+model RoleAssignment {
+ id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+ accountId String @db.Uuid
+ role RoleKey
+ grantedBy String? @db.Uuid
+ grantedAt DateTime @default(now()) @db.Timestamptz
+ revokedBy String? @db.Uuid
+ revokedAt DateTime? @db.Timestamptz
+ reason String
+ version Int @default(1)
+ @@index([accountId, role, revokedAt])
+ @@schema("marleva")
+}
+model MfaRecovery {
+ id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+ accountId String @db.Uuid
+ requestedBy String @db.Uuid
+ approvedBy String? @db.Uuid
+ state RecoveryState @default(requested)
+ reason String
+ providerReference String?
+ requestKey String
+ requestHash String
+ approvedAt DateTime? @db.Timestamptz
+ operations Json @default("{}")
+ providerState Json @default("{}")
+ leaseToken String? @db.Uuid
+ leaseUntil DateTime? @db.Timestamptz
+ capabilitySessionId String? @db.Uuid
+ capabilityExpiresAt DateTime? @db.Timestamptz
+ capabilityAttempts Int @default(0)
+ capabilityConsumedAt DateTime? @db.Timestamptz
+ factorId String? @db.Uuid
+ capabilityHash String?
+ createdAt DateTime @default(now()) @db.Timestamptz
+ expiresAt DateTime @db.Timestamptz
+ completedAt DateTime? @db.Timestamptz
+ version Int @default(1)
+ @@unique([accountId, requestKey])
+ @@index([accountId, state])
+ @@schema("marleva")
+}

@@ -1,10 +1,10 @@
 import { it, expect } from 'vitest';
-import { NoticeQuery } from '../../../../apps/api/dist/modules/m1/presentation/dtos/notice-query.js';
+import { NoticeQuery } from '../../../../apps/api/src/modules/m1/presentation/dtos/notice-query.ts';
 import {
   encodeNoticeCursor,
   decodeNoticeCursor,
-} from '../../../../apps/api/dist/modules/m1/domain/notice-cursor.js';
-import { ListNotices } from '../../../../apps/api/dist/modules/m1/application/use-cases/list-notices.js';
+} from '../../../../apps/api/src/modules/m1/domain/notice-cursor.ts';
+import { ListNotices } from '../../../../apps/api/src/modules/m1/application/use-cases/list-notices.ts';
 const a = '11111111-1111-4111-8111-111111111111';
 const b = '22222222-2222-4222-8222-222222222222';
 const boundary = { accountId: a, createdAt: '2026-10-13T12:00:00.123456Z', id: a };

@@ -4,16 +4,8 @@
     "slug": "marleva-local",
     "scheme": "marleva",
     "version": "0.1.0",
-    "platforms": [
-      "android",
-      "ios",
-      "web"
-    ],
-    "plugins": [
-      "expo-router",
-      "expo-secure-store",
-      "./plugins/local-debug-tls.cjs"
-    ],
+    "platforms": ["android", "ios", "web"],
+    "plugins": ["expo-router", "expo-secure-store", "./plugins/local-debug-tls.cjs"],
     "web": {
       "bundler": "metro",
       "output": "single"
