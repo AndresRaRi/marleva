@@ -49,7 +49,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git, verificado sin referencias al configurarlo. Rama codex/fix-quality-and-rules | Al iniciar git pull --ff-only; al cerrar commit y push de la rama. Rama nueva crea upstream al primer push; main requiere revisión |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git, verificado sin referencias al configurarlo. Rama codex/fix-quality-and-rules; commit documental 31ddbf1. Primer push intentado el 14-10: bloqueado por credenciales HTTPS ausentes | Autenticar GitHub y repetir push con upstream. Al iniciar git pull --ff-only; al cerrar commit y push de la rama. Rama nueva crea upstream al primer push; main requiere revisión |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Instalación limpia y arranque reproducible completos; conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 11 tablas de negocio y cuatro migraciones aplicadas. Objetivo: 13 tablas. Contrato canónico: 17 operaciones; recuperación: siete operaciones objetivo | Roles/recuperación aún no aplicados. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -72,10 +72,10 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | Chat | Estado / ubicación del cierre |
 |---|---|
 | MAR-CHAT-001–003 | Cerrados; antecedentes en Git y evidencia 03 |
-| MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit538c351 |
+| MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Abierto; implementación/pruebas base/M1 y corrección de fuentes. No equivale a M1 terminada |
 
-Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android),a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores. No hay automatización activa de este chat ni trabajo garantizado cuando termina un turno.
+Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores. No hay automatización activa de este chat ni trabajo garantizado cuando termina un turno.
 
 ## 6. Pendientes y decisiones del usuario
 
