@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-14T15:52:07.387Z",
+  "cases": {
+    "launch": true,
+    "invalidOtp": true,
+    "otpAccount": true,
+    "secureStoreRestart": true,
+    "refresh": true,
+    "logout": true,
+    "revokedRestart": true
+  },
+  "ids": [
+    "MAR-M1-IT-FE-102-ANDROID-A",
+    "MAR-M1-IT-FE-104-ANDROID-A"
+  ],
+  "avd": "Marleva_API36_ARM64",
+  "apiLevel": "36",
+  "display": "Physical size: 320x640\nOverride size: 1080x1920",
+  "duration_ms": 191045,
+  "build": "APK debug ARM64; Metro localhost; API HTTPS CA local",
+  "limits": [
+    "Emulador, no dispositivo físico/iOS",
+    "No cambio correo/MFA completo ni accesibilidad acreditados",
+    "Sin Expo Go; no build productivo",
+    "Actualizar cuenta conserva UI; no acredita renovación del proveedor por sí solo"
+  ]
+}

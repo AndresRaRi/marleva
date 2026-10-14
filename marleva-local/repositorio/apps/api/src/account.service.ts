@@ -1,3 +1,5 @@
+import { RateLimitException } from './rate-limit.exception.js';
+import { originWait } from './modules/m1/domain/otp-origin-limit.js';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { Database } from './database.js';
@@ -14,19 +16,22 @@ export class AccountService {
   private encrypt(t:Tokens){return seal(t,config().TOKEN_ENCRYPTION_KEY);}
   private decrypt(t:string){return unseal<Tokens>(t,config().TOKEN_ENCRYPTION_KEY);}
   async challenge(input:unknown,origin:string){
-    const address=email(input), id=randomUUID(), now=new Date();
+    const address=email(input), id=randomUUID();
     const result=await this.db.$transaction(async tx=>{
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${origin}, 1101))`;
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${address}))`;
+      const now=new Date();
       const recent=await tx.challenge.findFirst({where:{email:address},orderBy:{createdAt:'desc'}});
       if(recent?.blockedUntil&&recent.blockedUntil>now)return {blocked:Math.ceil((+recent.blockedUntil-+now)/1000)};
       if(recent&&+now-+recent.createdAt<limits.resend_seconds*1000)return {blocked:limits.resend_seconds-Math.floor((+now-+recent.createdAt)/1000)};
-      const count=await tx.challenge.count({where:{origin,createdAt:{gte:new Date(+now-3600000)}}});
-      if(count>=30)return {blocked:limits.pause_seconds};
+      const recentOrigin=await tx.challenge.findMany({where:{origin,createdAt:{gt:new Date(+now-3600000)}},select:{createdAt:true},orderBy:{createdAt:'desc'},take:30});
+      const remaining=originWait(recentOrigin.map(item=>item.createdAt),now);
+      if(remaining)return {blocked:remaining};
       await tx.challenge.updateMany({where:{email:address,state:{in:['open','sending']}},data:{state:'superseded'}});
       await tx.challenge.create({data:{id,email:address,origin,expiresAt:seconds(limits.otp_seconds)}});
       return {blocked:0};
     });
-    if(result.blocked)fail(429,'ESPERA_CODIGO',`Espera ${result.blocked} segundos antes de continuar`,`Vuelve a intentar en ${result.blocked} segundos`);
+    if(result.blocked)throw new RateLimitException(result.blocked);
     const {error}=await identity().auth.signInWithOtp({email:address,options:{shouldCreateUser:true}});
     if(error){await this.db.challenge.update({where:{id},data:{state:'failed'}});fail(503,'CORREO_NO_DISPONIBLE','No pudimos enviar el código','Espera y solicita otro código');}
     await this.db.challenge.updateMany({where:{id,state:'sending'},data:{state:'open'}});
@@ -67,7 +72,7 @@ export class AccountService {
     if(bearer&&req.headers.origin)fail(403,'ORIGEN','Acceso no permitido');
     const token=bearer?.startsWith('Bearer ')?bearer.slice(7):req.cookies?.marleva_session;
     if(typeof token!=='string'||token.length>200)fail(401,'SESION','Inicia sesión para continuar');
-    let s=await this.db.session.findUnique({where:{tokenHash:digest(token)},include:{account:true}});
+    const s=await this.db.session.findUnique({where:{tokenHash:digest(token)},include:{account:true}});
     const now=Date.now();
     if(!s||s.revokedAt||s.account.state!=='active')fail(401,'SESION','La sesión terminó','Inicia sesión de nuevo');
     const operator=s.account.operator,max=(operator?limits.operator_max_seconds:limits.user_max_seconds)*1000,idle=(operator?limits.operator_idle_seconds:limits.user_idle_seconds)*1000;
@@ -116,11 +121,10 @@ export class AccountService {
     });
     // Verify the code against the mailbox that actually received it. The local
     // provider requires the original address for the original mailbox's code.
-    const {data,error}=await identity().auth.verifyOtp({email:mail,token:value,type:'email_change'});
+    const {error}=await identity().auth.verifyOtp({email:mail,token:value,type:'email_change'});
     if(error){await this.db.emailChange.update({where:{id},data:{state:'open'}});fail(401,'CODIGO_NO_VALIDO','El código no es válido o venció');}
     const oldConfirmed=claim.oldConfirmed||mail===claim.oldEmail,newConfirmed=claim.newConfirmed||mail===claim.newEmail;
     if(!oldConfirmed||!newConfirmed){await this.db.emailChange.update({where:{id},data:{state:'open',oldConfirmed,newConfirmed}});return {estado:'falta_otro_buzon'};}
-    const t=data.session?tokens(data.session):this.decrypt(claim.providerTokens);
     const check=await identityAdmin().auth.admin.getUserById(p.account.authId);
     if(check.error||check.data.user.email!==claim.newEmail){await this.db.emailChange.update({where:{id},data:{state:'reconcile',oldConfirmed,newConfirmed}});fail(503,'CAMBIO_VERIFICANDO','Estamos comprobando el cambio','Consulta tu cuenta y solicita ayuda si persiste');}
     await this.finishEmailChange(id,p.account.id,claim.oldEmail,claim.newEmail);

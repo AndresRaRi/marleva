@@ -365,7 +365,7 @@
                 }
               },
               "Retry-After": {
-                "description": "Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos reales restantes.",
+                "description": "Segundos restantes reales: reenvío/pausa o cuota móvil30/h. Coincide con mensaje de recuperación. Otras rutas conservan brechas documentadas.",
                 "schema": {
                   "type": "integer",
                   "minimum": 1

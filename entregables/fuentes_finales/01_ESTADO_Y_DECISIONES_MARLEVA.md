@@ -1,6 +1,6 @@
 # Marleva: estado y decisiones
 
-Fecha: 13-10-2026 America/Merida. Historial por Git, sin versiones documentales manuales. MAR-CHAT-004 cerrado documentalmente el13-10-2026 America/Merida,14:25. Base/M1 incompleta; MAR-CHAT-005 continúa el13-10-2026 con incrementos locales UC008 y B09.
+Fecha: 14-10-2026 America/Merida. Historial por Git, sin versiones documentales manuales. MAR-CHAT-004 cerrado documentalmente el13-10-2026 America/Merida,14:25. Base/M1 incompleta; MAR-CHAT-005 continúa con incrementos locales UC008, B09, cuota OTP y Android emulado.
 
 Reglas [00](00_GUIA_PRINCIPAL_MARLEVA.md), diseño [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md); [entrada de lectura](../../README.md).
 
@@ -60,9 +60,9 @@ Salida: recomendación concreta, cambios necesarios en secuencias/contratos/dato
 | Base | Arranque005 comprobado en marleva-m1/red marleva-private; Node24.21.0/pnpm12.11.2; puertoslocalhost | Repetibilidad/restauración y builds nativos pendientes |
 | Arquitectura | UC008 extraído: controller/query/casos/puertos/reglas/repositorios/SMTP; cliente separado | Resto AccountService/cliente y arquitectura M1 todavía parciales |
 | Datos/API | DATA001: 11 tablas de negocio; DATA002: 13 objetivo. API canónica 0.4.0: 17 operaciones, incluido cursor y B09 aplicado | Recovery: 7 operaciones objetivo. Retención, roles y autorización restantes pendientes |
-| Pruebas | Actas005 en tests/results/notices-*.json: unitarias/SQL/API/SMTP/medición de repositorio; typecheck API/cliente y Chrome pasaron | Calidad global todavía con8errores de lint; UI/Safari/nativos/recuperación y cobertura completa pendientes |
+| Pruebas | Actas005 notices/files/otp: unitarias/SQL/API/SMTP/mediciones parciales; typecheck API/cliente, Chrome y recorrido básico Android pasaron | Lint global falló con8errores en medición anterior; dos variables corregidas después, sin nueva aprobación global. Visual/Safari/iOS/físicos/recuperación y cobertura completa pendientes |
 | B12 | Procedimiento/SEQ013/matriz con 10 casos diseñados | Ensayo recuperación/repetibilidad no ejecutado |
-| Móviles | APK inicial anterior compiló/instaló; recorrido Metro falló, recompilación interrumpida | Android/iOS completos, Safari/accesibilidad/físicos; web no equivale |
+| Móviles | APK debug ARM64 recompilado y recorrido Android API36 a1080×1920 pasó14-10; actas android-build/test | Otros flujos Android,320×640, iOS/accesibilidad/físicos; emulador no equivale a físico |
 
 Cola única en [protocolo](../../marleva-local/repositorio/docs/proceso/PROCESO_DESARROLLO_MARLEVA.md), casos en [matriz M1](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md), ensayo [B12](../../marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md). No duplicar cola ni acreditar sintaxis como operación. Evidencias históricas anteriores al traslado no describen estado vivo.
 
@@ -85,7 +85,7 @@ Antecedente del cleanup, superado por comprobación de Xcode en§9: entorno camb
 | MAR-CHAT-002 | Alcance y diseño integral de MVP1 | Apertura estándar aquí: 12-10-2026, 14:05 America/Merida (hora de primera comprobación). Cerrado documentalmente el 12-10-2026, 17:43 America/Merida. El antecedente del mismo tema no consignó ID ni apertura estándar; se conserva su trabajo y no se inventa fecha anterior. |
 | MAR-CHAT-003 | Preparación de la implementación local de MVP1 | Abierto y cerrado documentalmente el12-10-2026 America/Merida. Primera hora comprobada del trabajo17:45:50; hora exacta de ficha no registrada. No desarrollo autorizado. |
 | MAR-CHAT-004 | Desarrollo local de base/M1, sujeto a autorización | Abierto el 12-10-2026 America/Merida; primera comprobación17:54:24. Cerrado documentalmente13-10-2026,14:25; commit538c351 comprobado en005. Base/M1 incompleta; A0 vigente. |
-| MAR-CHAT-005 | Implementación integrada y pruebas de base/M1 | CONTINUACIÓN13-10-2026 America/Merida por solicitud del usuario y chat referenciado. Incrementos UC008/B09; permanece abierto, no M1 completa. |
+| MAR-CHAT-005 | Implementación integrada y pruebas de base/M1 | CONTINUACIÓN14-10-2026 America/Merida tras créditos. Incrementos UC008/B09/cuota OTP/Android emulado; permanece abierto, no M1 completa. |
 
 ## 6. Lista para después
 
@@ -187,3 +187,10 @@ El usuario confirmó que revisará el [instructivo M1](../../marleva-local/repos
 Las reglas nuevas están en 00 §13; README e instructivo actualizados. Para reemplazar Fuentes: 00, 01 y 03; 02 no cambió. Configuración editable: INSTRUCCIONES_FINALES_PARA_PEGAR.txt. AGENTS raíz y sources son referencias sincronizadas y quedan fuera del commit propio. Solo local, sin subida ni remoto. MAR-CHAT-005 permanece abierto.
 
 Android en005: recompilación debug ARM64 terminó con BUILD SUCCESSFUL, exit0 y APK con hash en tests/results/android-build.json. Autolinking regenerado por ruta anterior; dependencia fijada faltante descargada. No acredita recorrido, iOS, accesibilidad ni dispositivo físico. Chrome repetido pasó; capturas de cuenta y cambio de correo ahora muestran secciones distintas.
+
+## Continuación 14-10-2026 tras interrupción por créditos
+
+HEAD local comprobado: 5c0324093f6117b86d8900c49459f4cb57856c37. B09 y APK guardados. La corrección independiente de cuota OTP quedó sin commit: 19 unitarias y dos integraciones pasaron; tipado API/cliente y lint de archivos nuevos comprobados al retomar. Serializa por origen antes de reservar, calcula ventana móvil30/h y comunica segundos reales. No cambia C15 ni la estrategia Google/Supabase, que sigue pendiente. Otras rutas conservan la brecha de Retry-After documentada.
+
+Servicios locales y emulador comprobados activos. Recorrido Android retomado; no darlo por terminado antes del acta final. B12 solo preparación/dry-run, todavía sin backup/restauración. Revisión visual del usuario pendiente; originales sincronizados preservados.
+Resultado del incremento14-10-2026:19UT,12IT API de regresión y2IT cuota pasaron con el compilado final. PF cuota a1/5/10 concurrentes:0 errores inesperados,30 reservas conservadas; p95 aproximado4.90/18.71/28.56ms solo AccountService/PG. Recorrido Android emulado pasó a1080×1920 efectiva: acceso/error/OTP/cuenta, persistencia tras reinicio, salida y reinicio sin sesión revocada. Cinco capturas reales añadidas al instructivo. Actualizar cuenta conserva UI; no acredita renovación del proveedor por sí sola.320×640 y demás flujos/plataformas/accesibilidad siguen pendientes. [Acta y límites](../../marleva-local/repositorio/tests/results/otp-android-increment.md). Preparación B12 continúa; no ensayo acreditado. No cierre de005 ni aceptación visual.

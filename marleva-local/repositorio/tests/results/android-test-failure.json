@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-14T15:42:52.656Z",
+  "cases": {
+    "launch": true
+  },
+  "message": "Command failed: adb -s emulator-5554 shell uiautomator dump /data/local/tmp/marleva-ui-15.xml",
+  "limits": "Recorrido parcial; no acreditar paso pendiente"
+}

@@ -9,10 +9,10 @@ sequenceDiagram
     Note over UI,API: MAR-M1-SEQ-001 - Solicitar código
     U->>UI: S010 escribir correo ficticio
     UI->>API: S020 solicitar desafío
-    API->>DB: S030 bloquear por correo y comprobar espera/origen
+    API->>DB: S030 bloquear origen y correo; comprobar espera y ventana móvil30/h
     alt Espera o pausa vigente
-     DB-->>API: S040 límite
-     API-->>UI: S050 429 y recuperación
+     DB-->>API: S040 límite con segundos restantes reales
+     API-->>UI: S050 429 con Retry-After real y recuperación
     else Puede continuar
      API->>DB: S060 invalidar anteriores y reservar desafío
      API->>AUTH: S070 solicitar OTP estándar

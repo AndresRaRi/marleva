@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import type { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'node:crypto';
+import { RateLimitException } from './rate-limit.exception.js';
 import { database } from './database.js';
 import { AccountService } from './account.service.js';
 import { AccountController, HealthController } from './controller.js';
@@ -57,7 +58,8 @@ class Errors implements ExceptionFilter {
             mensaje: 'Una dependencia local no está disponible',
             accion_recuperacion: 'Intenta de nuevo',
           };
-    if (status === 429 && !res.hasHeader('Retry-After')) res.setHeader('Retry-After', '60');
+    if (error instanceof RateLimitException) res.setHeader('Retry-After', String(error.retryAfter));
+    else if (status === 429 && !res.hasHeader('Retry-After')) res.setHeader('Retry-After', '60');
     res.status(status).json({
       ...(typeof body === 'object' ? body : { mensaje: body }),
       request_id: res.getHeader('x-request-id'),

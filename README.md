@@ -26,7 +26,7 @@ Productos y servicios entre vecinos de los siete desarrollos de Gran Santa Fe, M
 
 [Instructivo M1 con capturas reales](marleva-local/repositorio/docs/revision/M1/INSTRUCTIVO_M1.md). Aplicación: https://localhost:8443; capturador ficticio:http://127.0.0.1:54324. Ambos son locales. Pasos técnicos de arranque/parada en [README del código](marleva-local/repositorio/README.md). Abrir archivos ycontratos en IDE también sirve para revisar backend; no sustituye probar el recorrido.
 
-Disponible y comprobado parcialmente: acceso/cuenta/salida/cambio por ambos buzones/MFA básico, cursor de avisos, correo durable y backend B09 de archivos ficticios privados. Pendientes: recuperación/restauración, revisión visual, Safari/nativos/físicos y casos restantes. Google/Supabase queda pendiente y no detiene lo independiente. No hay módulo M2–M10 completo; el simulador no acredita M6.
+Disponible y comprobado parcialmente: acceso/cuenta/salida/cambio por ambos buzones/MFA básico, cursor de avisos, correo durable y backend B09 de archivos ficticios privados. Android emulado comprobó acceso OTP, error, cuenta, persistencia tras reinicio y salida sin recuperar sesión revocada. Pendientes: recuperación/restauración, revisión visual, Safari/iOS/físicos y demás flujos nativos/casos restantes. Google/Supabase queda pendiente y no detiene lo independiente. No hay módulo M2–M10 completo; el simulador no acredita M6.
 
 ## Cada proceso y chat
 

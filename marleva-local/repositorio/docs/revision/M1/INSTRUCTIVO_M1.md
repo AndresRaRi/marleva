@@ -1,6 +1,6 @@
 # M1: revisar acceso, cuenta y avisos
 
-Fecha:13-10-2026 America/Merida. Entrega parcial, MAR-CHAT-005. Las capturas son de la aplicación real en Chrome, con datos ficticios; no son una maqueta ni una aprobación del diseño. No acreditan Android/iOS, lectores de pantalla o M1 terminada.
+Fecha:14-10-2026 America/Merida. Entrega parcial, MAR-CHAT-005. Las capturas son de la aplicación real en Chrome y, en el apartado Android, del emulador, con datos ficticios; no son una maqueta ni una aprobación del diseño. No acreditan iOS, dispositivos físicos, lectores de pantalla o M1 terminada.
 
 ## Abrir la aplicación
 
@@ -82,4 +82,14 @@ Para reportar un fallo: indicar flujo, paso, qué se hizo, qué se esperaba y qu
 
 Usuario confirmó que revisará este instructivo y dará observaciones. Revisión/aceptación siguen pendientes; no hay aceptación por silencio. M1 no se declara terminada hasta cerrar casos, integración, accesibilidad, plataformas y recuperación. El [estado01](../../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md) conserva continuidad y porcentajes cuando exista base comprobada.
 
-Compilación Android en005 comprobada: APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk, ignorado en Git; acta tests/results/android-build.json. Requiere Metro. Recorrido en emulador/dispositivo e iOS aún pendientes; las capturas de este instructivo siguen siendo Chrome.
+## Revisar en Android emulado
+
+APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk, ignorado en Git; [acta de compilación](../../../tests/results/android-build.json). Requiere Metro local en8081. El emulador Marleva_API36_ARM64, API36, comprobó el mismo flujo de los pasos1,2,3 y5: OTP, error, cuenta, reinicio conservando sesión y salida seguida de reinicio sin recuperar sesión. [Resultado](../../../tests/results/android-test.json). Actualizar cuenta se pulsó y conservó la pantalla; no prueba por sí sola renovación del proveedor.
+
+![Acceso Android](capturas/android/01-acceso.png)
+![Código pendiente Android, campo vacío](capturas/android/02-codigo-pendiente.png)
+![Error Android, código retirado](capturas/android/03-codigo-invalido.png)
+![Cuenta Android](capturas/android/04-cuenta.png)
+![Salida Android](capturas/android/05-sesion-cerrada.png)
+
+Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS siguen pendientes. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.

@@ -48,4 +48,4 @@ Incremento UC008 en commit cd0a019: cursor por cuenta/microsegundos, índice nue
 
 Revisar este README al inicio/fin de cada proceso y chat; corregirlo solo si cambió la realidad. Cerrar con resultados, instructivo/revisión, porcentajes medibles y commit claro. Sin remoto por decisión del usuario; fuentes y originales sincronizados no se modifican ni se consideran subidos por guardado local.
 
-Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.json y ubicación en el instructivo. Requiere Metro; recorrido nativo aún pendiente.
+Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.json y ubicación en el instructivo. Requiere Metro. Recorrido emulado de acceso/error/OTP/cuenta/reinicio/salida pasó en1080×1920; acta tests/results/android-test.json. Los demás flujos,320×640, accesibilidad/físicos/iOS siguen pendientes. Cuota OTP corregida y probada: tests/results/otp-android-increment.md.

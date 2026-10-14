@@ -1,0 +1,58 @@
+{
+  "id": "MAR-M1-PF-BE-101-A",
+  "date": "2026-10-14T15:52:38.600Z",
+  "node": "v24.21.0",
+  "scope": "AccountService + PG local; rama429 por cuota, sin HTTP/envío OTP/capacidad productiva",
+  "dataset": "30 reservas ficticias; origen exclusivo; sin desactivar cuotas",
+  "groups": [
+    {
+      "concurrency": 1,
+      "warmup_ms": 1000,
+      "measurement_ms": 5000.26225,
+      "expected_429": 1454,
+      "unexpected": 0,
+      "p50_ms": 3.2116249999999127,
+      "p95_ms": 4.897792000000209,
+      "p99_ms": 6.010125000000016,
+      "attempts_per_second": 290.7847483399496,
+      "cpu_client_us": {
+        "user": 1149654,
+        "system": 210102
+      },
+      "peak_client_rss_bytes": 243941376
+    },
+    {
+      "concurrency": 5,
+      "warmup_ms": 1000,
+      "measurement_ms": 5009.851667,
+      "expected_429": 1832,
+      "unexpected": 0,
+      "p50_ms": 12.782208000000537,
+      "p95_ms": 18.713208000001032,
+      "p99_ms": 28.06408300000021,
+      "attempts_per_second": 365.67948948816655,
+      "cpu_client_us": {
+        "user": 1425601,
+        "system": 208785
+      },
+      "peak_client_rss_bytes": 272809984
+    },
+    {
+      "concurrency": 10,
+      "warmup_ms": 1000,
+      "measurement_ms": 5021.992457999999,
+      "expected_429": 2037,
+      "unexpected": 0,
+      "p50_ms": 24.21954099999857,
+      "p95_ms": 28.564666999998735,
+      "p99_ms": 34.34829200000058,
+      "attempts_per_second": 405.61590186283,
+      "cpu_client_us": {
+        "user": 1283544,
+        "system": 211148
+      },
+      "peak_client_rss_bytes": 286523392
+    }
+  ],
+  "finalRows": 30
+}

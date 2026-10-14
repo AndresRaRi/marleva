@@ -561,7 +561,7 @@ export interface operations {
                     "Cache-Control"?: "no-store";
                     /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
                     "x-request-id"?: string;
-                    /** @description Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos reales restantes. */
+                    /** @description Segundos restantes reales: reenvío/pausa o cuota móvil30/h. Coincide con mensaje de recuperación. Otras rutas conservan brechas documentadas. */
                     "Retry-After"?: number;
                     [name: string]: unknown;
                 };
