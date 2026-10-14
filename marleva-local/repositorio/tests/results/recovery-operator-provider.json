@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-14T21:10:49.749Z",
+  "id": "MAR-M1-IT-BE-114-PROVIDER",
+  "copyPrefix": "marleva-b12-1791995970112",
+  "cases": {
+    "selfUnprivilegedAal1AndStaleDenied": true,
+    "oldMarlevaSessionsAndProviderRefreshRejected": true,
+    "lostFactorRemovalConfirmed": true,
+    "realNewOtpAndNewTotpRestoreAccountWithoutAal1Privilege": true,
+    "permissionRevocationDeniesLiveAal2Session": true
+  },
+  "limits": [
+    "Prueba SDK/proveedor y permisos básicos existentes; no siete endpoints ni tabla RoleAssignment runtime",
+    "Permiso m1_access_admin del revisor es fixture del puerto; no gestión real de roles",
+    "Sin capacidad limitada, idempotencia durable, conciliación tras caída ni UI; UC014 incompleto",
+    "Refresh revocado; JWT del proveedor puede conservar validez hasta expiración. Marleva deniega por sesión revocada"
+  ],
+  "result": "PASS",
+  "cleanup": "Solo operadores ficticios creados en destino quedan suspendidos, sin rol/factores y con sesiones revocadas; origen intacto"
+}

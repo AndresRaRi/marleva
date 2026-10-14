@@ -22,8 +22,8 @@ Implementación: criterio cuya salida funcional descrita abajo tiene código dis
 | UC010 | Salud/configuración/dependencias locales y fallo recuperable | Sí | No | HealthController/config/adaptador; completar caídas/rendimiento/regresión de plataformas |
 | UC011 | Permiso/lectura/borrado de archivo ficticio privado con integridad | Sí | No | B09 código y actas files/recovery; sin pantalla M2 exigida; aceptación/recuperación completa pendiente |
 | UC012 | Simulador aislado: idempotencia, eventos, fallos y reembolso | Sí | No | PaymentSimulator y pruebas; no acredita M6; completar contrato/medición/aceptación aplicables |
-| UC013 | Restauración/repetibilidad sin revivir accesos o borrados | No | No | Fases B12 probadas; cola/operador/plataformas/repetibilidad/medición restantes |
-| UC014 | Recuperación administrativa MFA con otro autorizado | No | No | Contrato/modelo objetivo; sin siete operaciones runtime integradas |
+| UC013 | Restauración/repetibilidad sin revivir accesos o borrados | No | No | Fases B12 y cola restaurada probadas en ensayos separados; recuperación runtime de operador/plataformas/ensayo integral restantes |
+| UC014 | Recuperación administrativa MFA con otro autorizado | No | No | Contrato/modelo objetivo y ensayo real del proveedor; sin siete operaciones runtime integradas ni permisos persistidos |
 
 Implementación M1 = 10/14 = 71,43%. Barra: ███████░░░. Aceptación M1 = 0/14 = 0%. El numerador de aceptación cero refleja criterios completos aún no entregados/aceptados; no ausencia de código o pruebas. El encabezado muestra 71,43%, nunca la cobertura como avance funcional.
 

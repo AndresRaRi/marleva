@@ -341,6 +341,7 @@ try {
     SUPABASE_SERVICE_KEY: keys.service,
     DATABASE_URL: apiUrl.toString(),
     MAILPIT_URL: 'http://127.0.0.1:54424',
+    SMTP_PORT: '54425',
     MARLEVA_TEST: '1',
   };
   writeFileSync(folder + '/stack.private.json', JSON.stringify(config, null, 2), { mode: 0o600 });
