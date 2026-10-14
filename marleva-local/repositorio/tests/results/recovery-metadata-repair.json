@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-14T19:07:26.946Z",
+  "copyPrefix": "marleva-b12-1791995970112",
+  "repaired": 3,
+  "hashesUnchanged": true,
+  "method": "Reconstrucción limitada desde metadata SQL y parámetros de fixtures conocidos; no preservación original",
+  "limits": [
+    "Backups/origen intactos",
+    "Copia nueva con atributos todavía pendiente"
+  ]
+}

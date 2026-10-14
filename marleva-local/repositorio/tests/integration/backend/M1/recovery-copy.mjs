@@ -11,6 +11,10 @@ import {
 } from '../../../fixtures/recovery-guard.mjs';
 process.chdir(path.resolve(new URL('../../../..', import.meta.url).pathname));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1', 'Requiere ensayo local autorizado');
+const repeatWithAttributes = process.env.MARLEVA_RECOVERY_ATTRIBUTES === '1';
+const reportFile = repeatWithAttributes
+  ? 'tests/results/recovery-copy-with-attributes.json'
+  : 'tests/results/recovery-copy.json';
 const run = String(Date.now()),
   names = recoveryNames(run),
   started = Date.now();
@@ -151,6 +155,39 @@ function copy(from, to) {
     'cp -a /source/. /destination/',
   ]);
   assertRecoveryManifest(manifest(from), manifest(to));
+  if ([sourceStorage, names.storageBackup].includes(from)) {
+    const script = path.resolve('tests/fixtures/recovery-xattrs.mjs');
+    const args = [
+      ...helperBase.slice(0, -2),
+      '--entrypoint=node',
+      '--mount',
+      `type=volume,src=${from},dst=/source,readonly`,
+      '--mount',
+      `type=volume,src=${to},dst=/destination`,
+      '--mount',
+      `type=bind,src=${script},dst=/helper.mjs,readonly`,
+      storage.Image,
+      '/helper.mjs',
+      'copy',
+      '/source',
+      '/destination',
+    ];
+    const expected = docker(args);
+    const actual = docker([
+      ...helperBase.slice(0, -2),
+      '--entrypoint=node',
+      '--mount',
+      `type=volume,src=${to},dst=/source,readonly`,
+      '--mount',
+      `type=bind,src=${script},dst=/helper.mjs,readonly`,
+      storage.Image,
+      '/helper.mjs',
+      'manifest',
+      '/source',
+    ]);
+    assertRecoveryManifest(expected, actual);
+    privateFile(to + '-xattrs.json', expected);
+  }
 }
 const privateFile = (name, data) => writeFileSync(privateDir + '/' + name, data, { mode: 0o600 });
 const report = {
@@ -191,6 +228,9 @@ try {
   });
   docker(['stop', '--time', '20', ...services]);
   before = rows(sourceDb);
+  const availableIds = new Set(
+    sql(sourceDb, 'SELECT id FROM marleva."PrivateFixture" WHERE state=\'available\'').split('\n'),
+  );
   privateFile('rows-before.json', JSON.stringify(before, null, 2));
   const pauseStart = Date.now();
   docker(['stop', '--time', '30', sourceDb]);
@@ -205,9 +245,15 @@ try {
     storageManifest = manifest(names.storageBackup);
   const dataset = JSON.parse(readFileSync('artifacts/recovery/fixtures.private.json', 'utf8'));
   assert.equal(dataset.files.length, 3, 'Preparar los tres objetos del ensayo');
-  for (const file of dataset.files)
+  const expectedFiles = repeatWithAttributes
+    ? dataset.files.filter((file) => availableIds.has(file.id))
+    : dataset.files;
+  assert.ok(expectedFiles.length > 0, 'No acreditar contenido con Storage vacío');
+  for (const file of expectedFiles)
     assert.ok(storageManifest.includes(file.sha256 + ' '), 'Falta contenido esperado en Storage');
-  report.fixtureBytes = dataset.files.reduce((sum, file) => sum + file.bytes, 0);
+  report.fixtureBytes = expectedFiles.reduce((sum, file) => sum + file.bytes, 0);
+  report.expectedLiveFixtures = expectedFiles.length;
+  report.cases.storageAttributes = true;
   privateFile('pg-manifest.txt', pgManifest);
   privateFile('storage-manifest.txt', storageManifest);
   report.backup = {
@@ -318,7 +364,6 @@ try {
   }
   report.duration_ms = Date.now() - started;
   privateFile('phase-final.json', JSON.stringify(report, null, 2));
-  if (!report.error)
-    writeFileSync('tests/results/recovery-copy.json', JSON.stringify(report, null, 2) + '\n');
+  if (!report.error) writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n');
 }
 if (report.error) throw new Error(report.error);

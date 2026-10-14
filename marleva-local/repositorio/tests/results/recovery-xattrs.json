@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-14T19:08:59.726Z",
+  "case": "MAR-M1-IT-BE-113-G-XATTR",
+  "passed": true,
+  "image": "sha256:6a32896ae2d1ae2ea2d05ecaf6ed6c8a6b091739b469a8cf860ee89b2604d28f",
+  "files": 1,
+  "attributes": 2,
+  "limits": [
+    "Prueba del helper en volumen desechable; copia completa nueva todavía pendiente"
+  ]
+}

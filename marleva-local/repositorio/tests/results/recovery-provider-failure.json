@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-14T18:27:20.198Z",
+  "copyPrefix": "marleva-b12-1791995970112",
+  "cases": {
+    "originCredentialsStillValid": true
+  },
+  "limits": [
+    "Operadores/MFA administrativo, cliente, cola, migración interrumpida y PF113 pendientes",
+    "Worker limitado al borrado del fixture; dueAt adelantado tras caída/reinicio explícitamente"
+  ],
+  "error": "integrity"
+}

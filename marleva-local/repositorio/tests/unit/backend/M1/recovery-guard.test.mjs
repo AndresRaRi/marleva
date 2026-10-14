@@ -40,3 +40,13 @@ it('MAR-M1-UT-BE-113-C | SEQ013:S050 | falta de objeto o hash distinto bloquea d
   expect(() => assertRecoveryManifest(manifest, [])).toThrow();
   expect(() => assertRecoveryManifest(manifest, [{ bytes: 5, sha256: 'b'.repeat(64) }])).toThrow();
 });
+it('MAR-M1-UT-BE-113-D | SEQ013:S050 | atributos perdidos bloquean aunque el contenido coincida', () => {
+  const expected = [['objeto/version', [['user.supabase.content-type', 'dGV4dC9wbGFpbg==']]]];
+  expect(() => assertRecoveryManifest(expected, expected)).not.toThrow();
+  expect(() => assertRecoveryManifest(expected, [['objeto/version', []]])).toThrow();
+  expect(() =>
+    assertRecoveryManifest(expected, [
+      ['objeto/version', [['user.supabase.content-type', 'b3Rybw==']]],
+    ]),
+  ).toThrow();
+});

@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-14T18:01:33.927Z",
+  "message": "Storage del destino no listo",
+  "created": [
+    "marleva-b12-1791995970112-kong-provider",
+    "marleva-b12-1791995970112-storage-provider",
+    "marleva-b12-1791995970112-auth-provider",
+    "marleva-b12-1791995970112-inbucket-provider",
+    "marleva-b12-1791995970112-db-provider"
+  ],
+  "limits": "No proveedor recuperado acreditado; origen intacto"
+}

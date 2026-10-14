@@ -28,7 +28,7 @@ Productos y servicios entre vecinos de los siete desarrollos de Gran Santa Fe, M
 
 Disponible y comprobado parcialmente: acceso/cuenta/salida/cambio por ambos buzones/MFA básico, cursor de avisos, correo durable y backend B09 de archivos ficticios privados. Android emulado comprobó acceso OTP, error, cuenta, persistencia tras reinicio y salida sin recuperar sesión revocada. Pendientes: recuperación/restauración, revisión visual, Safari/iOS/físicos y demás flujos nativos/casos restantes. Google/Supabase queda pendiente y no detiene lo independiente. No hay módulo M2–M10 completo; el simulador no acredita M6.
 
-B12 ya comprobó una copia física aislada de PostgreSQL/Auth/metadata y tres archivos ficticios con hashes iguales. El origen volvió a arrancar. Falta comprobar proveedor/API en destino, reaplicar un borrado posterior, revocar accesos y completar los demás casos; [procedimiento y resultados](marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md).
+B12 comprobó filas y contenido de una copia aislada, reaplicó un borrado, recuperó una caída de Storage, rechazó accesos antiguos y permitió OTP nuevo conservando cuentas/permisos. La copia perdió atributos de Storage: el destino se reparó solo para los tres fixtures; la copia completa se repitió conservando atributos; faltan MFA, cola, migración y plataformas. [Procedimiento y resultados](marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md).
 
 ## Cada proceso y chat
 

@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-14T18:15:48.584Z",
+  "names": {
+    "db": "marleva-b12-1791995970112-db-provider",
+    "auth": "marleva-b12-1791995970112-auth-provider",
+    "storage": "marleva-b12-1791995970112-storage-provider",
+    "kong": "marleva-b12-1791995970112-kong-provider",
+    "inbucket": "marleva-b12-1791995970112-inbucket-provider"
+  },
+  "network": "marleva-b12-1791995970112-private",
+  "ports": {
+    "gateway": 54421,
+    "db": 54422,
+    "mailpit": 54424,
+    "smtp": 54425,
+    "api": 3001
+  },
+  "obtained": "PG/Auth/Storage/gateway/capturador separados; claves nuevas; sin API Marleva todavía",
+  "limits": "Reaplicación/revocación/permisos en destino aún no comprobados"
+}
