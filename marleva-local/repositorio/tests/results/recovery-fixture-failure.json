@@ -1,0 +1,8 @@
+{
+  "date": "14-10-2026 America/Merida",
+  "scope": "Preparación privilegiada ficticia B12, no acceso del producto",
+  "obtained": "Primera verificación con type magiclink no produjo sesión",
+  "correction": "Usar verification_type que devuelve generateLink; el SDK documenta signup para identidad nueva",
+  "repeated": "Dos identidades/sesiones y tres objetos preparados; API comprobó titular/hash y denegó otra cuenta/público",
+  "limits": "No acredita OTP UI ni todos los casos B12"
+}

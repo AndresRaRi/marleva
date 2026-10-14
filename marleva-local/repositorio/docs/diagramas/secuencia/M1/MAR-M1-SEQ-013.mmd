@@ -1,4 +1,4 @@
-%% MAR-M1-SEQ-013 | Restaurar base y archivos sin revivir accesos | Estado: objetivo no ejecutado
+%% MAR-M1-SEQ-013 | Restaurar base y archivos sin revivir accesos | Estado: parcial; copia física probada, resto objetivo
 sequenceDiagram
     actor U as Usuario
     participant API as API Nest M1 y herramientas locales
@@ -20,4 +20,4 @@ sequenceDiagram
     U->>API: S072 probar permisos A/B OTP nuevo y trabajador
     API->>DB: S075 ensayo migración interrumpida en otro destino desechable
     API-->>U: S080 acta duración recursos fallos y limpieza identificada
-    Note over API,DB: No ejecutar sobre origen; ensayo no ejecutado
+    Note over API,DB: Restaurar solo en destino; copia física probada, B12 completa pendiente

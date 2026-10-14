@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-14T16:39:31.068Z",
+  "phase": "B12 copia física; parcial113-A/G",
+  "names": {
+    "prefix": "marleva-b12-1791995970112",
+    "network": "marleva-b12-1791995970112-private",
+    "db": "marleva-b12-1791995970112-db",
+    "pgBackup": "marleva-b12-1791995970112-backup-pg",
+    "storageBackup": "marleva-b12-1791995970112-backup-storage",
+    "pgTarget": "marleva-b12-1791995970112-target-pg",
+    "storageTarget": "marleva-b12-1791995970112-target-storage"
+  },
+  "sourceImages": [
+    {
+      "name": "/supabase_db_marleva-m1",
+      "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108"
+    },
+    {
+      "name": "/supabase_pg_meta_marleva-m1",
+      "image": "sha256:145325b7e39f8ef4931d6e8cfd3f6f4d655de09d72a2ccc96d9513542c2202bd"
+    },
+    {
+      "name": "/supabase_storage_marleva-m1",
+      "image": "sha256:6a32896ae2d1ae2ea2d05ecaf6ed6c8a6b091739b469a8cf860ee89b2604d28f"
+    },
+    {
+      "name": "/supabase_rest_marleva-m1",
+      "image": "sha256:d155c6718ed9a9f990d159a2ab7c0a3f16944dbb6d0a0344557421042acfe0df"
+    },
+    {
+      "name": "/supabase_realtime_marleva-m1",
+      "image": "sha256:f704b3222e3c772610865e016153d606a3f94f0a55a7548a903b3f6d7f3f8270"
+    },
+    {
+      "name": "/supabase_inbucket_marleva-m1",
+      "image": "sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d"
+    },
+    {
+      "name": "/supabase_auth_marleva-m1",
+      "image": "sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b"
+    },
+    {
+      "name": "/supabase_kong_marleva-m1",
+      "image": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d"
+    }
+  ],
+  "cases": {
+    "completeVolumeCopy": true,
+    "allThreeSchemaRows": true,
+    "accountIdentitySessionLinks": true,
+    "storageHashes": true,
+    "corruptManifestBlocked": true,
+    "targetNoPublishedPorts": true
+  },
+  "limits": [
+    "Sin API Auth/Storage/permisos/revocación/borrado posterior/MFA/cliente",
+    "Sin RPO/RTO ni capacidad productiva; recursos helper configurados, no CPU/RAM medidas"
+  ],
+  "fixtureBytes": 1050624,
+  "backup": {
+    "pause_ms": 6525,
+    "pgFiles": 1977,
+    "storageFiles": 3,
+    "pgManifestSha256": "5af9acb7a028256f95db1a3ff6890e48cb464a7e914763575a0c082551ab2773",
+    "storageManifestSha256": "2e872a5f3dac5393a999ec33ab872790f2fc49debc78ce06cb696d5fc05c0ad3"
+  },
+  "sourceResumed": true,
+  "schemas": [
+    {
+      "schema": "marleva",
+      "tables": 12,
+      "rows": 1156
+    },
+    {
+      "schema": "auth",
+      "tables": 27,
+      "rows": 1631
+    },
+    {
+      "schema": "storage",
+      "tables": 10,
+      "rows": 78
+    }
+  ],
+  "targetStopped": true,
+  "duration_ms": 18916
+}

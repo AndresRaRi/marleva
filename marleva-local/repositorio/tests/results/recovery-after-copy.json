@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-14T16:41:55.051Z",
+  "case": "MAR-M1-IT-BE-113-C-PRE",
+  "fixtureId": "68a224b7-8d74-4938-ad5f-89195af0fe15",
+  "copyPrefix": "marleva-b12-1791995970112",
+  "obtained": "DELETE por API aceptado; worker confirmó deleted; ledger mínimo fuera de backup",
+  "limits": "Reaplicación en destino todavía pendiente"
+}
