@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-14T19:19:37.691Z",
+  "case": "MAR-M1-IT-BE-113-H",
+  "step": "SEQ013:S075",
+  "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108",
+  "migrations": [
+    {
+      "path": "apps/api/prisma/migrations/202610120001_m1/migration.sql",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/api/prisma/migrations/202610120002_m1_tables/migration.sql",
+      "sha256": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c"
+    },
+    {
+      "path": "apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql",
+      "sha256": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b"
+    },
+    {
+      "path": "apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql",
+      "sha256": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0"
+    }
+  ],
+  "cases": {
+    "cancelledTransactionRolledBack": true,
+    "sameCandidateReapplied": true,
+    "originalMigrationsAndSourceUntouched": true
+  },
+  "limits": [
+    "Candidata SQL ficticia con transacción explícita; no runner Prisma ni rollback no transaccional",
+    "Sin crash de servidor ni medición PF113"
+  ],
+  "disposableRemoved": true
+}
