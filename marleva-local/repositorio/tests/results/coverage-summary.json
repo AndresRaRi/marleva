@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-14T20:29:11.721Z",
+  "timezone": "America/Merida",
+  "scope": "Lógica de negocio API y adaptador cliente; AccountService incluido",
+  "threshold": 80,
+  "obtained": {
+    "lines": {
+      "total": 359,
+      "covered": 339,
+      "skipped": 0,
+      "pct": 94.42
+    },
+    "statements": {
+      "total": 411,
+      "covered": 378,
+      "skipped": 0,
+      "pct": 91.97
+    },
+    "functions": {
+      "total": 66,
+      "covered": 62,
+      "skipped": 0,
+      "pct": 93.93
+    },
+    "branches": {
+      "total": 310,
+      "covered": 281,
+      "skipped": 0,
+      "pct": 90.64
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "passed": true,
+  "tests": 67,
+  "limits": [
+    "Unitarias fuente TS con puertos/DB controlados; no integración real por mocks",
+    "Pantallas/componentes, Sonar/CI y revisión completa no acreditados"
+  ]
+}
