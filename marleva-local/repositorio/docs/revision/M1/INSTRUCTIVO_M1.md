@@ -57,11 +57,11 @@ Caso:UC004. Salida actual probada en Chrome; actual/total, cookie segura y CSRF 
 
 ## 6. Segundo factor del operador ficticio
 
-Solo las cuentas operadoras ficticias preparadas por el entorno muestran esa sección. Verificar correo reciente, preparar TOTP con un autenticador local y verificar el factor. No guardar capturas del secreto/QR ni compartirlo. El registro normal no concede el rol. Rol/AAL y revocación comprobados por API; instructivo con capturas seguras de ese flujo y recuperación administrativa todavía pendiente.
+Solo las cuentas operadoras ficticias preparadas por el entorno muestran esa sección. Verificar correo reciente, preparar TOTP con un autenticador local y verificar el factor. No guardar capturas del secreto/QR ni compartirlo. El registro normal no concede el rol. Rol/AAL y revocación comprobados por API; instructivo con capturas seguras de ese flujo y pantallas de recuperación administrativa todavía pendientes.
 
 ## 7. Pérdida del buzón y sesión vencida
 
-Recuperar el buzón con su proveedor. Un comprobante vecinal no transfiere la cuenta. Si la sesión venció, volver a entrar y consultar el estado antes de repetir una acción. Retomar destinos internos completos, recuperación MFA y restauración todavía requieren implementación/pruebas. Google/Supabase permanece pendiente; no es una función de esta entrega.
+Recuperar el buzón con su proveedor. Un comprobante vecinal no transfiere la cuenta. Si la sesión venció, volver a entrar y consultar el estado antes de repetir una acción. Retomar destinos internos completos, recuperación MFA ya tiene backend probado; pantalla y restauración integral siguen pendientes. Google/Supabase permanece pendiente; no es una función de esta entrega.
 
 ## 8. Archivos privados B09
 
@@ -93,3 +93,20 @@ APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk
 ![Salida Android](capturas/android/05-sesion-cerrada.png)
 
 Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS siguen pendientes. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.
+
+## 9. Revisar recuperación de operadores en el IDE
+
+El backend está disponible localmente; todavía no hay pantalla nueva aprobada. Abrir docs/apis/M1/swagger.html para ver las siete operaciones y sus entradas/respuestas. Este visor no envía solicitudes ni concede permisos. El [resultado real](../../../tests/results/recovery-api.json) registra el recorrido probado con dos operadores ficticios; el [contrato explicado](../../apis/M1/CONTRATO_RECUPERACION_MFA.md) detalla controles y límites.
+
+| Paso | Quién | Qué sucede |
+|---|---|---|
+| 1. Solicitar | Titular, correo recién verificado | POST /v1/auth/mfa-recoveries; recibe ID y estado |
+| 2. Consultar | Titular o administrador autorizado con segundo factor | GET /v1/auth/mfa-recoveries/{id}; muestra estado y versión |
+| 3. Revisar | Otro administrador vigente, acceso reciente y segundo factor | POST .../{id}/approvals o .../{id}/rejections; nunca autorrevisión |
+| 4. Recuperar proveedor | Trabajador del backend | Revoca accesos y elimina solo el factor perdido; ante caída conserva tarea pendiente |
+| 5. Entrar de nuevo | Titular | Verifica mismo buzón; POST .../{id}/capabilities obtiene permiso temporal ligado a esta sesión |
+| 6. Preparar factor | Titular con capacidad | POST .../{id}/enrollments; configurar autenticador sin guardar captura de secreto/QR |
+| 7. Completar | Titular con capacidad y código actual | POST .../{id}/verifications; completa, consume capacidad y cierra sesiones |
+| 8. Volver a operar | Titular | Entra nuevamente por correo y verifica nuevo factor; correo solo no habilita al operador |
+
+Si el proveedor sigue pendiente por una credencial antigua, entrar nuevamente por correo y reenviar la solicitud continúa el mismo proceso. Capacidad vencida, cinco códigos fallidos o recuperación vencida no conceden acceso. La revisión visual y capturas de esta pantalla se harán después de aprobar su diseño; las capturas existentes no acreditan este flujo nuevo.

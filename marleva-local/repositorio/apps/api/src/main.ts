@@ -26,7 +26,24 @@ import { LocalPrivateStorage } from './modules/m1/infrastructure/adapters/local-
 import { IssueFileAccess } from './modules/m1/application/use-cases/issue-file-access.js';
 import { ReadPrivateFile } from './modules/m1/application/use-cases/read-private-file.js';
 import { DeletePrivateFile } from './modules/m1/application/use-cases/delete-private-file.js';
+import { MfaRecoveryController } from './modules/m1/presentation/controllers/mfa-recovery.controller.js';
+import { PrismaRecoveryRepository } from './modules/m1/infrastructure/repositories/prisma-recovery-repository.js';
+import { SupabaseRecoveryProvider } from './modules/m1/infrastructure/adapters/supabase-recovery-provider.js';
+import { LocalRecoverySecrets } from './modules/m1/infrastructure/adapters/recovery-secrets.js';
+import { RecoveryContext } from './modules/m1/application/use-cases/recovery-context.js';
+import { RequestMfaRecovery } from './modules/m1/application/use-cases/request-mfa-recovery.js';
+import { ReadMfaRecovery } from './modules/m1/application/use-cases/read-mfa-recovery.js';
+import { ReviewMfaRecovery } from './modules/m1/application/use-cases/review-mfa-recovery.js';
+import { IssueRecoveryCapability } from './modules/m1/application/use-cases/issue-recovery-capability.js';
+import { EnrollRecoveryFactor } from './modules/m1/application/use-cases/enroll-recovery-factor.js';
+import { VerifyRecoveryFactor } from './modules/m1/application/use-cases/verify-recovery-factor.js';
+import { ProcessMfaRecoveries } from './modules/m1/application/use-cases/process-mfa-recoveries.js';
 const db = database();
+const recovery = new RecoveryContext(
+  new PrismaRecoveryRepository(db),
+  new SupabaseRecoveryProvider(),
+  new LocalRecoverySecrets(),
+);
 const files = new PrismaFileRepository(db);
 const storage = new LocalPrivateStorage();
 @Module({
@@ -35,8 +52,16 @@ const storage = new LocalPrivateStorage();
     HealthController,
     NotificationsController,
     PrivateFilesController,
+    MfaRecoveryController,
   ],
   providers: [
+    { provide: RequestMfaRecovery, useFactory: () => new RequestMfaRecovery(recovery) },
+    { provide: ReadMfaRecovery, useFactory: () => new ReadMfaRecovery(recovery) },
+    { provide: ReviewMfaRecovery, useFactory: () => new ReviewMfaRecovery(recovery) },
+    { provide: IssueRecoveryCapability, useFactory: () => new IssueRecoveryCapability(recovery) },
+    { provide: EnrollRecoveryFactor, useFactory: () => new EnrollRecoveryFactor(recovery) },
+    { provide: VerifyRecoveryFactor, useFactory: () => new VerifyRecoveryFactor(recovery) },
+    { provide: ProcessMfaRecoveries, useFactory: () => new ProcessMfaRecoveries(recovery) },
     { provide: IssueFileAccess, useFactory: () => new IssueFileAccess(files) },
     { provide: ReadPrivateFile, useFactory: () => new ReadPrivateFile(files, storage) },
     { provide: DeletePrivateFile, useFactory: () => new DeletePrivateFile(files) },
@@ -95,7 +120,7 @@ export async function makeApp() {
 if (process.env.MARLEVA_TEST !== '1') {
   const app = await makeApp();
   await app.listen(3000, '127.0.0.1');
-  const stop = startWorker(db, app.get(AccountService));
+  const stop = startWorker(db, app.get(AccountService), app.get(ProcessMfaRecoveries));
   async function close() {
     stop();
     await app.close();

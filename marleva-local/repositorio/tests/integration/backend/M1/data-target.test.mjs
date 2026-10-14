@@ -79,6 +79,11 @@ beforeAll(async () => {
   if (!result.ok) throw new Error('SQL objetivo inválido: ' + result.error);
   expect(
     sql(
+      `ALTER TABLE marleva."MfaRecovery" ALTER COLUMN "requestKey" SET DEFAULT gen_random_uuid()::text, ALTER COLUMN "requestHash" SET DEFAULT repeat('a',64);`,
+    ).ok,
+  ).toBe(true);
+  expect(
+    sql(
       `INSERT INTO marleva."Account"(id,"authId",email) VALUES ('${a}','${a}','a@example.test'),('${b}','${b}','b@example.test');`,
     ).ok,
   ).toBe(true);

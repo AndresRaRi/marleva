@@ -1,14 +1,12 @@
-# OBJETIVO DOCUMENTAL, no implementación. Leer DATA002/SEQ014/matriz antes de desarrollar.
 openapi: 3.1.1
 info:
-  title: Marleva M1 recuperación MFA objetivo
-  version: 0.2.0
-  description: "PROPUESTA DOCUMENTAL, no endpoints implementados. No publicar ni
-    aplicar como contrato actual. ModeloDATA002, UC014/SEQ014. Mantener C15:
-    ningún comprobante de residencia transfiere cuentas. Reenrolamiento
-    documentado completo como objetivo local; todavía NO implementado.
-    Aprobación expira24h; capacidad10min de un uso vinculada a cuenta/sesión
-    nueva. Nunca sustituye control del buzón."
+  title: Marleva M1 recuperación MFA local
+  version: 0.3.0
+  description: Contrato integrado de recuperación MFA, UC014/SEQ014, backend
+    local. Aprobación por otro administrador vigente; recuperación no transfiere
+    cuentas ni concede roles. Buzón verificado de nuevo, capacidad de diez
+    minutos ligada a sesión, flujo de 24 horas. Pantallas y aceptación
+    pendientes.
 servers:
   - url: https://localhost:8443
 paths:
@@ -17,11 +15,13 @@ paths:
       operationId: MAR_M1_API_015
       description: Titular con sesiónOTP reciente solicita. Un proceso activo por
         cuenta; cuerpo reason acotado. No requiere AAL2 del factor perdido ni
-        concede permiso.
+        concede permiso. Un titular con OTP nuevo puede reanudar el proceso
+        provider_pending sin crear otro; credencial cifrada de tarea
+        actualizada. Detalle en CONTRATO_RECUPERACION_MFA.md.
       security:
         - cookieSession: []
         - mobileSession: []
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       responses:
@@ -258,7 +258,7 @@ paths:
       security:
         - cookieSession: []
         - mobileSession: []
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       responses:
@@ -474,7 +474,7 @@ paths:
       security:
         - cookieSession: []
         - mobileSession: []
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       responses:
@@ -714,7 +714,7 @@ paths:
       description: Titular con nuevo OTP reciente posterior a revocación.
         State=reenrollment; emisión única10min ligada a sesión; reemitir
         invalida anterior. No permiso para roles/otros recursos.
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       parameters:
@@ -935,7 +935,7 @@ paths:
       description: Sesión titular y capacidad vigente ligada; un factor por
         recuperación; idempotencia/conciliación tras caídas. SDK Auth estándar
         en servidor; respuesta privada no-store, nunca logs.
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       parameters:
@@ -1159,7 +1159,7 @@ paths:
         Cinco fallos invalidan capacidad y exigen nuevo OTP/capacidad. Provider
         verifica/AAL; completar una sola vez, revocar sesiones y capacidad;
         nuevoOTP/AAL2 para operar.
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       parameters:
@@ -1390,7 +1390,7 @@ paths:
       description: Otro administrador actual/AAL2/reciente sin conflicto rechaza solo
         requested; motivo acotado auditado. No cancela a ciegas tarea externa ya
         ejecutando.
-      x-implementation-status: planned
+      x-implementation-status: implemented-local
       x-use-case-id: MAR-M1-UC-014
       x-sequence-id: MAR-M1-SEQ-014
       parameters:

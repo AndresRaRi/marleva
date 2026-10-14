@@ -7,7 +7,7 @@ Table marleva.Account {
  authId uuid [not null, unique, note: 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.']
  email text [not null, unique]
  state text [not null, default: 'active']
- legacyOperator boolean [not null, default: false, note: 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.']
+ operator boolean [not null, default: false, note: 'Proyección compatible de RoleAssignment; no autoridad independiente ni autoasignación.']
  createdAt timestamptz [not null, default: `now()`]
 }
 Table marleva.Session {
@@ -119,6 +119,13 @@ Table marleva.MfaRecovery {
  state marleva.RecoveryState [not null, default: 'requested']
  reason text [not null, note: 'Motivo acotado sin OTP, secreto TOTP o expediente vecinal.']
  providerReference text
+ requestKey text [not null]
+ requestHash text [not null]
+ approvedAt timestamptz
+ operations jsonb [not null, default: `'{}'::jsonb`, note: 'Resultados idempotentes estructurados; respuestas privadas solo cifradas y vigentes.']
+ providerState jsonb [not null, default: `'{}'::jsonb`, note: 'Referencias estables y tarea durable; tokens solo cifrados.']
+ leaseToken uuid
+ leaseUntil timestamptz
  capabilitySessionId uuid [note: 'Sesión nueva del titular tras revocación; ningún permiso administrativo.']
  capabilityExpiresAt timestamptz
  capabilityAttempts integer [not null, default: 0]
@@ -129,7 +136,10 @@ Table marleva.MfaRecovery {
  expiresAt timestamptz [not null]
  completedAt timestamptz
  version integer [not null, default: 1]
- indexes { (accountId, state) }
+ indexes {
+  (accountId, state)
+  (accountId, requestKey) [unique, name: 'MfaRecovery_accountId_requestKey_key']
+ }
 }
 Table marleva.PrivateFixture {
  id uuid [pk, not null, default: `gen_random_uuid()`]
@@ -188,3 +198,11 @@ Table marleva.FixtureDeletion {
 Ref FixtureAccess_fixture_owner: marleva.FixtureAccess.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)
 Ref FixtureAccess_session_owner: marleva.FixtureAccess.(sessionId, accountId) > marleva.Session.(id, accountId)
 Ref FixtureDeletion_fixture_owner: marleva.FixtureDeletion.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)
+
+Ref RoleAssignment_account: marleva.RoleAssignment.accountId > marleva.Account.id
+Ref RoleAssignment_granted: marleva.RoleAssignment.grantedBy > marleva.Account.id
+Ref RoleAssignment_revoked: marleva.RoleAssignment.revokedBy > marleva.Account.id
+Ref Recovery_account: marleva.MfaRecovery.accountId > marleva.Account.id
+Ref Recovery_requester: marleva.MfaRecovery.requestedBy > marleva.Account.id
+Ref Recovery_approver: marleva.MfaRecovery.approvedBy > marleva.Account.id
+Ref Recovery_capability_session: marleva.MfaRecovery.capabilitySessionId > marleva.Session.id [delete: no action, update: no action]

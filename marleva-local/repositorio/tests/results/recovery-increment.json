@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-14T22:17:33.129076+00:00",
+  "scope": "UC014 backend integrado y migración local",
+  "quality": {
+    "typecheck": true,
+    "lint": true,
+    "format": true
+  },
+  "unit": {
+    "passed": 87,
+    "failed": 0
+  },
+  "schema": {
+    "passed": 12,
+    "failed": 0
+  },
+  "regression": {
+    "api": 12,
+    "outbox": 5
+  },
+  "coverage": {
+    "lines": 94.21,
+    "branches": 88.66,
+    "statements": 92.28,
+    "functions": 94.91
+  },
+  "runtime": {
+    "origin": "127.0.0.1:54322",
+    "businessTables": 13,
+    "migrations": 5,
+    "apiRestarted": true
+  },
+  "httpEvidence": "recovery-api.json",
+  "migrationEvidence": "recovery-schema.json",
+  "failures": [
+    {
+      "case": "Primera repetición HTTP",
+      "cause": "Control nuevo devuelve 409, prueba esperaba 403",
+      "correction": "Expectativa actualizada, recorrido completo repetido PASS"
+    },
+    {
+      "case": "Outbox sin habilitación",
+      "cause": "Gate local faltante; ninguna prueba ejecutada",
+      "correction": "MARLEVA_OUTBOX_CHECK=1; cinco PASS"
+    },
+    {
+      "case": "SQL con sandbox",
+      "cause": "Docker no accesible dentro del sandbox",
+      "correction": "Repetido con permiso local, doce PASS"
+    }
+  ],
+  "limits": [
+    "Cinco fallos, expiración y leases adicionales se verifican con reloj unitario; no toda variante tiene ensayo Auth real",
+    "UI, plataformas, aceptación y restauración integral pendientes",
+    "Lectura final de fuentes extensas y derivados parcialmente cotejada; no afirmar revisión completa de todo el repositorio"
+  ]
+}

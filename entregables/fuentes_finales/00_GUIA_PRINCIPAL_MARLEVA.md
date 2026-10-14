@@ -57,7 +57,7 @@ Cambiar solo lo afectado, con motivo y fecha necesarios. No copiar reglas entre 
 
 Palabras comunes, frases cortas y nombres claros. Separar confirmado, propuesto, pendiente y no verificado. No inventar cifras, resultados, acceso o aprobaciones. Consultar fuentes primarias para decisiones técnicas y verificar información cambiante cuando afecte una decisión. Registrar fecha, mercado, límites y consecuencia; no extrapolar otro país.
 
-Informar al terminar cada tarea o ante un bloqueo. Las actualizaciones no piden otra aprobación para tareas ordinarias. Un chat abierto o un turno terminado no garantiza ejecución continua. El formato de respuesta está únicamente en §14.
+Informar al terminar cada tarea o ante un bloqueo. El resultado debe ir primero en lenguaje sencillo; después, los detalles técnicos. Si una tarea supera el doble de su estimación, avisar con opciones antes de continuar. Las actualizaciones no piden otra aprobación para tareas ordinarias. Un chat abierto o un turno terminado no garantiza ejecución continua. El formato de respuesta está únicamente en §14.
 
 ## 5. Referentes
 
@@ -69,7 +69,7 @@ Comparar experiencias, operaciones, pagos, acceso y generación de ingresos para
 
 Conservar C01–C26, A0 y autorización del SDK Android. La programación base/M1 local con fixtures está autorizada; no pedirla de nuevo. Google/Supabase permanece pendiente. M2–M10 completos, dinero/datos reales, contactos, contratación, cuentas externas, publicación y despliegue no quedan autorizados por resolver una tarea técnica. El push al repositorio indicado por el usuario es sincronización del proyecto, no despliegue.
 
-Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio.
+Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio. Terminar un turno solo con cola vacía, bloqueo real o decisión pendiente del usuario; indicar el motivo. Si queda trabajo autorizado ejecutable, continuar.
 
 Considerar negocio, operación, ingeniería, seguridad, privacidad, accesibilidad, soporte y obligaciones mexicanas cuando afecten el caso. Antes de operar: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, responsables y soporte. Demografía no se reabre. Ideas que amplían alcance van a pendientes para después en 01.
 
@@ -143,7 +143,9 @@ Solo cambia la fuente afectada por una decisión, diseño, evidencia o correcci�
 
 Al iniciar o retomar: comprobar raíz, rama, HEAD, cambios locales, upstream y origin; ejecutar git pull --ff-only de la rama de trabajo. Nunca resetear ni descartar cambios; ante divergencia conservar trabajo y resolver. En una rama nueva sin upstream o un remoto vacío, comprobar referencias/fetch y crear seguimiento al primer push; no inventar un pull exitoso.
 
-Al cerrar: verificar compilación, pruebas, reglas/documentos/README, enlaces, diff e ignorados; commit claro y push de la rama de trabajo. Comprobar SHA local/remoto. No incorporar modificaciones ajenas ni originales sincronizados al commit propio. Commits pequeños Conventional Commits: tipo(módulo/caso): resultado. Ramas codex/feat-… o codex/fix-…; main estable y revisión de §7 antes de integrar. Versiones de releases con SemVer, distintas del historial documental.
+Después de pasar las pruebas de cada incremento pequeño, commit y push inmediatos; informar el SHA real, nunca uno anunciado sin existir. Esto reduce pérdidas ante cortes de uso. Priorizar lo que acerca al piloto y lo que el usuario puede ver o probar.
+
+Al cerrar: verificar compilación, pruebas, reglas/documentos/README, enlaces, diff e ignorados; commit claro y push de la rama de trabajo. Comprobar SHA local/remoto. No incorporar modificaciones ajenas ni originales sincronizados al commit propio. Commits pequeños Conventional Commits: tipo(módulo/caso): resultado. Ramas codex/feat-… o codex/fix-…; main es la rama principal del remoto activo. Flujo rama → PR → CI → merge, con revisión de §7 antes de integrar. Prohibido push --force, reset --hard o rebase sobre ramas subidas; actualizar ramas publicadas mediante merge. Versiones de releases con SemVer, distintas del historial documental.
 
 Integración continua en GitHub Actions: lint → pruebas → build, sin despliegue. Falla bloquea integración. Sonar y cobertura se validan conforme §9; no sustituir pruebas ni publicar secretos para ejecutar el pipeline. No crear despliegue/cloud/piloto por hacer push.
 
@@ -151,4 +153,4 @@ Integración continua en GitHub Actions: lint → pruebas → build, sin desplie
 
 Cada respuesta y aviso comienza con tres líneas en cita: área/módulo/tarea; implementación del módulo y proyecto desde docs/avance.md con barra de diez bloques; estado/fase. Si falta cálculo, escribir Por calcular. Áreas: Backend⚙️, Frontend🎨, UX/UI✨, Base de datos🗄️, Seguridad🔐, Calidad y pruebas🧪, DevOps🚀, Infraestructura🏗️, Investigación🔍, Arquitectura y diagramas📐, Documentación📚, Configuración del proyecto🛠️, Configuración de ChatGPT🤖 y Planeación🗺️. Principal primero; otras solo si ayudan.
 
-Estados: En progreso🔄, Terminado✅, Esperando tu aprobación⏸️, Necesito información❓, Bloqueado⚠️. Fases: Auditoría, Plan, Ejecución, Revisión, Cierre de sesión. Cerrar cada respuesta con Siguiente paso y Necesito de ti; FIN solo según §10. Documentos sin adornos innecesarios; respuestas usan los iconos pedidos por el usuario.
+Estados: En progreso🔄, Terminado✅, Esperando tu aprobación⏸️, Necesito información❓, Bloqueado⚠️. Fases: Auditoría, Plan, Ejecución, Revisión, Cierre de sesión. Cerrar cada respuesta con Siguiente paso y Necesito de ti; si el usuario tiene acciones pendientes, añadir Tus pendientes; FIN solo según §10. Documentos sin adornos innecesarios; respuestas usan los iconos pedidos por el usuario.

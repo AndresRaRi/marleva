@@ -410,10 +410,34 @@ export class AccountService {
     });
     return { csrf_token: value };
   }
+  private async noActiveRecovery(accountId: string) {
+    const active = await this.db.mfaRecovery.findFirst({
+      where: {
+        accountId,
+        state: { in: ['requested', 'approved', 'executing', 'provider_pending', 'reenrollment'] },
+        expiresAt: { gt: new Date() },
+      },
+    });
+    const latest = await this.db.mfaRecovery.findFirst({
+      where: { accountId, approvedBy: { not: null } },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (active || (latest && latest.state !== 'completed'))
+      fail(409, 'RECUPERACION_ACTIVA', 'Continúa el proceso de recuperación');
+  }
   async enroll(p: Principal) {
     if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso de operador');
     this.recent(p);
+    await this.noActiveRecovery(p.account.id);
     const { client } = await authenticatedIdentity(p.tokens);
+    const factors = await client.auth.mfa.listFactors();
+    if (factors.error || !factors.data)
+      fail(503, 'DEPENDENCIA', 'No pudimos consultar tus factores');
+    if (factors.data.totp.some((factor) => factor.status === 'verified')) {
+      const assurance = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (assurance.error || assurance.data?.currentLevel !== 'aal2')
+        fail(403, 'MFA', 'Verifica tu segundo factor antes de agregar otro');
+    }
     const { data, error } = await client.auth.mfa.enroll({
       factorType: 'totp',
       friendlyName: 'Marleva local',
@@ -426,6 +450,7 @@ export class AccountService {
     if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso');
     this.recent(p);
     const { client } = await authenticatedIdentity(p.tokens);
+    await this.noActiveRecovery(p.account.id);
     const { data, error } = await client.auth.mfa.challengeAndVerify({
       factorId: uuid(factorId),
       code: code(otp),
@@ -439,6 +464,7 @@ export class AccountService {
     return { estado: 'factor_verificado' };
   }
   async operator(p: Principal) {
+    await this.noActiveRecovery(p.account.id);
     if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso de operador');
     this.recent(p);
     const { client } = await authenticatedIdentity(p.tokens);

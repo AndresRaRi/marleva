@@ -1,6 +1,6 @@
 {
   "id": "MAR-M1-PF-BE-108-W",
-  "date": "2026-10-14T21:07:53.704Z",
+  "date": "2026-10-14T22:13:36.853Z",
   "scope": "Disposable PG17 + actual SMTP capture; one-message warmup,30fictitious jobs,two concurrent workers; no HTTP/production capacity claim",
   "versions": {
     "node": "v24.21.0",
@@ -9,14 +9,14 @@
   },
   "jobs": 30,
   "concurrency": 2,
-  "durationMs": 113.07554100000016,
-  "jobsPerSecond": 265.30936517915893,
+  "durationMs": 156.28049999999985,
+  "jobsPerSecond": 191.9625289143561,
   "batchesMs": [
-    41.897791000000325,
-    36.288165999999364,
-    30.85095899999942
+    49.838957999999366,
+    63.66533299999992,
+    37.82299999999941
   ],
-  "nodeRss": 191905792,
+  "nodeRss": 207994880,
   "correct": true,
   "threshold": "Proportional smoke measurement; no approved production latency threshold",
   "cleanup": "afterAll removes only identified disposable PostgreSQL container"

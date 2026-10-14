@@ -495,3 +495,5 @@ Consultas primarias 13–14 de octubre de 2026; describen criterios, no certific
 | [RFC9457](https://www.rfc-editor.org/rfc/rfc9457) | Errores interoperables; transición compatible pendiente porque cliente vigente usa mensaje/código propios |
 
 CI de GitHub Actions previsto: lint→pruebas→build, sin despliegue. Sonar y revisión de arquitectura/seguridad completos siguen abiertos. El porcentaje funcional no se replica aquí; consultar docs/avance.md.
+
+Evidencia UC014, 14-10-2026: [migración de roles/recuperación](../../marleva-local/repositorio/tests/results/recovery-schema.json) y [siete operaciones HTTP reales](../../marleva-local/repositorio/tests/results/recovery-api.json). PostgreSQL/Supabase locales aislados, actores ficticios; no pantallas, aceptación ni B12 integral. Las variantes con reloj controlado se identifican en la matriz, sin atribuirlas al proveedor real.

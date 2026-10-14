@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-14T20:42:11.314705+00:00",
+  "date": "2026-10-14T22:17:33.129076+00:00",
   "timezone": "America/Merida",
   "root": "/Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a",
   "chat": "MAR-CHAT-005",
@@ -2535,5 +2535,317 @@
     }
   ],
   "previousInventoryDate": "2026-10-14T19:17:12.000Z",
-  "limits": "Inventario actualizado después de corrección documental. Fuentes00-03 e instrucciones releídas en partes; lectura general restante parcial. Secretos/dependencias/ignorados excluidos."
+  "limits": "Inventario de continuación UC014; lectura general parcial. Archivos nuevos inventariados; no atribuir lectura completa por hash. Secretos, dependencias y binarios excluidos.",
+  "continuationChanges": [
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql",
+      "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/recovery-provider.ts",
+      "sha256": "7e30f39940b42c954c9699eb3ca221bec2d4416ce2e379a8558ebc5a192b07f4",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/recovery-repository.ts",
+      "sha256": "b0ea8ea2fb08cca2c0909c535070fde62fc91138c5eb65147ec4a4325c66ed2e",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/enroll-recovery-factor.ts",
+      "sha256": "2b9faeff7ff2ef8456d2f2d9afd75555c66f6a84652b136296dc167bd9e04dcc",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/issue-recovery-capability.ts",
+      "sha256": "479249c4002cea10756aa0fe0b72906d34540d187b1920b9e62a060e8546b4d2",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/read-mfa-recovery.ts",
+      "sha256": "0063c15628cf53c5db445ef04e51b3a03fe4d94b2fc420dcdb3fa4a427586943",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/recovery-context.ts",
+      "sha256": "db7eeaaef58706c8567869f2a68b7cb36d6060f6abdecdd3574ac93263bf8dda",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/request-mfa-recovery.ts",
+      "sha256": "7880a2637e3f6e37a7b632b711f3828cd202c0b5da13be36d2c281a5cf865b17",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/review-mfa-recovery.ts",
+      "sha256": "3b93c72ae964d2a2345d1d375b0c7fa0654762b92cf2ee5edcfbb49e703af8fd",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/verify-recovery-factor.ts",
+      "sha256": "cd43ab010e666e7345dbcf6e1d40aaa1c24bf9b439c744eda72e425d62c58783",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/domain/entities/mfa-recovery.ts",
+      "sha256": "a9531787adb9572156352bd15a53af0a5a8846bd9c470c2a02e80fa8d05401fc",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters/recovery-secrets.ts",
+      "sha256": "4a583031e792676cc6c5bbe7c963797c527ed874d13fc5a7635f5a5f2ffeabcb",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters/supabase-recovery-provider.ts",
+      "sha256": "16579a21cf7c5473eb913be0783f1bad0659014e41c94d801360a9dd154e1767",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/repositories/prisma-recovery-repository.ts",
+      "sha256": "2ecae292979cc5842ba97979ae46f8a6b4ca04eeeb68b3adc36e7053e48f2851",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/controllers/mfa-recovery.controller.ts",
+      "sha256": "e10cab5e634c3c78ba5341bef2ae563a137178ed33336500e978d34c9cdd3a1c",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/presentation/dtos/recovery-request.ts",
+      "sha256": "70c2292784f1608019758843e09044295780889268886470c3c44a09743bfd8e",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/scripts/recovery-constraints.mjs",
+      "sha256": "ac3c1d8718f4d2de95196cd7e58c12c40ef1742ebee66c0fecf7cb02167bfb12",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-api.mjs",
+      "sha256": "b6b3971f5514b9b109afee2e4d6801baba219bdd959e60ea0db651259f04c4a9",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-migration-schema.mjs",
+      "sha256": "c941603677e7dcef160006a214712d9db78fbe3dca5cd50e03da2c8b43ab992d",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-api-failure.json",
+      "sha256": "dcefccf5d33d987697b52c222bb2fe49e606eaab4a97379960b4c5cd90d458b8",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-api.json",
+      "sha256": "fc473ad0070e69efe40835ce6a73c081373fa1138320405c1df22ba6cf4fceb1",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-increment.json",
+      "sha256": "f17cfed672b9cef46d259e4c4e2d9b05cfe395ba6690c7819c3a616f4e7163ea",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-schema.json",
+      "sha256": "526a71148da2bbba785cf1a2caaaa5944df7b09dcd1462413a72f4f03b3374ef",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/unit/backend/M1/mfa-recovery.test.mjs",
+      "sha256": "08d9ee64a7662af78da4d7aba39c475f2e1b11d8921010a7748ac855ce4c6c83",
+      "reading": "N"
+    },
+    {
+      "path": "entregables/fuentes_finales/00_GUIA_PRINCIPAL_MARLEVA.md",
+      "sha256": "25c3735747d84f62f5bc314bcff118e0babe039ebffdd46e48c2e4dd47bf1090",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/ports/recovery-review.ts",
+      "sha256": "e93806e355f10d1744f9093a909bb5a6b4c3e6d7b0d93999fb50951d4822f3c0",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/application/use-cases/authorize-recovery-review.ts",
+      "sha256": "278edf38051b83a1b4a938a39c848cce32eaf38f8017a3f02d6ad0a7ca75f17c",
+      "reading": "C"
+    },
+    {
+      "path": "marleva-local/repositorio/docs/avance.md",
+      "sha256": "43d7af773857b3b9d909ea1ecc6e779edbe1288e56b6ee09ac8898381bdddf24",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-fixtures.mjs",
+      "sha256": "42abfe2a33eba987fa4cb1633bda33056a852570b2367dcd28832881f49262e1",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-guard.mjs",
+      "sha256": "bc84761ddd42ac390a5c57cecdd38c0f32ff1be52fc96b21859e889bd0bf02d9",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-keys.mjs",
+      "sha256": "0052937857fea9aaa2524b1e15792f313f509fe8b788632efafcbef618fcfa70",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-repair-metadata.mjs",
+      "sha256": "1f565e4898856ee1e2dc431f6ebe4d2f73fd2cbd07b5e506960fe1546ea49742",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-stack.mjs",
+      "sha256": "dc65e6067d2f242d8c6110a8b7e770b9b31454362b4b96e04d05263d1a293a95",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/fixtures/recovery-xattrs.mjs",
+      "sha256": "13d4242fc8d6ceccd9fff0a9b6d0864a6480c1bd45877cee702ebc9ca258cb19",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-after-copy.mjs",
+      "sha256": "6ffb39bd4e5f38d6368c507395f8867f34252aaa3f57586dd3c008278a12fefa",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-copy.mjs",
+      "sha256": "7613d010c6453422813e117256aa1ec8e1bafef6e7ac6b8370f06aa80114de72",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-migration.mjs",
+      "sha256": "83a8f9e07d645a3c8510eda0d3a4065f5cd3f0ae043c466478dcafdfa96c4fe6",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-operator.mjs",
+      "sha256": "923a6be9971782322d0f901bcc66081c0f9e3d6917cc517beb896e97eec2bf84",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-outbox.mjs",
+      "sha256": "c59c2439fe7b2298320cd549cf399e7d7cf031f8be96871e9b50d3fb912495e7",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-provider.mjs",
+      "sha256": "c70dc7f10706ca038dc098db0dc33aecdff6f9750b657b7e430a52165c27cd5a",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-source.mjs",
+      "sha256": "108724f250935e1442c55c822e92c8424ed89d613b1da9ba66b2c43215130e01",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/integration/backend/M1/recovery-xattrs.mjs",
+      "sha256": "e874fd917c5cc2dba58dd7fc95d2c33d708488e27278185c914aa1946a12dd5e",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-after-copy.json",
+      "sha256": "76a1b49ce247ff186b5a7c0e2a89cadf8a3368ed3a47f80c7579caf79721c99a",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-copy-empty-baseline.json",
+      "sha256": "467a2eaece27107e3f79c03f0b2b1bb05d5310400e5ab4daaf690c98da69d242",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-copy-with-attributes.json",
+      "sha256": "95984b2e47e86a52f6985d80359396c3ff3f62c260b22a5a9ea1a0413ee0d081",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-copy.json",
+      "sha256": "447bb43541f682da89e9a39450a1009e3160641747ef74a37d5d1f94bd7f0d96",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-fixture-failure.json",
+      "sha256": "455b6f4c15f685c611ff7572cf742d8714366ca107ebfec0837bc45206338feb",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-guard-unit.json",
+      "sha256": "46ad2f9fe9822445fcdf472a99dc1e8a29038792f1d695b5e4e88727e4d1b7d4",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-metadata-repair.json",
+      "sha256": "f0e0803b9e303b4af448d7dcaae8e86d94c3563e18217be02e40ecec261775db",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-migration.json",
+      "sha256": "4baf3f920fcdc64931ea1c5fc3a7133c67d0e621c6effcf915346243b9ee9d7a",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-operator-provider.json",
+      "sha256": "b0c7fd98c0ed3cb40ed75d5634145bab53755b3219f7cdb3c937dfa60c7fe0b8",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-outbox-failure.json",
+      "sha256": "a20051b12ebdaf788a09fd13d9e822a2dd02739343432b11e14e909130f4f804",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-outbox.json",
+      "sha256": "311c795344f9047b595c5d67a6f169c92fe85f286bc6c86ac6057a1a62c49276",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-provider-failure.json",
+      "sha256": "b6c9a91d48e204e6a35a556223da1927ce161c86cba52d4d3b90c669af720db7",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-provider.json",
+      "sha256": "a424ee524ec0e832a941a2831bea5e361768d96c1b75a21c253af30175904f7d",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-source.json",
+      "sha256": "fd63a93764b34ee17e57e524107597eedabb6c2108dc07fadfb78d7243af2651",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-stack-failure.json",
+      "sha256": "5b7ca4cee065b28c917c042971d759fae8b6e66a12f43a4ecf6637048c3c418b",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-stack.json",
+      "sha256": "84a75ed62219daeba40934bbd7fc0a4aa45786307320882b40ed7884d51a4782",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-unit.json",
+      "sha256": "26b7dacad9dfd76a86a4367ddc17217b6102b96cab4e2eee5dc53edd1b501467",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/results/recovery-xattrs.json",
+      "sha256": "72bcc830fa9a0549b43f0ced73480b311fb7aba3c1fec8c3c37c3d4b52c9aafc",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/unit/backend/M1/recovery-guard.test.mjs",
+      "sha256": "8977942c1cbba155ca7948bd31a6ea129361d5f84ee6d120fb5dec474a1de28a",
+      "reading": "N"
+    },
+    {
+      "path": "marleva-local/repositorio/tests/unit/backend/M1/recovery-review.test.mjs",
+      "sha256": "4741ab23b264b18330c0b749660c1d653ba992fb22ded68fc07d11af589dc16d",
+      "reading": "N"
+    }
+  ]
 }

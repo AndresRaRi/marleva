@@ -80,10 +80,16 @@ beforeEach(() => {
     expiresAt: new Date(Date.now() + 600000),
   };
   database = Object.fromEntries(
-    ['account', 'session', 'challenge', 'emailChange', 'audit', 'notice', 'outbox'].map((name) => [
-      name,
-      model(),
-    ]),
+    [
+      'account',
+      'session',
+      'challenge',
+      'emailChange',
+      'audit',
+      'notice',
+      'outbox',
+      'mfaRecovery',
+    ].map((name) => [name, model()]),
   );
   database.$executeRaw = vi.fn();
   database.$transaction = vi.fn((fn) => fn(database));
@@ -112,6 +118,7 @@ beforeEach(() => {
     .mockResolvedValue({ data: { session: tokens }, error: null });
   fixture.auth.updateUser = vi.fn().mockResolvedValue({ error: null });
   fixture.auth.mfa = {
+    listFactors: vi.fn().mockResolvedValue({ data: { totp: [] }, error: null }),
     enroll: vi.fn().mockResolvedValue({ data: { id, totp: { uri: 'fixture-only' } }, error: null }),
     challengeAndVerify: vi.fn().mockResolvedValue({ data: tokens, error: null }),
     getAuthenticatorAssuranceLevel: vi
@@ -394,4 +401,29 @@ it('UT-BE-107-B | operador exige factor válido y AAL2; auditoría de verificaci
   });
   await expect(service.operator(principal)).rejects.toMatchObject({ status: 403 });
   expect((await service.operator(principal)).estado).toBe('operador_autenticado');
+});
+
+it('UT-BE-114 | recuperación aprobada vencida impide saltar el proceso', async () => {
+  account.operator = true;
+  database.mfaRecovery.findFirst.mockResolvedValue({ state: 'expired', approvedBy: id });
+  await expect(service.enroll(principal)).rejects.toMatchObject({ status: 409 });
+  await expect(service.verifyFactor(principal, id, '123456')).rejects.toMatchObject({
+    status: 409,
+  });
+  await expect(service.operator(principal)).rejects.toMatchObject({ status: 409 });
+  expect(fixture.auth.mfa.enroll).not.toHaveBeenCalled();
+  expect(fixture.auth.mfa.challengeAndVerify).not.toHaveBeenCalled();
+});
+it('UT-BE-114 | agregar un segundo factor requiere AAL2', async () => {
+  account.operator = true;
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: { totp: [{ status: 'verified' }] },
+    error: null,
+  });
+  fixture.auth.mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({
+    data: { currentLevel: 'aal1' },
+    error: null,
+  });
+  await expect(service.enroll(principal)).rejects.toMatchObject({ status: 403 });
+  expect(fixture.auth.mfa.enroll).not.toHaveBeenCalled();
 });

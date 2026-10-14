@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-14T21:37:30.854Z",
+  "id": "MAR-M1-IT-BE-114-MIGRATION",
+  "cases": {
+    "existingOperatorAndAccountPreserved": true,
+    "booleanProjectionCannotGrantOrHideActiveRole": true,
+    "thirteenBusinessTables": true,
+    "appliedOriginalHashesUnchanged": true
+  },
+  "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108",
+  "hashes": {
+    "202610120001_m1": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "202610120002_m1_tables": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c",
+    "202610130001_notice_cursor": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b",
+    "202610130002_private_fixtures": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0"
+  },
+  "result": "PASS"
+}

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { exporter } from '@dbml/core';
 import SwaggerParser from '@apidevtools/swagger-parser';
+import { recoveryConstraints } from './recovery-constraints.mjs';
 import { privateFixtureConstraints } from './private-fixture-constraints.mjs';
 const root = path.resolve(new URL('..', import.meta.url).pathname);
 process.chdir(root);
@@ -19,7 +20,8 @@ await writeFile(
   '-- GENERADO desde MAR-M1-DATA-001.dbml. Solo revisión; no aplicar completo sobre base existente.\n' +
     ddl +
     privateFixtureConstraints +
-    '\n',
+    recoveryConstraints +
+    '',
 );
 const yamlPath = 'docs/apis/M1/openapi.yaml';
 let spec;
