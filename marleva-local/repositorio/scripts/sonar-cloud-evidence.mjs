@@ -4,7 +4,12 @@ import { randomBytes, scryptSync, createCipheriv } from 'node:crypto';
 export function encryptCloudEvidence(folder, token) {
   const files = ['summary.json', 'negative-rule.json'];
   for (const label of ['base', 'head', 'negative', 'corrected'])
-    files.push(label + '.log', label + '-profile.json', label + '-result/inventory.json');
+    files.push(
+      label + '.log',
+      label + '-task.json',
+      label + '-profile.json',
+      label + '-result/inventory.json',
+    );
   const contents = Object.fromEntries(
     files
       .filter((file) => existsSync(path.join(folder, file)))

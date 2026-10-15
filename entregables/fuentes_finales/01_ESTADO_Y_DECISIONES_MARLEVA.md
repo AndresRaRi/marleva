@@ -45,6 +45,8 @@ Decisión B12-PILOTO-A, 14-10-2026: el usuario respondió «Aprueno A». Exigir 
 
 No cuentas externas, gasto, despliegue, contratación, contactos, cobros ni datos/dinero reales. M2–M10 completos fuera de la etapa de implementación base/M1. Conservar siete desarrollos, privacidad, demografía pausada y Stripe como referencia documental revisable. Antes del piloto: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, revisores/soporte y pruebas.
 
+Excepción posterior expresa del usuario, 15-10-2026, solo Sonar: autoriza SonarQube Cloud en plan gratuito, crear/conectar cuenta y proyecto privado y enviar código para analizarlo, sin tarjeta ni gasto. Confirmó términos y permisos OAuth concretos mostrados por GitHub. Organización `andresrari-marleva` y proyecto `andresrari-marleva_marleva` comprobados Free/Private; conexión CI mediante secreto protegido. No amplía las otras operaciones externas ni autoriza merge a main. Diagnóstico, diseño, resultados y límites en ADR002; configuración no equivale a prueba completa.
+
 ## 3. Estado actual
 
 El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la única fuente de porcentajes; aquí se enlaza, no se replica.

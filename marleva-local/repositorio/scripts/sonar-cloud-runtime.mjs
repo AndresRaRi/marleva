@@ -1,3 +1,4 @@
+import { validateCloudTask } from './sonar-cloud-task.mjs';
 import { spawnSync } from 'node:child_process';
 import {
   mkdirSync,
@@ -135,7 +136,7 @@ export function copyCloudCoverage(from, folder) {
   mkdirSync(path.join(folder, 'coverage'), { recursive: true });
   copyFileSync(path.join(from, 'coverage/lcov.info'), path.join(folder, 'coverage/lcov.info'));
 }
-export async function completedAnalysis(token, taskId) {
+export async function completedAnalysis(token, taskId, context, persist) {
   const response = await fetch(
     'https://sonarcloud.io/api/ce/task?id=' + encodeURIComponent(taskId),
     {
@@ -145,14 +146,20 @@ export async function completedAnalysis(token, taskId) {
   );
   if (!response.ok) throw new Error('No se pudo comprobar tarea Cloud');
   const { task } = await response.json();
-  if (
-    task?.status !== 'SUCCESS' ||
-    !task.analysisId ||
-    task.warningCount !== 0 ||
-    !Array.isArray(task.warnings) ||
-    task.warnings.length > 0
-  )
-    throw new Error('Tarea Cloud incompleta o con advertencias');
+  persist({ task });
+  let binding;
+  if (context.pullRequest && task?.warnings?.length) {
+    const response = await fetch(
+      'https://sonarcloud.io/api/alm_integration/is_project_bound?' +
+        new URLSearchParams({ project: context.project }),
+      { headers: { Authorization: 'Bearer ' + token }, signal: AbortSignal.timeout(30000) },
+    );
+    if (!response.ok) throw new Error('No se pudo verificar vinculación Cloud');
+    binding = await response.json();
+  }
+  const classification = validateCloudTask(task, { ...context, binding });
+  persist({ task, binding, ...classification });
+  Object.assign(task, classification);
   return task;
 }
 export async function cloudProfile(token, manifest) {

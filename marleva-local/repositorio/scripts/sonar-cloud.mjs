@@ -74,7 +74,12 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     tokenFile,
     path.join(output, label + '.log'),
   );
-  const task = await completedAnalysis(token, scan.taskId);
+  const task = await completedAnalysis(
+    token,
+    scan.taskId,
+    { project: manifest.project, pullRequest },
+    (metadata) => save(path.join(output, label + '-task.json'), metadata),
+  );
   await verifyCloudRevision(token, manifest.project, pullRequest, task.id);
   const inventory = await cloudInventory(
     mcp,
@@ -101,6 +106,8 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     gate: inventory.gate.status,
     nativeConditions: inventory.gate.conditions,
     warnings: task.warningCount,
+    analysisWarnings: task.analysisWarnings,
+    integrationWarnings: task.integrationWarnings,
     issues: inventory.issues.length,
     hotspots: inventory.hotspots.length,
   };
