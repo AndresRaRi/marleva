@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/modules/m3/infrastructure/generated"
+}
+datasource db {
+  provider = "postgresql"
+  schemas = ["m3"]
+}
+// Column mappings for raw repositories. FK/checks/indexes are canonical in DATA001 + SQL;
+// use migrate deploy only, never db push or migrate dev against M1.
+model SellerEligibility {
+  id String @id @db.Uuid
+  owner_id String @db.Uuid
+  public_name String
+  membership_current Boolean
+  enabled Boolean
+  version Int @default(1)
+  updated_at DateTime @default(now()) @db.Timestamptz
+  @@schema("m3")
+}
+model Offer {
+  id String @id @db.Uuid
+  seller_id String @db.Uuid
+  paused Boolean @default(true)
+  revision Int @default(1)
+  public_version_id String? @db.Uuid
+  updated_at DateTime @default(now()) @db.Timestamptz
+  @@schema("m3")
+}
+model OfferVersion {
+  id String @id @db.Uuid
+  offer_id String @db.Uuid
+  number Int
+  state String @default("draft")
+  title String
+  description String
+  kind String
+  category String
+  price_cents Int?
+  unit String?
+  stock Int?
+  made_to_order Boolean @default(false)
+  developments Int[]
+  modalities String[]
+  response_minutes Int
+  preparation_minutes Int
+  food Json?
+  reason String?
+  reviewed_by String? @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+  @@unique([offer_id, number])
+  @@unique([id, offer_id])
+  @@schema("m3")
+}
+model Photo {
+  id String @id @db.Uuid
+  version_id String @db.Uuid
+  position Int
+  state String
+  object_key String @unique
+  mime_type String
+  bytes Int
+  sha256 String
+  metadata_removed Boolean @default(false)
+  @@unique([version_id, position])
+  @@schema("m3")
+}
+model CommandReceipt {
+  actor_id String @db.Uuid
+  key String @db.Uuid
+  operation String
+  request_hash String
+  result Json
+  created_at DateTime @default(now()) @db.Timestamptz
+  @@id([actor_id, key, operation])
+  @@schema("m3")
+}
+model CatalogEvent {
+  id String @id @db.Uuid
+  offer_id String @db.Uuid
+  actor_id String @db.Uuid
+  action String
+  revision Int
+  created_at DateTime @default(now()) @db.Timestamptz
+  @@schema("m3")
+}

@@ -79,6 +79,9 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
 
+| MAR-CHAT-007 | Diseño documental M2/M8 paralelo, confirmado en su chat15-10-2026; copia/ramas propias, sin integración |
+| MAR-CHAT-008 | M3 Catálogo aislado, autorizado15-10-2026 por solicitud actual; tema abierto |
+
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
 Vigilancia CI del PR #2 eliminada tras comprobar su integración a main el 15-10-2026. La automatización anterior de MAR-CHAT-004 sigue pausada. [Cierre, contradicciones, limpieza propuesta y trabajo local pendiente](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). No se eliminaron archivos, ramas o chats.
@@ -139,4 +142,40 @@ Aplicar autonomía 00 §6: corregir/probar/documentar/sincronizar lo autorizado 
 confirmaciones rutinarias. Releer finales, verificar enlaces/diff/ignorados,
 commit/push y SHA local/remoto real. Indicar Fuentes/configuración a reemplazar;
 no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierre real.
+```
+
+
+## M3 paralelo — MAR-CHAT-008
+
+15-10-2026 America/Merida. Autorizado: desarrollo local aislado de M3 y propuesta visual de catálogo, detalle y perfil aprobada por el usuario. M1 continúa en MAR-CHAT-006; M2/M8 se diseña en MAR-CHAT-007. No se declara ningún módulo aceptado.
+
+Copia: `/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a`. Rama `codex/feat-m3-catalogo-008`, base `6fed44f`. PostgreSQL propio en 55432, API en 3103 y web en 8103. No se modifican M1, contratos compartidos ni migraciones aplicadas. Sin push, PR, integración a main, publicación, gasto, contactos o datos reales.
+
+Incremento: catálogo público Nest/Expo/PostgreSQL con búsqueda, filtros, cursor, detalle y perfil. Casos internos de versiones, revisión y pausa usan actores ficticios; no sustituyen identidad, elegibilidad o revisión reales. Fotos, gestión autenticada, integración autorizada M1/M2/M8, plataformas nativas y aceptación siguen pendientes. M3 permanece abierto.
+
+Documentación, resultados y límites: [instructivo](../../marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md), [matriz](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M3.md) y [avance](../../marleva-local/repositorio/docs/avance.md). Se conservan fallos y correcciones. Diseñado, implementado, probado y aceptado son estados distintos.
+
+Lectura completa de 00–03, AGENTS, protocolo técnico y matriz M1; lectura general de código y anexos parcial. Inventario propio con metadatos y estado de lectura en docs/proceso/inventario-m3.json. Hashes no acreditan lectura. Dependencias, cachés, secretos y binarios no se presentan como leídos.
+
+Fuentes: únicamente esta copia de 01 registra el avance. El guardado o commit local no actualiza Fuentes compartidas. Conciliar este añadido con la continuidad de 006/007 antes de reemplazar 01; no sustituir su estado con una fotografía de otra rama. 00/02/03 y configuración no requieren cambios por este incremento.
+
+Prompt revisado de continuación:
+
+```text
+PROYECTO Marleva. MAR-CHAT-008, CONTINUACIÓN: M3 Catálogo aislado.
+Trabajar en /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a,
+rama codex/feat-m3-catalogo-008. Registrar fecha real America/Merida.
+Leer instrucciones, AGENTS, 00–03, protocolo, matrices M1/M3; inventariar y leer cambios.
+Respetar C01–C26, límites C25, autorización local y revisión visual ya aprobada.
+No tocar M1, M2/M8, contratos compartidos, migraciones aplicadas, main o cambios ajenos.
+Usar recursos propios M3: PG55432, API3103, web8103; herramientas existentes en lectura.
+Consultar instructivo, matriz, actas y avance para estado real. M3 sigue incompleto.
+Próximo: cerrar brechas por matriz; diseñar fotos seguras y gestión antes de programarlas.
+Integrar identidad/elegibilidad/revisión solo cuando esté disponible y autorizada esa integración.
+No acreditar Auth/MFA reales con fixtures. Mantener pruebas propias y hooks obligatorios.
+Conservar migraciones aplicadas; corregir mediante nuevas migraciones. Releer finales.
+Sin operaciones externas, push/PR/merge, gasto, publicación, contactos o datos reales.
+Actualizar solo fuentes necesarias de esta copia; conciliar 01 con 006/007 antes de reemplazar Fuentes.
+Continuar sin confirmaciones rutinarias; aprobación técnica del entorno sigue siendo obligatoria.
+Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
 ```

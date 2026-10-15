@@ -1,0 +1,79 @@
+Project Marleva_M3 { database_type: 'PostgreSQL'
+ Note: 'Solo base ficticia M3 aislada; no tablas M1/M2. DDL derivado para revisión y migración nueva exclusiva.' }
+Table m3.SellerEligibility {
+ id uuid [pk]
+ owner_id uuid [not null]
+ public_name text [not null]
+ membership_current boolean [not null]
+ enabled boolean [not null]
+ version integer [not null, default: 1]
+ updated_at timestamptz [not null, default: `now()`]
+ Note: 'Proyección ficticia de puerto M2; no evidencia de residencia ni alta real. No almacenar expediente.'
+}
+Table m3.Offer {
+ id uuid [pk]
+ seller_id uuid [not null, ref: > m3.SellerEligibility.id]
+ paused boolean [not null, default: true]
+ revision integer [not null, default: 1]
+ public_version_id uuid
+ updated_at timestamptz [not null, default: `now()`]
+}
+Table m3.OfferVersion {
+ id uuid [pk]
+ offer_id uuid [not null, ref: > m3.Offer.id]
+ number integer [not null]
+ state text [not null, default: 'draft']
+ title text [not null]
+ description text [not null]
+ kind text [not null]
+ category text [not null]
+ price_cents integer
+ unit text
+ stock integer
+ made_to_order boolean [not null, default: false]
+ developments integer[] [not null]
+ modalities text[] [not null]
+ response_minutes integer [not null]
+ preparation_minutes integer [not null]
+ food jsonb [note: 'Ingredientes/alérgenos/conservación estructurados. No datos clínicos.' ]
+ reason text
+ reviewed_by uuid
+ created_at timestamptz [not null, default: `now()`]
+ indexes {
+  (offer_id, number) [unique]
+  (id, offer_id) [unique]
+ }
+ Note: 'Estadísticas de expresión de búsqueda en MAR-M3-search-statistics.sql; DBML no representa CREATE STATISTICS. Migración M3 separada002, no reescribir001.'
+}
+Ref public_version_offer: m3.Offer.(public_version_id,id) > m3.OfferVersion.(id,offer_id)
+Table m3.Photo {
+ id uuid [pk]
+ version_id uuid [not null, ref: > m3.OfferVersion.id]
+ position integer [not null]
+ state text [not null]
+ object_key text [not null, unique]
+ mime_type text [not null]
+ bytes integer [not null]
+ sha256 text [not null]
+ metadata_removed boolean [not null, default: false]
+ indexes { (version_id, position) [unique] }
+ Note: 'Solo derivados seguros listos, sin URLs externas. Pipeline de ingreso pendiente; tabla no acredita procesamiento.'
+}
+Table m3.CommandReceipt {
+ actor_id uuid [not null]
+ key uuid [not null]
+ operation text [not null]
+ request_hash text [not null]
+ result jsonb [not null, note: 'Resultado estructurado idempotente, sin secretos.' ]
+ created_at timestamptz [not null, default: `now()`]
+ indexes { (actor_id, key, operation) [pk] }
+}
+Table m3.CatalogEvent {
+ id uuid [pk]
+ offer_id uuid [not null, ref: > m3.Offer.id]
+ actor_id uuid [not null]
+ action text [not null]
+ revision integer [not null]
+ created_at timestamptz [not null, default: `now()`]
+ Note: 'Evento local transaccional. No correo ni M9 integrado; no política de retención real aprobada.'
+}

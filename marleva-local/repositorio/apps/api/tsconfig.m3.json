@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "dist-m3" },
+  "include": ["src/m3-main.ts", "src/modules/m3/**/*.ts"],
+  "exclude": []
+}

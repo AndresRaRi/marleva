@@ -14,7 +14,8 @@
       "entry": [
         "src/main.ts",
         "bootstrap.mjs",
-        "seed.mjs"
+        "seed.mjs",
+        "src/m3-main.ts"
       ],
       "project": [
         "src/**/*.ts",
@@ -27,11 +28,14 @@
     },
     "apps/client": {
       "entry": [
-        "app/**/*.{ts,tsx}"
+        "app/**/*.{ts,tsx}",
+        "m3/index.ts",
+        "src/modules/m3/generated-api.ts"
       ],
       "project": [
         "app/**/*.{ts,tsx}",
-        "src/**/*.{ts,tsx}"
+        "src/**/*.{ts,tsx}",
+        "m3/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
         "expo-updates"

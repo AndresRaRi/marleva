@@ -12,6 +12,7 @@ export default [
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
+      '**/dist-m3/**',
       '**/build/**',
       '**/.expo/**',
       '**/.gradle/**',
@@ -25,6 +26,8 @@ export default [
       'docs/**',
       'tests/results/**',
       'apps/api/src/generated/**',
+      'apps/api/src/modules/m3/infrastructure/generated/**',
+      'apps/client/src/modules/m3/generated-api.ts',
       'packages/contracts/generated.ts',
     ],
   },

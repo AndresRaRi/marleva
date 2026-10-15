@@ -1,0 +1,14 @@
+%% MAR-M3-SEQ-006; UC-006; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S020 Autorizar revisor MFA sin conflicto
+ A->>D: S040 Bloquear y comprobar versión exacta pendiente
+ A->>D: S060 Aprobar o devolver corrección/rechazo con motivo
+ A-->>U: S080 Actualizar puntero público, evento y recibo atómicos
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

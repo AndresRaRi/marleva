@@ -80,3 +80,8 @@ El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriore
 El stack CI usa puertos 54621/54622/54624/54625 y credenciales propias ignoradas. Integración y web requieren libres los puertos API 3000 y HTTPS 8443; no detener procesos ajenos. En este Mac se puede usar el proxy TLS existente mediante MARLEVA_CI_EXISTING_PROXY=1, deteniendo y restaurando únicamente la API con scripts/local.mjs. Los jobs de GitHub tienen entorno propio; NSS confía en su CA temporal, sin ignorar TLS. No ejecutar suites que detienen Auth/Storage/correo en paralelo. Migraciones aplicadas intactas; pruebas de operadores usan una base nueva independiente, no reinician cuotas de otras suites.
 
 Requisito de GitHub: la revisión de dependencias necesita Dependency graph habilitado en Settings → Security → Advanced Security, en [ajustes de seguridad](https://github.com/AndresRaRi/marleva/settings/security_analysis). Se habilitó por solicitud del usuario y el control ya pasó. OSV analiza los lockfiles completos; su informe original se conserva y solo se reconoce una corrección local cuando coinciden sus hashes y pasan las regresiones en la misma ejecución. Cualquier aviso sin corrección comprobada bloquea. [PR #2 integrado](https://github.com/AndresRaRi/marleva/pull/2); cierre documental en [PR #3](https://github.com/AndresRaRi/marleva/pull/3), abierto al comprobar.
+
+
+## M3 aislado
+
+Composición paralela autorizada en008: [revisión y comandos](docs/revision/M3/INSTRUCTIVO_M3.md). No usar los scripts de arranque/parada M1 para M3. API3103, web8103 yPG55432 propios; solo datos ficticios. Rutas privadas/fotos/plataformas pendientes; M3 no completo.

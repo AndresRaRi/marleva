@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-15T22:23:14.534Z",
+  "browser": "155.0.8059.40",
+  "source": "Expo web M3 + API Nest/PG propios",
+  "cases": [
+    {
+      "id": "MAR-M3-IT-FE-001-LOAD",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-PF-FE-001-NO-RENDER-REQUESTS",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-PAGE",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-002-DETAIL",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-003-SELLER",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-EMPTY",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-ERROR-CONTROLLED",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-WIDTH-320",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-WIDTH-1280",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "docs/revision/M3/capturas/01-catalogo.png",
+    "docs/revision/M3/capturas/02-detalle.png",
+    "docs/revision/M3/capturas/03-oferente.png"
+  ],
+  "limits": "Chrome headless; no Safari ni builds Android/iOS/físicos; axe no acredita WCAG completo.",
+  "axe": {
+    "catalog": [],
+    "detail": []
+  },
+  "passed": true
+}

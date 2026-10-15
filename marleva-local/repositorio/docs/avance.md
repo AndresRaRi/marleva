@@ -31,7 +31,7 @@ Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Acep
 |---|---|---|---|
 | M1 Acceso/cuenta | 11/14: 78,57% | 0/14: 0% | Criterios arriba; pendientes reales |
 | M2 Comunidad/oferentes | 0% | 0% | Diseño; sin implementación del módulo |
-| M3 Catálogo | 0% | 0% | Diseño; sin implementación |
+| M3 Catálogo | 3/9: 33,33% | 0/9: 0% | Catálogo público aislado; criterios abajo |
 | M4 Compra directa | 0% | 0% | Diseño; sin implementación |
 | M5 Cotización | 0% | 0% | Diseño; sin implementación |
 | M6 Dinero | 0% | 0% | Diseño; simulador no suma como módulo |
@@ -40,7 +40,7 @@ Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Acep
 | M9 Avisos transversales | 0% | 0% | Infraestructura M1 no acredita módulo completo |
 | M10 Medición | 0% | 0% | Diseño; sin implementación |
 
-Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; todos permanecen 0% de implementación, fuera del alcance de construcción de esta etapa. General: no es un módulo funcional, Por calcular.
+Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; M3 tiene autorización paralela y cálculo propio abajo; M2 yM4–M10 permanecen0% de implementación. General: no es un módulo funcional, Por calcular.
 
 ## Verificación técnica independiente del porcentaje
 
@@ -63,3 +63,22 @@ Cierre técnico de este incremento: primer verde completo y negativa de segurida
 Dependency graph habilitado por solicitud del usuario. Lighthouse/YAML retiran extract-zip/sprintf-js. braces/node-forge conservan versiones originales con parches locales: OSV sigue identificándolas, pero solo se reconocen como corregidas tras comprobar hashes y regresiones en la misma corrida. Avisos desconocidos o evidencia alterada bloquean. Estos controles no modifican el avance funcional ni acreditan M1 completa.
 
 Cierre MAR-CHAT-005: [acta y continuidad](proceso/CIERRE_MAR_CHAT_005.md). Integración del pipeline no cambia el avance funcional. Incrementos locales recientes UC001 aún no incorporados; no atribuir sus resultados al CI del remoto.
+
+
+## M3: catálogo aislado — MAR-CHAT-008
+
+Autorización explícita15-10-2026, independiente de base/M1. Nueve criterios de [matriz M3](proceso/MATRIZ_CASOS_M3.md), todos peso1. Implementado exige salida integradaAPI/cliente local; lógica interna sin recorrido autenticado completo no suma. Aceptación exige además proveedores reales autorizados, plataformas/accesibilidad, calidad/manual y revisión. Fixtures no acreditan M1/M2/M8 ni personas aprobadas.
+
+| Criterio | Salida | Implementado | Aceptado | Evidencia y límite |
+|---|---|---|---|---|
+| UC001 | Búsqueda/filtros/cursor y paginación con carga/vacío/error | Sí | No | Código M3 separado; PG/Nest ycliente universal/web; actas m3-*. Plataformas/aceptación pendientes |
+| UC002 | Detalle público elegible o retirada404 | Sí | No | API/cliente integrados; sin fotos procesadas, caso009 separado |
+| UC003 | Perfil público y ofertas por oferente | Sí | No | Campos públicos explícitos; elegibilidad ficticia, integraciónM2 pendiente |
+| UC004 | Crear/editar ofertas propias autenticadas | No | No | Casos internos yPG probados; ruta privada/UI de gestión pendientes |
+| UC005 | Enviar versión propia revisable | No | No | Caso interno; identidad real/cliente pendientes |
+| UC006 | Revisión autorizada conMFA sin conflicto | No | No | Caso interno yconcurrenciaPG; M1/M8 reales no integrados |
+| UC007 | Pausar/disponibilidad por titular | No | No | Caso interno; recorrido autenticado pendiente |
+| UC008 | Elegibilidad vigente integrada conM2 | No | No | Proyección ficticia con ocultación comprobada; noM2 real |
+| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Diseño/tablas; sin pipeline ni fotos públicas |
+
+Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptación=0/9=0%. M1 conserva su cálculo anterior; Proyecto sigue Por calcular. Las pruebas/archivos/commits no suman criterios. No integración a main ni operación real.

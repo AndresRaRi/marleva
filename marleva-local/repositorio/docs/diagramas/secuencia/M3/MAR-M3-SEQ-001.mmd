@@ -1,0 +1,14 @@
+%% MAR-M3-SEQ-001; UC-001; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S020 Validar filtro y cursor
+ A->>D: S040 Consultar elegibilidad y versión pública con frontera
+ A->>D: S060 Proyectar solo campos públicos
+ A-->>U: S080 UI001 con encabezado principal accesible; Devolver items y cursor o error recuperable
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

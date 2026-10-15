@@ -45,3 +45,8 @@ Recuperación de operadores: siete operaciones backend integradas, roles persist
 El PR #1 de recuperación fue incorporado a main. El pipeline continúa en codex/feat-ci-pipeline, actualizado mediante merge; [estado por etapas](marleva-local/repositorio/docs/avance.md). No se fusiona ni despliega automáticamente.
 
 Cierre MAR-CHAT-005 solicitado el 15-10-2026: PR #2 integrado a main en b12bfca. [Auditoría, contradicciones, limpieza propuesta, chats y siguiente paso](marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). Hay cambios locales de otros chats todavía sin integrar; no confundir main actualizado con árbol limpio. MAR-CHAT-006 continúa la consolidación por procedencia; estado y prompt vigentes en 01.
+
+
+## M3 aislado — MAR-CHAT-008
+
+Desarrollo paralelo autorizado15-10-2026 en copia/rama propias. [Revisión y arranque M3](marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md). Catálogo, filtros, cursor, detalle y perfil públicos con datos ficticios; API3103, web8103 y PostgreSQL55432 exclusivos. No conecta identidad/base de M1 ni publica. Gestión privada, fotos y plataformas siguen pendientes. Estado y pruebas en la matriz M3; no declarar módulo completo ni reutilizar resultados de M1.

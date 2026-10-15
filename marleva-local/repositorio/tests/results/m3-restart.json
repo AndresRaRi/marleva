@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-15T22:23:16.981Z",
+  "case": "MAR-M3-IT-BE-010-RESTART",
+  "destination": "marleva-m3-008",
+  "passed": true,
+  "outage_status": 503
+}

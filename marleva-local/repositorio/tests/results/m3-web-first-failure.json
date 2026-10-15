@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-15T22:01:51.536Z",
+  "browser": "155.0.8059.40",
+  "source": "Expo web M3 + API Nest/PG propios",
+  "cases": [],
+  "screenshots": [],
+  "limits": "Chrome headless; no Safari ni builds Android/iOS/físicos; axe no acredita WCAG completo.",
+  "passed": false,
+  "failure": "TimeoutError: page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""
+}

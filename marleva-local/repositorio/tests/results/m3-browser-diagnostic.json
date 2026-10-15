@@ -1,0 +1,10 @@
+[
+  {
+    "url": "http://127.0.0.1:8103/",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8103/_expo/static/js/web/index-f9c70447c4cc03d3febe6ee1f5ea1a55.js",
+    "status": 200
+  }
+]
