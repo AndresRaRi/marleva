@@ -414,7 +414,7 @@ Historial de decisiones y cambios: consultar Git; no versiones documentales para
 
 ## 16. Preparación reproducible de base/M1 — MAR-CHAT-003
 
-Estado histórico MAR-CHAT-003: preparación documental completa; entonces ejecución pendiente de autorización explícita. Ahora A0 confirmada, ver 16.6 y 01. Inventario real y contraste primario en 03, apartado MAR-CHAT-003. Ya existen código, lockfile, imágenes, cuatro migraciones aplicadas, servicios y builds con pruebas; la aceptación completa sigue abierta. Consultar 01, matriz y actas para estado actual. Esta sección concreta §13–15 sin reabrir C01–C26. Responsable documental: asistente; ejecución: asistente con A0 vigente; permisos de equipo/licencias/dispositivos: usuario o persona con acceso al equipo.
+Estado histórico MAR-CHAT-003: preparación documental completa; entonces ejecución pendiente de autorización explícita. Ahora A0 confirmada, ver 16.6 y 01. Inventario real y contraste primario en 03, apartado MAR-CHAT-003. Ya existen código, lockfile, imágenes, cinco migraciones aplicadas, servicios y builds con pruebas; la aceptación completa sigue abierta. Consultar 01, matriz y actas para estado actual. Esta sección concreta §13–15 sin reabrir C01–C26. Responsable documental: asistente; ejecución: asistente con A0 vigente; permisos de equipo/licencias/dispositivos: usuario o persona con acceso al equipo.
 
 ### 16.1 Prerrequisitos y secuencia de arranque
 

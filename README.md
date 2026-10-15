@@ -43,3 +43,5 @@ Plan técnico aprobado: [decisiones únicas](marleva-local/repositorio/docs/adr/
 Recuperación de operadores: siete operaciones backend integradas, roles persistidos y quinta migración aplicada localmente. Revisión y límites en el instructivo M1 y tests/results/recovery-api.json. UI nueva y aceptación siguen pendientes.
 
 El PR #1 de recuperación fue incorporado a main. El pipeline continúa en codex/feat-ci-pipeline, actualizado mediante merge; [estado por etapas](marleva-local/repositorio/docs/avance.md). No se fusiona ni despliega automáticamente.
+
+Cierre MAR-CHAT-005 solicitado el 15-10-2026: PR #2 integrado a main en b12bfca. [Auditoría, contradicciones, limpieza propuesta, chats y siguiente paso](marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). Hay cambios locales de otros chats todavía sin integrar; no confundir main actualizado con árbol limpio. Próximo chat propuesto: MAR-CHAT-006.
