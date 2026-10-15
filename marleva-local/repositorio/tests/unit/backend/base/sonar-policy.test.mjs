@@ -58,14 +58,15 @@ it('Sonar | error HTTP y espera agotada bloquean', async () => {
       'HTTP 503',
     );
     expect(mock.mock.calls[0][1].headers.Authorization).toBe('private');
-    await expect(
-      waitSonar(
-        async () => ({}),
-        () => false,
-        0,
-      ),
-    ).rejects.toThrow('tiempo');
+    vi.useFakeTimers();
+    const read = vi.fn().mockResolvedValue({ status: 'STARTING' });
+    const waiting = waitSonar(read, (result) => result.status === 'UP', 2);
+    const rejection = expect(waiting).rejects.toThrow('tiempo');
+    await vi.advanceTimersByTimeAsync(4000);
+    await rejection;
+    expect(read).toHaveBeenCalledTimes(2);
   } finally {
     mock.mockRestore();
+    vi.useRealTimers();
   }
 });

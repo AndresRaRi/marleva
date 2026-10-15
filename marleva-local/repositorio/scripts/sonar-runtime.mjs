@@ -73,9 +73,18 @@ export function scanner(manifest, folder, project, sha, tokenFile, server, outpu
         '-Dsonar.typescript.tsconfigPaths=apps/api/tsconfig.json,apps/client/tsconfig.json',
         '-Dsonar.sourceEncoding=UTF-8',
         '-Dsonar.scm.disabled=true',
+        '-Dsonar.scanner.skipJreProvisioning=true',
       ],
       { stdio: ['ignore', log, log] },
     );
+  } catch (error) {
+    const diagnostic = readFileSync(output, 'utf8')
+      .split('\n')
+      .filter((line) => /ERROR|WARN|Exception|Caused by/.test(line))
+      .slice(-20)
+      .map((line) => line.replace(/[A-Za-z0-9_-]{20,}/g, '[redactado]'))
+      .join(' | ');
+    throw new Error(error.message + '; scanner: ' + diagnostic, { cause: error });
   } finally {
     closeSync(log);
     command('docker', ['stop', project + '-scanner']);

@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { isIPv4 } from 'node:net';
 import { sonarApi, waitSonar, allPages } from './sonar-api.mjs';
 import { fingerprint, introduced } from './sonar-policy.mjs';
 import { command, snapshot, scanner, save, sourceFiles } from './sonar-runtime.mjs';
@@ -13,13 +14,13 @@ mkdirSync(folder, { recursive: true, mode: 0o700 });
 const startedAt = Date.now();
 const password = 'Marleva-' + randomBytes(24).toString('hex') + '!9a';
 let credential = 'Basic ' + Buffer.from('admin:admin').toString('base64');
-const url = 'http://127.0.0.1:' + manifest.port;
-const api = sonarApi(url, () => credential);
+let url;
+let api;
 const summary = { date: new Date().toISOString(), manifest, snapshots: {}, status: 'failed' };
 let started = false;
-async function analyze(label, sha, tokenFile) {
+async function analyze(label, tokenFile) {
   const source = path.join(folder, label);
-  const revision = snapshot(sha, source);
+  const revision = summary.revisions[label];
   const project = name + '-' + label;
   await api('/api/projects/create', { project, name: project }, 'POST');
   const taskId = scanner(
@@ -70,6 +71,12 @@ async function analyze(label, sha, tokenFile) {
   ];
 }
 try {
+  summary.revisions = {};
+  for (const [label, sha] of Object.entries({
+    base: process.env.SONAR_BASE_SHA || manifest.base,
+    head: process.env.SONAR_HEAD_SHA || 'HEAD',
+  }))
+    summary.revisions[label] = snapshot(sha, path.join(folder, label));
   command('docker', ['pull', '--platform', manifest.platform, manifest.server]);
   command('docker', ['pull', '--platform', manifest.platform, manifest.scanner]);
   command('docker', [
@@ -93,15 +100,22 @@ try {
     'marleva.sonar=temporary',
     '--memory',
     manifest.serverMemory,
+    '-e',
+    'SONAR_TELEMETRY_ENABLE=false',
     '--ulimit',
     'nofile=131072:131072',
     '--ulimit',
     'nproc=8192:8192',
-    '-p',
-    '127.0.0.1:' + manifest.port + ':9000',
     manifest.server,
   ]);
   started = true;
+  const networks = JSON.parse(
+    command('docker', ['inspect', '--format', '{{json .NetworkSettings.Networks}}', name]),
+  );
+  const address = networks[name]?.IPAddress;
+  if (!isIPv4(address)) throw new Error('Sonar no tiene dirección IPv4 en su red propia');
+  url = 'http://' + address + ':9000';
+  api = sonarApi(url, () => credential);
   await waitSonar(
     async () => {
       try {
@@ -133,8 +147,8 @@ try {
   writeFileSync(tokenFile, 'SONAR_TOKEN=' + token + '\nSONAR_HOST_URL=http://' + name + ':9000\n', {
     mode: 0o600,
   });
-  const base = await analyze('base', process.env.SONAR_BASE_SHA || manifest.base, tokenFile);
-  const head = await analyze('head', process.env.SONAR_HEAD_SHA || 'HEAD', tokenFile);
+  const base = await analyze('base', tokenFile);
+  const head = await analyze('head', tokenFile);
   const additions = introduced(base, head);
   summary.introduced = additions;
   summary.negativeComparator = introduced(base, [...base, 'fixture-negative']).length === 1;
