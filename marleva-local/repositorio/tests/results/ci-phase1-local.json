@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-15T03:55:08.638077+00:00",
+  "phase": 1,
+  "github": "Pendiente primera ejecución y negativa revertida",
+  "local": {
+    "quality": "PASS; longitud de funciones conserva avisos",
+    "architecture": "PASS; 63 módulos / 172 dependencias",
+    "duplication": "PASS; cero clones exactos",
+    "contracts": "YAML/DBML y generación pasan; git diff de derivados se coteja tras commit",
+    "unit": 122,
+    "coverage": {
+      "lines": 96.16,
+      "statements": 94.77,
+      "branches": 91.46,
+      "functions": 96.47
+    },
+    "newCode": {
+      "covered": 93,
+      "total": 95,
+      "percent": 97.89,
+      "base": "938ad41",
+      "note": "Antes de incorporar archivos nuevos al índice; CI recalcula sobre todo el commit"
+    },
+    "sql": 12,
+    "apiRegression": 12,
+    "webRegression": "Chrome HTTPS/OTP/cuenta/cookie/foco/salida PASS",
+    "build": [
+      "API",
+      "Expo web",
+      "Docker ARM64"
+    ],
+    "containerHealth": "PASS con fixtures sin conexión a base",
+    "containerImage": "sha256:fb127ba32b05eae6d64bac5c152e4e83eb296329873761c65ea69467759afdae",
+    "highCriticalVulnerabilities": 0
+  },
+  "limits": [
+    "No fase 1 verde en GitHub aún",
+    "Solo arquitectura declarada por reglas, no certificación completa",
+    "Trinquete en código de aplicación; automatización CI se valida con ejecuciones reales y prueba negativa",
+    "Fases 2–3 pendientes; sin despliegue"
+  ]
+}

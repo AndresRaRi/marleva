@@ -1,6 +1,6 @@
 # Avance de Marleva por criterios funcionales
 
-Fecha: 14 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
+Fecha: 15 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
 
 ## Método
 
@@ -45,3 +45,19 @@ Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni in
 ## Verificación técnica independiente del porcentaje
 
 Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó. Cobertura de lógica medida con fuente TS y AccountService incluido superó 80% global; resumen en tests/results/coverage-summary.json. Cobertura no implica funcionalidad completa ni Sonar/CI aprobados. Manual único en docs/revision/M1/INSTRUCTIVO_M1.md; usuario revisará. Google pendiente, diseño visual nuevo pendiente de alta prioridad en 01. Datos ficticios; no despliegue.
+
+## Pipeline de integración continua
+
+15-10-2026. General no tiene porcentaje funcional. Rama codex/feat-ci-pipeline parte de 1d75de3; el usuario fusionó PR #1 y main quedó incorporado mediante dfeb9a3. Pipeline sin fusión.
+
+| Fase | Preparación local | Resultado en GitHub |
+|---|---|---|
+| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Verde 38679348007; negativa 38679688035 rechazada por capas/ciclo; reversión ee171cf verde en 38679887976. Fase 1 verificada |
+| 2. Seguridad, integración y web accesible | 153 unitarias, integración/operadores, migraciones cero/previa, contrato, axe/Lighthouse y contenedor. Dos paquetes retirados y dos parches locales comprobados, conservando OSV original | Primer verde completo 38773873030 sobre 9cdde72; negativa 4c54ea9 rechazada por seguridad en 38775164158. Correspondencia restaurada sin cambiar controles; integrar solo con todos los checks del HEAD restaurado verdes en PR #2 |
+| 3. Sonar, rendimiento, nightly, CD desactivado y dependabot | Comparación temporal Sonar aprobada, sin SonarCloud/gasto | No ejecutada |
+
+Avisos de longitud de funciones permanecen visibles como pidió el usuario; complejidad y anidación son errores. Una ejecución local no acredita CI verde. Fases 2–3 no se activan hasta cerrar fase previa. El [ADR002](adr/002-pipeline-ci.md) conserva versiones, fuentes, licencias y límites.
+
+Cierre técnico de este incremento: primer verde completo y negativa de seguridad observados; correspondencia exacta restaurada. La comprobación final vigente se consulta en [PR #2](https://github.com/AndresRaRi/marleva/pull/2), sin atribuir a un HEAD nuevo los resultados de otro. Evidencia en tests/results/ci-phase2-verified.json. Revisión independiente estática sin defectos accionables; límites en ADR002. La fase 3 queda pendiente para un incremento separado desde main después de la integración.
+
+Dependency graph habilitado por solicitud del usuario. Lighthouse/YAML retiran extract-zip/sprintf-js. braces/node-forge conservan versiones originales con parches locales: OSV sigue identificándolas, pero solo se reconocen como corregidas tras comprobar hashes y regresiones en la misma corrida. Avisos desconocidos o evidencia alterada bloquean. Estos controles no modifican el avance funcional ni acreditan M1 completa.

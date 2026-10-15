@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 if (process.env.APP_MODE !== 'local' || process.env.PAYMENT_MODE !== 'simulated')
   throw new Error('Local only');
 const bootstrap = new URL(process.env.BOOTSTRAP_DATABASE_URL);
-if (bootstrap.hostname !== '127.0.0.1' || bootstrap.port !== '54322')
+const ci = process.env.MARLEVA_CI_STACK === '1';
+if (bootstrap.hostname !== '127.0.0.1' || bootstrap.port !== (ci ? '54622' : '54322'))
   throw new Error('Unexpected destination');
 const db = new pg.Client({ connectionString: bootstrap.toString() });
 await db.connect();
@@ -27,7 +28,7 @@ const grant = spawnSync(
   [
     'docker',
     'exec',
-    'supabase_db_marleva-m1',
+    ci ? 'supabase_db_marleva-ci' : 'supabase_db_marleva-m1',
     'psql',
     '-U',
     'supabase_admin',
@@ -56,8 +57,14 @@ await db.query('RESET ROLE');
 const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const { data, error } = await admin.auth.admin.listUsers();
-if (error) throw new Error('Local Auth unavailable');
+const identities = [];
+let page = 1;
+while (page !== null) {
+  const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
+  if (error) throw new Error('Local Auth unavailable');
+  identities.push(...data.users);
+  page = data.nextPage;
+}
 const users = [];
 for (const email of [
   'a@example.test',
@@ -65,7 +72,7 @@ for (const email of [
   'operator1@example.test',
   'operator2@example.test',
 ]) {
-  let user = data.users.find((u) => u.email === email);
+  let user = identities.find((u) => u.email === email);
   if (!user) {
     const created = await admin.auth.admin.createUser({ email, email_confirm: true });
     if (created.error) throw new Error('Fixture creation failed');
@@ -74,7 +81,8 @@ for (const email of [
   users.push({ email, id: user.id });
 }
 await writeFile(
-  new URL('../../infra/local/secrets/fixture-identities.json', import.meta.url),
+  process.env.MARLEVA_FIXTURE_IDENTITIES ??
+    new URL('../../infra/local/secrets/fixture-identities.json', import.meta.url),
   JSON.stringify(users),
   { mode: 0o600 },
 );

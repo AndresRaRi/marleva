@@ -1,37 +1,41 @@
 import { fail, uuid, code } from '../../../../security.js';
-export function recoveryRequest(input: unknown, kind: 'request' | 'version' | 'reject' | 'verify') {
+type Kind = 'request' | 'version' | 'reject' | 'verify';
+const requiredFields: Record<Kind, string[]> = {
+  request: ['reason'],
+  version: ['expected_version'],
+  reject: ['expected_version', 'reason'],
+  verify: ['expected_version', 'factor_id', 'codigo'],
+};
+function validatedBody(input: unknown, fields: string[]) {
   if (!input || typeof input !== 'object' || Array.isArray(input))
     fail(422, 'CAMPOS', 'Revisa los campos');
   const body = input as Record<string, unknown>;
-  const fields =
-    kind === 'request'
-      ? ['reason']
-      : kind === 'reject'
-        ? ['expected_version', 'reason']
-        : kind === 'verify'
-          ? ['expected_version', 'factor_id', 'codigo']
-          : ['expected_version'];
   if (
     Object.keys(body).some((key) => !fields.includes(key)) ||
     fields.some((key) => !(key in body))
   )
     fail(422, 'CAMPOS', 'Revisa los campos de la solicitud');
-  const reason = body.reason;
-  if (
-    fields.includes('reason') &&
-    (typeof reason !== 'string' || !reason.trim() || reason.length > 500)
-  )
+  return body;
+}
+function checkedReason(reason: unknown) {
+  if (typeof reason !== 'string' || !reason.trim() || reason.length > 500)
     fail(422, 'MOTIVO', 'Escribe un motivo de hasta 500 caracteres');
-  if (
-    kind !== 'request' &&
-    (typeof body.expected_version !== 'number' ||
-      !Number.isSafeInteger(body.expected_version) ||
-      body.expected_version < 1)
-  )
+  return reason;
+}
+function checkedVersion(version: unknown) {
+  if (typeof version !== 'number' || !Number.isSafeInteger(version) || version < 1)
     fail(422, 'VERSION', 'Consulta la versión actual');
+  return version;
+}
+export function recoveryRequest(input: unknown, kind: Kind) {
+  const fields = requiredFields[kind],
+    body = validatedBody(input, fields);
   return {
-    reason: reason as string | undefined,
-    version: body.expected_version as number,
+    reason: fields.includes('reason') ? checkedReason(body.reason) : undefined,
+    version:
+      kind === 'request'
+        ? (body.expected_version as number)
+        : checkedVersion(body.expected_version),
     factorId: kind === 'verify' ? uuid(body.factor_id) : undefined,
     code: kind === 'verify' ? code(body.codigo) : undefined,
   };

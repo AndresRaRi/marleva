@@ -1,0 +1,77 @@
+{
+  "firstGreen": {
+    "conclusion": "success",
+    "databaseId": 38773873030,
+    "headSha": "9cdde722bfbf7a28b6eb31622c65ecb098af8467",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "codeql",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365259"
+      },
+      {
+        "conclusion": "success",
+        "name": "arquitectura-contratos",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365458"
+      },
+      {
+        "conclusion": "success",
+        "name": "unitarias",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365616"
+      },
+      {
+        "conclusion": "success",
+        "name": "seguridad",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365646"
+      },
+      {
+        "conclusion": "success",
+        "name": "revision-dependencias",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365666"
+      },
+      {
+        "conclusion": "success",
+        "name": "calidad",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365870"
+      },
+      {
+        "conclusion": "success",
+        "name": "integracion",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712260"
+      },
+      {
+        "conclusion": "success",
+        "name": "contrato",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712469"
+      },
+      {
+        "conclusion": "success",
+        "name": "web",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712525"
+      },
+      {
+        "conclusion": "success",
+        "name": "build",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116559175071"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030"
+  },
+  "negative": {
+    "commit": "4c54ea9e56809b93c580a94395c0e85864f63cee",
+    "run": 38775164158,
+    "job": 116560802612,
+    "expected": "Security rejects braces finding without exact advisory correspondence",
+    "observed": "Vulnerabilidades sin correcci\u00f3n comprobada: FAIL",
+    "remainingJobs": "Cancelled after expected failure to avoid redundant work"
+  },
+  "restoration": "Exact manifest from 9cdde72 restored; require all checks on current PR head before integration",
+  "review": {
+    "type": "Independent second agent static review",
+    "result": "No actionable findings",
+    "limits": "No exhaustive third-party or cryptographic certification"
+  },
+  "phase3": "Pending; separate increment after integration",
+  "deployment": "None"
+}

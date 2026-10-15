@@ -1,0 +1,32 @@
+{
+  "scope": "Verified local patches; original upstream versions retained",
+  "packages": {
+    "braces": {
+      "version": "3.0.3",
+      "advisories": [
+        "GHSA-vfj7-8cjw-p6xm"
+      ],
+      "files": {
+        "lib/parse.js": "a65d9ddab4857d90dedc8c61da05d9a1dbb7ee4564aedc57697729029d77fd20",
+        "lib/compile.js": "21e2fcb73f2cb3dc8b78334aadd5aaec311474e1a4e234181f8c73d72c54b0cd",
+        "lib/expand.js": "b243e218924b9fce5f18cb4166ffc29ee7a6dcff60e7c15411e406f776868075",
+        "lib/stringify.js": "5d1b790ef0c1dc4c259bac185a38a55d798fba99d555481c9c87edeeb8e129ec"
+      },
+      "source": "https://github.com/micromatch/braces/issues/70",
+      "patch": "patches/braces@3.0.3.patch",
+      "sha256": "388b9865e373fc16ea088fb5ae0fe126d49b22769469a643221aa465ad88be5d"
+    },
+    "node-forge": {
+      "version": "1.4.0",
+      "advisories": [
+        "GHSA-86w9-cpqp-85rv"
+      ],
+      "files": {
+        "lib/rsa.js": "c9b1e3799e230528b6d6815c1f6cd3c6058b9d45975264b55d995abb976589af"
+      },
+      "source": "https://github.com/digitalbazaar/forge/pull/1152",
+      "patch": "patches/node-forge@1.4.0.patch",
+      "sha256": "b6876574a5de19521a766856b293aeae2689848c5d8dab03f93040be0a64b8b4"
+    }
+  }
+}

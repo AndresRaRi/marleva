@@ -27,6 +27,21 @@ const yamlPath = 'docs/apis/M1/openapi.yaml';
 let spec;
 spec = await SwaggerParser.bundle(yamlPath);
 await SwaggerParser.validate(spec);
+await writeFile(
+  'packages/config/http-routes.json',
+  JSON.stringify(
+    Object.entries(spec.paths).map(([route, operations]) => ({
+      route,
+      methods: Object.keys(operations)
+        .filter((method) =>
+          ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace'].includes(method),
+        )
+        .map((method) => method.toUpperCase()),
+    })),
+    null,
+    2,
+  ) + '\n',
+);
 await writeFile('packages/contracts/openapi.json', JSON.stringify(spec, null, 2) + '\n');
 const assets = path.dirname(require.resolve('swagger-ui-dist/package.json'));
 await mkdir('docs/apis/M1/vendor', { recursive: true });

@@ -4,10 +4,41 @@ import { createRequire } from 'node:module';
 const pg = createRequire(new URL('../../../../apps/api/package.json', import.meta.url))('pg');
 import { readFile } from 'node:fs/promises';
 import { request as httpsRequest } from 'node:https';
-process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? new URL('../../../../.env', import.meta.url));
 const db = new pg.Pool({ connectionString: process.env.DATABASE_URL }),
   http = supertest('http://127.0.0.1:3000');
 const origin = 'https://localhost:8443';
+it('MAR-M1-IT-BE-110-HTTP | SEQ010:S012/S014/S016 | errores de entrada conservan referencia, forma y métodos', async () => {
+  const malformed = await http
+    .post('/v1/auth/verifications')
+    .set('Origin', origin)
+    .set('Content-Type', 'application/json')
+    .send('{');
+  const empty = await call('/v1/auth/verifications', 'post');
+  const extra = await call('/v1/auth/challenges', 'post', {
+    correo: 'input@example.test',
+    rol: 'admin',
+  });
+  const denied = await http
+    .post('/v1/auth/challenges')
+    .set('Origin', 'https://evil.example')
+    .send({ correo: 'input@example.test' });
+  const method = await http.trace('/v1/auth/challenges');
+  expect([malformed.status, empty.status, extra.status, denied.status, method.status]).toEqual([
+    400, 422, 422, 403, 405,
+  ]);
+  expect(method.headers.allow).toBe('POST');
+  for (const result of [malformed, empty, extra, denied, method]) {
+    expect(result.headers['cache-control']).toBe('no-store');
+    expect(result.body.request_id).toBe(result.headers['x-request-id']);
+    expect(Object.keys(result.body).sort()).toEqual([
+      'accion_recuperacion',
+      'codigo',
+      'mensaje',
+      'request_id',
+    ]);
+  }
+});
 const run = Date.now();
 let sequence = 0;
 const fixture = () => `m1-${run}-${sequence++}@example.test`;
@@ -64,7 +95,10 @@ async function login(address = fixture()) {
 afterAll(async () => db.end());
 describe('M1 integración real local PG17/Auth/correo/API', () => {
   it('MAR-M1-IT-BE-001 | UC010/SEQ010:S020-S060 | HTTPS valida certificado y readiness todas las dependencias', async () => {
-    const ca = await readFile(new URL('../../../../infra/local/secrets/ca.crt', import.meta.url));
+    const ca = await readFile(
+      process.env.MARLEVA_CA_FILE ??
+        new URL('../../../../infra/local/secrets/ca.crt', import.meta.url),
+    );
     const result = await new Promise((resolve, reject) => {
       httpsRequest(origin + '/health/ready', { ca }, (r) => {
         let data = '';

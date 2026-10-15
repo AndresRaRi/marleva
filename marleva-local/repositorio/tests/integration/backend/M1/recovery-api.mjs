@@ -3,14 +3,25 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { generate } from 'otplib';
-process.loadEnvFile('.env');
+import path from 'node:path';
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? '.env');
+const ci = process.env.MARLEVA_CI_STACK === '1';
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
-const copy = JSON.parse(readFileSync('tests/results/recovery-copy.json'));
-const stack = JSON.parse(
-  readFileSync(`artifacts/recovery/${copy.names.prefix}/provider/stack.private.json`),
-);
+const copy = ci
+  ? { names: { prefix: 'ci-no-restoration' } }
+  : JSON.parse(readFileSync('tests/results/recovery-copy.json'));
+const stack = ci
+  ? {
+      copyPrefix: copy.names.prefix,
+      environment: {},
+      names: { db: 'supabase_db_marleva-ci', auth: 'supabase_auth_marleva-ci' },
+    }
+  : JSON.parse(readFileSync(`artifacts/recovery/${copy.names.prefix}/provider/stack.private.json`));
 assert.equal(stack.copyPrefix, copy.names.prefix);
-assert.equal(stack.environment.SUPABASE_URL, 'http://127.0.0.1:54421');
+assert.equal(
+  ci ? process.env.SUPABASE_URL : stack.environment.SUPABASE_URL,
+  ci ? 'http://127.0.0.1:54621' : 'http://127.0.0.1:54421',
+);
 const docker = (args, input) =>
   execFileSync('./scripts/tool', ['docker', ...args], {
     input,
@@ -19,18 +30,24 @@ const docker = (args, input) =>
     stdio: ['pipe', 'pipe', 'pipe'],
   });
 const target = JSON.parse(docker(['inspect', stack.names.db]))[0];
-assert.equal(target.Config.Labels['marleva.b12.run'], stack.run);
+if (ci) {
+  assert.equal(target.Config.Labels['com.supabase.cli.project'], 'marleva-ci');
+  assert.equal(
+    target.Config.Labels['com.supabase.cli.workdir'],
+    path.resolve('artifacts/ci/stack'),
+  );
+} else assert.equal(target.Config.Labels['marleva.b12.run'], stack.run);
 assert.ok(target.State.Running);
 const migrationUrl = new URL(process.env.MIGRATION_DATABASE_URL);
-migrationUrl.port = '54422';
+migrationUrl.port = ci ? '54622' : '54422';
 assert.equal(migrationUrl.hostname, '127.0.0.1');
 Object.assign(process.env, stack.environment, {
-  SMTP_PORT: '54425',
+  SMTP_PORT: ci ? '54625' : '54425',
   MARLEVA_TEST: '1',
   MIGRATION_DATABASE_URL: migrationUrl.toString(),
 });
 const run = 'recovery-api-' + Date.now(),
-  folder = 'artifacts/recovery/' + run;
+  folder = (ci ? 'artifacts/ci/operators/' : 'artifacts/recovery/') + run;
 mkdirSync(folder, { recursive: true, mode: 0o700 });
 const report = {
   date: new Date().toISOString(),
@@ -308,13 +325,13 @@ try {
     expectStatus(challenge, 201, 'OTP nuevo');
     let otp;
     for (let i = 0; i < 100; i++) {
-      const messages = await (await fetch('http://127.0.0.1:54424/api/v1/messages')).json();
+      const messages = await (await fetch(process.env.MAILPIT_URL + '/api/v1/messages')).json();
       const message = messages.messages.find(
         (m) => m.To.some((t) => t.Address === owner.account.email) && +new Date(m.Created) >= since,
       );
       if (message) {
         const content = await (
-          await fetch('http://127.0.0.1:54424/api/v1/message/' + message.ID)
+          await fetch(process.env.MAILPIT_URL + '/api/v1/message/' + message.ID)
         ).json();
         otp = (content.Text + ' ' + content.HTML).match(/\b\d{6}\b/)?.[0];
         if (otp) break;
@@ -517,7 +534,9 @@ try {
   report.cleanup =
     'API del ensayo cerrada; actores propios suspendidos, roles y sesiones revocados; Auth destino activo';
   writeFileSync(
-    'tests/results/recovery-api' + (report.result === 'FAIL' ? '-failure' : '') + '.json',
+    (ci ? 'tests/results/ci-operators' : 'tests/results/recovery-api') +
+      (report.result === 'FAIL' ? '-failure' : '') +
+      '.json',
     JSON.stringify(report, null, 2) + '\n',
   );
 }

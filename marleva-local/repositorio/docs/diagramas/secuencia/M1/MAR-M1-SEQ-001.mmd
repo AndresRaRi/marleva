@@ -8,6 +8,7 @@ sequenceDiagram
     participant MAIL as Capturador local
     Note over UI,API: MAR-M1-SEQ-001 - Solicitar código
     U->>UI: S010 escribir correo ficticio
+    Note over U,UI: S015 contenido dentro de región principal accesible; no cambia diseño visual
     UI->>API: S020 solicitar desafío
     API->>DB: S030 bloquear origen y correo; comprobar espera y ventana móvil30/h
     alt Espera o pausa vigente

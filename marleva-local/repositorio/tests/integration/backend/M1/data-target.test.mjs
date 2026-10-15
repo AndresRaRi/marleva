@@ -59,7 +59,9 @@ beforeAll(async () => {
     'POSTGRES_PASSWORD=fixture-only',
     '--entrypoint',
     'docker-entrypoint.sh',
-    'public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108',
+    process.env.MARLEVA_CI_STACK === '1'
+      ? process.env.MARLEVA_CI_POSTGRES_IMAGE
+      : 'public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108',
     'postgres',
   ]);
   created = true;

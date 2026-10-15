@@ -1,0 +1,14 @@
+{
+  "run": 38678799733,
+  "url": "https://github.com/AndresRaRi/marleva/actions/runs/38678799733",
+  "sha": "94f7acf54e20184571b57b8a20013f7fa666ce14",
+  "result": "FAIL",
+  "checks": {
+    "calidad": "PASS antes de cleanup",
+    "arquitectura-contratos": "PASS antes de cleanup",
+    "unitarias": "PASS antes de cleanup",
+    "build": "No ejecutado por dependencia fallida"
+  },
+  "cause": "Cache path inferred from repository root differs from configured nested pnpm store",
+  "correction": "Cache action with explicit workspace store path; repeat full workflow"
+}

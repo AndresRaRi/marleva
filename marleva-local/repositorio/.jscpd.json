@@ -1,0 +1,18 @@
+{
+  "threshold": 0,
+  "minLines": 10,
+  "minTokens": 70,
+  "format": [
+    "typescript",
+    "tsx"
+  ],
+  "path": [
+    "apps/api/src",
+    "apps/client/app",
+    "apps/client/src"
+  ],
+  "ignore": [
+    "**/generated/**"
+  ],
+  "output": "artifacts/quality/duplication"
+}

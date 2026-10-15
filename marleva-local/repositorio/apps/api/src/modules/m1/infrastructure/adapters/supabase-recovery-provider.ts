@@ -74,17 +74,19 @@ export class SupabaseRecoveryProvider implements RecoveryProvider {
     replaying = false,
   ) {
     const { client } = await authenticatedIdentity(tokens);
-    if (replaying && (await this.verified(authId, factorId))) {
-      const refreshed = await client.auth.refreshSession(tokens);
-      if (!refreshed.error && refreshed.data.user?.id === authId) {
-        const current = await client.auth.mfa.getAuthenticatorAssuranceLevel();
-        if (!current.error && current.data?.currentLevel === 'aal2') return;
-      }
-    }
+    if (replaying && (await this.replayedVerification(authId, factorId, tokens))) return;
     const result = await client.auth.mfa.challengeAndVerify({ factorId, code });
     if (result.error || !result.data) fail(401, 'FACTOR', 'Revisa el código de tu autenticador');
     const level = await client.auth.mfa.getAuthenticatorAssuranceLevel();
     if (level.error || level.data?.currentLevel !== 'aal2')
       fail(503, 'DEPENDENCIA', 'No pudimos confirmar tu segundo factor');
+  }
+  private async replayedVerification(authId: string, factorId: string, tokens: RecoveryTokens) {
+    if (!(await this.verified(authId, factorId))) return false;
+    const { client } = await authenticatedIdentity(tokens);
+    const refreshed = await client.auth.refreshSession(tokens);
+    if (refreshed.error || refreshed.data.user?.id !== authId) return false;
+    const current = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+    return !current.error && current.data?.currentLevel === 'aal2';
   }
 }

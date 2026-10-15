@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import { randomUUID } from 'node:crypto';
 import { database } from '../../../../apps/api/dist/database.js';
 import { AccountService } from '../../../../apps/api/dist/account.service.js';
-process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? new URL('../../../../.env', import.meta.url));
 if (process.env.MARLEVA_QUOTA_CHECK !== '1')
   throw new Error('Cuota local: requiere ejecución separada, no junto aOTP');
 const db = database(),

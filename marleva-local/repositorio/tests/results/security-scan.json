@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-15T16:52:03.689Z",
+  "outcomes": [
+    {
+      "name": "Compatibilidad de correcciones",
+      "status": 0
+    },
+    {
+      "name": "SBOM",
+      "status": 0
+    },
+    {
+      "name": "Licencias",
+      "status": 0
+    },
+    {
+      "name": "OSV original",
+      "status": 1,
+      "blocking": false
+    },
+    {
+      "name": "Vulnerabilidades sin corrección comprobada",
+      "status": 0
+    },
+    {
+      "name": "Gitleaks",
+      "status": 0
+    }
+  ],
+  "limits": [
+    "Sin certificación legal; licencias conocidas conservan obligaciones",
+    "CLI de GitLeaks analiza historial; informes redactados",
+    "OSV examina lockfiles npm/Python completos, incluido desarrollo",
+    "OSV original conserva sus avisos; solo parches con hashes y regresiones comprobados se clasifican como corregidos localmente"
+  ]
+}

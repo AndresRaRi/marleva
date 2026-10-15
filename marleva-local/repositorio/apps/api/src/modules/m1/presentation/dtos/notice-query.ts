@@ -13,13 +13,7 @@ export class NoticeQuery {
       const input = query as Record<string, unknown>;
       if (Object.keys(input).some((key) => !['limit', 'cursor'].includes(key)))
         throw new Error('query');
-      if (
-        input.limit !== undefined &&
-        (typeof input.limit !== 'string' || !/^[1-9]\d?$/.test(input.limit))
-      )
-        throw new Error('limit');
-      const limit = input.limit === undefined ? 24 : Number(input.limit);
-      if (limit > 50) throw new Error('limit');
+      const limit = parseLimit(input.limit);
       if (input.cursor !== undefined && typeof input.cursor !== 'string') throw new Error('cursor');
       return new NoticeQuery(
         limit,
@@ -36,4 +30,12 @@ export class NoticeQuery {
       );
     }
   }
+}
+
+function parseLimit(value: unknown) {
+  if (value === undefined) return 24;
+  if (typeof value !== 'string' || !/^[1-9]\d?$/.test(value)) throw new Error('limit');
+  const limit = Number(value);
+  if (limit > 50) throw new Error('limit');
+  return limit;
 }

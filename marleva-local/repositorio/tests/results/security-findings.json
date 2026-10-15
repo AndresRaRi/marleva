@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-15T16:52:02.973Z",
+  "scope": "Complete npm/Python lockfiles; raw OSV retained; local patches verified in this scan",
+  "rawStatus": 1,
+  "resolved": [
+    {
+      "name": "braces",
+      "version": "3.0.3",
+      "ecosystem": "npm",
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "state": "resolved_with_pedigree",
+      "patch": "patches/braces@3.0.3.patch"
+    },
+    {
+      "name": "node-forge",
+      "version": "1.4.0",
+      "ecosystem": "npm",
+      "id": "GHSA-86w9-cpqp-85rv",
+      "state": "resolved_with_pedigree",
+      "patch": "patches/node-forge@1.4.0.patch"
+    }
+  ],
+  "pending": []
+}

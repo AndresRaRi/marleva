@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-15T15:32:32.078Z",
+  "outcomes": [
+    {
+      "name": "build API",
+      "status": 0
+    },
+    {
+      "name": "build web",
+      "status": 0
+    },
+    {
+      "name": "semillas ficticias",
+      "status": 0
+    },
+    {
+      "name": "web y accesibilidad",
+      "status": 0
+    }
+  ],
+  "limits": "Ensayo Mac usa proxy TLS existente y CA pública; API/datos/proveedor CI separados"
+}

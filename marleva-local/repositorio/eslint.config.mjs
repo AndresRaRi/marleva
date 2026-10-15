@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
+import sonarjs from 'eslint-plugin-sonarjs';
 
 const typescriptFiles = ['apps/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'];
 
@@ -36,6 +37,7 @@ export default [
       'scripts/*.{mjs,cjs}',
       'tests/**/*.{ts,mjs}',
       'eslint.config.mjs',
+      '.dependency-cruiser.cjs',
     ],
     languageOptions: { globals: globals.node },
   },
@@ -43,6 +45,17 @@ export default [
     // Playwright callbacks execute in the browser; the runner executes in Node.
     files: ['tests/integration/frontend/**/*.mjs', 'tests/performance/frontend/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
+    files: ['apps/**/*.{ts,tsx}'],
+    plugins: { sonarjs },
+    rules: {
+      'sonarjs/no-identical-expressions': 'error',
+      'sonarjs/no-duplicated-branches': 'error',
+      complexity: ['error', 10],
+      'max-depth': ['error', 2],
+      'max-lines-per-function': ['warn', { max: 30, skipBlankLines: true, skipComments: true }],
+    },
   },
   ...tseslint.configs.recommended.map((config) => ({
     ...config,

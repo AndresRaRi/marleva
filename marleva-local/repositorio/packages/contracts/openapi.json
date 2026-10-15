@@ -428,7 +428,9 @@
                 "properties": {
                   "correo": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "maxLength": 254,
+                    "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
                   }
                 },
                 "required": [
@@ -3187,7 +3189,9 @@
                 "properties": {
                   "correo": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "maxLength": 254,
+                    "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
                   }
                 },
                 "required": [
@@ -3656,7 +3660,9 @@
                 "properties": {
                   "correo": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "maxLength": 254,
+                    "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
                   },
                   "codigo": {
                     "type": "string",
@@ -6586,7 +6592,8 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   }
                 }
               }
@@ -7541,7 +7548,8 @@
                   "reason": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 500
+                    "maxLength": 500,
+                    "pattern": "\\S"
                   }
                 },
                 "required": [
@@ -8599,7 +8607,8 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   }
                 },
                 "required": [
@@ -8679,7 +8688,8 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   }
                 },
                 "required": [
@@ -9193,7 +9203,8 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   }
                 },
                 "required": [
@@ -9712,7 +9723,8 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   },
                   "factor_id": {
                     "type": "string",
@@ -10252,12 +10264,14 @@
                 "properties": {
                   "expected_version": {
                     "type": "integer",
-                    "minimum": 1
+                    "minimum": 1,
+                    "maximum": 9007199254740991
                   },
                   "reason": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 500
+                    "maxLength": 500,
+                    "pattern": "\\S"
                   }
                 },
                 "required": [
@@ -10785,7 +10799,9 @@
         "properties": {
           "correo": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "maxLength": 254,
+            "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
           }
         },
         "required": [
@@ -10904,7 +10920,9 @@
         "properties": {
           "correo": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "maxLength": 254,
+            "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
           }
         },
         "required": [
@@ -10934,7 +10952,9 @@
         "properties": {
           "correo": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "maxLength": 254,
+            "pattern": "^[^\\s@]+@[eE][xX][aA][mM][pP][lL][eE]\\.[tT][eE][sS][tT]$"
           },
           "codigo": {
             "type": "string",
@@ -11079,6 +11099,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-recovery-capability"
+      },
+      "fixtureCapability": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-fixture-capability"
       }
     }
   }

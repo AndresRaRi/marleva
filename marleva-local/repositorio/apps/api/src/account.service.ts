@@ -174,12 +174,7 @@ export class AccountService {
     };
   }
   async principal(req: Request, mutating = false): Promise<Principal> {
-    const bearer = req.headers.authorization;
-    // Browser credentials always use cookies and exact origin checks.
-    if (bearer && req.headers.origin) fail(403, 'ORIGEN', 'Acceso no permitido');
-    const token = bearer?.startsWith('Bearer ') ? bearer.slice(7) : req.cookies?.marleva_session;
-    if (typeof token !== 'string' || token.length > 200)
-      fail(401, 'SESION', 'Inicia sesión para continuar');
+    const { token, bearer } = this.sessionCredential(req);
     const s = await this.db.session.findUnique({
       where: { tokenHash: digest(token) },
       include: { account: true },
@@ -187,6 +182,30 @@ export class AccountService {
     const now = Date.now();
     if (!s || s.revokedAt || s.account.state !== 'active')
       fail(401, 'SESION', 'La sesión terminó', 'Inicia sesión de nuevo');
+    await this.sessionFresh(s, now);
+    this.sessionCsrf(req, s, mutating, bearer);
+    const t = await this.providerSession(s);
+    const { data, error } = await identity().auth.getUser(t.access_token);
+    if (error || data.user?.id !== s.account.authId) fail(401, 'SESION', 'Inicia sesión de nuevo');
+    const still = await this.db.session.updateMany({
+      where: { id: s.id, revokedAt: null },
+      data: { lastSeen: new Date() },
+    });
+    if (!still.count) fail(401, 'SESION', 'La sesión terminó');
+    const current = await this.db.account.findUniqueOrThrow({ where: { id: s.accountId } });
+    if (current.state !== 'active') fail(403, 'CUENTA', 'Tu cuenta no está habilitada');
+    return { session: s, account: current, tokens: t };
+  }
+  private sessionCredential(req: Request) {
+    const bearer = req.headers.authorization;
+    // Browser credentials always use cookies and exact origin checks.
+    if (bearer && req.headers.origin) fail(403, 'ORIGEN', 'Acceso no permitido');
+    const token = bearer?.startsWith('Bearer ') ? bearer.slice(7) : req.cookies?.marleva_session;
+    if (typeof token !== 'string' || token.length > 200)
+      fail(401, 'SESION', 'Inicia sesión para continuar');
+    return { token, bearer };
+  }
+  private async sessionFresh(s: Session & { account: Account }, now: number) {
     const operator = s.account.operator,
       max = (operator ? limits.operator_max_seconds : limits.user_max_seconds) * 1000,
       idle = (operator ? limits.operator_idle_seconds : limits.user_idle_seconds) * 1000;
@@ -194,6 +213,8 @@ export class AccountService {
       await this.db.session.update({ where: { id: s.id }, data: { revokedAt: new Date() } });
       fail(401, 'SESION_VENCIDA', 'La sesión venció', 'Inicia sesión de nuevo');
     }
+  }
+  private sessionCsrf(req: Request, s: Session, mutating: boolean, bearer: string | undefined) {
     if (mutating && !bearer) {
       if (
         req.headers.origin !== config().APP_ORIGIN ||
@@ -202,6 +223,8 @@ export class AccountService {
       )
         fail(403, 'CSRF', 'Vuelve a abrir tu cuenta para continuar');
     }
+  }
+  private async providerSession(s: Session) {
     let t = this.decrypt(s.providerTokens);
     if (t.expires_at * 1000 < Date.now() + 30000) {
       const lease = await this.db.session.updateMany({
@@ -213,43 +236,36 @@ export class AccountService {
         data: { refreshLease: seconds(15) },
       });
       if (lease.count) {
-        try {
-          const { data, error } = await identity().auth.refreshSession({
-            refresh_token: t.refresh_token,
-          });
-          if (error || !data.session) fail(401, 'SESION', 'Inicia sesión de nuevo');
-          t = tokens(data.session);
-          await this.db.session.updateMany({
-            where: { id: s.id, revokedAt: null },
-            data: { providerTokens: this.encrypt(t) },
-          });
-        } finally {
-          await this.db.session.update({ where: { id: s.id }, data: { refreshLease: null } });
-        }
+        t = await this.renewProviderSession(s, t);
       } else {
-        let done = false;
-        for (let i = 0; i < 30; i++) {
-          await new Promise((r) => setTimeout(r, 100));
-          const fresh = await this.db.session.findUniqueOrThrow({ where: { id: s.id } });
-          if (!fresh.refreshLease) {
-            t = this.decrypt(fresh.providerTokens);
-            done = true;
-            break;
-          }
-        }
-        if (!done) fail(503, 'SESION_OCUPADA', 'La sesión se está renovando', 'Intenta de nuevo');
+        t = await this.awaitProviderSession(s.id);
       }
     }
-    const { data, error } = await identity().auth.getUser(t.access_token);
-    if (error || data.user?.id !== s.account.authId) fail(401, 'SESION', 'Inicia sesión de nuevo');
-    const still = await this.db.session.updateMany({
-      where: { id: s.id, revokedAt: null },
-      data: { lastSeen: new Date() },
-    });
-    if (!still.count) fail(401, 'SESION', 'La sesión terminó');
-    const current = await this.db.account.findUniqueOrThrow({ where: { id: s.accountId } });
-    if (current.state !== 'active') fail(403, 'CUENTA', 'Tu cuenta no está habilitada');
-    return { session: s, account: current, tokens: t };
+    return t;
+  }
+  private async renewProviderSession(s: Session, previous: Tokens) {
+    try {
+      const { data, error } = await identity().auth.refreshSession({
+        refresh_token: previous.refresh_token,
+      });
+      if (error || !data.session) fail(401, 'SESION', 'Inicia sesión de nuevo');
+      const current = tokens(data.session);
+      await this.db.session.updateMany({
+        where: { id: s.id, revokedAt: null },
+        data: { providerTokens: this.encrypt(current) },
+      });
+      return current;
+    } finally {
+      await this.db.session.update({ where: { id: s.id }, data: { refreshLease: null } });
+    }
+  }
+  private async awaitProviderSession(id: string) {
+    for (let i = 0; i < 30; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const fresh = await this.db.session.findUniqueOrThrow({ where: { id } });
+      if (!fresh.refreshLease) return this.decrypt(fresh.providerTokens);
+    }
+    fail(503, 'SESION_OCUPADA', 'La sesión se está renovando', 'Intenta de nuevo');
   }
   recent(p: Principal) {
     if (Date.now() - +p.session.authenticatedAt > limits.reauth_seconds * 1000)
@@ -329,7 +345,7 @@ export class AccountService {
         fail(409, 'CAMBIO_NO_VIGENTE', 'El cambio ya no está disponible');
       if (![c.oldEmail, c.newEmail].includes(mail))
         fail(422, 'BUZON', 'Verifica uno de los dos buzones');
-      if ((mail === c.oldEmail && c.oldConfirmed) || (mail === c.newEmail && c.newConfirmed))
+      if ([c.oldConfirmed && c.oldEmail, c.newConfirmed && c.newEmail].includes(mail))
         fail(409, 'YA_CONFIRMADO', 'Ese buzón ya se verificó');
       return tx.emailChange.update({
         where: { id },

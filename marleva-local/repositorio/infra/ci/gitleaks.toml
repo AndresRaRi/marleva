@@ -1,0 +1,13 @@
+title = "Marleva: reglas predeterminadas y falso positivo documental comprobado"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "SHA256 de OpenAPI generado, no credencial; informe documental histórico comprobado"
+regexTarget = "line"
+regexes = ['''^\s*"docs/apis/M1/openapi.json": "cb222280130c343ca1a649af6980f81927b4c58702bfac198975ad846ee3f840",?\s*$''']
+paths = ['''(^|/)tests/results/documentation-20261013\.json$''']
+condition = "AND"

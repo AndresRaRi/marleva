@@ -427,3 +427,23 @@ it('UT-BE-114 | agregar un segundo factor requiere AAL2', async () => {
   await expect(service.enroll(principal)).rejects.toMatchObject({ status: 403 });
   expect(fixture.auth.mfa.enroll).not.toHaveBeenCalled();
 });
+
+it('UT-BE-103-F | espera al dueño de renovación y usa su token vigente', async () => {
+  tokens.expires_at = Math.floor(Date.now() / 1000);
+  session.providerTokens = seal(tokens, 'a'.repeat(64));
+  database.session.updateMany.mockResolvedValueOnce({ count: 0 });
+  const work = service.principal(request());
+  await vi.advanceTimersByTimeAsync(100);
+  expect((await work).account.id).toBe(actorId);
+  expect(fixture.auth.refreshSession).not.toHaveBeenCalled();
+});
+it('UT-BE-103-G | renovación ajena que no termina conserva error recuperable', async () => {
+  tokens.expires_at = Math.floor(Date.now() / 1000);
+  session.providerTokens = seal(tokens, 'a'.repeat(64));
+  session.refreshLease = new Date(Date.now() + 15000);
+  database.session.updateMany.mockResolvedValueOnce({ count: 0 });
+  const work = expect(service.principal(request())).rejects.toMatchObject({ status: 503 });
+  await vi.advanceTimersByTimeAsync(3000);
+  await work;
+  expect(fixture.auth.getUser).not.toHaveBeenCalled();
+});

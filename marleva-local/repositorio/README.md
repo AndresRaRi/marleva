@@ -44,14 +44,39 @@ Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integr
 
 ## Estado real
 
-Incremento UC008 en commit cd0a019: cursor por cuenta/microsegundos, índice nuevo, reintentos/lease/caducidad del correo; actas notices-*.json. El 14-10 pasaron tipado, lint, formato, 69 pruebas unitarias, cobertura de lógica de cuenta y regresión Chrome; Sonar y CI siguen pendientes. B09 backend tiene tres operaciones y seis pruebas reales locales pasadas; ver files-increment.json. Recuperación/B12, visual/nativos/físicos y otros casos siguen abiertos. Google/Supabase pendiente; Prisma/YAML canónico conservados por plan aprobado, Sonar local/CI por integrar, Flyway alternativa futura.
+Base/M1: backend de avisos, archivos privados y recuperación de operadores implementado; M1 sigue incompleta. Fase 1 del CI verificada en GitHub. Fase 2 pasó localmente calidad, 139 unitarias, 38 integraciones, siete operaciones de recuperación, contrato sobre 24 operaciones y accesibilidad web. En GitHub pasaron integración, contrato, web, calidad y CodeQL sobre 69672a5. Seguridad y revisión de dependencias pasaron en GitHub sobre 9cdde72. Dos paquetes vulnerables se retiraron; otros dos conservan versión original con parches locales comprobados mediante hashes y regresiones. OSV original se conserva. El primer pipeline completo pasó en 38773873030 y la negativa de seguridad fue rechazada; la correspondencia quedó restaurada. Integrar únicamente con todos los checks del HEAD vigente verdes en PR #2. Fase 3 sin ejecutar. Estado único y límites en [avance](docs/avance.md) y [ADR002](docs/adr/002-pipeline-ci.md). Google sigue pendiente; Prisma y YAML canónico conservados.
 
 Revisar este README al inicio/fin de cada proceso y chat; corregirlo solo si cambió la realidad. Cerrar con resultados, instructivo/revisión, porcentajes medibles y commit claro. Origin configurado; rama codex/fix-quality-and-rules subida el 14-10, seguimiento activo y pull --ff-only comprobado. Fuentes y originales sincronizados no se modifican ni se consideran subidos por guardado local. [ADR001](docs/adr/001-consolidacion-tecnica.md), [avance](docs/avance.md), reglas en 00. Hooks desde raíz: git config core.hooksPath .githooks; precommit ejecuta quality, unitarias y cobertura; commit-msg exige Conventional Commits.
 
 Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.json y ubicación en el instructivo. Requiere Metro. Recorrido emulado de acceso/error/OTP/cuenta/reinicio/salida pasó en 1080×1920; acta tests/results/android-test.json. Los demás flujos, 320×640, accesibilidad/físicos/iOS siguen pendientes. Cuota OTP corregida y probada: tests/results/otp-android-increment.md.
 
-B12 parcial: copia PG/Auth/metadata/contenido, borrado posterior reaplicado, caída de Storage recuperable, accesos antiguos rechazados y OTP nuevo con IDs/permisos conservados. Destino aislado con puertos solo 127.0.0.1; origen intacto. Incidencia: cp perdió atributos Storage; reconstrucción limitada de tres fixtures, prueba de nuevo helper pasada, copia completa nueva pasó. Actas recovery-provider/metadata-repair/xattrs y procedimiento docs/proceso/RECUPERACION_B12_M1.md. Recuperación runtime de operadores, ensayo integral, plataformas/repetibilidad/PF113 pendientes; no restauración completa acreditada.
+Recuperación B12: copia con atributos, borrado posterior, revocación, cola restaurada y recuperación de operador probados en ensayos separados. Falta el ensayo integral y la aceptación de plataformas. [Procedimiento](docs/proceso/RECUPERACION_B12_M1.md). No mezclar destinos ni dar por restaurado todo por pasar una fase.
 
-B12: cola restaurada con pg_dump, reinicio PG y nuevos procesos pasó en recovery-outbox.json; entrega exclusiva al capturador del destino. El proveedor recuperó un operador ficticio con otro revisor/AAL2 y OTP/TOTP nuevos: recovery-operator-provider.json. Esta prueba no integra las siete operaciones de recuperación ni roles persistidos, capacidad/idempotencia/conciliación o interfaz. Leer el procedimiento antes de repetir; el ensayo de correo detiene solo el capturador del destino.
+Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Pantallas y aceptación pendientes.
 
-Recuperación de operadores UC014: siete operaciones backend disponibles en el contrato canónico, con roles persistidos, revisión por otro administrador, revocación y segundo factor nuevo. Quinta migración local aplicada; 13 tablas de negocio. Pasos en docs/revision/M1/INSTRUCTIVO_M1.md y resultados en tests/results/recovery-api.json. Pantallas nuevas y aceptación pendientes; no asignar administradores reales desde los fixtures.
+## Leer el CI
+
+[![CI](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml/badge.svg?branch=codex%2Ffeat-ci-pipeline)](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml)
+
+Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español, corregir la causa y repetir el mismo comando local.
+
+| Etapa | Ejecutar desde esta carpeta |
+|---|---|
+| Calidad y dependencias sin uso | pnpm quality |
+| Capas y duplicación | pnpm arch:check |
+| Contratos y derivados | pnpm contracts:check |
+| Unitarias y cobertura | pnpm test:coverage; después pnpm coverage:check |
+| Compilación API/web | pnpm build |
+| Imagen local, hadolint y Trivy | pnpm build:container; requiere Docker |
+| Dependencias, secretos, licencias y SBOM | pnpm security:scan; bloquea avisos sin corrección comprobada |
+| Preparar servicios CI separados | pnpm ci:stack:start; después pnpm ci:migrations |
+| Integración general y operadores CI | pnpm ci:run integracion |
+| Navegador, axe y Lighthouse | pnpm ci:run web |
+| Generador de contrato | pnpm ci:run contrato; Python fijado en infra/ci/.python-version |
+| Detener servicios CI conservando datos | pnpm ci:stack:stop |
+
+El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriores. Setup genera Prisma sin conexión a datos. La imagen no incluye secretos ni herramientas locales; usuario numérico sin privilegios, varias etapas y comprobación de salud. Se compila y analiza, no se publica. La ejecución de aplicación sigue limitada al entorno local; activar despliegue exige otra decisión.
+
+El stack CI usa puertos 54621/54622/54624/54625 y credenciales propias ignoradas. Integración y web requieren libres los puertos API 3000 y HTTPS 8443; no detener procesos ajenos. En este Mac se puede usar el proxy TLS existente mediante MARLEVA_CI_EXISTING_PROXY=1, deteniendo y restaurando únicamente la API con scripts/local.mjs. Los jobs de GitHub tienen entorno propio; NSS confía en su CA temporal, sin ignorar TLS. No ejecutar suites que detienen Auth/Storage/correo en paralelo. Migraciones aplicadas intactas; pruebas de operadores usan una base nueva independiente, no reinician cuotas de otras suites.
+
+Requisito de GitHub: la revisión de dependencias necesita Dependency graph habilitado en Settings → Security → Advanced Security, en [ajustes de seguridad](https://github.com/AndresRaRi/marleva/settings/security_analysis). Se habilitó por solicitud del usuario y el control ya pasó. OSV analiza los lockfiles completos; su informe original se conserva y solo se reconoce una corrección local cuando coinciden sus hashes y pasan las regresiones en la misma ejecución. Cualquier aviso sin corrección comprobada bloquea. [Borrador de revisión #2](https://github.com/AndresRaRi/marleva/pull/2), sin fusionar.

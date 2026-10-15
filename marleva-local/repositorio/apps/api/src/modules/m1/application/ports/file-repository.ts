@@ -2,14 +2,14 @@ export interface FileActor {
   accountId: string;
   sessionId: string;
 }
-export interface FileDescriptor {
+interface FileDescriptor {
   id: string;
   objectKey: string;
   bytes: number;
   sha256: string;
   mimeType: string;
 }
-export interface DeletionResult {
+interface DeletionResult {
   fixture_id: string;
   task_id: string;
   estado: 'delete_pending' | 'deleted';

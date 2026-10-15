@@ -1,0 +1,146 @@
+[
+  {
+    "route": "/v1/auth/challenges",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/verifications",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/me",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/csrf",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/sessions/current",
+    "methods": [
+      "DELETE"
+    ]
+  },
+  {
+    "route": "/v1/auth/sessions",
+    "methods": [
+      "DELETE"
+    ]
+  },
+  {
+    "route": "/v1/auth/email-changes",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/email-changes/{id}/confirmations",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/notifications",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa/enrollments",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa/verifications",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/operator/access",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/health/live",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/health/ready",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/local/file-fixtures/{id}/access",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/local/file-fixtures/{id}/content",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/local/file-fixtures/{id}",
+    "methods": [
+      "DELETE"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}/approvals",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}/capabilities",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}/enrollments",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}/verifications",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/{id}/rejections",
+    "methods": [
+      "POST"
+    ]
+  }
+]

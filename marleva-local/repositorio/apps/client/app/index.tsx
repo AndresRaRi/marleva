@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { api } from '../src/api';
+import { StatusMessages } from '../src/status-messages';
 import type { ApiResponse } from '../src/api-response';
 import type { components } from '../../../packages/contracts/generated';
 type Account = components['schemas']['Account'];
@@ -91,24 +92,14 @@ export default function Home() {
     </View>
   );
   return (
-    <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+    <ScrollView role="main" contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
       <View style={styles.card}>
         <Text accessibilityRole="header" style={styles.title}>
           Marleva
         </Text>
         <Text style={styles.subtitle}>Productos y servicios entre vecinos de Gran Santa Fe</Text>
         <Text style={styles.local}>Entorno local · Datos ficticios · Sin pagos reales</Text>
-        {busy && <Text accessibilityLiveRegion="polite">Procesando…</Text>}
-        {error !== '' && (
-          <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.error}>
-            {error}
-          </Text>
-        )}
-        {message !== '' && (
-          <Text accessibilityLiveRegion="polite" style={styles.message}>
-            {message}
-          </Text>
-        )}
+        <StatusMessages busy={busy} error={error} message={message} styles={styles} />
         {!account ? (
           <>
             <Text accessibilityRole="header" style={styles.heading}>

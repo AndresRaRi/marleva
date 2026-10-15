@@ -1,5 +1,9 @@
 import { fail } from '../../../../security.js';
-import { recoveryProjection, type RecoveryActor } from '../../domain/entities/mfa-recovery.js';
+import {
+  recoveryProjection,
+  type RecoveryActor,
+  type RecoveryRecord,
+} from '../../domain/entities/mfa-recovery.js';
 import { RecoveryContext } from './recovery-context.js';
 export class RequestMfaRecovery {
   constructor(private readonly context: RecoveryContext) {}
@@ -8,14 +12,7 @@ export class RequestMfaRecovery {
     const continued = await this.context.repository.atomic(actor.accountId, async (tx) => {
       await this.context.actor(tx, actor);
       const row = await tx.active(actor.accountId);
-      if (
-        row &&
-        ['approved', 'executing', 'provider_pending'].includes(row.state) &&
-        row.expiresAt > this.context.clock() &&
-        row.approvedAt &&
-        actor.authenticatedAt > row.approvedAt &&
-        (!row.leaseUntil || row.leaseUntil <= this.context.clock())
-      ) {
+      if (this.canResume(row, actor)) {
         if (
           typeof row.providerState.authId !== 'string' ||
           !Array.isArray(row.providerState.factorIds) ||
@@ -62,5 +59,15 @@ export class RequestMfaRecovery {
       await tx.audit(actor.accountId, 'recovery.requested', row.id);
       return recoveryProjection(row);
     });
+  }
+  private canResume(row: RecoveryRecord | null, actor: RecoveryActor): row is RecoveryRecord {
+    return (
+      !!row &&
+      ['approved', 'executing', 'provider_pending'].includes(row.state) &&
+      row.expiresAt > this.context.clock() &&
+      !!row.approvedAt &&
+      actor.authenticatedAt > row.approvedAt &&
+      (!row.leaseUntil || row.leaseUntil <= this.context.clock())
+    );
   }
 }

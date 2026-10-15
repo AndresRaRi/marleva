@@ -1,0 +1,45 @@
+{
+  "positive": {
+    "conclusion": "success",
+    "databaseId": 38679348007,
+    "headSha": "dfeb9a3fd8a40e574dc29951967f604bcd17c340",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "unitarias",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679348007/job/116240164944"
+      },
+      {
+        "conclusion": "success",
+        "name": "calidad",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679348007/job/116240165022"
+      },
+      {
+        "conclusion": "success",
+        "name": "arquitectura-contratos",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679348007/job/116240165046"
+      },
+      {
+        "conclusion": "success",
+        "name": "build",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679348007/job/116240366960"
+      }
+    ],
+    "phase": 1,
+    "status": "completed",
+    "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679348007"
+  },
+  "negative": {
+    "run": 38679688035,
+    "sha": "f724d4d93a8dea0600e13ed0928fd85a245c01ed",
+    "url": "https://github.com/AndresRaRi/marleva/actions/runs/38679688035",
+    "expected": "FAIL por dependencia de aplicación en dominio",
+    "actual": "FAIL; domain-independent y no-circular",
+    "otherJobs": {
+      "calidad": "success",
+      "unitarias": "success",
+      "build": "No ejecutado por dependencia fallida"
+    }
+  },
+  "reversion": "Entidad restaurada exactamente desde dfeb9a3 en commit nuevo; repetición verde pendiente"
+}

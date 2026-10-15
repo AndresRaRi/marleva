@@ -1,6 +1,6 @@
 # Marleva: guía principal
 
-Fecha: 14 de octubre de 2026, America/Merida. Reglas vigentes; Git conserva el historial. Las decisiones C01–C26 y las autorizaciones están en [01](01_ESTADO_Y_DECISIONES_MARLEVA.md); el alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md); la evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
+Fecha: 15 de octubre de 2026, America/Merida. Reglas vigentes; Git conserva el historial. Las decisiones C01–C26 y las autorizaciones están en [01](01_ESTADO_Y_DECISIONES_MARLEVA.md); el alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md); la evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
 
 ## 1. Propósito y glosario
 
@@ -57,6 +57,8 @@ Cambiar solo lo afectado, con motivo y fecha necesarios. No copiar reglas entre 
 
 Palabras comunes, frases cortas y nombres claros. Separar confirmado, propuesto, pendiente y no verificado. No inventar cifras, resultados, acceso o aprobaciones. Consultar fuentes primarias para decisiones técnicas y verificar información cambiante cuando afecte una decisión. Registrar fecha, mercado, límites y consecuencia; no extrapolar otro país.
 
+Respuestas concisas: entregar resultados puntuales y útiles, evidencia necesaria y bloqueos accionables. Omitir explicaciones largas, narración de operaciones y pasos intermedios innecesarios; ampliar solo cuando el usuario lo pida o sea indispensable para decidir.
+
 Informar al terminar cada tarea o ante un bloqueo. El resultado debe ir primero en lenguaje sencillo; después, los detalles técnicos. Si una tarea supera el doble de su estimación, avisar con opciones antes de continuar. Las actualizaciones no piden otra aprobación para tareas ordinarias. Un chat abierto o un turno terminado no garantiza ejecución continua. El formato de respuesta está únicamente en §14.
 
 ## 5. Referentes
@@ -70,6 +72,10 @@ Comparar experiencias, operaciones, pagos, acceso y generación de ingresos para
 Conservar C01–C26, A0 y autorización del SDK Android. La programación base/M1 local con fixtures está autorizada; no pedirla de nuevo. Google/Supabase permanece pendiente. M2–M10 completos, dinero/datos reales, contactos, contratación, cuentas externas, publicación y despliegue no quedan autorizados por resolver una tarea técnica. El push al repositorio indicado por el usuario es sincronización del proyecto, no despliegue.
 
 Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio. Terminar un turno solo con cola vacía, bloqueo real o decisión pendiente del usuario; indicar el motivo. Si queda trabajo autorizado ejecutable, continuar.
+
+Las autorizaciones vigentes cubren correcciones, pruebas y sincronización ordinarias del plan: no solicitar confirmación por cada paso. Tramitar los permisos técnicos que exija el entorno sin omitirlos; agrupar operaciones del mismo alcance y reutilizar permisos válidos. No ampliar permisos por comodidad.
+
+Regla permanente, reforzada por el usuario el 15-10-2026: aplicar esta autonomía en cada chat, continuación, respuesta y tarea, aunque el usuario no esté conectado. Actuar directamente cuando la solución esté dentro del alcance autorizado y sea reversible; no preguntar «¿continúo?» ni pedir otra aprobación para corregir, probar, documentar, preparar el PR o sincronizar la rama ya autorizada. Antes de preguntar, comprobar las autorizaciones existentes y resolver con criterio las decisiones rutinarias. Preguntar solo ante una decisión material o irreversible no autorizada, información indispensable que no pueda obtenerse, o un permiso obligatorio de la plataforma. El tiempo transcurrido no sustituye una aprobación necesaria. Si el entorno exige permiso, explicar brevemente la acción y la restricción real; agrupar operaciones del mismo alcance y reutilizar autorizaciones válidas, sin desactivar controles ni ampliar permisos por comodidad. No detener trabajo independiente mientras se espera esa respuesta.
 
 Considerar negocio, operación, ingeniería, seguridad, privacidad, accesibilidad, soporte y obligaciones mexicanas cuando afecten el caso. Antes de operar: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, responsables y soporte. Demografía no se reabre. Ideas que amplían alcance van a pendientes para después en 01.
 
@@ -103,7 +109,7 @@ Antes de cualquier pantalla nueva o cambio visual material: proponer paleta, tip
 
 ## 9. Pruebas, calidad y entorno
 
-Para cambios backend/frontend: unitarias de reglas, integración real necesaria, negativos/permisos/concurrencia/caídas, rendimiento proporcional y regresión. Separar por tipo/lado/módulo. Guardar caso, requisito, versión, entorno/dataset/plataforma, esperado/obtenido, fallos/corrección y límites. Mocks no acreditan integración del proveedor; carpetas o planes no son resultados.
+Para cambios backend/frontend: unitarias de reglas, integración real necesaria, negativos/permisos/concurrencia/caídas, rendimiento proporcional y regresión. Separar por tipo/lado/módulo. Guardar caso, requisito, versión, entorno/dataset/plataforma, esperado/obtenido, fallos/corrección y límites. Mocks no acreditan integración del proveedor; carpetas o planes no son resultados. Agrupar hallazgos por causa antes de corregir. Repetir una validación solo ante cambios que la afecten, fallos o dudas concretas pendientes; conservar hooks y controles obligatorios.
 
 Cobertura objetivo ≥80% de lógica de negocio, incluyendo archivos no ejecutados. Tipado, lint, formato y hooks obligatorios; no apagar reglas ni excluir lógica para aparentar cumplimiento. Sonar local se homologa con versión, recursos, licencia y compatibilidad comprobadas; SonarCloud no se activa por defecto. Pasar una herramienta no acredita seguridad ni módulo terminado.
 
@@ -148,6 +154,8 @@ Después de pasar las pruebas de cada incremento pequeño, commit y push inmedia
 Al cerrar: verificar compilación, pruebas, reglas/documentos/README, enlaces, diff e ignorados; commit claro y push de la rama de trabajo. Comprobar SHA local/remoto. No incorporar modificaciones ajenas ni originales sincronizados al commit propio. Commits pequeños Conventional Commits: tipo(módulo/caso): resultado. Ramas codex/feat-… o codex/fix-…; main es la rama principal del remoto activo. Flujo rama → PR → CI → merge, con revisión de §7 antes de integrar. Prohibido push --force, reset --hard o rebase sobre ramas subidas; actualizar ramas publicadas mediante merge. Versiones de releases con SemVer, distintas del historial documental.
 
 Integración continua en GitHub Actions: lint → pruebas → build, sin despliegue. Falla bloquea integración. Sonar y cobertura se validan conforme §9; no sustituir pruebas ni publicar secretos para ejecutar el pipeline. No crear despliegue/cloud/piloto por hacer push.
+
+GitHub Actions es la validación principal del trabajo: subir el incremento a su rama, usar la ejecución automática existente o lanzar el workflow cuando proceda, y trabajar con sus resultados, resúmenes y artefactos. Corregir causas concretas y volver a ejecutar lo afectado. Evitar ejecuciones duplicadas del mismo commit y repetir manualmente en este equipo una suite ya comprobada en CI. Reservar comprobaciones locales para diagnóstico dirigido, casos que el pipeline aún no cubre, revisión de la aplicación y hooks obligatorios; conservar estos controles sin desactivarlos. Un fallo o bloqueo del pipeline se registra y se atiende, sin presentarlo como aprobado ni activar despliegue.
 
 ## 14. Formato de respuestas
 
