@@ -138,7 +138,8 @@ export function copyCloudCoverage(from, folder) {
 }
 export async function completedAnalysis(token, taskId, context, persist) {
   const response = await fetch(
-    'https://sonarcloud.io/api/ce/task?id=' + encodeURIComponent(taskId),
+    'https://sonarcloud.io/api/ce/task?' +
+      new URLSearchParams({ id: taskId, additionalFields: 'warnings' }),
     {
       headers: { Authorization: 'Bearer ' + token },
       signal: AbortSignal.timeout(30000),
