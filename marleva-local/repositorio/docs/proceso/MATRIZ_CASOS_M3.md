@@ -71,3 +71,7 @@ Primer PF001: cero errores, pero p95 hasta1414,67ms a10000 coincidencias/concurr
 Incidencia FE001 antes de corregir: transporte Node pasó, Chrome mostró error sin petición. Experimento real: fetch directo200, invocado como método de CatalogClient «Illegal invocation», ligado a globalThis200. Corregir receptor, añadir regresión con contrato nativo y repetir navegador/API real. No aceptar Node como prueba suficiente de navegador. Misma búsqueda/cursor/permiso; sin cambio visual.
 
 Accesibilidad antes de corregir: axe en detalle señaló page-has-heading-one. SEQ001/002/003:S080 incorpora encabezado principal semántico UI001/002/003; añadir aria-level1 al título, sin cambiar aspecto, y repetir axe yrecorrido. No ignorar la regla.
+
+## Autorización vigente de sincronización — 15-10-2026
+
+El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.

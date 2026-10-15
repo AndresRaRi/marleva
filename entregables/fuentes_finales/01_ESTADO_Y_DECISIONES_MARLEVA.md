@@ -179,3 +179,7 @@ Actualizar solo fuentes necesarias de esta copia; conciliar 01 con 006/007 antes
 Continuar sin confirmaciones rutinarias; aprobación técnica del entorno sigue siendo obligatoria.
 Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
 ```
+
+## Autorización vigente de sincronización — 15-10-2026
+
+El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.

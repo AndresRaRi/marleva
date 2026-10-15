@@ -62,3 +62,7 @@ Nueve escenarios de rendimiento del repositorio, con 10/1000/10000 ofertas y con
 Capturas finales revisadas: [catálogo](capturas/01-catalogo.png), [detalle](capturas/02-detalle.png), [perfil](capturas/03-oferente.png). Sin desbordamiento horizontal en los anchos comprobados 320/1280; axe no detectó infracciones en catálogo/detalle. Esto no acredita WCAG completo. Inventario y límites de lectura: [registro](../../proceso/inventario-m3.json).
 
 Comparación con la base: sin cambios en código M1, migraciones M1, contratos compartidos, fuentes sincronizadas o lockfile. El árbol estaba limpio tras el commit. Servicios de revisión locales disponibles en los accesos indicados; no se promete permanencia. Fuentes compartidas no se han subido ni reemplazado.
+
+## Autorización vigente de sincronización — 15-10-2026
+
+El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
