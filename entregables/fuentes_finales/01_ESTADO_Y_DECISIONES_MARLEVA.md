@@ -143,3 +143,5 @@ confirmaciones rutinarias. Releer finales, verificar enlaces/diff/ignorados,
 commit/push y SHA local/remoto real. Indicar Fuentes/configuración a reemplazar;
 no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierre real.
 ```
+
+Continuación UC008, 15-10-2026: PR #7 integrado por el usuario; main comprobado db2ec7d976243868293b1b2304f972cb9d592e99 y CI38810874321 correcto. Rama codex/feat-m1-paginacion-avisos: siguiente página explícita, exclusión de petición concurrente, conservación ante error/reintento y descarte por desmontaje; contrato/API/modelo/migraciones sin cambios. Evidencia y límites en matriz/SEQ008. Sonar separado y pendiente; no bloquea este incremento. Cambios preexistentes de autonomía, idea de cercanía y fuentes conservados por procedencia. M1 y aceptación/plataformas siguen incompletas; no subida a Fuentes compartidas.

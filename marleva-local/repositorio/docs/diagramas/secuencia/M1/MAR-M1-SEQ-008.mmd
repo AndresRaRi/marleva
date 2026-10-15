@@ -25,8 +25,10 @@ sequenceDiagram
     API->>DB: S080 leer limit+1 propios por createdAt DESC/id DESC; frontera UTC exacta con microsegundos
     API->>API: S085 devolver máximo limit; cursor solo si hay siguiente fila
     API-->>UI: S090 lista o vacío; next_cursor o null
+    UI->>UI: S091 conservar lista; cargar siguiente solo con cursor y sin petición activa
+    UI->>API: S093 cursor siguiente; validar cuenta/avance y anexar IDs únicos; error conserva lista y cursor
     alt Cursor inválido o cuenta distinta
-     API-->>UI: S095 422 PAGINACION; reiniciar primera página sin datos ajenos
+     API-->>UI: S095 422 PAGINACION; conservar lista; Actualizar cuenta reinicia primera página sin datos ajenos
     else DB o identidad caídas
      API-->>UI: S097 error recuperable; nunca vacío fingido
     end

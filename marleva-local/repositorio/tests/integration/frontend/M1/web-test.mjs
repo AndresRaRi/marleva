@@ -1,3 +1,4 @@
+import { verifyPaginatedNotices } from './paginated-notices.mjs';
 import path from 'node:path';
 process.chdir(path.resolve(new URL('../../../..', import.meta.url).pathname));
 import { chromium } from '@playwright/test';
@@ -119,6 +120,10 @@ try {
     browser,
     process.env.APP_ORIGIN ?? 'https://localhost:8443',
   );
+  const paginatedNotices = await verifyPaginatedNotices(
+    browser,
+    process.env.APP_ORIGIN ?? 'https://localhost:8443',
+  );
   await writeFile(
     'tests/results/web-test.json',
     JSON.stringify(
@@ -136,6 +141,7 @@ try {
           logout: true,
           realSessionReloadNotices: true,
           resumedNotices,
+          paginatedNotices,
         },
         pageErrors: errors,
       },
