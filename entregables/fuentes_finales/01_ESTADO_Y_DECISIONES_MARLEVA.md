@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main remoto comprobado en b12bfca2a8a9f7e35b9c1a6dea76264cfedf88ce; PR #1/#2 integrados y CI propio del merge correcto en 38778339532 | [PR #3 documental](https://github.com/AndresRaRi/marleva/pull/3) abierto al comprobar; consolidación separada en codex/fix-consolidacion-m1-006, basada en su commit efdefdf. No fusionar; verificar checks del HEAD final y revisión antes de main |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main remoto comprobado en b12bfca2a8a9f7e35b9c1a6dea76264cfedf88ce; PR #1/#2 integrados y CI propio del merge correcto en 38778339532 | [PR #3 documental](https://github.com/AndresRaRi/marleva/pull/3) abierto al comprobar; [PR #4 de consolidación](https://github.com/AndresRaRi/marleva/pull/4) en codex/fix-consolidacion-m1-006, basada en su commit efdefdf. No fusionar; verificar checks del HEAD final y revisión antes de main |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -108,6 +108,8 @@ Objetivo: preservar y consolidar inventario/auditoría/UC001 por procedencia en 
 
 Lectura: instrucciones/README/AGENTS y 00–03 completos, incluidos espejos anteriores y diferencias de las copias editables; protocolo, matriz, ADR001/002 y acta de cierre leídos. Árbol general: inventario inicial de 408 archivos no ignorados; lectura parcial de código, anexos extensos y artefactos generados. No lectura exhaustiva de dependencias, secretos, cachés ni binarios. Originales ausentes permanecen según §4; investigación externa no revalidada por esta consolidación. Inventario de rutas/fechas/tamaños/hashes y copia del diff en artifacts/consolidacion-006, ignorados; no acreditar lectura por calcular hashes.
 
+Revisión independiente estática: un hallazgo de aislamiento PG/Auth corregido y verificado por segunda lectura. Negativa dirigida rechaza Auth 54321 antes de construir DB/servicio. [Acta UC001 y consolidación](../../marleva-local/repositorio/tests/results/uc001-branches.json). [CI del PR #4](https://github.com/AndresRaRi/marleva/pull/4/checks) se consulta por el HEAD vigente; no es aceptación funcional ni autorización de merge. Fase 3 no iniciada: requiere cerrar la integración previa.
+
 Cambios preexistentes en AGENTS raíz y sources/01–03 preservados y fuera de commits propios. Cinco migraciones se comparan por hash, sin alterar ni aplicar DDL. A0/SDK, C01–C26 y Google pendiente se conservan. Fuente 01 es la entrega de estado para reemplazar en Fuentes mediante acceso autorizado; guardado/commit/push no realizan esa carga.
 
 ## 7. Prompt de continuidad
@@ -123,7 +125,8 @@ cinco migraciones inmutables y todo trabajo preexistente. No reset/stash/borrado
 Comprobar rama/HEAD/upstream/origin; pull --ff-only sin descartar cambios.
 main b12bfca tiene CI propio verde 38778339532; PR #3 contiene cierre documental.
 Rama codex/fix-consolidacion-m1-006 consolida inventario/auditoría/UC001 desde
-efdefdf; verificar estado remoto, PR y CI del HEAD real, sin atribuir otros verdes.
+efdefdf, PR #4. Revisión independiente y corrección de aislamiento PG/Auth hechas;
+verificar estado remoto y CI del HEAD real, sin atribuir otros verdes.
 Primero cerrar revisión y consolidación por procedencia. No fusionar ni iniciar
 fase 3 antes de cumplir su dependencia. Después fase 3 acotada de ADR002 y
 ramas M1 por matriz: avisos cliente, retorno seguro y B12 esencial integrado;

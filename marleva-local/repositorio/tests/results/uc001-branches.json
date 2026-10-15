@@ -73,13 +73,14 @@
         "UT-BE-114-AAL2"
       ]
     },
-    "ciForConsolidation": "Pendiente; consultar checks del HEAD del PR separado, no reutilizar el verde de main",
+    "ciForConsolidation": "Resultado consultable en https://github.com/AndresRaRi/marleva/pull/4/checks para su HEAD vigente; no reutilizar el verde de main",
     "performance": "No nueva carga: solo pruebas/metadatos/documentación; mediciones históricas conservadas",
     "reviewCorrection": {
       "finding": "P2: configuración mezclada podía escribir en Auth origen",
       "fix": "Exigir provider.origin http://127.0.0.1:54621 antes de construir DB/servicio",
       "negative": "Runner con PG CI y Auth 54321 rechazado en beforeAll, salida no cero esperada; casos omitidos; sin escritura ni conexión de negocio",
       "review": "Segunda revisión estática confirma hallazgo resuelto; sin otros defectos accionables en su alcance parcial"
-    }
+    },
+    "pullRequest": "https://github.com/AndresRaRi/marleva/pull/4"
   }
 }

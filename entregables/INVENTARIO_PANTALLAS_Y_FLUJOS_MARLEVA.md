@@ -590,4 +590,3 @@ Lectura C: completa; P: parcial/extracción; V: imagen inspeccionada visualmente
 | sources/01_ESTADO_Y_DECISIONES_MARLEVA.md | 2026-10-15 | 50160 | 1cafdfbcbe0f | S/P |
 | sources/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md | 2026-10-15 | 80614 | c8aadd2a8295 | S/P |
 | sources/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md | 2026-10-15 | 79470 | d655c9abfdcd | S/C |
-
