@@ -2,7 +2,10 @@ import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { writeFile, mkdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+const browser = await chromium.launch({
+  channel: process.env.M3_CI === '1' ? undefined : 'chrome',
+  headless: true,
+});
 const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
 const page = await context.newPage();
 const report = {
