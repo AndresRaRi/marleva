@@ -1,6 +1,6 @@
 # Marleva: estado y decisiones
 
-Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 continúa. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
+Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 cerrado por solicitud del usuario; continuidad propuesta MAR-CHAT-006, aún no abierto. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
 
 ## 1. Decisiones confirmadas
 
@@ -51,14 +51,14 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main principal en 25b60f9 tras fusión del PR #1. Rama codex/feat-ci-pipeline incorpora main mediante merge dfeb9a3; fase 1 verificada en ee171cf y fase 2 publicada inicialmente en 412d56d | [PR #2: comprobaciones y revisión](https://github.com/AndresRaRi/marleva/pull/2); aplicar 00 §13, sin fusionarlo automáticamente |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main en b12bfca tras integrar PR #1 y PR #2; fases 1–2 del CI comprobadas sobre a93375b, negativa y restauración incluidas | [PR #2 integrado](https://github.com/AndresRaRi/marleva/pull/2); comprobar CI del merge y consolidar cambios locales aún no integrados |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
 | Acceso/cuenta | OTP, sesión, salida actual/total, cambio de correo y segundo factor básico implementados; pruebas API y recorridos básicos web/Android | Casos restantes, renovación/recuperación completas, accesibilidad y plataformas |
 | Avisos/archivos | Cursor por cuenta, correo durable y B09 de archivos ficticios privados implementados/probados en backend | Paginación del cliente, operación y recuperación restante; sin expediente M2 |
 | Recuperación B12 | Copia física corregida conserva filas/contenido/atributos; otro destino probó borrado posterior, caída Storage, revocación y OTP nuevo. Migración ficticia transaccional interrumpida/reaplicada | Cola restaurada/reinicio/SMTP aislado probados en ensayo separado; SDK de recuperación de operador probado. Siete operaciones runtime y permisos persistidos probados; capacidad/idempotencia/conciliación implementadas. Faltan cliente/plataformas y ensayo integral. No mezclar destinos |
-| CI por fases | Fase 1 verificada: verde, negativa rechazada y reversión verde. Fase 2: primer verde completo sobre 9cdde72, negativa de seguridad rechazada y correspondencia restaurada. Gráfico y correcciones de seguridad comprobados en GitHub | Exigir todos los checks del HEAD restaurado verdes antes de dejar PR #2 listo. Resultados y límites en docs/avance.md. Fase 3 en incremento separado después de integrar; Sonar temporal base/cambio aprobado, sin SonarCloud ni gasto |
+| CI por fases | Fase 1 verificada: verde, negativa rechazada y reversión verde. Fase 2: primer verde completo sobre 9cdde72, negativa de seguridad rechazada y correspondencia restaurada. Gráfico y correcciones de seguridad comprobados en GitHub | Diez checks verdes sobre a93375b; PR #2 integrado. Pipeline de main tiene ejecución propia. Resultados y límites en docs/avance.md. Fase 3 en incremento separado después de integrar; Sonar temporal base/cambio aprobado, sin SonarCloud ni gasto |
 | Calidad | Tipado/lint/formato, 153 unitarias y 38 integraciones aisladas pasaron. Axe y Lighthouse pasaron en web; cobertura con alcance explícito y hooks activos. Controles remotos independientes verificados | Seguridad y gráfico comprobados; revisión independiente estática sin defectos accionables. Sonar y fase 3 posteriores. Sin certificación |
 | Revisión local | Instructivo M1 con capturas reales web/Android; usuario revisará y enviará observaciones | Aceptación visual pendiente; propuesta visual nueva primero |
 
@@ -76,11 +76,12 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 |---|---|
 | MAR-CHAT-001–003 | Cerrados; antecedentes en Git y evidencia 03 |
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
-| MAR-CHAT-005 | Abierto; implementación/pruebas base/M1 y corrección de fuentes. No equivale a M1 terminada |
+| MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
+| MAR-CHAT-006 | Propuesto, aún no abierto: consolidación de main y siguientes brechas de M1 |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
-Seguimiento CI autorizado y activado el 15-10-2026 en este chat: «Vigilar y corregir CI de Marleva», ID vigilar-y-corregir-ci-de-marleva, cada 15 minutos. Revisa codex/feat-ci-pipeline y PR #2, diagnostica fallos nuevos y corrige dentro del alcance autorizado; avisa solo cambios relevantes o intervención necesaria. Estado mínimo de ejecuciones en artifacts ignorados. No es notificación instantánea; requiere aplicación/equipo disponibles y permisos de ejecución. No fusiona, despliega ni cambia ajustes del repositorio; no repite avisos por bloqueos conocidos sin novedad. La automatización anterior de MAR-CHAT-004 permanece pausada.
+Vigilancia CI del PR #2 eliminada tras comprobar su integración a main el 15-10-2026. La automatización anterior de MAR-CHAT-004 sigue pausada. [Cierre, contradicciones, limpieza propuesta y trabajo local pendiente](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). No se eliminaron archivos, ramas o chats.
 
 ## 6. Pendientes y decisiones del usuario
 
@@ -97,17 +98,4 @@ Para después, fuera del alcance: reparto propio, favoritos/reseñas/promociones
 
 ## 7. Prompt de continuidad
 
-PROYECTO: Marleva. CHAT: MAR-CHAT-005, CONTINUACIÓN; conservar ID. ANTERIOR: MAR-CHAT-004.
-TEMA: Implementación integrada y pruebas de base/M1.
-RAÍZ: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a.
-FECHA: comprobar fecha real America/Merida.
-
-1. Verifica acceso, registro de chat, rama, HEAD, cambios y origin. Ejecuta git pull --ff-only de la rama de trabajo. Sin upstream, comprueba referencias y configura seguimiento en el primer push; no descartes cambios ni inventes sincronización.
-2. Lee instrucciones, README y AGENTS. Después lee 00, 01, 02 y 03 completas y en orden. Inventaría desde raíz y lee nuevos/modificados. Declara faltantes y lectura parcial; no reconstruyas originales ni divulges secretos.
-3. Lee el protocolo técnico, matriz M1 y ADR001. Luego casos/secuencias/pasos, datos, contrato y pruebas del cambio. Documentación coherente antes de código; propuesta/revisión visual antes de pantallas.
-4. Conserva C01–C26, A0, SDK Android y decisiones actuales. Prisma gestiona marleva; Supabase sus esquemas. YAML es canónico. Google queda pendiente. No nuevas cuentas/gasto/despliegue/contactos/cobros/datos reales ni M2–M10 completos.
-5. Consulta docs/avance.md para implementación/aceptación por criterios. No copies porcentajes a 01 ni cuentes archivos/tests como funciones. No declares M1 completa por un incremento.
-6. Prioridad vigente: dejar PR #2 listo con revisión y todos los checks del HEAD restaurado verdes; no fusionarlo automáticamente. Después de integrar y actualizar main, continuar fase 3 en rama nueva. Mantener verde real, negativa y reversión verde como puertas por fase. Conservar aprobación de Sonar temporal base/cambio; sin SonarCloud ni gasto. No ignorar avisos de seguridad para aprobar. Después continúa la dependencia pendiente de la matriz. No repitas pruebas sin cambio/fallo nuevo. Distingue destinos B12 y conserva backups/ledger privados. Revisión visual pendiente; aplicar B12-PILOTO-A aprobado, priorizando recuperación esencial y registrando pruebas avanzadas diferidas.
-7. Ejecuta pruebas pertinentes, corrige fallos y documenta evidencia/límites. Mantén README útil. No cambies SQL aplicado ni elimines archivos sin confirmación.
-8. Relee finales, comprueba enlaces/diff/ignorados y guarda commits claros. Al cerrar, commit y push de la rama; coteja SHA remoto/local. Antes de main exige revisión de código. CI GitHub Actions: lint→pruebas→build, sin despliegue.
-9. Usa el formato de 00 §14 y sus plantillas de chat cuando corresponda. Entrega archivos/SHA/acceso/subida real y siguiente acción. FIN solo al cerrar el tema. No prometer ejecución o acceso futuro inexistentes.
+Usar el prompt completo revisado del [cierre MAR-CHAT-005](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md#prompt-de-continuidad). Próximo ID propuesto MAR-CHAT-006, comprobar registro antes de abrirlo. Prioridad: confirmar CI de main, consolidar los cambios locales de auditoría/inventario/UC001, continuar fase 3 acotada y después ramas M1 por dependencia. No reabrir 005 ni declarar M1 completa. Autonomía de 00 §6 permanente.
