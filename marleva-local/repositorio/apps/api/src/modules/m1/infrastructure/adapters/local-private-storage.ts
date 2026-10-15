@@ -31,15 +31,8 @@ export class LocalPrivateStorage implements FileStorage {
     const mime = (response.headers.get('content-type') ?? '').split(';')[0].trim();
     const reader = response.body.getReader(),
       chunks: Uint8Array[] = [];
-    let size = 0;
     try {
-      for (;;) {
-        const next = await reader.read();
-        if (next.done) break;
-        size += next.value.byteLength;
-        if (size > 1048576) throw new FileFault('integrity');
-        chunks.push(next.value);
-      }
+      await readChunks(reader, chunks);
       return { data: Buffer.concat(chunks), mime };
     } catch (error) {
       await reader.cancel().catch(() => undefined);
@@ -82,18 +75,31 @@ export class LocalPrivateStorage implements FileStorage {
     // Local Supabase Storage wraps NoSuchKey in HTTP400; never treat any 400 as absence.
     if (response.status === 400) {
       const body: unknown = await response.json().catch(() => null);
-      if (
-        body &&
-        typeof body === 'object' &&
-        'code' in body &&
-        body.code === 'NoSuchKey' &&
-        'statusCode' in body &&
-        String(body.statusCode) === '404'
-      )
-        return true;
+      if (noSuchKey(body)) return true;
     } else {
       await response.body?.cancel();
     }
     throw new FileFault('dependency');
   }
+}
+
+async function readChunks(reader: ReadableStreamDefaultReader<Uint8Array>, chunks: Uint8Array[]) {
+  let size = 0;
+  for (;;) {
+    const next = await reader.read();
+    if (next.done) return;
+    size += next.value.byteLength;
+    if (size > 1048576) throw new FileFault('integrity');
+    chunks.push(next.value);
+  }
+}
+function noSuchKey(body: unknown) {
+  return (
+    !!body &&
+    typeof body === 'object' &&
+    'code' in body &&
+    body.code === 'NoSuchKey' &&
+    'statusCode' in body &&
+    String(body.statusCode) === '404'
+  );
 }

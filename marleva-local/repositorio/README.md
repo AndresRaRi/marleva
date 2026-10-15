@@ -55,3 +55,20 @@ B12 parcial: copia PG/Auth/metadata/contenido, borrado posterior reaplicado, ca�
 B12: cola restaurada con pg_dump, reinicio PG y nuevos procesos pasó en recovery-outbox.json; entrega exclusiva al capturador del destino. El proveedor recuperó un operador ficticio con otro revisor/AAL2 y OTP/TOTP nuevos: recovery-operator-provider.json. Esta prueba no integra las siete operaciones de recuperación ni roles persistidos, capacidad/idempotencia/conciliación o interfaz. Leer el procedimiento antes de repetir; el ensayo de correo detiene solo el capturador del destino.
 
 Recuperación de operadores UC014: siete operaciones backend disponibles en el contrato canónico, con roles persistidos, revisión por otro administrador, revocación y segundo factor nuevo. Quinta migración local aplicada; 13 tablas de negocio. Pasos en docs/revision/M1/INSTRUCTIVO_M1.md y resultados en tests/results/recovery-api.json. Pantallas nuevas y aceptación pendientes; no asignar administradores reales desde los fixtures.
+
+## Leer el CI
+
+[![CI](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml/badge.svg?branch=codex%2Ffeat-ci-pipeline)](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml)
+
+Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español, corregir la causa y repetir el mismo comando local.
+
+| Etapa | Ejecutar desde esta carpeta |
+|---|---|
+| Calidad y dependencias sin uso | pnpm quality |
+| Capas y duplicación | pnpm arch:check |
+| Contratos y derivados | pnpm contracts:check |
+| Unitarias y cobertura | pnpm test:coverage; después pnpm coverage:check |
+| Compilación API/web | pnpm build |
+| Imagen local, hadolint y Trivy | pnpm build:container; requiere Docker |
+
+El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriores. Setup genera Prisma sin conexión a datos. La imagen no incluye secretos ni herramientas locales; usuario numérico sin privilegios, varias etapas y comprobación de salud. Se compila y analiza, no se publica. La ejecución de aplicación sigue limitada al entorno local; activar despliegue exige otra decisión.

@@ -8,6 +8,14 @@ export async function api<Result = unknown>(
   method = 'GET',
   body?: unknown,
 ): Promise<Result> {
+  const headers = await requestHeaders(path, method);
+  const response = await request(path, method, headers, body);
+  const result = await readPayload(response);
+  await checkResponse(response, result, path);
+  await saveSession(result, path);
+  return result as Result;
+}
+async function requestHeaders(path: string, method: string) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (Platform.OS !== 'web') {
     headers['x-marleva-client'] = 'native';
@@ -20,9 +28,16 @@ export async function api<Result = unknown>(
     }
     headers['x-csrf-token'] = csrf;
   }
-  let response: Response;
+  return headers;
+}
+async function request(
+  path: string,
+  method: string,
+  headers: Record<string, string>,
+  body: unknown,
+) {
   try {
-    response = await fetch(base + path, {
+    return await fetch(base + path, {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -32,6 +47,8 @@ export async function api<Result = unknown>(
   } catch {
     throw new Error('No hay conexión con Marleva. Conservamos este paso; intenta de nuevo.');
   }
+}
+async function readPayload(response: Response) {
   let payload: unknown;
   try {
     payload = await response.json();
@@ -45,28 +62,32 @@ export async function api<Result = unknown>(
       'No pudimos leer la respuesta de Marleva. Conservamos este paso; intenta de nuevo.',
     );
   const result = payload as Record<string, unknown>;
-  if (!response.ok) {
-    if (
-      response.status === 401 &&
-      path !== '/v1/auth/verifications' &&
-      !path.includes('/confirmations')
-    ) {
-      if (Platform.OS !== 'web') await SecureStore.deleteItemAsync('marleva_session');
-      csrf = '';
-    }
-    throw Object.assign(
-      new Error(
-        typeof result.mensaje === 'string' ? result.mensaje : 'No pudimos completar la acción',
-      ),
-      { status: response.status, code: result.codigo },
-    );
-  }
+  return result;
+}
+async function checkResponse(response: Response, result: Record<string, unknown>, path: string) {
+  if (response.ok) return;
+  if (
+    response.status === 401 &&
+    path !== '/v1/auth/verifications' &&
+    !path.includes('/confirmations')
+  )
+    await clearSession();
+  throw Object.assign(
+    new Error(
+      typeof result.mensaje === 'string' ? result.mensaje : 'No pudimos completar la acción',
+    ),
+    { status: response.status, code: result.codigo },
+  );
+}
+async function clearSession() {
+  if (Platform.OS !== 'web') await SecureStore.deleteItemAsync('marleva_session');
+  csrf = '';
+}
+async function saveSession(result: Record<string, unknown>, path: string) {
   if (typeof result.csrf_token === 'string') csrf = result.csrf_token;
   if (typeof result.session_token === 'string' && Platform.OS !== 'web')
     await SecureStore.setItemAsync('marleva_session', result.session_token);
   if (path.startsWith('/v1/auth/sessions') || result.estado === 'completo') {
-    csrf = '';
-    if (Platform.OS !== 'web') await SecureStore.deleteItemAsync('marleva_session');
+    await clearSession();
   }
-  return payload as Result;
 }

@@ -1,0 +1,53 @@
+{
+  "workspaces": {
+    ".": {
+      "entry": [
+        "scripts/*.{mjs,cjs}",
+        "tests/**/*.{mjs,ts}"
+      ],
+      "project": [
+        "scripts/*.{mjs,cjs}",
+        "tests/**/*.{mjs,ts}"
+      ]
+    },
+    "apps/api": {
+      "entry": [
+        "src/main.ts",
+        "bootstrap.mjs",
+        "seed.mjs"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "*.mjs",
+        "prisma/**/*.prisma"
+      ],
+      "ignoreDependencies": [
+        "@prisma/client"
+      ]
+    },
+    "apps/client": {
+      "entry": [
+        "app/**/*.{ts,tsx}"
+      ],
+      "project": [
+        "app/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "expo-updates"
+      ]
+    },
+    "packages/contracts": {
+      "entry": [
+        "generated.ts"
+      ]
+    }
+  },
+  "ignoreBinaries": [
+    "openssl",
+    "adb"
+  ],
+  "ignoreUnresolved": [
+    "./scripts/tool"
+  ]
+}

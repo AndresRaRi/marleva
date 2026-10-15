@@ -1,32 +1,31 @@
 {
-  "date": "2026-10-14T20:29:11.721Z",
+  "date": "2026-10-15T03:52:18.373821+00:00",
   "timezone": "America/Merida",
-  "scope": "Lógica de negocio API y adaptador cliente; AccountService incluido",
-  "threshold": 80,
+  "scope": "Lógica de negocio, DTO, dos adaptadores refactorizados y mensajes/cliente; incluye no ejecutados",
   "obtained": {
     "lines": {
-      "total": 359,
-      "covered": 339,
+      "total": 834,
+      "covered": 802,
       "skipped": 0,
-      "pct": 94.42
+      "pct": 96.16
     },
     "statements": {
-      "total": 411,
-      "covered": 378,
+      "total": 937,
+      "covered": 888,
       "skipped": 0,
-      "pct": 91.97
+      "pct": 94.77
     },
     "functions": {
-      "total": 66,
-      "covered": 62,
+      "total": 170,
+      "covered": 164,
       "skipped": 0,
-      "pct": 93.93
+      "pct": 96.47
     },
     "branches": {
-      "total": 310,
-      "covered": 281,
+      "total": 703,
+      "covered": 643,
       "skipped": 0,
-      "pct": 90.64
+      "pct": 91.46
     },
     "branchesTrue": {
       "total": 0,
@@ -35,10 +34,11 @@
       "pct": 100
     }
   },
+  "tests": 122,
   "passed": true,
-  "tests": 67,
+  "newCode": "Trinquete LCOV >=80%, base 938ad41; tipos y continuaciones no son líneas ejecutables adicionales",
   "limits": [
-    "Unitarias fuente TS con puertos/DB controlados; no integración real por mocks",
-    "Pantallas/componentes, Sonar/CI y revisión completa no acreditados"
+    "Unitarias con puertos/proveedor controlados; integración real se registra por separado",
+    "No representa aceptación de M1 ni análisis Sonar"
   ]
 }

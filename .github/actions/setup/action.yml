@@ -1,0 +1,22 @@
+name: Preparar Marleva
+description: Versiones del proyecto, caché y dependencias congeladas
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288
+      with:
+        package_json_file: marleva-local/repositorio/package.json
+        run_install: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version-file: marleva-local/repositorio/.node-version
+        cache: pnpm
+        cache-dependency-path: marleva-local/repositorio/pnpm-lock.yaml
+    - name: Instalar versiones fijadas
+      shell: bash
+      working-directory: marleva-local/repositorio
+      run: pnpm install --frozen-lockfile
+    - name: Generar cliente de datos sin conectar
+      shell: bash
+      working-directory: marleva-local/repositorio
+      run: pnpm ci:prepare

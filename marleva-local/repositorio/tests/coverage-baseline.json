@@ -1,0 +1,11 @@
+{
+  "base": "938ad41774b0608d08aac4a33c1d7d7cfd51c7b1",
+  "scope": "L\u00f3gica de negocio y adaptador cliente; ampliar sin ocultar archivos nuevos",
+  "total": {
+    "lines": 96.16,
+    "statements": 94.77,
+    "branches": 91.46,
+    "functions": 96.47
+  },
+  "date": "2026-10-15T03:52:18.373378+00:00"
+}

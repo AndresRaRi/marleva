@@ -15,7 +15,7 @@ export type RecoveryActor = {
   authenticatedAt: Date;
   tokens: RecoveryTokens;
 };
-export type RecoveryOperation = {
+type RecoveryOperation = {
   hash: string;
   response?: string;
   expiresAt?: string;

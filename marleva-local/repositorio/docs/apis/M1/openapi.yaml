@@ -2732,3 +2732,7 @@ components:
       type: apiKey
       in: header
       name: x-recovery-capability
+    fixtureCapability:
+      type: apiKey
+      in: header
+      name: x-fixture-capability

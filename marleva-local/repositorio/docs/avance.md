@@ -45,3 +45,15 @@ Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni in
 ## Verificación técnica independiente del porcentaje
 
 Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó. Cobertura de lógica medida con fuente TS y AccountService incluido superó 80% global; resumen en tests/results/coverage-summary.json. Cobertura no implica funcionalidad completa ni Sonar/CI aprobados. Manual único en docs/revision/M1/INSTRUCTIVO_M1.md; usuario revisará. Google pendiente, diseño visual nuevo pendiente de alta prioridad en 01. Datos ficticios; no despliegue.
+
+## Pipeline de integración continua
+
+14-10-2026. General no tiene porcentaje funcional. Rama codex/feat-ci-pipeline parte de 1d75de3; PR de recuperación #1 abierto hacia main, sin fusión.
+
+| Fase | Preparación local | Resultado en GitHub |
+|---|---|---|
+| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Pendiente primera ejecución y prueba negativa revertida |
+| 2. Seguridad, integración y web accesible | Pendiente; no saltar desde fase 1 | No ejecutada |
+| 3. Sonar, rendimiento, nightly, CD desactivado y dependabot | Comparación temporal Sonar aprobada, sin SonarCloud/gasto | No ejecutada |
+
+Avisos de longitud de funciones permanecen visibles como pidió el usuario; complejidad y anidación son errores. Una ejecución local no acredita CI verde. Fases 2–3 no se activan hasta cerrar fase previa. El [ADR002](adr/002-pipeline-ci.md) conserva versiones, fuentes, licencias y límites.

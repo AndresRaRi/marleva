@@ -4,16 +4,11 @@ export function fixtureId(value: string) {
     throw new FileFault('missing');
   return value;
 }
+function validKey(key: string | undefined): key is string {
+  return !!key && key.length >= 16 && key.length <= 128 && !/[^\x21-\x7e]/.test(key);
+}
 export function deletionInput(body: unknown, key: string | undefined) {
-  if (
-    !key ||
-    key.length < 16 ||
-    key.length > 128 ||
-    /[^\x21-\x7e]/.test(key) ||
-    !body ||
-    typeof body !== 'object' ||
-    Array.isArray(body)
-  )
+  if (!validKey(key) || !body || typeof body !== 'object' || Array.isArray(body))
     throw new FileFault('input');
   const fields = body as Record<string, unknown>;
   if (
