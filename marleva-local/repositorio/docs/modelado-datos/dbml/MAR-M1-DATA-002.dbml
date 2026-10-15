@@ -1,6 +1,6 @@
 Project Marleva_M1_Objetivo {
  database_type: 'PostgreSQL'
- Note: 'MAR-M1-DATA-002. Modelo objetivo propuesto, NO implementado ni aplicado. No incluye M2–M10, Auth/Storage gestionados por Supabase ni credenciales. DDL generado desde este DBML, no aplicar completo a una base existente. Hay brechas de integridad identificadas en el protocolo; no es modelo íntegro de MVP1.'
+ Note: 'MAR-M1-DATA-002. Modelo objetivo separado del físico: roles/recuperación y B09 tienen implementación parcial acreditada; diferencias pendientes como FK EmailChange. No aplicado íntegramente. No incluye M2–M10, Auth/Storage gestionados por Supabase ni credenciales. DDL generado desde este DBML, no aplicar completo a una base existente. Hay brechas de integridad identificadas en el protocolo; no es modelo íntegro de MVP1.'
 }
 Table marleva.Account {
  id uuid [pk, not null, default: `gen_random_uuid()`]
