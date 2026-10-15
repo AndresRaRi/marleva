@@ -1,0 +1,231 @@
+{
+  "date": "2026-10-15",
+  "timezone": "America/Merida",
+  "status": "passed",
+  "run": 38821867592,
+  "url": "https://github.com/AndresRaRi/marleva/actions/runs/38821867592",
+  "base": "db2ec7d976243868293b1b2304f972cb9d592e99",
+  "head": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+  "project": "andresrari-marleva_marleva",
+  "plan": "Free",
+  "visibility": "private",
+  "cardProvided": false,
+  "spending": 0,
+  "negativeBlocked": true,
+  "negativeRule": "typescript:S1764",
+  "mcp": {
+    "name": "sonarqube-mcp-server",
+    "version": "1.25.0.3221"
+  },
+  "startedAt": "2026-10-15T23:11:34.270Z",
+  "finishedAt": "2026-10-15T23:14:01.472Z",
+  "analyses": {
+    "base": {
+      "revision": "db2ec7d976243868293b1b2304f972cb9d592e99",
+      "sourceSha": "db2ec7d976243868293b1b2304f972cb9d592e99",
+      "exitCode": 0,
+      "taskId": "AaFB1nsRmv3EtrWtbCVX",
+      "indexedFiles": 64,
+      "cachedFiles": 0,
+      "uncachedFiles": 64,
+      "languageFiles": 64,
+      "analysisId": "7dcd2939-2f36-4cc0-a071-6db66ad5db24",
+      "gate": "OK",
+      "nativeConditions": [
+        {
+          "metricKey": "new_reliability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_maintainability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_hotspots_reviewed",
+          "status": "OK",
+          "errorThreshold": "100",
+          "actualValue": "100.0"
+        }
+      ],
+      "warnings": 0,
+      "analysisWarnings": 0,
+      "integrationWarnings": [],
+      "issues": 2,
+      "hotspots": 0,
+      "measureScope": "main_total",
+      "measuredFiles": 64
+    },
+    "head": {
+      "revision": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+      "sourceSha": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+      "exitCode": 0,
+      "taskId": "AaFB1vdI93XecPASdJY2",
+      "indexedFiles": 64,
+      "cachedFiles": 64,
+      "uncachedFiles": 0,
+      "languageFiles": 64,
+      "analysisId": "d6f7a094-39de-46f2-b21e-57030a3bed03",
+      "gate": "OK",
+      "nativeConditions": [
+        {
+          "metricKey": "new_reliability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_maintainability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_hotspots_reviewed",
+          "status": "OK",
+          "errorThreshold": "100",
+          "actualValue": "100.0"
+        }
+      ],
+      "warnings": 0,
+      "analysisWarnings": 0,
+      "integrationWarnings": [],
+      "issues": 0,
+      "hotspots": 0,
+      "measureScope": "pull_request_delta"
+    },
+    "negative": {
+      "revision": "ee374502381b871266ef8b8ad2806f3e7d314e96",
+      "sourceSha": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+      "exitCode": 3,
+      "taskId": "AaFB13RNTWeR7JXquXSz",
+      "indexedFiles": 65,
+      "cachedFiles": 64,
+      "uncachedFiles": 1,
+      "languageFiles": 65,
+      "analysisId": "04acf836-7939-42db-a447-367d83136e54",
+      "gate": "ERROR",
+      "nativeConditions": [
+        {
+          "metricKey": "new_reliability_rating",
+          "status": "ERROR",
+          "errorThreshold": "1",
+          "actualValue": "3"
+        },
+        {
+          "metricKey": "new_security_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_maintainability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_coverage",
+          "status": "OK",
+          "errorThreshold": "80",
+          "actualValue": "0.0"
+        },
+        {
+          "metricKey": "new_duplicated_lines_density",
+          "status": "OK",
+          "errorThreshold": "3",
+          "actualValue": "0.0"
+        },
+        {
+          "metricKey": "new_security_hotspots_reviewed",
+          "status": "OK",
+          "errorThreshold": "100",
+          "actualValue": "100.0"
+        }
+      ],
+      "warnings": 1,
+      "analysisWarnings": 0,
+      "integrationWarnings": [
+        "Pull request decoration did not happen. Property 'sonar.pullrequest.provider' was missing."
+      ],
+      "issues": 1,
+      "hotspots": 0,
+      "measureScope": "pull_request_delta",
+      "measuredFiles": 1
+    },
+    "corrected": {
+      "revision": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+      "sourceSha": "de4b239876576e1c12d8f1e02487cf3365ab5250",
+      "exitCode": 0,
+      "taskId": "AaFB1-mdTWeR7JXquXTo",
+      "indexedFiles": 64,
+      "cachedFiles": 64,
+      "uncachedFiles": 0,
+      "languageFiles": 64,
+      "analysisId": "9f62b393-06e5-4209-aed6-5fe4de2e93f0",
+      "gate": "OK",
+      "nativeConditions": [
+        {
+          "metricKey": "new_reliability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_maintainability_rating",
+          "status": "OK",
+          "errorThreshold": "1",
+          "actualValue": "1"
+        },
+        {
+          "metricKey": "new_security_hotspots_reviewed",
+          "status": "OK",
+          "errorThreshold": "100",
+          "actualValue": "100.0"
+        }
+      ],
+      "warnings": 0,
+      "analysisWarnings": 0,
+      "integrationWarnings": [],
+      "issues": 0,
+      "hotspots": 0,
+      "measureScope": "pull_request_delta"
+    }
+  },
+  "evidence": {
+    "encryptedSha256": "b23d8ec70cb5dd5d54f2d2042f6fd8dea46135071dd319808cfbb7487017645b",
+    "publicArtifact": "sonar-cloud-summary; 7 days",
+    "privateLocal": "artifacts/sonar-cloud-evidence/38821867592/evidence.private.json; ignored; mode0600"
+  },
+  "limits": [
+    "No merge or deployment",
+    "Community guard preserved; this proof uses Cloud",
+    "Unbound project has no native GitHub decoration; the Actions sonar job blocks build",
+    "Only exact decoration integration warning allowed with verified unbound PR; all analysis warnings block",
+    "64 application TS/TSX sources; generated Prisma excluded; reuse of cache identified separately",
+    "Negative fails new_reliability_rating; default gate ignores coverage/duplication below20 new lines; no threshold changed",
+    "No acceptance of all M1 or all phase3 components; no application load change"
+  ],
+  "durationSeconds": 147.202
+}
