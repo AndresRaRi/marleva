@@ -8,7 +8,7 @@ Cada etapa llama scripts pnpm locales. Setup compartido toma Node de .node-versi
 
 | Función | Elección / versión / licencia | Motivo |
 |---|---|---|
-| Reglas y complejidad | ESLint 10.12.0 + sonarjs 4.2.2, LGPL-3.0-only | Complementa reglas de TS, no sustituye tipado; peer ESLint 8/9/10 |
+| Reglas y complejidad | ESLint 10.12.0 + sonarjs 1.0.4 LGPL-3.0-only + @eslint/compat 2.1.1 Apache-2.0 | Dos reglas conservadas; compatibilidad adaptada comprobada; detalle en acta de lint |
 | Código y dependencias sin uso | knip 6.41.0, ISC | Reconoce workspaces; Node 20.19 o 22.12+ |
 | Capas y ciclos | dependency-cruiser 18.6.0, MIT | Relaciones TS con imports de tipos; Node 22/24/26+ |
 | Duplicación | jscpd 5.4.1, MIT | Ejecutable ARM64 comprobado; soporta TypeScript/TSX; evita un segundo detector |
@@ -101,3 +101,6 @@ Negativa de fase 2 comprobada: commit 4c54ea9, run 38775164158, job seguridad 11
 Continuidad de ramas tras integrar PR #2: main será la base única integrada. Actualizarla con pull --ff-only, crear una rama codex/feat-… o codex/fix-… por incremento pequeño y volver mediante PR, revisión y CI verde. No desarrollar directamente en main, no reescribir ramas publicadas ni borrar ramas sin confirmación. El cierre de este PR cubre fases 1–2; fase 3/Sonar sigue pendiente y se trabajará por separado desde main actualizado. M1 y su aceptación visual/plataformas no se consideran terminadas.
 
 Corrección de cierre: 737762e pasó los diez jobs en 38775631581. GitHub mantuvo mergeStateStatus=UNSTABLE por los checks cancelados del evento push duplicado. El workflow se dispara por push a main y por PR hacia main; retirar solo push a codex/** evita duplicación. Las ramas se validan al abrir/actualizar su PR, main conserva validación tras integrar y workflow_dispatch permite ensayo manual. No omitir jobs ni cambiar umbrales. Exigir una única ejecución completa del nuevo HEAD antes de cerrar.
+
+
+Corrección de licencia del lint, 15-10-2026: el paquete 4.2.2 declara LGPL pero incluye SSAL. Se conserva ESLint10/TypeScript6 y ambas reglas, mediante distribución 1.0.4 LGPL y adaptador oficial Apache. Excepción peer exacta, licencias reales por hash y positivos/negativos TS/TSX obligatorios en quality. Diseño, fuentes, resultados y límites: [acta](../../tests/results/lint-compatibility.md). Este incremento sale de main 40c6583 y no incorpora el ensayo Sonar de PR #5 ni acredita fase3.
