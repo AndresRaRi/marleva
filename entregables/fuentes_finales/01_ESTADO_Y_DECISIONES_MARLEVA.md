@@ -1,6 +1,6 @@
 # Marleva: estado y decisiones
 
-Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 cerrado por solicitud del usuario; continuidad propuesta MAR-CHAT-006, aún no abierto. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
+Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 cerrado por solicitud del usuario; MAR-CHAT-006 en CONTINUACIÓN: consolidación de main y siguientes brechas de M1. ID comprobado contra el registro y acta; no reabre 004/005. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
 
 ## 1. Decisiones confirmadas
 
@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main en b12bfca tras integrar PR #1 y PR #2; fases 1–2 del CI comprobadas sobre a93375b, negativa y restauración incluidas | [PR #2 integrado](https://github.com/AndresRaRi/marleva/pull/2); comprobar CI del merge y consolidar cambios locales aún no integrados |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main remoto comprobado en b12bfca2a8a9f7e35b9c1a6dea76264cfedf88ce; PR #1/#2 integrados y CI propio del merge correcto en 38778339532 | [PR #3 documental](https://github.com/AndresRaRi/marleva/pull/3) abierto al comprobar; [PR #4 de consolidación](https://github.com/AndresRaRi/marleva/pull/4) en codex/fix-consolidacion-m1-006, basada en su commit efdefdf. No fusionar; verificar checks del HEAD final y revisión antes de main |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -59,7 +59,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 | Avisos/archivos | Cursor por cuenta, correo durable y B09 de archivos ficticios privados implementados/probados en backend | Paginación del cliente, operación y recuperación restante; sin expediente M2 |
 | Recuperación B12 | Copia física corregida conserva filas/contenido/atributos; otro destino probó borrado posterior, caída Storage, revocación y OTP nuevo. Migración ficticia transaccional interrumpida/reaplicada | Cola restaurada/reinicio/SMTP aislado probados en ensayo separado; SDK de recuperación de operador probado. Siete operaciones runtime y permisos persistidos probados; capacidad/idempotencia/conciliación implementadas. Faltan cliente/plataformas y ensayo integral. No mezclar destinos |
 | CI por fases | Fase 1 verificada: verde, negativa rechazada y reversión verde. Fase 2: primer verde completo sobre 9cdde72, negativa de seguridad rechazada y correspondencia restaurada. Gráfico y correcciones de seguridad comprobados en GitHub | Diez checks verdes sobre a93375b; PR #2 integrado. Pipeline de main tiene ejecución propia. Resultados y límites en docs/avance.md. Fase 3 en incremento separado después de integrar; Sonar temporal base/cambio aprobado, sin SonarCloud ni gasto |
-| Calidad | Tipado/lint/formato, 153 unitarias y 38 integraciones aisladas pasaron. Axe y Lighthouse pasaron en web; cobertura con alcance explícito y hooks activos. Controles remotos independientes verificados | Seguridad y gráfico comprobados; revisión independiente estática sin defectos accionables. Sonar y fase 3 posteriores. Sin certificación |
+| Calidad | Tipado/lint/formato y 163 unitarias/cobertura pasan en hooks locales de consolidación; 38 integraciones anteriores tienen actas propias. Axe y Lighthouse pasaron en web; cobertura con alcance explícito y hooks activos. Controles remotos independientes verificados | Seguridad y gráfico comprobados; revisión independiente estática sin defectos accionables. Sonar y fase 3 posteriores. Sin certificación |
 | Revisión local | Instructivo M1 con capturas reales web/Android; usuario revisará y enviará observaciones | Aceptación visual pendiente; propuesta visual nueva primero |
 
 Actas: [B09](../../marleva-local/repositorio/tests/results/files-increment.json), [cuota/Android](../../marleva-local/repositorio/tests/results/otp-android-increment.md), [B12 proveedor](../../marleva-local/repositorio/tests/results/recovery-provider.json), [copia con atributos](../../marleva-local/repositorio/tests/results/recovery-copy-with-attributes.json), [migración interrumpida](../../marleva-local/repositorio/tests/results/recovery-migration.json). Nuevas actas: [cola restaurada](../../marleva-local/repositorio/tests/results/recovery-outbox.json) y [proveedor del operador](../../marleva-local/repositorio/tests/results/recovery-operator-provider.json). [Recuperación HTTP](../../marleva-local/repositorio/tests/results/recovery-api.json) y [migración/roles](../../marleva-local/repositorio/tests/results/recovery-schema.json). Las corridas fallidas se conservan en tests/results. Los detalles técnicos están en protocolo/matriz, no en una bitácora duplicada aquí.
@@ -77,7 +77,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-001–003 | Cerrados; antecedentes en Git y evidencia 03 |
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
-| MAR-CHAT-006 | Propuesto, aún no abierto: consolidación de main y siguientes brechas de M1 |
+| MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
@@ -96,6 +96,47 @@ Vigilancia CI del PR #2 eliminada tras comprobar su integración a main el 15-10
 
 Para después, fuera del alcance: reparto propio, favoritos/reseñas/promociones/referidos, IA/mapas/chat general, monedero/crédito/agenda y apps Swift/Kotlin independientes.
 
+## Consolidación MAR-CHAT-006
+
+Objetivo: preservar y consolidar inventario/auditoría/UC001 por procedencia en un PR separado, con trazabilidad y CI antes de fase 3. Alcance: documentación y pruebas base/M1; sin pantallas nuevas, cambios de negocio, migraciones, gasto ni despliegue. Condición de salida de consolidación: hashes protegidos intactos, generación determinista, hooks, revisión y checks del HEAD subido correctos; integración a main permanece separada.
+
+| Procedencia | Resultado y ubicación | Límite |
+|---|---|---|
+| Inventariar pantallas y flujos | [Inventario heredado](../INVENTARIO_PANTALLAS_Y_FLUJOS_MARLEVA.md), conservado como fotografía histórica en commit separado | Sus referencias a 004/005 y Git son del momento de elaboración; no sustituyen este registro |
+| Auditoría documental M1 | Matriz/índice distinguen diseñado, implementado y probado; B09 enlaza UC011/SEQ011; SEQ003 incluye API004; notas de modelos y derivados regenerados | Sin nuevas migraciones, runtime o aceptación |
+| Pruebas UC001 | Diez variantes unitarias K–N y dos integraciones K/L heredadas; actas uc001-branches*.json y matriz. Consolidación distingue IDs duplicados con sufijos y exige puerto CI 54622 | Resultados heredados 52/52 dirigidas, 163/163 unitarias y 2/2 PG/Auth; no HTTP ni captura. CI nuevo se comprueba por su propio HEAD |
+
+Lectura: instrucciones/README/AGENTS y 00–03 completos, incluidos espejos anteriores y diferencias de las copias editables; protocolo, matriz, ADR001/002 y acta de cierre leídos. Árbol general: inventario inicial de 408 archivos no ignorados; lectura parcial de código, anexos extensos y artefactos generados. No lectura exhaustiva de dependencias, secretos, cachés ni binarios. Originales ausentes permanecen según §4; investigación externa no revalidada por esta consolidación. Inventario de rutas/fechas/tamaños/hashes y copia del diff en artifacts/consolidacion-006, ignorados; no acreditar lectura por calcular hashes.
+
+Revisión independiente estática: un hallazgo de aislamiento PG/Auth corregido y verificado por segunda lectura. Negativa dirigida rechaza Auth 54321 antes de construir DB/servicio. [Acta UC001 y consolidación](../../marleva-local/repositorio/tests/results/uc001-branches.json). [CI del PR #4](https://github.com/AndresRaRi/marleva/pull/4/checks) se consulta por el HEAD vigente; no es aceptación funcional ni autorización de merge. Fase 3 no iniciada: requiere cerrar la integración previa.
+
+Cambios preexistentes en AGENTS raíz y sources/01–03 preservados y fuera de commits propios. Cinco migraciones se comparan por hash, sin alterar ni aplicar DDL. A0/SDK, C01–C26 y Google pendiente se conservan. Fuente 01 es la entrega de estado para reemplazar en Fuentes mediante acceso autorizado; guardado/commit/push no realizan esa carga.
+
 ## 7. Prompt de continuidad
 
-Usar el prompt completo revisado del [cierre MAR-CHAT-005](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md#prompt-de-continuidad). Próximo ID propuesto MAR-CHAT-006, comprobar registro antes de abrirlo. Prioridad: confirmar CI de main, consolidar los cambios locales de auditoría/inventario/UC001, continuar fase 3 acotada y después ramas M1 por dependencia. No reabrir 005 ni declarar M1 completa. Autonomía de 00 §6 permanente.
+```text
+PROYECTO: Marleva. CHAT: MAR-CHAT-006, CONTINUACIÓN; no cerrar ni renumerar.
+Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a.
+Registrar fecha real America/Merida. Leer usuario/README/AGENTS, 00–03 editables
+completos, protocolo, matriz, ADR001/002 y acta CIERRE_MAR_CHAT_005.md;
+inventariar y leer nuevos/modificados, declarar lectura parcial y ausentes.
+Conservar C01–C26, A0/SDK Android, Google pendiente, sources/AGENTS raíz readonly,
+cinco migraciones inmutables y todo trabajo preexistente. No reset/stash/borrado.
+Comprobar rama/HEAD/upstream/origin; pull --ff-only sin descartar cambios.
+main b12bfca tiene CI propio verde 38778339532; PR #3 contiene cierre documental.
+Rama codex/fix-consolidacion-m1-006 consolida inventario/auditoría/UC001 desde
+efdefdf, PR #4. Revisión independiente y corrección de aislamiento PG/Auth hechas;
+verificar estado remoto y CI del HEAD real, sin atribuir otros verdes.
+Primero cerrar revisión y consolidación por procedencia. No fusionar ni iniciar
+fase 3 antes de cumplir su dependencia. Después fase 3 acotada de ADR002 y
+ramas M1 por matriz: avisos cliente, retorno seguro y B12 esencial integrado;
+propuesta visual revisada antes de pantallas; plataformas/accesibilidad pendientes.
+UC001 permanece abierto; separar diseñado/implementado/probado/aceptado.
+Usar CI principal, diagnóstico local dirigido y hooks obligatorios. Porcentajes
+solo docs/avance.md. Sin nuevos módulos completos, gasto, despliegue, contactos,
+contratación, datos o dinero reales. No eliminar archivos/ramas sin confirmación.
+Aplicar autonomía 00 §6: corregir/probar/documentar/sincronizar lo autorizado sin
+confirmaciones rutinarias. Releer finales, verificar enlaces/diff/ignorados,
+commit/push y SHA local/remoto real. Indicar Fuentes/configuración a reemplazar;
+no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierre real.
+```

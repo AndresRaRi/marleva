@@ -1,0 +1,86 @@
+{
+  "case": "MAR-M1-UC-001",
+  "date": "2026-10-15",
+  "designed": [
+    "UT-BE-101-K/L/M/N",
+    "IT-BE-101-K/L"
+  ],
+  "implemented": "Pruebas; sin cambio de runtime, pantallas o migraciones",
+  "tested": {
+    "uc001-branches-unit": {
+      "passed": 52,
+      "failed": 0,
+      "success": true
+    },
+    "uc001-unit-regression": {
+      "passed": 163,
+      "failed": 0,
+      "success": true
+    },
+    "uc001-branches-integration": {
+      "passed": 2,
+      "failed": 0,
+      "success": true
+    }
+  },
+  "limits": [
+    "Unitarias con mocks/reloj",
+    "Integración AccountService + PG/Auth local CI; no HTTP ni captura de correo",
+    "No nuevas mediciones de rendimiento ni plataformas",
+    "UC001 y M1 incompletos"
+  ],
+  "failures": [
+    "Primera invocación usó ruta incorrecta del wrapper, corregida sin ejecutar pruebas",
+    "Lint detectó variable de prueba sin uso, retirada; lint final pasa"
+  ],
+  "cleanup": "Desafíos del origen UUID propio eliminados; proveedor y correo ficticios conservados; servicios existentes no detenidos",
+  "consolidation": {
+    "chat": "MAR-CHAT-006",
+    "date": "2026-10-15",
+    "scope": "Pruebas heredadas y documentación; no runtime/migraciones/UI",
+    "main": {
+      "sha": "b12bfca2a8a9f7e35b9c1a6dea76264cfedf88ce",
+      "ci": "https://github.com/AndresRaRi/marleva/actions/runs/38778339532",
+      "conclusion": "success"
+    },
+    "documentationPR": "https://github.com/AndresRaRi/marleva/pull/3",
+    "localHooks": {
+      "quality": 0,
+      "unitPassed": 163,
+      "coveragePassed": 163
+    },
+    "deterministicArtifacts": 9,
+    "protectedHashes": {
+      "AGENTS.md": "25478cd78f9d432f4b9a7dfbb2db6d70b366a745ad9e3ff7ef64c1bc982a69cd",
+      "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1/migration.sql": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables/migration.sql": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c",
+      "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b",
+      "marleva-local/repositorio/apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0",
+      "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0",
+      "marleva-local/repositorio/apps/api/prisma/migrations/migration_lock.toml": "1db17a8d051aa136110736752c5e1f8b7ed92b6ea8e803112fbbe2497047c210",
+      "sources/00_GUIA_PRINCIPAL_MARLEVA.md": "2dd00513f18c5f96c4e6d8dac6258c6dfc4c8dd8a371a94488c8cb55d0fcfb8a",
+      "sources/01_ESTADO_Y_DECISIONES_MARLEVA.md": "1cafdfbcbe0fd42d52de30baef6bc28672b78c6553c6305340389c1128d5a59a",
+      "sources/02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md": "c8aadd2a8295ea1ed180965bc8451b941ea0fdd9d5890e4512f9ea11bc638811",
+      "sources/03_REFERENTES_Y_EVIDENCIA_MARLEVA.md": "d655c9abfdcd332d9d491336e705eed6e3dd36e07fec4769223c7a195a099d45"
+    },
+    "renamedHistoricalIDs": {
+      "UT-BE-103-F": [
+        "UT-BE-103-F-CSRF",
+        "UT-BE-103-F-REFRESH"
+      ],
+      "UT-BE-114": [
+        "UT-BE-114-EXPIRED",
+        "UT-BE-114-AAL2"
+      ]
+    },
+    "ciForConsolidation": "Resultado consultable en https://github.com/AndresRaRi/marleva/pull/4/checks para su HEAD vigente; no reutilizar el verde de main",
+    "performance": "No nueva carga: solo pruebas/metadatos/documentación; mediciones históricas conservadas",
+    "reviewCorrection": {
+      "finding": "P2: configuración mezclada podía escribir en Auth origen",
+      "fix": "Exigir provider.origin http://127.0.0.1:54621 antes de construir DB/servicio",
+      "negative": "Runner con PG CI y Auth 54321 rechazado en beforeAll, salida no cero esperada; casos omitidos; sin escritura ni conexión de negocio",
+      "review": "Segunda revisión estática confirma hallazgo resuelto; sin otros defectos accionables en su alcance parcial"
+    },
+    "pullRequest": "https://github.com/AndresRaRi/marleva/pull/4"
+  }
+}

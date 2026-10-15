@@ -21,3 +21,9 @@ sequenceDiagram
      API->>DB: S080 comprobar permiso actual y revocación de nuevo
      API-->>UI: S090 cuenta propia y acciones permitidas
     end
+
+    opt Cliente web necesita token CSRF para una mutación posterior
+     UI->>API: S092 GET /v1/auth/csrf con sesión vigente (API004)
+     API->>DB: S094 validar sesión mediante S020-S080 y guardar hash CSRF nuevo
+     API-->>UI: S096 devolver csrf_token; no concede permisos nuevos
+    end

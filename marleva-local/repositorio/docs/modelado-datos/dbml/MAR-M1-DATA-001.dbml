@@ -7,7 +7,7 @@ Table marleva.Account {
  authId uuid [not null, unique, note: 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.']
  email text [not null, unique]
  state text [not null, default: 'active']
- operator boolean [not null, default: false, note: 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.']
+ operator boolean [not null, default: false, note: 'Proyección compatible de RoleAssignment; roles/recuperación incorporados por migración 202610140001_mfa_recovery, con pruebas parciales.']
  createdAt timestamptz [not null, default: `now()`]
 }
 Table marleva.Session {

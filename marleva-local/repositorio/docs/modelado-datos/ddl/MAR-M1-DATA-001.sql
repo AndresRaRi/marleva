@@ -201,7 +201,7 @@ CREATE UNIQUE INDEX "MfaRecovery_accountId_requestKey_key" ON "marleva"."MfaReco
 
 COMMENT ON COLUMN "marleva"."Account"."authId" IS 'Identidad del proveedor, validada mediante adaptador; no acceso directo cliente a Auth.';
 
-COMMENT ON COLUMN "marleva"."Account"."operator" IS 'Implementación inicial simplificada; asignaciones formales de roles y recuperación MFA pendientes.';
+COMMENT ON COLUMN "marleva"."Account"."operator" IS 'Proyección compatible de RoleAssignment; roles/recuperación incorporados por migración 202610140001_mfa_recovery, con pruebas parciales.';
 
 COMMENT ON COLUMN "marleva"."Session"."providerTokens" IS 'Credenciales cifradas en servidor; nunca valores de ejemplo reales.';
 
