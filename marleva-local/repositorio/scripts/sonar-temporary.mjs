@@ -8,6 +8,8 @@ import { command, snapshot, scanner, save, sourceFiles } from './sonar-runtime.m
 if (process.platform !== 'linux' || process.arch !== 'x64')
   throw new Error('Ensayo Sonar homologado solo para Linux x64; no emulación ARM64');
 const manifest = JSON.parse(readFileSync('infra/ci/sonar.json', 'utf8'));
+if (manifest.executionStatus !== 'eligible')
+  throw new Error('Sonar bloqueado: elegibilidad SSAL pendiente; fase 3 no acreditada');
 const name = 'marleva-sonar-' + randomBytes(6).toString('hex');
 const folder = path.resolve('artifacts/ci/sonar', name);
 mkdirSync(folder, { recursive: true, mode: 0o700 });

@@ -8,7 +8,7 @@ Cada etapa llama scripts pnpm locales. Setup compartido toma Node de .node-versi
 
 | Función | Elección / versión / licencia | Motivo |
 |---|---|---|
-| Reglas y complejidad | ESLint 10.12.0 + sonarjs 4.2.2, LGPL-3.0-only | Complementa reglas de TS, no sustituye tipado; peer ESLint 8/9/10 |
+| Reglas y complejidad | ESLint 10.12.0 + sonarjs 1.0.4 LGPL-3.0-only + @eslint/compat 2.1.1 Apache-2.0 | Dos reglas conservadas; compatibilidad adaptada comprobada. Corrige metadato de licencia engañoso de 4.2.2; detalle al final |
 | Código y dependencias sin uso | knip 6.41.0, ISC | Reconoce workspaces; Node 20.19 o 22.12+ |
 | Capas y ciclos | dependency-cruiser 18.6.0, MIT | Relaciones TS con imports de tipos; Node 22/24/26+ |
 | Duplicación | jscpd 5.4.1, MIT | Ejecutable ARM64 comprobado; soporta TypeScript/TSX; evita un segundo detector |
@@ -127,3 +127,8 @@ Prueba negativa end-to-end diseñada antes de añadirla: después de comprobar b
 Corrección de huella de seguridad, por contraste con ejemplo API oficial actual: hotspots/search incluye ruleKey, distinto de securityCategory. La huella acepta rule/ruleKey y rechaza ausencia de regla; nunca sustituye la regla por una categoría amplia. Fuente: https://github.com/SonarSource/sonarqube/blob/master/server/sonar-webserver-webapi/src/main/resources/org/sonar/server/hotspot/ws/search-example.json. Prueba dirigida distingue dos reglas dentro de la misma categoría y exige rechazar categoría sin regla.
 
 Cuarto ensayo 38798902117 sobre 7a6b8134c49e7c4f976b157101273b2075152bd4: metadatos leídos y tarea base terminada sin advertencias; fallo HTTP400 al consultar hotspots con projectKey. Código oficial de API declara retirada de projectKey en2026.5 y exige project; se corrige ese parámetro, sin omitir el inventario. Fuente: https://github.com/SonarSource/sonarqube/blob/master/server/sonar-webserver-webapi/src/main/java/org/sonar/server/hotspot/ws/SearchAction.java. No se acredita comparación/negativa mientras no completen las tres tareas e inventarios.
+
+
+Corrección de elegibilidad, 15-10-2026: inspección del JAR JavaScript 14.0.0.46108 de la imagen fijada confirma SSALv1 y restricción de interacción con IA. SHA256 del JAR: 151150e019176d6e1bcda27174b1cd33a9c17bc7611c8909f2946ff06518c2a4. La licencia incluida en eslint-plugin-sonarjs 4.2.2 también es SSAL, pese al metadato LGPL. No acreditar elegibilidad bajo A0; bloquear ejecución Sonar antes de iniciar recursos. El quinto ensayo 38799757614 analizó base/cambio (62 archivos cada uno), pero la negativa no produjo S1186: control completo no probado.
+
+Diseño previo de corrección del lint: fijar eslint-plugin-sonarjs 1.0.4, cuyo tarball y licencia LGPL-3.0-only se verificaron, sin dependencias runtime; envolverlo con fixupPluginRules de @eslint/compat 2.1.1 (Apache-2.0, ESLint10 declarado). Conservar las dos reglas y sus severidades, TypeScript6 y ESLint10. El plugin declara peers8/9; cualquier excepción será únicamente para este paquete y ESLint10.12.0, respaldada por prueba de compatibilidad local, sin atribuir soporte nativo oficial. Probar positivos y negativos TS/TSX mediante la CLI real y exigir la regla concreta y código de salida, además de calidad y regresión existentes. No sustituye Sonar ni completa fase3.
