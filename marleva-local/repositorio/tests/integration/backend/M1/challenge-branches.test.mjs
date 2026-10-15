@@ -11,6 +11,9 @@ describe.skipIf(process.env.MARLEVA_CI_STACK !== '1')('UC001 proveedor aislado',
     const target = new URL(process.env.DATABASE_URL);
     if (target.hostname !== '127.0.0.1' || target.port !== '54622')
       throw new Error('Requiere PostgreSQL del stack CI aislado en 127.0.0.1:54622');
+    const provider = new URL(process.env.SUPABASE_URL);
+    if (provider.origin !== 'http://127.0.0.1:54621')
+      throw new Error('Requiere Auth del stack CI aislado en http://127.0.0.1:54621');
     db = database();
     service = new AccountService(db);
   });
