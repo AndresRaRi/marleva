@@ -80,6 +80,42 @@ try {
   await page.unroute('**/v1/catalog/offers?**');
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click();
   await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().waitFor();
+  await page.getByRole('button', { name: 'Filtros', exact: true }).click();
+  const filtered = page.waitForResponse(
+    (response) => response.url().includes('category=classes') && response.status() === 200,
+  );
+  await page.getByRole('button', { name: 'Clases', exact: true }).click();
+  const filterBody = await (await filtered).json();
+  assert.ok(filterBody.items.length > 0);
+  assert.ok(filterBody.items.every((item) => item.category === 'classes'));
+  await page.getByRole('button', { name: 'Cerrar filtros', exact: true }).click();
+  record('MAR-M3-IT-FE-001-FILTER');
+  await page.getByRole('textbox', { name: 'Buscar productos o servicios' }).fill('repostería');
+  const keyboard = page.waitForResponse(
+    (response) => response.url().includes('q=reposter') && response.status() === 200,
+  );
+  await page.getByRole('textbox', { name: 'Buscar productos o servicios' }).press('Enter');
+  await keyboard;
+  await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().waitFor();
+  record('MAR-M3-IT-FE-001-KEYBOARD');
+  await page.route('**/v1/catalog/offers/*', (route) =>
+    route.fulfill({ status: 404, contentType: 'application/json', body: '{"codigo":"NOT_FOUND"}' }),
+  );
+  await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().click();
+  await page.getByText('Esta oferta ya no está disponible.', { exact: true }).waitFor();
+  assert.equal(await page.getByRole('button', { name: /Ver oferente:/ }).count(), 0);
+  await page.unroute('**/v1/catalog/offers/*');
+  await page.getByRole('button', { name: 'Volver a intentar', exact: true }).click();
+  await page.getByRole('button', { name: /Ver oferente:/ }).waitFor();
+  record('MAR-M3-IT-FE-002-RETIRED-RECOVERY');
+  await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click();
+  assert.equal(
+    await page.getByRole('textbox', { name: 'Buscar productos o servicios' }).inputValue(),
+    'repostería',
+  );
+  record('MAR-M3-IT-FE-001-RETURN-FILTERS');
+  await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click();
+  await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().waitFor();
   const axe = await new AxeBuilder({ page }).analyze();
   report.axe = {
     catalog: axe.violations.map((item) => item.id),

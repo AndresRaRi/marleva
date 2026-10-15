@@ -51,7 +51,7 @@ Cobertura de lógica incluye dominio, casos, DTOs, transporte y estado del clien
 
 Integrar puertos de identidad M1, elegibilidad M2 y revisión M8 cuando estén listos y se autorice integración; conservar roles actuales, revocación, MFA y no autorrevisión. Completar fotos seguras, gestión autenticada de ofertas, pantallas de gestión revisadas, plataformas y aceptación. No incorporar favoritos, reseñas, ranking pagado, ofertas externas o giros excluidos C25.
 
-No push, PR ni integración main por este encargo de «no operaciones externas». Guardado/commit local no actualizan Fuentes. Solo01 cambia como registro de este avance; conciliar su añadido M3 con el estado paralelo de006/007 antes de reemplazar Fuentes.00/02/03 y configuración permanente no requieren sustitución por estas reglas técnicas locales. No prometer acceso desde otros chats.
+Push de la rama aislada autorizado por la instrucción posterior del usuario; sin integración a main. Guardado/commit local no actualizan Fuentes. Solo01 cambia como registro de este avance; conciliar su añadido M3 con el estado paralelo de006/007 antes de reemplazar Fuentes.00/02/03 y configuración permanente no requieren sustitución por estas reglas técnicas locales. No prometer acceso desde otros chats.
 
 ## Resultado comprobado del incremento
 
@@ -66,3 +66,11 @@ Comparación con la base: sin cambios en código M1, migraciones M1, contratos c
 ## Autorización vigente de sincronización — 15-10-2026
 
 El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
+
+## Comprobaciones adicionales
+
+La integración M3 tiene configuración propia: primero generar y compilar con `./scripts/tool node scripts/m3-prepare.mjs` y `./scripts/tool node node_modules/typescript/bin/tsc -p apps/api/tsconfig.m3.json`; después ejecutar `MARLEVA_M3_CHECK=1 ./scripts/tool node node_modules/vitest/vitest.mjs run --config vitest.m3.integration.config.mjs`. Su guardia exige la base M3, nunca se sustituye por un test omitido. La preparación común llama al generador M3 sin conexión de base; no aplica migraciones ni arranca M1.
+
+Recorrido web ampliado: 13 comprobaciones aprobadas, con filtros reales, Enter, retorno con búsqueda y retirada 404 simulada con recuperación. Diez muestras Chrome limpias tras calentamiento: p95 carga 145,45 ms, búsqueda 97,74 ms y detalle 478,69 ms. Acta `tests/results/m3-performance-frontend.json`; objetivos locales 3000/1000/1000 ms definidos previamente y cumplidos. Medición local sin limitación de red/CPU, no resultados de dispositivos físicos.
+
+Verificación posterior de preparación: generación y compilación M3 aprobadas, siete integraciones propias aprobadas. El descubrimiento general de integración muestra únicamente M1; M3 se ejecuta con su configuración explícita. Arquitectura aprobada con cero violaciones y duplicación cero en código propio. Los derivados se mantienen fuera de ese análisis según la exclusión de carpetas generated existente; los primeros fallos quedan registrados. No se ha ejecutado ni acreditado CI remoto de este incremento.

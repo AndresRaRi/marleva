@@ -20,13 +20,14 @@ await writeFile('docs/modelado-datos/ddl/MAR-M3-DATA-001.sql', ddl);
 const spec = YAML.parse(await readFile('docs/apis/M3/openapi.yaml', 'utf8'));
 await SwaggerParser.validate(structuredClone(spec));
 await writeFile('docs/apis/M3/openapi.json', JSON.stringify(spec, null, 2) + '\n');
+await mkdir('apps/client/src/modules/m3/generated', { recursive: true });
 execFileSync(
   process.execPath,
   [
     'packages/contracts/node_modules/openapi-typescript/bin/cli.js',
     'docs/apis/M3/openapi.yaml',
     '-o',
-    'apps/client/src/modules/m3/generated-api.ts',
+    'apps/client/src/modules/m3/generated/api.ts',
   ],
   { stdio: 'inherit' },
 );

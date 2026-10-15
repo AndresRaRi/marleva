@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-15T22:23:14.534Z",
+  "date": "2026-10-15T22:39:08.149Z",
   "browser": "155.0.8059.40",
   "source": "Expo web M3 + API Nest/PG propios",
   "cases": [
@@ -29,6 +29,22 @@
     },
     {
       "id": "MAR-M3-IT-FE-001-ERROR-CONTROLLED",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-FILTER",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-KEYBOARD",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-002-RETIRED-RECOVERY",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-001-RETURN-FILTERS",
       "passed": true
     },
     {

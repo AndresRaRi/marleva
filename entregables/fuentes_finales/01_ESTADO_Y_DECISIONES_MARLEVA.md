@@ -78,7 +78,6 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
-
 | MAR-CHAT-007 | Diseño documental M2/M8 paralelo, confirmado en su chat15-10-2026; copia/ramas propias, sin integración |
 | MAR-CHAT-008 | M3 Catálogo aislado, autorizado15-10-2026 por solicitud actual; tema abierto |
 
@@ -149,7 +148,7 @@ no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierr
 
 15-10-2026 America/Merida. Autorizado: desarrollo local aislado de M3 y propuesta visual de catálogo, detalle y perfil aprobada por el usuario. M1 continúa en MAR-CHAT-006; M2/M8 se diseña en MAR-CHAT-007. No se declara ningún módulo aceptado.
 
-Copia: `/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a`. Rama `codex/feat-m3-catalogo-008`, base `6fed44f`. PostgreSQL propio en 55432, API en 3103 y web en 8103. No se modifican M1, contratos compartidos ni migraciones aplicadas. Sin push, PR, integración a main, publicación, gasto, contactos o datos reales.
+Copia: `/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a`. Rama `codex/feat-m3-catalogo-008`, base `6fed44f`. PostgreSQL propio en 55432, API en 3103 y web en 8103. No se modifican M1, contratos compartidos ni migraciones aplicadas. Commit y push de la rama aislada autorizados. Sin integración a main, publicación, gasto, contactos o datos reales.
 
 Incremento: catálogo público Nest/Expo/PostgreSQL con búsqueda, filtros, cursor, detalle y perfil. Casos internos de versiones, revisión y pausa usan actores ficticios; no sustituyen identidad, elegibilidad o revisión reales. Fotos, gestión autenticada, integración autorizada M1/M2/M8, plataformas nativas y aceptación siguen pendientes. M3 permanece abierto.
 
@@ -174,7 +173,7 @@ Próximo: cerrar brechas por matriz; diseñar fotos seguras y gestión antes de 
 Integrar identidad/elegibilidad/revisión solo cuando esté disponible y autorizada esa integración.
 No acreditar Auth/MFA reales con fixtures. Mantener pruebas propias y hooks obligatorios.
 Conservar migraciones aplicadas; corregir mediante nuevas migraciones. Releer finales.
-Sin operaciones externas, push/PR/merge, gasto, publicación, contactos o datos reales.
+Commit y push ordinarios autorizados. Sin merge, gasto, publicación, contactos o datos reales.
 Actualizar solo fuentes necesarias de esta copia; conciliar 01 con 006/007 antes de reemplazar Fuentes.
 Continuar sin confirmaciones rutinarias; aprobación técnica del entorno sigue siendo obligatoria.
 Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
@@ -183,3 +182,5 @@ Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
 ## Autorización vigente de sincronización — 15-10-2026
 
 El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
+
+Continuación comprobada 15-10-2026: rama M3 sincronizada, sin integración a main. Se amplían a 13 las comprobaciones web y se mide rendimiento del cliente con diez muestras. Preparación M3 sin conexión añadida al preparador de CI; integración propia separada del patrón general para no exigir su base en M1. Arquitectura: cero violaciones y cero duplicados en código propio; derivados en carpetas generated. Siete integraciones M3 pasaron. Resultados locales, no CI remoto. Pendientes funcionales y aceptación permanecen según matriz; no se solicita nueva confirmación rutinaria.

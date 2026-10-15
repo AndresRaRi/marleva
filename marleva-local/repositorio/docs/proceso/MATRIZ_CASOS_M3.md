@@ -4,7 +4,7 @@ MAR-CHAT-008. 15-10-2026 America/Merida. Diseño previo al código. Autorizació
 
 ## Límites y arquitectura
 
-Rama codex/feat-m3-catalogo-008 desde main 6fed44f. API Nest independiente, sin importar main/config/database de M1. PostgreSQL exclusivo `marleva_m3_008`, esquema `m3`, contenedor `marleva-m3-008`, red propia y puerto 127.0.0.1:55432; API 127.0.0.1:3103. No usar 3000/8443/543xx/546xx, secretos, volúmenes ni servicios existentes. No push, PR, publicación o llamadas a proveedores: el límite actual «no operaciones externas» prevalece sobre sincronización habitual. Git local conserva el incremento.
+Rama codex/feat-m3-catalogo-008 desde main 6fed44f. API Nest independiente, sin importar main/config/database de M1. PostgreSQL exclusivo `marleva_m3_008`, esquema `m3`, contenedor `marleva-m3-008`, red propia y puerto 127.0.0.1:55432; API 127.0.0.1:3103. No usar 3000/8443/543xx/546xx, secretos, volúmenes ni servicios existentes. Commit y push de la rama aislada autorizados por instrucción posterior del usuario. Sin integración a main, publicación o llamadas a proveedores.
 
 Capas reales: controller/DTO → casos → dominio y puertos → repositorio Prisma/PostgreSQL. Cliente: adaptador HTTP y estado de consulta independientes de pantallas. Una composición exclusiva de M3 conecta el módulo; la composición M1 permanece intacta.
 
@@ -75,3 +75,15 @@ Accesibilidad antes de corregir: axe en detalle señaló page-has-heading-one. S
 ## Autorización vigente de sincronización — 15-10-2026
 
 El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
+
+## Plan de cierre de validación web — 15-10-2026
+
+Sin cambio de alcance, pantallas, datos o API. UC001 → SEQ001:S020/S080 → API001 → Offer/OfferVersion → UI001: comprobar categoría real, búsqueda con Enter y conservación de filtro al volver. UC002 → SEQ002:S060/S080/S090 → API002 → UI002: simular retirada 404 en transporte, no mostrar detalle previo y recuperar con reintento. Las respuestas 404 simuladas son pruebas de interfaz, no prueban por sí solas elegibilidad del servidor; esa rama tiene integración PostgreSQL propia.
+
+PF-FE001: Chrome local, viewport 390×844, contexto limpio por muestra, una muestra de calentamiento y diez medidas secuenciales. Medir carga hasta primera oferta visible, búsqueda hasta resultados y detalle hasta oferente visible, con API/PG propios. Registrar p50/p95/máximo, recursos JS, paint y heap JS si está disponible. Objetivos locales definidos antes de ejecutar: p95 carga ≤3000 ms; búsqueda/detalle ≤1000 ms; cero errores JavaScript. No medir durante builds o carga de PostgreSQL. No acredita INP de campo, Safari o plataformas nativas.
+
+## Preparación reproducible y separación de pruebas — 15-10-2026
+
+Defecto detectado por revisión: el patrón general de integración backend recoge M3 aunque su PostgreSQL no esté preparado; además CI genera solo el cliente Prisma M1. Corrección prevista: suite M3 con configuración propia y nombre fuera del patrón general, manteniendo su guardia obligatoria; preparar cliente M3 sin conexión ni migraciones mediante script propio llamado tras la preparación existente. No iniciar servicios de M1 ni cambiar sus contratos/migraciones. Cliente Prisma M3 generado bajo src/generated/m3, dentro de la exclusión de artefactos generados ya existente, sin cambiar reglas de capas. Verificar generación, compilación M3, seis integraciones reales y controles de arquitectura. No atribuir ejecución local a CI remoto.
+
+Control de arquitectura: el primer análisis incluyó artefactos antiguos de Prisma; se conservan fuera del árbol de código en artifacts/m3. Tras corregirlo, capas/ciclos pasaron; duplicación detectó tres bloques del contrato TypeScript generado. Ubicar ese derivado bajo la carpeta generated de M3, ya excluida por la regla general de derivados. No excluir código escrito a mano ni rebajar umbral cero.

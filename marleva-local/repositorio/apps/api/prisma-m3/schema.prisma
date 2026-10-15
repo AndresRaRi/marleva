@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output = "../src/modules/m3/infrastructure/generated"
+  output = "../src/generated/m3"
 }
 datasource db {
   provider = "postgresql"

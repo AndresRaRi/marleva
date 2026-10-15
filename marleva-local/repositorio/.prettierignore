@@ -22,5 +22,4 @@ pnpm-lock.yaml
 .env
 .env.*
 
-apps/api/src/modules/m3/infrastructure/generated/**
-apps/client/src/modules/m3/generated-api.ts
+apps/client/src/modules/m3/generated/api.ts

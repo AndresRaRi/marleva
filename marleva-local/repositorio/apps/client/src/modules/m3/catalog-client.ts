@@ -1,4 +1,4 @@
-import type { components } from './generated-api';
+import type { components } from './generated/api';
 export type CatalogOffer = components['schemas']['Offer'];
 export type CatalogPage = components['schemas']['Page'];
 export interface Search {

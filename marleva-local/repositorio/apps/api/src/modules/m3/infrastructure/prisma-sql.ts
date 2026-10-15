@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from './generated/client.js';
+import { PrismaClient, Prisma } from '../../../generated/m3/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { Sql, TransactionalSql } from './sql.js';
 function assertDestination(url: URL): void {
