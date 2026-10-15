@@ -167,6 +167,61 @@ it('UT-BE-101-C | envío fallido conserva desafío failed; éxito genérico rese
   expect(result.mensaje).toBe('Si el correo es válido, recibirás un código');
   expect(database.challenge.create).toHaveBeenCalledTimes(2);
 });
+it.each([
+  undefined,
+  null,
+  12,
+  '',
+  'vecino@example.com',
+  ' a@example.test',
+  'a'.repeat(242) + '@example.test',
+])('MAR-M1-UT-BE-101-K-%# | SEQ001:S020 | entrada inválida no reserva ni envía', async (input) => {
+  await expect(service.challenge(input, 'fixture-origin')).rejects.toMatchObject({ status: 422 });
+  expect(database.$transaction).not.toHaveBeenCalled();
+  expect(fixture.auth.signInWithOtp).not.toHaveBeenCalled();
+});
+it('MAR-M1-UT-BE-101-L | SEQ001:S060 | reserva fallida no solicita OTP', async () => {
+  database.challenge.create.mockRejectedValue(new Error('fixture database unavailable'));
+  await expect(service.challenge(account.email, 'fixture-origin')).rejects.toThrow(
+    'fixture database unavailable',
+  );
+  expect(fixture.auth.signInWithOtp).not.toHaveBeenCalled();
+  expect(database.session.create).not.toHaveBeenCalled();
+});
+it('MAR-M1-UT-BE-101-M | SEQ001:S070/S100 | respuesta genérica y correo normalizado sin credenciales', async () => {
+  const result = await service.challenge('VECINO@EXAMPLE.TEST', 'fixture-origin');
+  expect(fixture.auth.signInWithOtp).toHaveBeenCalledWith({
+    email: 'vecino@example.test',
+    options: { shouldCreateUser: true },
+  });
+  expect(result).toEqual({
+    challenge_id: expect.any(String),
+    espera_segundos: 60,
+    mensaje: 'Si el correo es válido, recibirás un código',
+  });
+  expect(database.account.upsert).not.toHaveBeenCalled();
+  expect(database.session.create).not.toHaveBeenCalled();
+});
+it('MAR-M1-UT-BE-101-N | SEQ001:S090 | envío tardío no reabre desafío sustituido', async () => {
+  let finish;
+  fixture.auth.signInWithOtp.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const response = service.challenge(account.email, 'fixture-origin');
+  await vi.waitFor(() => expect(fixture.auth.signInWithOtp).toHaveBeenCalledOnce());
+  const reserved = database.challenge.create.mock.calls[0][0].data;
+  database.challenge.updateMany.mockImplementation(async ({ where }) => {
+    if (where.id === reserved.id && where.state === 'sending') return { count: 0 };
+    throw new Error('Unconditional state change');
+  });
+  finish({ error: null });
+  await expect(response).resolves.toHaveProperty('challenge_id', reserved.id);
+  expect(database.challenge.update).not.toHaveBeenCalled();
+  expect(database.session.create).not.toHaveBeenCalled();
+});
 it.each(['missing', 'consumed', 'expired', 'attempts', 'blocked'])(
   'UT-BE-102-A-%s | desafío no vigente no crea sesión',
   async (reason) => {
@@ -370,7 +425,7 @@ it('UT-BE-106-D | reconcile no finaliza mientras proveedor difiere y después co
     data: { email: change.newEmail },
   });
 });
-it('UT-BE-103-F | CSRF se rota como hash, sin cambiar sesión', async () => {
+it('UT-BE-103-F-CSRF | CSRF se rota como hash, sin cambiar sesión', async () => {
   const result = await service.csrf(principal);
   expect(database.session.update).toHaveBeenCalledWith({
     where: { id },
@@ -403,7 +458,7 @@ it('UT-BE-107-B | operador exige factor válido y AAL2; auditoría de verificaci
   expect((await service.operator(principal)).estado).toBe('operador_autenticado');
 });
 
-it('UT-BE-114 | recuperación aprobada vencida impide saltar el proceso', async () => {
+it('UT-BE-114-EXPIRED | recuperación aprobada vencida impide saltar el proceso', async () => {
   account.operator = true;
   database.mfaRecovery.findFirst.mockResolvedValue({ state: 'expired', approvedBy: id });
   await expect(service.enroll(principal)).rejects.toMatchObject({ status: 409 });
@@ -414,7 +469,7 @@ it('UT-BE-114 | recuperación aprobada vencida impide saltar el proceso', async 
   expect(fixture.auth.mfa.enroll).not.toHaveBeenCalled();
   expect(fixture.auth.mfa.challengeAndVerify).not.toHaveBeenCalled();
 });
-it('UT-BE-114 | agregar un segundo factor requiere AAL2', async () => {
+it('UT-BE-114-AAL2 | agregar un segundo factor requiere AAL2', async () => {
   account.operator = true;
   fixture.auth.mfa.listFactors.mockResolvedValue({
     data: { totp: [{ status: 'verified' }] },
@@ -428,7 +483,7 @@ it('UT-BE-114 | agregar un segundo factor requiere AAL2', async () => {
   expect(fixture.auth.mfa.enroll).not.toHaveBeenCalled();
 });
 
-it('UT-BE-103-F | espera al dueño de renovación y usa su token vigente', async () => {
+it('UT-BE-103-F-REFRESH | espera al dueño de renovación y usa su token vigente', async () => {
   tokens.expires_at = Math.floor(Date.now() / 1000);
   session.providerTokens = seal(tokens, 'a'.repeat(64));
   database.session.updateMany.mockResolvedValueOnce({ count: 0 });

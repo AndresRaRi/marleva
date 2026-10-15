@@ -10,14 +10,17 @@ sequenceDiagram
     U->>UI: S010 escribir correo ficticio
     Note over U,UI: S015 contenido dentro de región principal accesible; no cambia diseño visual
     UI->>API: S020 solicitar desafío
+    Note over UI,API: S025 correo inválido 422 antes de reservar o llamar Auth; correo válido normalizado
     API->>DB: S030 bloquear origen y correo; comprobar espera y ventana móvil30/h
     alt Espera o pausa vigente
      DB-->>API: S040 límite con segundos restantes reales
      API-->>UI: S050 429 con Retry-After real y recuperación
     else Puede continuar
      API->>DB: S060 invalidar anteriores y reservar desafío
+     Note over API,DB: S065 si falla la reserva no llamar Auth; no acreditar integración mediante mock
      API->>AUTH: S070 solicitar OTP estándar
+     Note over API,AUTH: S075 error reportado por proveedor marca failed y devuelve 503 sin datos internos
      AUTH->>MAIL: S080 enviar código solo al capturador
-     API->>DB: S090 guardar desafío abierto
+     API->>DB: S090 guardar desafío abierto solo si sigue sending; respuesta tardía no reabre superseded
      API-->>UI: S100 ID y mensaje genérico
     end
