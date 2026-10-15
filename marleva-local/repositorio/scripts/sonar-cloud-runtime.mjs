@@ -60,6 +60,12 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       tokenFile,
       '-e',
       'SCANNER_WORKDIR_PATH=' + folder + '/.scannerwork',
+      '-e',
+      'GIT_CONFIG_COUNT=1',
+      '-e',
+      'GIT_CONFIG_KEY_0=safe.directory',
+      '-e',
+      'GIT_CONFIG_VALUE_0=' + path.resolve(folder, '../..'),
       '-v',
       root + ':' + root + ':ro',
       '-v',
@@ -95,7 +101,8 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
   const log = readFileSync(logFile, 'utf8');
   if (
     result.error ||
-    ![0, 2].includes(result.status) ||
+    result.signal ||
+    !Number.isInteger(result.status) ||
     /Failed to (?:parse|analyze|create.*program)|ERROR.*(?:TypeScript|JavaScript)/i.test(log)
   )
     throw new Error('Scanner Cloud falló; revisar log conservado');
