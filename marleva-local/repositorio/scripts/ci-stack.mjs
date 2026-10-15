@@ -95,6 +95,9 @@ if (action === 'stop') {
     for (const ports of Object.values(container.NetworkSettings.Ports))
       for (const port of ports ?? [])
         if (port.HostIp !== '127.0.0.1') throw new Error('Puerto CI expuesto fuera de loopback');
+  if (!/^sha256:[a-f0-9]{64}$/.test(containers[0].Image))
+    throw new Error('Imagen PostgreSQL CI sin identificador inmutable');
+  env.MARLEVA_CI_POSTGRES_IMAGE = containers[0].Image;
   writeFileSync(
     folder + '/.env',
     Object.entries(env)

@@ -57,8 +57,14 @@ await db.query('RESET ROLE');
 const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const { data, error } = await admin.auth.admin.listUsers();
-if (error) throw new Error('Local Auth unavailable');
+const identities = [];
+let page = 1;
+while (page !== null) {
+  const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 100 });
+  if (error) throw new Error('Local Auth unavailable');
+  identities.push(...data.users);
+  page = data.nextPage;
+}
 const users = [];
 for (const email of [
   'a@example.test',
@@ -66,7 +72,7 @@ for (const email of [
   'operator1@example.test',
   'operator2@example.test',
 ]) {
-  let user = data.users.find((u) => u.email === email);
+  let user = identities.find((u) => u.email === email);
   if (!user) {
     const created = await admin.auth.admin.createUser({ email, email_confirm: true });
     if (created.error) throw new Error('Fixture creation failed');

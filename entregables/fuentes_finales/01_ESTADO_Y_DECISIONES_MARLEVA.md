@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main principal en 25b60f9 tras fusión del PR #1. Rama codex/feat-ci-pipeline incorpora main mediante merge dfeb9a3; fase 1 verificada en ee171cf y fase 2 preparada en su rama | Aplicar 00 §13; PR del pipeline pendiente, sin fusionarlo automáticamente |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main principal en 25b60f9 tras fusión del PR #1. Rama codex/feat-ci-pipeline incorpora main mediante merge dfeb9a3; fase 1 verificada en ee171cf y fase 2 publicada inicialmente en 412d56d | [PR #2 en borrador](https://github.com/AndresRaRi/marleva/pull/2); aplicar 00 §13, sin fusionarlo automáticamente |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -89,6 +89,7 @@ Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (c
 | MAR-TODO-B12-PILOTO / Alta | Decisión A aprobada; ejecutar y cerrar recuperación esencial antes del piloto | Alcance en procedimiento B12. Pruebas prolongadas y escenarios avanzados quedan pendientes posteriores, sin acreditar B12 completo |
 | Revisión / Alta | Observaciones del instructivo y revisión de código antes de main | Usuario o segundo agente autorizado revisa código; aceptación de pantallas corresponde al usuario |
 | MAR-TODO-CI-SEC-001 / Alta | Resolver vulnerabilidades detectadas por OSV | Mantener el control bloqueante. Estado, versiones y evidencia en ADR002/avance; sin excepciones de riesgo aprobadas |
+| MAR-TODO-CI-CONFIG-001 / Alta | Habilitar el gráfico de dependencias del repositorio | Requisito del control oficial de GitHub; pasos en README del código. No cambiar ajustes por esta tarea |
 | Activación real | Tarifas/proveedor/fiscalidad/privacidad/operación | Decisiones y comprobaciones previas al piloto, sin inventar valores ni activar servicios |
 
 Para después, fuera del alcance: reparto propio, favoritos/reseñas/promociones/referidos, IA/mapas/chat general, monedero/crédito/agenda y apps Swift/Kotlin independientes.
