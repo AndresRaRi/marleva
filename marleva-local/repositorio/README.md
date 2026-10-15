@@ -44,7 +44,7 @@ Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integr
 
 ## Estado real
 
-Base/M1: backend de avisos, archivos privados y recuperación de operadores implementado; M1 sigue incompleta. Fase 1 del CI verificada en GitHub. Fase 2 pasó localmente calidad, 139 unitarias, 38 integraciones, siete operaciones de recuperación, contrato sobre 24 operaciones y accesibilidad web. En GitHub pasaron integración, contrato, web, calidad y CodeQL sobre 69672a5. Seguridad conserva avisos bloqueantes de terceros y revisión de dependencias exige habilitar su gráfico. Fase 3 sin ejecutar. Estado único y límites en [avance](docs/avance.md) y [ADR002](docs/adr/002-pipeline-ci.md). Google sigue pendiente; Prisma y YAML canónico conservados.
+Base/M1: backend de avisos, archivos privados y recuperación de operadores implementado; M1 sigue incompleta. Fase 1 del CI verificada en GitHub. Fase 2 pasó localmente calidad, 139 unitarias, 38 integraciones, siete operaciones de recuperación, contrato sobre 24 operaciones y accesibilidad web. En GitHub pasaron integración, contrato, web, calidad y CodeQL sobre 69672a5. Seguridad y revisión de dependencias pasaron en GitHub sobre 9cdde72. Dos paquetes vulnerables se retiraron; otros dos conservan versión original con parches locales comprobados mediante hashes y regresiones. OSV original se conserva. El conjunto de fase 2 sigue en validación. Fase 3 sin ejecutar. Estado único y límites en [avance](docs/avance.md) y [ADR002](docs/adr/002-pipeline-ci.md). Google sigue pendiente; Prisma y YAML canónico conservados.
 
 Revisar este README al inicio/fin de cada proceso y chat; corregirlo solo si cambió la realidad. Cerrar con resultados, instructivo/revisión, porcentajes medibles y commit claro. Origin configurado; rama codex/fix-quality-and-rules subida el 14-10, seguimiento activo y pull --ff-only comprobado. Fuentes y originales sincronizados no se modifican ni se consideran subidos por guardado local. [ADR001](docs/adr/001-consolidacion-tecnica.md), [avance](docs/avance.md), reglas en 00. Hooks desde raíz: git config core.hooksPath .githooks; precommit ejecuta quality, unitarias y cobertura; commit-msg exige Conventional Commits.
 
@@ -68,7 +68,7 @@ Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisi
 | Unitarias y cobertura | pnpm test:coverage; después pnpm coverage:check |
 | Compilación API/web | pnpm build |
 | Imagen local, hadolint y Trivy | pnpm build:container; requiere Docker |
-| Dependencias, secretos, licencias y SBOM | pnpm security:scan; permanece rojo mientras haya avisos |
+| Dependencias, secretos, licencias y SBOM | pnpm security:scan; bloquea avisos sin corrección comprobada |
 | Preparar servicios CI separados | pnpm ci:stack:start; después pnpm ci:migrations |
 | Integración general y operadores CI | pnpm ci:run integracion |
 | Navegador, axe y Lighthouse | pnpm ci:run web |
@@ -79,4 +79,4 @@ El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriore
 
 El stack CI usa puertos 54621/54622/54624/54625 y credenciales propias ignoradas. Integración y web requieren libres los puertos API 3000 y HTTPS 8443; no detener procesos ajenos. En este Mac se puede usar el proxy TLS existente mediante MARLEVA_CI_EXISTING_PROXY=1, deteniendo y restaurando únicamente la API con scripts/local.mjs. Los jobs de GitHub tienen entorno propio; NSS confía en su CA temporal, sin ignorar TLS. No ejecutar suites que detienen Auth/Storage/correo en paralelo. Migraciones aplicadas intactas; pruebas de operadores usan una base nueva independiente, no reinician cuotas de otras suites.
 
-Requisito de GitHub: la revisión de dependencias necesita Dependency graph habilitado en Settings → Security → Advanced Security, en [ajustes de seguridad](https://github.com/AndresRaRi/marleva/settings/security_analysis). El primer ensayo informó que estaba deshabilitado; este trabajo no modifica ajustes del repositorio. OSV analiza los lockfiles por separado y conserva su bloqueo por vulnerabilidades. [Borrador de revisión #2](https://github.com/AndresRaRi/marleva/pull/2), sin fusionar.
+Requisito de GitHub: la revisión de dependencias necesita Dependency graph habilitado en Settings → Security → Advanced Security, en [ajustes de seguridad](https://github.com/AndresRaRi/marleva/settings/security_analysis). Se habilitó por solicitud del usuario y el control ya pasó. OSV analiza los lockfiles completos; su informe original se conserva y solo se reconoce una corrección local cuando coinciden sus hashes y pasan las regresiones en la misma ejecución. Cualquier aviso sin corrección comprobada bloquea. [Borrador de revisión #2](https://github.com/AndresRaRi/marleva/pull/2), sin fusionar.
