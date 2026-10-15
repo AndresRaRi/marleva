@@ -1,3 +1,4 @@
+import { checkSecretControls } from './check-secret-controls.mjs';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { ensureCiTool } from './ci-tool.mjs';
@@ -137,6 +138,7 @@ outcomes.push({
 if (findings.pending.length === 0 && osvResult.status === 1)
   outcomes.find((item) => item.name === 'OSV original').blocking = false;
 const gitleaks = await ensureCiTool('gitleaks');
+checkSecretControls(gitleaks);
 run('Gitleaks', gitleaks, [
   'git',
   root,
