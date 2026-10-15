@@ -78,7 +78,9 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Abierto; implementación/pruebas base/M1 y corrección de fuentes. No equivale a M1 terminada |
 
-Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores. No hay automatización activa de este chat ni trabajo garantizado cuando termina un turno.
+Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
+
+Seguimiento CI autorizado y activado el 15-10-2026 en este chat: «Vigilar y corregir CI de Marleva», ID vigilar-y-corregir-ci-de-marleva, cada 15 minutos. Revisa codex/feat-ci-pipeline y PR #2, diagnostica fallos nuevos y corrige dentro del alcance autorizado; avisa solo cambios relevantes o intervención necesaria. Estado mínimo de ejecuciones en artifacts ignorados. No es notificación instantánea; requiere aplicación/equipo disponibles y permisos de ejecución. No fusiona, despliega ni cambia ajustes del repositorio; no repite avisos por bloqueos conocidos sin novedad. La automatización anterior de MAR-CHAT-004 permanece pausada.
 
 ## 6. Pendientes y decisiones del usuario
 
