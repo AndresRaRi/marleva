@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - codex/feat-m3-catalogo-008
   pull_request:
     branches:
       - main
@@ -55,6 +56,15 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Comprobar unitarias
         run: pnpm ci:run unitarias
+      - name: Conservar cobertura general
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: coverage-general-${{ github.sha }}
+          path: |
+            marleva-local/repositorio/coverage/lcov.info
+            marleva-local/repositorio/coverage/coverage-summary.json
+          retention-days: 3
+          if-no-files-found: error
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs unitarias '${{ job.status }}'
@@ -70,6 +80,7 @@ jobs:
       - contrato
       - web
       - codeql
+      - cobertura
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -254,3 +265,30 @@ jobs:
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs codeql '${{ job.status }}'
+
+  m3:
+    uses: ./.github/workflows/m3.yml
+  cobertura:
+    needs: [unitarias, m3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Recuperar cobertura del mismo run y SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download "$GITHUB_RUN_ID" --name "coverage-general-$GITHUB_SHA" --dir coverage
+          gh run download "$GITHUB_RUN_ID" --name "m3-$GITHUB_SHA" --dir .
+      - name: Evaluar línea base y código nuevo con cobertura agregada
+        run: |
+          export MARLEVA_COVERAGE_BASE="$(git merge-base HEAD origin/main)"
+          export MARLEVA_COVERAGE_EXTRA=coverage/m3-full/lcov.info
+          pnpm coverage:check

@@ -12,8 +12,6 @@ regexes = ['''^\s*"docs/apis/M1/openapi.json": "cb222280130c343ca1a649af6980f819
 paths = ['''(^|/)tests/results/documentation-20261013\.json$''']
 condition = "AND"
 
-[[rules]]
-id = "generic-api-key"
 [[rules.allowlists]]
 description = "Identificador histórico de perfil Sonar comprobado; no token ni credencial"
 regexTarget = "line"

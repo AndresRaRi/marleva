@@ -101,3 +101,14 @@ Rendimiento local: procesador Sharp 0.35.5, diez muestras tras calentamiento, p9
 Se conservan fallos y diagnóstico: la consulta inicial estimaba tres coincidencias frente a 10000 y excedía el objetivo. La corrección final usa proyección pública explícita y búsqueda lateral de versión, pagina antes de agregar fotos y no amplía permisos. EXPLAIN final local: 1,468 ms. Migración M3 003 aplicada e inmutable; 001/002 y migraciones M1 intactas. Sharp y su grafo nuevo están fijados en lockfile; la afirmación anterior de lockfile sin cambios corresponde al incremento anterior.
 
 Originales privados y derivados operativos están ignorados por Git. Fuentes sincronizadas no se editaron ni subieron. Solo el añadido M3 de 01 debe conciliarse con 006/007 antes de reemplazar la fuente compartida; 00/02/03 y configuración no cambian. Continuidad: completar ingreso autenticado cuando existan contratos de identidad/elegibilidad/revisión compatibles, manteniendo aislamiento y sin integrar a main.
+
+
+## Validación CI y cobertura ampliada
+
+El primer CI de 221ad41 falló:207 pruebas pasaron pero el gate del diff no recibía cobertura M3; GitLeaks señaló un identificador histórico de perfil Sonar. Acta m3-ci-first-failure.json. El segundo intento b0e2e3a detectó comando Prisma no localizado y sustitución accidental de una excepción previa de GitLeaks; corregidos sin relajar el escáner. Ambos identificadores documentales quedan limitados por regla/ruta/línea.
+
+Se añadieron cinco integraciones de render React Native Web con jsdom 30.1.3 (solo pruebas, MIT), React/ReactDOM de la versión del cliente 19.2.3. React/DOM reales y respuestas HTTP simuladas; no equivalen a navegador o plataformas físicas. La dependencia jsdom y sus transitivas están fijadas en lockfile; excepción de antigüedad de esa versión registrada por pnpm. Sin scripts de instalación adicionales.
+
+Configuración vitest.m3.full-coverage.config.mjs:65 pruebas M3 (44UT+16IT previas+5 render), fuentes backend/cliente y JS compilado con mapas a TS; tipos generados excluidos, worker hijo no cubierto aunque sí probado por integración. Resultado local: líneas91,31%, ramas85,71%, declaraciones90,13%, funciones82,22%; ámbitos más amplios que el acta histórica de lógica, no comparar porcentajes sin su alcance. Umbral80% en las cuatro métricas. Gate agregado de diff contra merge-base main:547/617=88,65%; archivos sin cobertura siguen descubiertos, tipos puros y derivados de OpenAPI reproducidos no tienen ejecución.
+
+CI general conserva la línea base global y agrega los LCOV del mismo run/SHA. Build depende de ese gate y del ensayo M3 reusable:PostgreSQL17.11 fijado por digest, base/puerto/roles propios, migraciones M3, Nest, Expo/Chromium, errores/fotos/axe y recuperación. Sin conectar servicios locales M1, sin tocar sus contratos/migraciones y sin integración a main. Resultados remotos pendientes de verificación del SHA nuevo; no dar por aprobado por mediciones locales.
