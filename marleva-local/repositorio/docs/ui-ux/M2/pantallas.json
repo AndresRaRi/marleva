@@ -1,0 +1,897 @@
+{
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "status": "propuesta_no_aprobada",
+  "implementation": "not_started",
+  "contract_version": "0.3.1",
+  "screens": [
+    {
+      "id": "MAR-M2-UI-001",
+      "title": "Datos de pertenencia",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-001"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-001",
+          "steps": [
+            "S010",
+            "S060",
+            "S080",
+            "S085",
+            "S090",
+            "S130"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_001",
+        "MAR_M2_API_002",
+        "MAR_M2_API_003",
+        "MAR_M2_API_004"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipCommandReceipt"
+      ],
+      "primary": "Continuar con documentos",
+      "secondary": [
+        "Guardar borrador"
+      ],
+      "states": [
+        "editing",
+        "loading",
+        "validation_error",
+        "save_uncertain",
+        "session_expired"
+      ],
+      "contract": "Guardar no envía ni habilita pertenencia. Usar revisión confirmada, no inferir guardado por respuesta tardía.",
+      "state_actions": {
+        "editing": {
+          "primary": "Continuar con documentos",
+          "secondary": [
+            "Guardar borrador"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "validation_error": {
+          "primary": "Continuar con documentos",
+          "secondary": [
+            "Guardar borrador"
+          ]
+        },
+        "save_uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "session_expired": {
+          "primary": "Recuperar acceso con M1",
+          "secondary": [
+            "Guardar borrador"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-002",
+      "title": "Documentos privados",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-002",
+        "MAR-M2-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-002",
+          "steps": [
+            "S030",
+            "S050",
+            "S070",
+            "S085",
+            "S090",
+            "S140",
+            "S145",
+            "S150"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-004",
+          "steps": [
+            "S092",
+            "S094",
+            "S096",
+            "S098"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_005",
+        "MAR_M2_API_006",
+        "MAR_M2_API_007",
+        "MAR_M2_API_008",
+        "MAR_M2_API_010",
+        "MAR_M2_API_011",
+        "MAR_M2_API_017"
+      ],
+      "tables": [
+        "M2MembershipDocument",
+        "M2MembershipVersionDocument",
+        "M2MembershipDocumentAccess",
+        "M2MembershipCommandReceipt"
+      ],
+      "primary": "Revisar antes de enviar",
+      "secondary": [
+        "Agregar comprobante",
+        "Volver a mis datos"
+      ],
+      "states": [
+        "ready",
+        "uploading",
+        "analyzing",
+        "file_rejected",
+        "permit_expired",
+        "reusable",
+        "unavailable",
+        "conflict"
+      ],
+      "contract": "PDF/JPEG/PNG, máximo dos finalidades y5.000.000bytes por archivo. Reutilizar solo de versión fuente exacta y admisible; no cambiar su fecha. D08-0.1 define referencias legítimas y borrado bajo exclusión; reutilización real sigue bloqueada hasta aprobación e integración/pruebas D08-R.",
+      "state_actions": {
+        "ready": {
+          "primary": "Revisar antes de enviar",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        },
+        "uploading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "analyzing": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "file_rejected": {
+          "primary": "Revisar antes de enviar",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        },
+        "permit_expired": {
+          "primary": "Revisar antes de enviar",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        },
+        "reusable": {
+          "primary": "Revisar antes de enviar",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        },
+        "unavailable": {
+          "primary": "Revisar antes de enviar",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Agregar comprobante",
+            "Volver a mis datos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-003",
+      "title": "Revisión y envío",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-003",
+        "MAR-M2-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-003",
+          "steps": [
+            "S040",
+            "S060",
+            "S080",
+            "S090",
+            "S100",
+            "S120"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-004",
+          "steps": [
+            "S100",
+            "S105",
+            "S110",
+            "S120"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_003",
+        "MAR_M2_API_009",
+        "MAR_M2_API_012"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2MembershipVersion",
+        "M2MembershipSubmission",
+        "M2MembershipCommandReceipt",
+        "M2MembershipEvent"
+      ],
+      "primary": "Enviar solicitud",
+      "secondary": [
+        "Volver a documentos"
+      ],
+      "states": [
+        "ready",
+        "sending",
+        "send_uncertain",
+        "validation_error",
+        "conflict",
+        "correction_ready",
+        "reconsideration_ready"
+      ],
+      "contract": "En reconsideración el CTA es Enviar reconsideración. No mostrar enviado hasta recibo/consulta confirmados. Mantener clave/cuerpo; no repetir con clave nueva.",
+      "state_actions": {
+        "ready": {
+          "primary": "Enviar solicitud",
+          "secondary": [
+            "Volver a documentos"
+          ]
+        },
+        "sending": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "send_uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "validation_error": {
+          "primary": "Enviar solicitud",
+          "secondary": [
+            "Volver a documentos"
+          ]
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver a documentos"
+          ]
+        },
+        "correction_ready": {
+          "primary": "Enviar corrección",
+          "secondary": [
+            "Volver a documentos"
+          ]
+        },
+        "reconsideration_ready": {
+          "primary": "Enviar reconsideración",
+          "secondary": [
+            "Volver a documentos"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-004",
+      "title": "Estado y resolución",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-001",
+        "MAR-M2-UC-003",
+        "MAR-M2-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-001",
+          "steps": [
+            "S050",
+            "S140"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-003",
+          "steps": [
+            "S090",
+            "S100"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-004",
+          "steps": [
+            "S010",
+            "S030",
+            "S040",
+            "S120"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_001",
+        "MAR_M2_API_003",
+        "MAR_M2_API_014",
+        "MAR_M2_API_016"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2MembershipSubmission",
+        "M2MembershipDecision",
+        "M2MembershipDecisionPrivate"
+      ],
+      "primary": "Ver historial",
+      "secondary": [
+        "Actualizar estado"
+      ],
+      "states": [
+        "empty",
+        "pending",
+        "correction",
+        "rejected",
+        "approved",
+        "loading",
+        "service_error"
+      ],
+      "contract": "Motivo visible sin notas internas ni revisor. Sin promesa de tiempo de decisión. Aprobación vecinal no habilita por sí sola perfil comercial/pagos.",
+      "state_actions": {
+        "empty": {
+          "primary": "Iniciar solicitud",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        },
+        "pending": {
+          "primary": "Ver historial",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        },
+        "correction": {
+          "primary": "Preparar corrección",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        },
+        "rejected": {
+          "primary": "Preparar reconsideración",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        },
+        "approved": {
+          "primary": "Ver historial",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "service_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": [
+            "Actualizar estado"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-005",
+      "title": "Historial y detalle",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-004",
+          "steps": [
+            "S020",
+            "S030",
+            "S035",
+            "S040"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_014",
+        "MAR_M2_API_015",
+        "MAR_M2_API_016",
+        "MAR_M2_API_010",
+        "MAR_M2_API_011"
+      ],
+      "tables": [
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipSubmission",
+        "M2MembershipDecision",
+        "M2MembershipDecisionPrivate",
+        "M2MembershipDocumentAccess"
+      ],
+      "primary": "Ver detalle de versión",
+      "secondary": [
+        "Ver versiones anteriores",
+        "Actualizar historial"
+      ],
+      "states": [
+        "history",
+        "private_unavailable",
+        "loading",
+        "service_error",
+        "forbidden"
+      ],
+      "contract": "Página mínima sin PII; abrir versión/resolución por separado. No recuperar suprimidos desde otra proyección. Revisor no hereda este acceso.",
+      "state_actions": {
+        "history": {
+          "primary": "Ver detalle de versión",
+          "secondary": [
+            "Ver versiones anteriores",
+            "Actualizar historial"
+          ]
+        },
+        "private_unavailable": {
+          "primary": "Ver detalle de versión",
+          "secondary": [
+            "Ver versiones anteriores",
+            "Actualizar historial"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "service_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": [
+            "Ver versiones anteriores",
+            "Actualizar historial"
+          ]
+        },
+        "forbidden": {
+          "primary": "Volver",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-006",
+      "title": "Corrección y reconsideración",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-004",
+          "steps": [
+            "S035",
+            "S050",
+            "S055",
+            "S060",
+            "S065",
+            "S080",
+            "S090",
+            "S100"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_003",
+        "MAR_M2_API_004",
+        "MAR_M2_API_012",
+        "MAR_M2_API_013",
+        "MAR_M2_API_015",
+        "MAR_M2_API_016"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipDecision",
+        "M2MembershipCommandReceipt"
+      ],
+      "primary": "Preparar borrador",
+      "secondary": [
+        "Ver resolución anterior",
+        "Volver al estado"
+      ],
+      "states": [
+        "correction",
+        "reconsideration",
+        "draft",
+        "validation_error",
+        "prepare_uncertain",
+        "conflict",
+        "private_unavailable"
+      ],
+      "contract": "Mismo expediente, versión nueva, motivo privado obligatorio solo en reconsideración; declaración vecinal reiniciada. Preparar no presenta; enviar sí. D08-0.1 define referencias legítimas y borrado bajo exclusión; reutilización real sigue bloqueada hasta aprobación e integración/pruebas D08-R.",
+      "state_actions": {
+        "correction": {
+          "primary": "Preparar borrador",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        },
+        "reconsideration": {
+          "primary": "Preparar borrador",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        },
+        "draft": {
+          "primary": "Continuar con el borrador",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        },
+        "validation_error": {
+          "primary": "Preparar borrador",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        },
+        "prepare_uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        },
+        "private_unavailable": {
+          "primary": "Completar datos nuevos",
+          "secondary": [
+            "Ver resolución anterior",
+            "Volver al estado"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-001",
+      "title": "Cola y asignación",
+      "actor": "gestor o revisor según capacidad",
+      "cases": [
+        "MAR-M8-UC-001"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-001",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060",
+            "S070",
+            "S090",
+            "S100",
+            "S001",
+            "S002",
+            "S003",
+            "S004",
+            "S005",
+            "S025"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_001",
+        "MAR_M8_API_002",
+        "MAR_M8_API_005"
+      ],
+      "tables": [
+        "M2MembershipSubmission",
+        "M8MembershipAssignment",
+        "M8MembershipReviewGrant",
+        "M8MembershipReviewerProfile"
+      ],
+      "primary": "Abrir revisión asignada",
+      "secondary": [
+        "Actualizar cola",
+        "Ver más solicitudes"
+      ],
+      "states": [
+        "queue",
+        "empty",
+        "loading",
+        "mfa_required",
+        "assignment_unavailable",
+        "conflict",
+        "candidates",
+        "no_candidates",
+        "candidate_stale",
+        "candidates_error"
+      ],
+      "contract": "Fuente propia M8 por envío: perfil operativo habilitado y grant review vigente; gestor autorizado con MFA. Sin directorio M1, correo o domicilio. Revalidar al asignar; vacío real distinto de503. Aprovisionamiento D09-R pendiente.",
+      "state_actions": {
+        "queue": {
+          "primary": "Abrir revisión asignada",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "empty": {
+          "primary": "Abrir revisión asignada",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "mfa_required": {
+          "primary": "Confirmar acceso seguro con M1",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "assignment_unavailable": {
+          "primary": "Intentar de nuevo",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "candidates": {
+          "primary": "Asignar revisor",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "no_candidates": {
+          "primary": "Actualizar revisores",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "candidate_stale": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        },
+        "candidates_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": [
+            "Actualizar cola",
+            "Ver más solicitudes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-002",
+      "title": "Revisar y resolver",
+      "actor": "revisor asignado",
+      "cases": [
+        "MAR-M8-UC-002"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-002",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S035",
+            "S040",
+            "S050",
+            "S060",
+            "S070",
+            "S100",
+            "S120",
+            "S145"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_003",
+        "MAR_M8_API_004",
+        "MAR_M2_API_010",
+        "MAR_M2_API_011",
+        "MAR_M2_API_012"
+      ],
+      "tables": [
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipDocumentAccess",
+        "M2MembershipDecision",
+        "M2MembershipDecisionPrivate",
+        "M8MembershipAssignment",
+        "M2MembershipCommandReceipt"
+      ],
+      "primary": "Confirmar decisión",
+      "secondary": [
+        "Volver a la cola"
+      ],
+      "states": [
+        "review",
+        "approved",
+        "rejected",
+        "mfa_required",
+        "assignment_lost",
+        "decision_uncertain",
+        "document_unavailable",
+        "loading",
+        "correction_confirmed",
+        "review_reconsideration"
+      ],
+      "contract": "Revisión solo del envío asignado actual y parte visible de antecedente; motivo visible/nota interna separados. Reautorizar al confirmar y antes de responder bytes. Si pierde asignación, ocultar contenido sensible.",
+      "state_actions": {
+        "review": {
+          "primary": "Confirmar decisión",
+          "secondary": [
+            "Volver a la cola"
+          ]
+        },
+        "approved": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "rejected": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "mfa_required": {
+          "primary": "Confirmar acceso seguro con M1",
+          "secondary": [
+            "Volver a la cola"
+          ]
+        },
+        "assignment_lost": {
+          "primary": "Volver",
+          "secondary": []
+        },
+        "decision_uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "document_unavailable": {
+          "primary": "Confirmar decisión",
+          "secondary": [
+            "Volver a la cola"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        },
+        "correction_confirmed": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "review_reconsideration": {
+          "primary": "Confirmar decisión",
+          "secondary": [
+            "Volver a la cola"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-007",
+      "title": "Privacidad y conservación",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-011"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-011",
+          "steps": [
+            "S120",
+            "S130"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_018"
+      ],
+      "tables": [
+        "M2MembershipRetentionCase",
+        "M2MembershipDocument",
+        "M2MembershipVersionPrivate",
+        "M2MembershipDecisionPrivate"
+      ],
+      "primary": "Actualizar estado",
+      "secondary": [
+        "Volver al expediente"
+      ],
+      "states": [
+        "scheduled",
+        "held",
+        "delete_pending",
+        "deleted",
+        "uncalculated",
+        "service_error",
+        "loading"
+      ],
+      "contract": "Fecha prevista según política propuesta; bloqueo sin causa legal expuesta; Borrado pendiente hasta ausencia de todas las copias. No afirmar borrado por null ni inventar plazos. Sin trámite ARCO implementado.",
+      "state_actions": {
+        "scheduled": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "held": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "delete_pending": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "deleted": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "uncalculated": {
+          "primary": "Actualizar estado",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "service_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": [
+            "Volver al expediente"
+          ]
+        },
+        "loading": {
+          "primary": "Espera un momento",
+          "secondary": []
+        }
+      }
+    }
+  ],
+  "policy_version": "D08-0.1",
+  "revision": "revisión integral del recorrido"
+}

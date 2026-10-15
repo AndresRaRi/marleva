@@ -1,0 +1,550 @@
+Project Marleva_M2_Expediente_Objetivo {
+ database_type: 'PostgreSQL'
+ Note: 'MAR-CHAT-007, 15-10-2026. OBJETIVO DOCUMENTAL NO APLICADO. Recorrido M2 UC001-004 y M8 UC001-002; correccion/reconsideracion sobre mismo expediente, no todo M2/M8. Account, Session y Development son referencias externas mínimas para visualizar relaciones, no definiciones canónicas M1. El generador excluye sus CREATE/índices/comentarios y el bootstrap de esquema. Sin migraciones ni grants ejecutables. Checks locales en DBML; índices parciales en complemento trazado. Permisos vigentes, inmutabilidad y transiciones requieren coordinación/transacciones futuras, no quedan garantizados por este archivo.'
+}
+
+// REFERENCIAS EXTERNAS M1. No exportar su definición física.
+Table marleva.Account {
+ id uuid [pk, not null]
+ Note: 'EXTERNA M1: solo ID existente; no recrear ni alterar.'
+}
+Table marleva.Session {
+ id uuid [pk, not null]
+ accountId uuid [not null]
+ indexes { (id, accountId) [unique, name: 'm2_external_session_owner'] }
+ Note: 'EXTERNA M1: referencia al par único existente (id, accountId); no recrear ni alterar.'
+}
+Table marleva.Development {
+ id integer [pk, not null]
+ Note: 'EXTERNA M1: catálogo cerrado de siete. No sembrar ni duplicar catálogo.'
+}
+
+Table marleva.M2MembershipApplication {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null, unique]
+ state text [not null, default: 'draft']
+ revision integer [not null, default: 1]
+ currentVersionId uuid [note: 'Nulo solo durante creación atómica, antes de guardar primera versión.']
+ createdAt timestamptz [not null, default: `now()`]
+ updatedAt timestamptz [not null, default: `now()`]
+ indexes {
+  (id, accountId) [unique, name: 'm2_application_owner_key']
+  (state, updatedAt, id) [name: 'm2_application_queue_idx']
+ }
+ checks {
+  `revision > 0` [name: 'm2_application_revision']
+  `state IN ('draft','pending','correction','rejected','approved','suspended','archived_inactivity')` [name: 'm2_application_state']
+  `"updatedAt" >= "createdAt"` [name: 'm2_application_dates']
+  `state = 'draft' OR "currentVersionId" IS NOT NULL` [name: 'm2_application_current_required']
+ }
+ Note: 'M2 UC001/003. Un expediente por cuenta; revision es CAS, no número de evidencia. Cambios de residencia/restricciones fuera de este recorrido aún no tienen modelo completo.'
+}
+
+Table marleva.M2MembershipVersion {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ number integer [not null]
+ origin text [not null, default: 'initial']
+ sourceDecisionId uuid
+ sourceSubmissionId uuid
+ lifecycle text [not null, default: 'draft']
+ developmentId integer
+ evidenceRelationship text [not null, default: 'unspecified']
+ createdAt timestamptz [not null, default: `now()`]
+ submittedAt timestamptz
+ indexes {
+  (id, applicationId, accountId) [unique, name: 'm2_version_owner_key']
+  (applicationId, number) [unique, name: 'm2_version_number_key']
+ }
+ checks {
+  `number > 0` [name: 'm2_version_number']
+  `(number = 1) = (origin = 'initial')` [name: 'm2_version_initial_number']
+  `origin IN ('initial','correction','reconsideration')` [name: 'm2_version_origin']
+  `(origin = 'initial' AND "sourceDecisionId" IS NULL AND "sourceSubmissionId" IS NULL) OR (origin <> 'initial' AND "sourceDecisionId" IS NOT NULL AND "sourceSubmissionId" IS NOT NULL)` [name: 'm2_version_source_fields']
+  `lifecycle IN ('draft','submitted')` [name: 'm2_version_lifecycle']
+  `"evidenceRelationship" IN ('unspecified','own_name','cohabitation')` [name: 'm2_version_relationship']
+  `(lifecycle = 'draft' AND "submittedAt" IS NULL) OR (lifecycle = 'submitted' AND "submittedAt" IS NOT NULL AND "submittedAt" >= "createdAt" AND "developmentId" IS NOT NULL AND "evidenceRelationship" <> 'unspecified')` [name: 'm2_version_submission_fields']
+ }
+ Note: 'Envío congela esta versión y sus enlaces. Solo borrador editable. Nuevo envío exige nueva versión. Un índice parcial complementario limita a un borrador por expediente. origin y sourceDecisionId/sourceSubmissionId conservan el antecedente exacto del mismo titular. No editar la version/decision enviada anterior. Estado/origen, decision mas reciente y numero siguiente requieren transaccion T12.'
+}
+
+Table marleva.M2MembershipVersionPrivate {
+ versionId uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ reviewName text
+ privateAddress text
+ reconsiderationReason text
+ declaredResidenceCurrent boolean [not null, default: false]
+ purgedAt timestamptz
+ checks {
+  `"reviewName" IS NULL OR (char_length("reviewName") BETWEEN 1 AND 200 AND btrim("reviewName") <> '')` [name: 'm2_private_name_length']
+  `"privateAddress" IS NULL OR (char_length("privateAddress") BETWEEN 1 AND 1000 AND btrim("privateAddress") <> '')` [name: 'm2_private_address_length']
+  `"reconsiderationReason" IS NULL OR (char_length("reconsiderationReason") BETWEEN 1 AND 2000 AND btrim("reconsiderationReason") <> '')` [name: 'm2_private_reconsideration_reason']
+  `"purgedAt" IS NULL OR ("reviewName" IS NULL AND "privateAddress" IS NULL AND "reconsiderationReason" IS NULL AND "declaredResidenceCurrent" = false)` [name: 'm2_private_purge']
+ }
+ Note: 'Datos privados fuera del registro mínimo. Nullable admite borrador incompleto y futura supresión con motivo autorizado. No guardar copia privada en JSON de evento/recibo/decisión. Motivo privado de reconsideracion separado del historial minimo; obligatorio solo para origin reconsideration por transaccion. Calendario propuesto D08 v0.1 por finalidad, no activado; ver CONSERVACION_REVISORES_D08_D09.md.'
+}
+
+Table marleva.M2MembershipDocument {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ purpose text [not null]
+ objectKey text [unique, note: 'Referencia opaca sin nombre, correo o dirección en ruta; bucket privado, nunca URL pública.']
+ claimedMime text [not null]
+ expectedBytes integer [not null]
+ actualMime text
+ actualBytes bigint
+ sha256 text
+ analysisState text [not null, default: 'upload_pending']
+ analysisReference text [note: 'Referencia idempotente a análisis, no contenido ni secreto.']
+ uploadExpiresAt timestamptz [not null]
+ createdAt timestamptz [not null, default: `now()`]
+ validatedAt timestamptz
+ privacyState text [not null, default: 'active']
+ retentionDecisionId uuid
+ retentionStartedAt timestamptz
+ deleteAfter timestamptz
+ deletedAt timestamptz
+ revision integer [not null, default: 1]
+ indexes {
+  (id, applicationId, accountId, purpose) [unique, name: 'm2_document_owner_purpose_key']
+  (privacyState, deleteAfter, id) [name: 'm2_document_retention_idx']
+ }
+ checks {
+  `"privacyState" = 'deleted' OR "objectKey" IS NOT NULL` [name: 'm2_document_live_object']
+  `"privacyState" <> 'deleted' OR ("objectKey" IS NULL AND sha256 IS NULL AND "actualMime" IS NULL AND "actualBytes" IS NULL AND "analysisReference" IS NULL)` [name: 'm2_document_purged_metadata']
+  `purpose IN ('residence_proof','cohabitation_statement')` [name: 'm2_document_purpose']
+  `"claimedMime" IN ('application/pdf','image/jpeg','image/png') AND "expectedBytes" BETWEEN 1 AND 5000000` [name: 'm2_document_claimed_limits']
+  `"actualMime" IS NULL OR char_length("actualMime") BETWEEN 1 AND 127` [name: 'm2_document_actual_mime']
+  `"actualBytes" IS NULL OR "actualBytes" >= 0` [name: 'm2_document_actual_bytes']
+  `sha256 IS NULL OR sha256 ~ '^[a-f0-9]{64}$'` [name: 'm2_document_hash']
+  `"analysisState" IN ('upload_pending','analyzing','valid','rejected')` [name: 'm2_document_analysis_state']
+  `"privacyState" = 'deleted' OR "analysisState" <> 'valid' OR ("actualMime" IS NOT NULL AND "actualBytes" IS NOT NULL AND sha256 IS NOT NULL AND "validatedAt" IS NOT NULL AND "validatedAt" >= "createdAt")` [name: 'm2_document_valid_fields']
+  `"privacyState" = 'deleted' OR "analysisState" <> 'valid' OR ("actualMime" = "claimedMime" AND "actualBytes" = "expectedBytes")` [name: 'm2_document_valid_claim_match']
+  `"privacyState" IN ('active','held','delete_pending','deleted')` [name: 'm2_document_privacy_state']
+  `("privacyState" = 'deleted') = ("deletedAt" IS NOT NULL) AND ("deletedAt" IS NULL OR "deletedAt" >= "createdAt")` [name: 'm2_document_deleted_fields']
+  `("retentionStartedAt" IS NULL AND "deleteAfter" IS NULL AND "retentionDecisionId" IS NULL) OR ("retentionStartedAt" IS NOT NULL AND "retentionDecisionId" IS NOT NULL AND "deleteAfter" IS NOT NULL AND "deleteAfter" = "retentionStartedAt" + interval '30 days')` [name: 'm2_document_retention_fields']
+  `"uploadExpiresAt" > "createdAt" AND revision > 0` [name: 'm2_document_dates_revision']
+ }
+ Note: 'Objeto nuevo por carga; no sobrescribir bytes de evidencia enviada. El tipo/tamaño observado puede registrar un rechazo; solo valid exige coincidencia con lo permitido y declarado. Válido técnico no significa residencia aprobada. Estados derivados del caso de conservación y sus bloqueos/tareas. Columnas retention* son proyección C14 de decisión final; el caso es fuente del vencimiento efectivo, también para huérfanos. Una referencia técnica histórica no retiene bytes. Política propuesta, no activada.'
+}
+
+Table marleva.M2MembershipVersionDocument {
+ versionId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ slot smallint [not null]
+ documentId uuid [not null]
+ purpose text [not null]
+ declaredDocumentDate date
+ indexes {
+  (versionId, slot) [pk, name: 'm2_version_document_pk']
+  (versionId, purpose) [unique, name: 'm2_version_document_purpose_key']
+  (versionId, documentId, applicationId, accountId) [unique, name: 'm2_version_document_access_key']
+ }
+ checks {
+  `slot IN (1,2)` [name: 'm2_version_document_slots']
+  `purpose IN ('residence_proof','cohabitation_statement')` [name: 'm2_version_document_purpose']
+ }
+ Note: 'Como máximo dos vínculos por versión y uno por finalidad. Fecha declarada, revisada sobre el contenido; tres meses se evalúan con hora del servidor/fecha de envío en America/Merida, no con CHECK current_date mutable. Inmutabilidad después de envío y presencia de comprobante son reglas de transacción pendientes.'
+}
+
+Table marleva.M2MembershipSubmission {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ versionId uuid [not null, unique]
+ submittedBy uuid [not null]
+ submittedAt timestamptz [not null, default: `now()`]
+ status text [not null, default: 'pending']
+ decidedAt timestamptz
+ revision integer [not null, default: 1]
+ indexes {
+  (id, applicationId, accountId) [unique, name: 'm2_submission_owner_key']
+  (id, versionId, applicationId, accountId) [unique, name: 'm2_submission_version_key']
+  (status, submittedAt, id) [name: 'm2_submission_queue_idx']
+ }
+ checks {
+  `"submittedBy" = "accountId"` [name: 'm2_submission_self']
+  `status IN ('pending','decided') AND revision > 0` [name: 'm2_submission_status_revision']
+  `(status = 'pending' AND "decidedAt" IS NULL) OR (status = 'decided' AND "decidedAt" IS NOT NULL AND "decidedAt" >= "submittedAt")` [name: 'm2_submission_decision_fields']
+ }
+ Note: 'Un recibo por versión enviada; índice parcial de pendiente por expediente. Reenvío tras corrección conserva expediente y crea versión/envío nuevos. Reconsideraciones y restricciones completas aún pendientes.'
+}
+
+Table marleva.M8MembershipReviewGrant {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ accountId uuid [not null]
+ capability text [not null]
+ grantedBy uuid [not null]
+ grantedAt timestamptz [not null, default: `now()`]
+ revokedBy uuid
+ revokedAt timestamptz
+ reasonCode text [not null]
+ revision integer [not null, default: 1]
+ indexes {
+  (id, accountId, capability) [unique, name: 'm8_membership_grant_identity_key']
+ }
+ checks {
+  `capability IN ('membership_review','membership_assign','membership_conserve')` [name: 'm8_membership_grant_capability']
+  `"grantedBy" <> "accountId" AND revision > 0 AND char_length("reasonCode") BETWEEN 1 AND 80` [name: 'm8_membership_grant_no_self']
+  `("revokedBy" IS NULL AND "revokedAt" IS NULL) OR ("revokedBy" IS NOT NULL AND "revokedAt" IS NOT NULL AND "revokedAt" >= "grantedAt")` [name: 'm8_membership_grant_revocation']
+ }
+ Note: 'Capacidad específica M8, sin alterar RoleKey/Account.operator M1. Una activa por persona/capacidad vía índice parcial. Modelo de datos de autorización, no endpoint de gestión o bootstrap implementado. Cadena de otorgamiento y permiso vigente del otorgante requieren diseño posterior.'
+}
+
+Table marleva.M8MembershipAssignment {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ submissionId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null, note: 'Titular del expediente, no revisor.']
+ reviewerId uuid [not null]
+ reviewerGrantId uuid [not null]
+ reviewerCapability text [not null, default: 'membership_review']
+ assignedBy uuid [not null]
+ managerGrantId uuid [not null]
+ managerCapability text [not null, default: 'membership_assign']
+ assignedAt timestamptz [not null, default: `now()`]
+ endedAt timestamptz
+ endReason text
+ revision integer [not null, default: 1]
+ indexes {
+  (id, submissionId, applicationId, accountId, reviewerId) [unique, name: 'm8_assignment_decision_key']
+  (id, submissionId, applicationId, accountId) [unique, name: 'm8_assignment_receipt_key']
+  (reviewerId, endedAt, assignedAt, id) [name: 'm8_assignment_queue_idx']
+ }
+ checks {
+  `"reviewerId" <> "accountId" AND "assignedBy" <> "accountId"` [name: 'm8_assignment_no_owner']
+  `"reviewerCapability" = 'membership_review' AND "managerCapability" = 'membership_assign' AND revision > 0` [name: 'm8_assignment_capabilities']
+  `("endedAt" IS NULL AND "endReason" IS NULL) OR ("endedAt" IS NOT NULL AND "endedAt" >= "assignedAt" AND "endReason" IS NOT NULL AND "endReason" IN ('reassigned','conflict','decided','revoked'))` [name: 'm8_assignment_end_fields']
+ }
+ Note: 'Una asignación activa por envío, índice parcial. Registra concesiones concretas; deben seguir vigentes al leer/decidir. Gestor no asigna su propio expediente. Conflictos adicionales declarados se registran con endReason conflict; no exponer detalles privados.'
+}
+
+Table marleva.M2MembershipDecision {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ submissionId uuid [not null, unique]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ assignmentId uuid [not null]
+ reviewerId uuid [not null]
+ outcome text [not null]
+ reasonCode text [not null]
+ decidedAt timestamptz [not null, default: `now()`]
+ finalityState text [not null, default: 'provisional']
+ finalizedAt timestamptz
+ indexes {
+  (id, applicationId, accountId) [unique, name: 'm2_decision_owner_key']
+  (id, submissionId, applicationId, accountId) [unique, name: 'm2_decision_submission_key']
+  (id, assignmentId, submissionId, applicationId, accountId, reviewerId) [unique, name: 'm2_decision_receipt_actor_key']
+ }
+ checks {
+  `"reviewerId" <> "accountId"` [name: 'm2_decision_no_self']
+  `outcome IN ('approved','correction','rejected')` [name: 'm2_decision_outcome']
+  `char_length("reasonCode") BETWEEN 1 AND 80` [name: 'm2_decision_reason']
+  `"finalityState" IN ('pending_definition','provisional','final','challenged')` [name: 'm2_decision_finality']
+  `("finalityState" = 'final' AND "finalizedAt" IS NOT NULL AND "finalizedAt" >= "decidedAt") OR ("finalityState" IN ('pending_definition','provisional') AND "finalizedAt" IS NULL) OR ("finalityState" = 'challenged' AND ("finalizedAt" IS NULL OR "finalizedAt" >= "decidedAt"))` [name: 'm2_decision_finalized_fields']
+ }
+ Note: 'Resultado mínimo ligado a envío/asignación/revisor exactos, uno por envío. Finalidad no se deriva automáticamente de approved/rejected. Registro mínimo y finality todavía no son calendario jurídico completo; impugnación después de final requiere historial/bloqueo posterior.'
+}
+
+Table marleva.M2MembershipDecisionPrivate {
+ decisionId uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ visibleReason text
+ correctionFields jsonb [not null, default: `'[]'::jsonb`, note: 'Array de nombres de campo permitidos; sin valores de domicilio o documentos. Esquema cerrado del API pendiente.']
+ internalNote text
+ purgedAt timestamptz
+ checks {
+  `"visibleReason" IS NULL OR char_length("visibleReason") BETWEEN 1 AND 1000` [name: 'm2_decision_visible_reason_length']
+  `"internalNote" IS NULL OR char_length("internalNote") BETWEEN 1 AND 2000` [name: 'm2_decision_internal_note_length']
+  `jsonb_typeof("correctionFields") = 'array'` [name: 'm2_decision_fields_array']
+  `"purgedAt" IS NULL OR ("visibleReason" IS NULL AND "internalNote" IS NULL AND "correctionFields" = '[]'::jsonb)` [name: 'm2_decision_private_purge']
+ }
+ Note: 'Texto sensible fuera del mínimo de decisión, con supresión controlada posterior. Proyección del titular excluye internalNote. Calendario propuesto D08 v0.1, no activado; textos privados separados del mínimo.'
+}
+
+Table marleva.M2MembershipDocumentAccess {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ documentId uuid [not null]
+ versionId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ accessorId uuid [not null]
+ sessionId uuid [not null]
+ submissionId uuid
+ assignmentId uuid
+ tokenHash text [not null, unique]
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ revokedAt timestamptz
+ indexes { (documentId, expiresAt) [name: 'm2_document_access_expiry_idx'] }
+ checks {
+  `("accessorId" = "accountId" AND "assignmentId" IS NULL AND "submissionId" IS NULL) OR ("accessorId" <> "accountId" AND "assignmentId" IS NOT NULL AND "submissionId" IS NOT NULL)` [name: 'm2_access_actor_path']
+  `"expiresAt" > "createdAt" AND "expiresAt" <= "createdAt" + interval '5 minutes'` [name: 'm2_access_ttl']
+  `"revokedAt" IS NULL OR "revokedAt" >= "createdAt"` [name: 'm2_access_revoked_date']
+  `"tokenHash" ~ '^[a-f0-9]{64}$'` [name: 'm2_access_hash']
+ }
+ Note: 'Permiso temporal de lectura mediada, no URL pública. Compuesto vincula sesión del actor y documento de versión exacta. Revalidar sesión, rol/asignación, estado de privacidad y finalidad al leer y antes de responder. No garantiza revocación de bytes ya entregados; no reemplaza controles M1.'
+}
+
+Table marleva.M2MembershipEvent {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ submissionId uuid [not null]
+ decisionId uuid
+ eventType text [not null]
+ recipientId uuid [not null]
+ createdAt timestamptz [not null, default: `now()`]
+ deliveredAt timestamptz
+ indexes {
+  (eventType, submissionId, recipientId) [unique, name: 'm2_event_once_key']
+  (deliveredAt, createdAt, id) [name: 'm2_event_pending_idx']
+ }
+ checks {
+  `( "eventType" = 'membership_submitted' AND "decisionId" IS NULL) OR ("eventType" = 'membership_decided' AND "decisionId" IS NOT NULL)` [name: 'm2_event_type_reference']
+  `"deliveredAt" IS NULL OR "deliveredAt" >= "createdAt"` [name: 'm2_event_delivery_date']
+ }
+ Note: 'Evento durable sin domicilio/correo/documento/textos privados. Se guarda en misma transacción. deliveredAt significa acuse de consumidor idempotente, no correo recibido. Puente a avisos/worker pendiente; no escribir Notice/Outbox de M1 directamente.'
+}
+
+Table marleva.M2MembershipCommandReceipt {
+ id uuid [pk, not null, default: `gen_random_uuid()`]
+ actorId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ operation text [not null]
+ keyHash text [not null]
+ hashKeyId text [not null, note: 'ID no secreto de llave HMAC; anillo servidor fuera de Git.']
+ requestHash text [not null, note: 'Huella protegida/HMAC del cuerpo canónico; no almacenar PII ni usar hash como anonimización. Gestión de clave pendiente en contrato/seguridad.']
+ versionId uuid
+ submissionId uuid
+ documentId uuid
+ documentPurpose text
+ assignmentId uuid
+ decisionId uuid
+ resultRevision integer [not null]
+ createdAt timestamptz [not null, default: `now()`]
+ expiresAt timestamptz [not null]
+ indexes { (actorId, operation, keyHash) [unique, name: 'm2_receipt_key'] }
+ checks {
+  `char_length("hashKeyId") BETWEEN 1 AND 80 AND btrim("hashKeyId") <> ''` [name: 'm2_receipt_key_id']
+  `operation IN ('assign_review','decide_membership') OR "actorId" = "accountId"` [name: 'm2_receipt_owner_operations']
+  `operation IN ('create_application','create_version','save_version','request_upload','finalize_upload','link_document','submit_version','assign_review','decide_membership')` [name: 'm2_receipt_operation']
+  `"keyHash" ~ '^[a-f0-9]{64}$' AND "requestHash" ~ '^[a-f0-9]{64}$' AND "resultRevision" > 0` [name: 'm2_receipt_hash_revision']
+  `("documentId" IS NULL) = ("documentPurpose" IS NULL)` [name: 'm2_receipt_document_pair']
+  `"versionId" IS NOT NULL AND ((operation IN ('create_application','create_version','save_version') AND "documentId" IS NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation IN ('request_upload','finalize_upload','link_document') AND "documentId" IS NOT NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'submit_version' AND "submissionId" IS NOT NULL AND "documentId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'assign_review' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "documentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'decide_membership' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "decisionId" IS NOT NULL AND "documentId" IS NULL))` [name: 'm2_receipt_result_shape']
+  `"expiresAt" >= "createdAt" + interval '72 hours'` [name: 'm2_receipt_expiry']
+ }
+ Note: 'Recibo mínimo con referencias tipadas, sin copia de datos privados. Replay reautoriza actor/recurso y devuelve recibo original; recurso actual se consulta por separado. Misma clave/cuerpo no repite transición; distinto cuerpo es 409. Unicidad de expediente/envío/decisión sobrevive a purgar recibos. Escenarios de expiración/doble guardado deben cerrarse en contrato.'
+}
+
+// Referencias a M1: solo lectura de identidad, no nueva definición canónica.
+Ref m2_application_account: marleva.M2MembershipApplication.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref m2_version_development: marleva.M2MembershipVersion.developmentId > marleva.Development.id [delete: no action, update: no action]
+Ref m8_grant_account: marleva.M8MembershipReviewGrant.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref m8_grant_granter: marleva.M8MembershipReviewGrant.grantedBy > marleva.Account.id [delete: no action, update: no action]
+Ref m8_grant_revoker: marleva.M8MembershipReviewGrant.revokedBy > marleva.Account.id [delete: no action, update: no action]
+Ref m2_access_session_actor: marleva.M2MembershipDocumentAccess.(sessionId, accessorId) > marleva.Session.(id, accountId) [delete: no action, update: no action]
+Ref m2_event_recipient: marleva.M2MembershipEvent.recipientId > marleva.Account.id [delete: no action, update: no action]
+Ref m2_receipt_actor: marleva.M2MembershipCommandReceipt.actorId > marleva.Account.id [delete: no action, update: no action]
+
+// Compuestos: ninguna evidencia, versión, asignación o decisión de otro titular.
+Ref m2_version_application: marleva.M2MembershipVersion.(applicationId, accountId) > marleva.M2MembershipApplication.(id, accountId) [delete: no action, update: no action]
+Ref m2_version_source_decision: marleva.M2MembershipVersion.(sourceDecisionId, sourceSubmissionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, submissionId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_version_source_submission: marleva.M2MembershipVersion.(sourceSubmissionId, applicationId, accountId) > marleva.M2MembershipSubmission.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_application_current_version: marleva.M2MembershipApplication.(currentVersionId, id, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_version_private: marleva.M2MembershipVersionPrivate.(versionId, applicationId, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_document_application: marleva.M2MembershipDocument.(applicationId, accountId) > marleva.M2MembershipApplication.(id, accountId) [delete: no action, update: no action]
+Ref m2_link_version: marleva.M2MembershipVersionDocument.(versionId, applicationId, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_link_document: marleva.M2MembershipVersionDocument.(documentId, applicationId, accountId, purpose) > marleva.M2MembershipDocument.(id, applicationId, accountId, purpose) [delete: no action, update: no action]
+Ref m2_submission_version: marleva.M2MembershipSubmission.(versionId, applicationId, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m8_assignment_submission: marleva.M8MembershipAssignment.(submissionId, applicationId, accountId) > marleva.M2MembershipSubmission.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m8_assignment_reviewer_grant: marleva.M8MembershipAssignment.(reviewerGrantId, reviewerId, reviewerCapability) > marleva.M8MembershipReviewGrant.(id, accountId, capability) [delete: no action, update: no action]
+Ref m8_assignment_manager_grant: marleva.M8MembershipAssignment.(managerGrantId, assignedBy, managerCapability) > marleva.M8MembershipReviewGrant.(id, accountId, capability) [delete: no action, update: no action]
+Ref m2_decision_assignment: marleva.M2MembershipDecision.(assignmentId, submissionId, applicationId, accountId, reviewerId) > marleva.M8MembershipAssignment.(id, submissionId, applicationId, accountId, reviewerId) [delete: no action, update: no action]
+Ref m2_decision_private: marleva.M2MembershipDecisionPrivate.(decisionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_document_retention_decision: marleva.M2MembershipDocument.(retentionDecisionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_access_version_document: marleva.M2MembershipDocumentAccess.(versionId, documentId, applicationId, accountId) > marleva.M2MembershipVersionDocument.(versionId, documentId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_access_submission_version: marleva.M2MembershipDocumentAccess.(submissionId, versionId, applicationId, accountId) > marleva.M2MembershipSubmission.(id, versionId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_access_assignment_reviewer: marleva.M2MembershipDocumentAccess.(assignmentId, submissionId, applicationId, accountId, accessorId) > marleva.M8MembershipAssignment.(id, submissionId, applicationId, accountId, reviewerId) [delete: no action, update: no action]
+Ref m2_event_submission: marleva.M2MembershipEvent.(submissionId, applicationId, accountId) > marleva.M2MembershipSubmission.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_event_decision: marleva.M2MembershipEvent.(decisionId, submissionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, submissionId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_receipt_application: marleva.M2MembershipCommandReceipt.(applicationId, accountId) > marleva.M2MembershipApplication.(id, accountId) [delete: no action, update: no action]
+Ref m2_receipt_version: marleva.M2MembershipCommandReceipt.(versionId, applicationId, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_receipt_submission: marleva.M2MembershipCommandReceipt.(submissionId, versionId, applicationId, accountId) > marleva.M2MembershipSubmission.(id, versionId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_receipt_document: marleva.M2MembershipCommandReceipt.(documentId, applicationId, accountId, documentPurpose) > marleva.M2MembershipDocument.(id, applicationId, accountId, purpose) [delete: no action, update: no action]
+Ref m2_receipt_assignment: marleva.M2MembershipCommandReceipt.(assignmentId, submissionId, applicationId, accountId) > marleva.M8MembershipAssignment.(id, submissionId, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_receipt_decision: marleva.M2MembershipCommandReceipt.(decisionId, assignmentId, submissionId, applicationId, accountId, actorId) > marleva.M2MembershipDecision.(id, assignmentId, submissionId, applicationId, accountId, reviewerId) [delete: no action, update: no action]
+
+TableGroup Referencias_M1_no_exportar {
+ marleva.Account
+ marleva.Session
+ marleva.Development
+}
+TableGroup Expediente_M2 {
+ marleva.M2MembershipApplication
+ marleva.M2MembershipVersion
+ marleva.M2MembershipVersionPrivate
+ marleva.M2MembershipDocument
+ marleva.M2MembershipVersionDocument
+ marleva.M2MembershipSubmission
+ marleva.M2MembershipDecision
+ marleva.M2MembershipDecisionPrivate
+ marleva.M2MembershipDocumentAccess
+ marleva.M2MembershipEvent
+ marleva.M2MembershipCommandReceipt
+}
+TableGroup Revision_M8 {
+ marleva.M8MembershipReviewGrant
+ marleva.M8MembershipAssignment
+}
+
+
+// D08/D09 v0.1 propuesto. Integridad declarativa, no política activada.
+Table marleva.M2MembershipRetentionCase {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ resourceType text [not null]
+ anchorDecisionId uuid
+ documentId uuid
+ documentPurpose text
+ versionId uuid
+ decisionId uuid
+ policyVersion text [not null, default: 'D08-0.1']
+ state text [not null, default: 'uncalculated']
+ basisCode text [not null]
+ startedAt timestamptz
+ dueAt timestamptz
+ completedAt timestamptz
+ revision integer [not null, default: 1]
+ indexes {
+  (id, applicationId, accountId) [unique, name: 'm2_retention_owner_key']
+  (documentId) [unique, name: 'm2_retention_document_key']
+  (versionId) [unique, name: 'm2_retention_version_key']
+  (decisionId) [unique, name: 'm2_retention_decision_key']
+  (state, dueAt, id) [name: 'm2_retention_due_idx']
+ }
+ checks {
+  `("resourceType" = 'document' AND "documentId" IS NOT NULL AND "documentPurpose" IS NOT NULL AND "versionId" IS NULL AND "decisionId" IS NULL) OR ("resourceType" = 'version_private' AND "versionId" IS NOT NULL AND "documentId" IS NULL AND "documentPurpose" IS NULL AND "decisionId" IS NULL) OR ("resourceType" = 'decision_private' AND "decisionId" IS NOT NULL AND "documentId" IS NULL AND "documentPurpose" IS NULL AND "versionId" IS NULL)` [name: 'm2_retention_typed_target']
+  `state NOT IN ('scheduled','delete_pending','deleted','error') OR ("startedAt" IS NOT NULL AND "dueAt" IS NOT NULL)` [name: 'm2_retention_schedule_required']
+  `"completedAt" IS NULL OR ("dueAt" IS NOT NULL AND "completedAt" >= "dueAt")` [name: 'm2_retention_completion_date']
+  `state IN ('uncalculated','scheduled','held','delete_pending','deleted','error') AND revision > 0` [name: 'm2_retention_state']
+  `("startedAt" IS NULL AND "dueAt" IS NULL) OR ("startedAt" IS NOT NULL AND "dueAt" IS NOT NULL AND "dueAt" >= "startedAt")` [name: 'm2_retention_schedule']
+  `(state = 'deleted') = ("completedAt" IS NOT NULL)` [name: 'm2_retention_completion']
+  `char_length("basisCode") BETWEEN 1 AND 80` [name: 'm2_retention_basis']
+ }
+ Note: 'Una fila por recurso privado, solo dentro del mismo expediente/cuenta. dueAt se calcula por política y referencias legítimas; no es un temporizador arbitrario del cliente. anchorDecisionId puede cerrar cadena anterior o corrección archivada, sin editar outcome. startedAt toma evento de finalización pertinente, no primera finalizedAt de decisión. Conservación del mínimo estructural requiere la puerta jurídica/depuración de FK D08-R, no se finge implementada.'
+}
+Table marleva.M2MembershipRetentionHold {
+ id uuid [pk, not null]
+ caseId uuid [not null]
+ createdBy uuid [not null]
+ basisCode text [not null]
+ caseReference text [not null]
+ createdAt timestamptz [not null]
+ reviewAt timestamptz [not null]
+ releasedAt timestamptz
+ releasedBy uuid
+ revision integer [not null, default: 1]
+ indexes { (caseId, releasedAt, reviewAt) [name: 'm2_hold_active_idx'] }
+ checks {
+  `"reviewAt" > "createdAt" AND revision > 0` [name: 'm2_hold_review']
+  `("releasedAt" IS NULL AND "releasedBy" IS NULL) OR ("releasedAt" IS NOT NULL AND "releasedAt" >= "createdAt" AND "releasedBy" IS NOT NULL)` [name: 'm2_hold_release']
+  `char_length("basisCode") BETWEEN 1 AND 80 AND char_length("caseReference") BETWEEN 1 AND 120` [name: 'm2_hold_basis']
+ }
+ Note: 'Causa legal/controversia documentada; referencia opaca sin relato ni adjuntos. ReviewAt es revisión obligatoria, nunca expiración silenciosa. No permite uso ordinario ni recuperar bytes borrados.'
+}
+Table marleva.M2MembershipDeletionTask {
+ id uuid [pk, not null]
+ caseId uuid [not null, unique]
+ state text [not null, default: 'pending']
+ leaseId uuid
+ leaseUntil timestamptz
+ fence bigint [not null, default: 0]
+ attempts integer [not null, default: 0]
+ nextAttemptAt timestamptz [not null]
+ externalLedgerReference text
+ completedAt timestamptz
+ indexes { (state, nextAttemptAt, id) [name: 'm2_deletion_due_idx'] }
+ checks {
+  `(state = 'running' AND "leaseId" IS NOT NULL AND "leaseUntil" IS NOT NULL) OR (state <> 'running' AND "leaseId" IS NULL AND "leaseUntil" IS NULL)` [name: 'm2_deletion_running_lease']
+  `state <> 'complete' OR "externalLedgerReference" IS NOT NULL` [name: 'm2_deletion_complete_ledger']
+  `state IN ('pending','running','retry','complete') AND attempts >= 0 AND fence >= 0` [name: 'm2_deletion_state']
+  `("leaseId" IS NULL) = ("leaseUntil" IS NULL)` [name: 'm2_deletion_lease']
+  `(state = 'complete') = ("completedAt" IS NOT NULL)` [name: 'm2_deletion_complete']
+ }
+ Note: 'Intención durable; ledger externo confirmado antes de borrar. Un trabajador antiguo no confirma con fence/lease ajenos. Reintentar ausencia de todas las réplicas; fallos no reviven acceso.'
+}
+Table marleva.M2MembershipRetentionEvent {
+ id uuid [pk, not null]
+ caseId uuid [not null]
+ actorId uuid
+ eventType text [not null]
+ commandId uuid [unique]
+ commandKeyId text
+ commandHash text [note: 'HMAC del cuerpo canónico, sin copiar contenido privado.']
+ occurredAt timestamptz [not null]
+ previousDueAt timestamptz
+ resultingDueAt timestamptz
+ reference text [not null]
+ indexes { (caseId, occurredAt, id) [name: 'm2_retention_event_order_idx'] }
+ checks {
+  `("commandId" IS NULL AND "commandHash" IS NULL AND "commandKeyId" IS NULL) OR ("commandId" IS NOT NULL AND "commandHash" IS NOT NULL AND "commandKeyId" IS NOT NULL AND char_length("commandKeyId") BETWEEN 1 AND 80 AND btrim("commandKeyId") <> '' AND "commandHash" ~ '^[a-f0-9]{64}$' AND "actorId" IS NOT NULL)` [name: 'm2_retention_command_pair']
+  `"eventType" IN ('finalized','challenged','scheduled','held','released','delete_intended','deleted','failed','restored_guard')` [name: 'm2_retention_event_type']
+  `char_length(reference) BETWEEN 1 AND 120` [name: 'm2_retention_event_reference']
+ }
+ Note: 'Append-only por permisos/transacción futura. Guarda primera finalización y cambios de cómputo, sin motivo privado/cuerpo/hash del documento. actor nulo solo tarea técnica identificada por referencia.'
+}
+Table marleva.M2MembershipReplica {
+ id uuid [pk, not null]
+ caseId uuid [not null]
+ replicaReference text [not null, unique]
+ kind text [not null]
+ registeredAt timestamptz [not null]
+ purgeBy timestamptz [not null]
+ absenceConfirmedAt timestamptz
+ indexes { (caseId, absenceConfirmedAt) [name: 'm2_replica_case_idx'] }
+ checks {
+  `kind IN ('primary','backup','temporary','analysis')` [name: 'm2_replica_kind']
+  `"purgeBy" >= "registeredAt" AND ("absenceConfirmedAt" IS NULL OR "absenceConfirmedAt" >= "registeredAt")` [name: 'm2_replica_dates']
+ }
+ Note: 'Inventario cerrado de todas las copias privadas, también copias de textos. Sin ubicación pública. Solo ausencia confirmada de todas permite completar borrado. No usar backup general no depurable para estas finalidades.'
+}
+Table marleva.M8MembershipReviewerProfile {
+ accountId uuid [pk, not null]
+ operationalLabel text [not null, unique]
+ enabled boolean [not null, default: false]
+ revision integer [not null, default: 1]
+ updatedAt timestamptz [not null]
+ checks {
+  `"operationalLabel" ~ '^REV-[A-Z0-9]{6,12}$' AND revision > 0` [name: 'm8_reviewer_label']
+ }
+ Note: 'Etiqueta operativa M8 sin correo/nombre/domicilio. Perfil habilitado no concede capacidad: consultar grant vigente por envío y revalidar al asignar. Aprovisionamiento controlado con doble intervención antes del piloto; sin endpoint público de bootstrap ni cambio M1.'
+}
+Ref m2_retention_application: marleva.M2MembershipRetentionCase.(applicationId, accountId) > marleva.M2MembershipApplication.(id, accountId) [delete: no action, update: no action]
+Ref m2_retention_anchor: marleva.M2MembershipRetentionCase.(anchorDecisionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_retention_document: marleva.M2MembershipRetentionCase.(documentId, applicationId, accountId, documentPurpose) > marleva.M2MembershipDocument.(id, applicationId, accountId, purpose) [delete: no action, update: no action]
+Ref m2_retention_version: marleva.M2MembershipRetentionCase.(versionId, applicationId, accountId) > marleva.M2MembershipVersion.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_retention_decision: marleva.M2MembershipRetentionCase.(decisionId, applicationId, accountId) > marleva.M2MembershipDecision.(id, applicationId, accountId) [delete: no action, update: no action]
+Ref m2_hold_case: marleva.M2MembershipRetentionHold.caseId > marleva.M2MembershipRetentionCase.id [delete: no action, update: no action]
+Ref m2_hold_actor: marleva.M2MembershipRetentionHold.createdBy > marleva.Account.id [delete: no action, update: no action]
+Ref m2_hold_releaser: marleva.M2MembershipRetentionHold.releasedBy > marleva.Account.id [delete: no action, update: no action]
+Ref m2_deletion_case: marleva.M2MembershipDeletionTask.caseId > marleva.M2MembershipRetentionCase.id [delete: no action, update: no action]
+Ref m2_retention_event_case: marleva.M2MembershipRetentionEvent.caseId > marleva.M2MembershipRetentionCase.id [delete: no action, update: no action]
+Ref m2_retention_event_actor: marleva.M2MembershipRetentionEvent.actorId > marleva.Account.id [delete: no action, update: no action]
+Ref m2_replica_case: marleva.M2MembershipReplica.caseId > marleva.M2MembershipRetentionCase.id [delete: no action, update: no action]
+Ref m8_reviewer_profile_account: marleva.M8MembershipReviewerProfile.accountId > marleva.Account.id [delete: no action, update: no action]
+TableGroup Conservacion_M2 {
+ marleva.M2MembershipRetentionCase
+ marleva.M2MembershipRetentionHold
+ marleva.M2MembershipDeletionTask
+ marleva.M2MembershipRetentionEvent
+ marleva.M2MembershipReplica
+}

@@ -1,0 +1,108 @@
+{
+  "status": "consumer_proposal_only",
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "shared_contracts_modified": false,
+  "providers_implemented": false,
+  "ports": {
+    "IdentityContext": {
+      "owner": "M1 authority, interface agreement pending D07-I",
+      "input": [
+        "transport_credential"
+      ],
+      "output": {
+        "account_id": "uuid",
+        "session_id": "uuid",
+        "checked_at": "date-time",
+        "authenticated_at": "date-time",
+        "mfa_level": "single_factor | multi_factor",
+        "mfa_checked_at": "date-time | null",
+        "session_active": "boolean",
+        "account_active": "boolean"
+      },
+      "errors": [
+        "unauthenticated",
+        "forbidden",
+        "unavailable"
+      ],
+      "rules": [
+        "No client supplied identity/MFA facts",
+        "Operator boolean does not grant M8 capabilities",
+        "Fresh check before sensitive effect; no external atomicity guarantee"
+      ]
+    },
+    "MembershipEventSink": {
+      "owner": "agreed M1/M9 consumer, D07-E",
+      "input": {
+        "event_id": "uuid",
+        "event_type": "membership_submitted | membership_decided",
+        "recipient_account_id": "uuid",
+        "application_id": "uuid",
+        "submission_id": "uuid",
+        "decision_id": "uuid | null"
+      },
+      "output": {
+        "accepted_durably": "boolean",
+        "consumer_reference": "opaque string"
+      },
+      "errors": [
+        "unavailable",
+        "conflict"
+      ],
+      "rules": [
+        "Deduplicate by event_id",
+        "No private payload",
+        "Acknowledgment is not email delivery",
+        "Timeout preserves same event and pending state"
+      ]
+    },
+    "PrivateEvidenceStore": {
+      "owner": "M2 private adapter, D07-S",
+      "operations": [
+        "reserve",
+        "write_conditionally",
+        "inspect_and_analyze",
+        "read_authorized",
+        "delete",
+        "confirm_all_replicas_absent"
+      ],
+      "errors": [
+        "unavailable",
+        "rejected",
+        "conflict",
+        "absent_confirmed"
+      ],
+      "rules": [
+        "No public URL or service credential in client",
+        "Object immutable after finalization",
+        "Absent must be verified, never inferred from timeout",
+        "Deletion fenced against link and hold"
+      ]
+    },
+    "CommandFingerprint": {
+      "owner": "M2/M8 server, D07-K",
+      "canonicalization": "RFC8785 JCS",
+      "algorithm": "HMAC-SHA256",
+      "domains": [
+        "marleva:m2:key:v1",
+        "marleva:m2:body:v1"
+      ],
+      "stored_metadata": [
+        "hashKeyId",
+        "keyHash",
+        "requestHash"
+      ],
+      "conservation_metadata": [
+        "commandId",
+        "commandKeyId",
+        "commandHash"
+      ],
+      "rules": [
+        "Key material outside Git/database/logs",
+        "Retain verification keys while receipts/commands require them",
+        "Missing key fails closed with recovery, no new business effect",
+        "No silent Unicode normalization or string trimming"
+      ]
+    }
+  }
+}

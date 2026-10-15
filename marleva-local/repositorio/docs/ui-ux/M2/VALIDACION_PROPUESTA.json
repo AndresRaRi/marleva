@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "contractVersion": "0.3.1",
+  "screens": 9,
+  "views": 66,
+  "plannedCases": 183,
+  "allPreviousTestIdsPreserved": 128,
+  "operations": 23,
+  "eachOperationAuthAndRecovery": true,
+  "allViewsHaveScenario": true,
+  "allReferencesResolve": true,
+  "layoutAndActionChecks": 264,
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "pageErrors": [],
+  "externalRequestsAttempted": [],
+  "newScreenshots": 0,
+  "visualAcceptance": false,
+  "nativePlatformsTested": false,
+  "productTestsExecuted": 0,
+  "acta": "../../apis/M2/VALIDACION_AUDITORIA.json"
+}

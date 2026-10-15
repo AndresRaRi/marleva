@@ -1,0 +1,20 @@
+%% MAR-M8-SEQ-003: Restricción y reconsideración vecinal/comercial
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+actor R as Revisor M8
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+R->>A: S010 Restringir por causa, alcance y versión
+A->>I: S020 Comprobar permiso, MFA y autenticación reciente
+A->>D: S030 Sin conflicto y recurso actual
+A->>D: S040 Guardar restricción, efectos nuevos e historial/evento
+A-->>T: S050 Motivo visible y vía de reconsideración
+T->>A: S060 Presentar motivo/evidencia de reconsideración
+A->>D: S070 Registrar revisión sin levantar restricción
+R->>A: S080 Resolver revisión asignada sin conflicto
+A->>I: S090 Revalidar autorización actual
+A->>D: S100 Levantar o mantener causa con transición y aviso atómicos
+Note over A,D: S110 Elegibilidad exige todas las causas levantadas y pertenencia/perfil vigentes
+Note over T,D: S120 Obligaciones anteriores se conservan

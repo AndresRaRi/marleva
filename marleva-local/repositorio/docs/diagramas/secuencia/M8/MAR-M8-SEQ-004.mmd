@@ -1,0 +1,22 @@
+%% MAR-M8-SEQ-004: Decisión de alta comercial
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor R as Revisor M8
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+participant W as Tareas y avisos durables
+R->>A: S010 Abrir versión comercial asignada
+A->>I: S020 Verificar ámbito comercial, MFA y sesión
+A->>D: S030 Comprobar asignación y conflicto, leer campos pertinentes
+R->>A: S040 Habilitar/corrección/rechazo con motivo y versión
+A->>I: S050 Revalidar rol, MFA y autenticación reciente
+A->>D: S060 Comparar versión/asignación y pertenencia actual
+alt Residencia no aprobada o restricción vigente
+ A-->>R: S070 No habilitar, actualizar estado antes de resolver
+else Condiciones válidas
+ A->>D: S080 Guardar decisión, transición y aviso atómicos
+ A-->>R: S090 Recibo idempotente sobre versión exacta
+ A->>W: S100 Aviso sin datos contractuales privados
+end
+Note over R,D: S110 Habilitar perfil no publica oferta ni activa pagos

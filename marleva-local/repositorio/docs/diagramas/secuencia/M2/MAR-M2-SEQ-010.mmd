@@ -1,0 +1,18 @@
+%% MAR-M2-SEQ-010: Consulta de elegibilidad por capacidad
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+participant C as Consumidor autorizado
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+C->>A: S010 Pedir comprar/ofrecer para identidad autorizada
+A->>I: S020 Autenticar consumidor o titular y finalidad
+A->>D: S030 Leer pertenencia, restricciones y perfil si ofrecer
+alt Dependencia caída
+ A-->>C: S040 Error recuperable, no autorizar por caché permisiva
+else Estado disponible
+ A->>A: S050 Evaluar capacidad y condiciones actuales
+ A-->>C: S060 Permitido/no permitido, razón mínima, versión y fecha
+end
+Note over A,C: S070 Una consulta previa no reserva permiso, consumidor revalida en operación nueva
+Note over A,I: S080 Sin cambiar GET /me o contratos de M1

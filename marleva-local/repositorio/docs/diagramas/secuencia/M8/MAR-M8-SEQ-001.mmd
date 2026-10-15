@@ -1,0 +1,27 @@
+%% MAR-M8-SEQ-001: Asignación y cola de revisión
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor R as Revisor M8
+actor G as Gestor autorizado M8
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+G->>A: S001 Consultar candidatos para envío exacto
+A->>I: S002 Sesión gestor, MFA reciente e identidad estable
+A->>D: S003 Grant membership_assign actual y envío pendiente no propio
+A->>D: S004 Perfiles habilitados con grant review vigente, excluir titular y conflictos registrados
+A-->>G: S005 Etiqueta operativa, reviewer_id, grant_id y revisiones, página mínima sin PII
+G->>A: S010 Asignar/reasignar caso a revisor de ámbito
+A->>I: S020 Verificar gestor, MFA y autenticación reciente
+A->>D: S025 Revalidar candidato y perfil, sin confiar en la página anterior
+A->>D: S030 Verificar concesiones de gestor/revisor, ninguno titular, y envío pendiente
+alt Sin persona disponible o conflicto
+ A-->>G: S040 Caso sigue pendiente, nunca autoasignar permiso
+else Asignación válida
+ A->>D: S050 Transacción: cerrar asignación previa y crear única activa, guardar recibo
+ A-->>G: S060 Asignación confirmada y anterior revocada
+end
+R->>A: S070 Consultar cola/version enviada asignada
+A->>I: S080 Revalidar rol/MFA
+A->>D: S090 Filtrar por asignación propia y paginar con orden estable
+A-->>R: S100 Proyección mínima, acceso a evidencia solo con permiso vigente

@@ -1,0 +1,30 @@
+%% MAR-M2-SEQ-001: Crear y guardar expediente
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+T->>A: S010 Consultar expediente propio
+A->>I: S020 Verificar identidad y sesión vigentes
+I-->>A: S030 Identidad estable o denegación
+alt Sin sesión válida
+ A-->>T: S040 401, recuperar acceso por M1
+else Sesión válida
+ A->>D: S050 Consultar por titular
+ alt No existe y se solicita crear
+  A->>D: S060 Transacción: crear expediente, primera versión privada y recibo únicos
+  D-->>A: S070 Expediente creado o existente por carrera
+ end
+ T->>A: S080 Guardar campos propios y versión esperada
+ A->>A: S085 Revalidar titular y rechazar campos de estado o revisor
+ A->>D: S090 CAS revision del expediente, editar solo borrador actual en draft/correction/rejected, guardar recibo
+ alt Estado o versión cambiaron
+  D-->>A: S100 Sin cambios, conflicto
+  A-->>T: S110 409 y consultar versión vigente
+ else Guardado confirmado
+  D-->>A: S120 ID, estado y versión nueva
+  A-->>T: S130 Borrador guardado, ninguna elegibilidad
+ end
+end
+Note over T,D: S140 Si se pierde respuesta, consultar antes de repetir la misma clave
