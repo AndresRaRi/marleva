@@ -13,8 +13,8 @@ paths = ['''(^|/)tests/results/documentation-20261013\.json$''']
 condition = "AND"
 
 [[rules.allowlists]]
-description = "Identificador del perfil de calidad Sonar way core del historial4af0e279; no token (cloudProfile lo compara con qualityprofiles/search)"
+description = "Identificador del perfil TypeScript Cloud comprobado por API, no credencial ni permiso"
 regexTarget = "line"
-regexes = ['''^\s*"key": "AaFBim1byffhRH0TlHOJ",?\s*$''']
+regexes = ['''^\s*"key": "AaFBim1byffhRH0TlHOJ",\s*$''']
 paths = ['''(^|/)infra/ci/sonar-cloud\.json$''']
 condition = "AND"

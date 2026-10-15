@@ -9,6 +9,7 @@ const stages = {
   integracion: ['ci:integration', 'test:recovery:ci'],
   contrato: ['contracts:fuzz'],
   web: ['test:e2e'],
+  sonar: ['ci:sonar'],
 };
 const stage = process.argv[2],
   commands = stages[stage];

@@ -1,0 +1,14 @@
+{
+  "organization": "andresrari-marleva",
+  "project": "andresrari-marleva_marleva",
+  "scanner": "sonarsource/sonar-scanner-cli:12.2.0.4256_8.1.0@sha256:a3f4215076706c95a17a68c19322ee916e40a3acd081a8c1a1e839e0194afa57",
+  "platform": "linux/amd64",
+  "scannerMemory": "2g",
+  "negativeRule": "typescript:S1764",
+  "profile": {
+    "key": "AaFBim1byffhRH0TlHOJ",
+    "name": "Sonar way core",
+    "activeRuleCount": 248
+  },
+  "eligibility": "Cloud autorizado expresamente por el usuario; scanner oficial + MCP nativo oficial; plan Free, proyecto privado"
+}
