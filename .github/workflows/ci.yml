@@ -68,6 +68,7 @@ jobs:
       - seguridad
       - integracion
       - contrato
+      - sonar
       - web
       - codeql
     steps:
@@ -254,3 +255,31 @@ jobs:
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs codeql '${{ job.status }}'
+
+  sonar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    needs: [calidad, arquitectura-contratos, unitarias]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Preparar requisitos Linux del runner desechable
+        run: sudo sysctl -w vm.max_map_count=524288
+      - name: Comparar base y cambio con Sonar temporal
+        env:
+          SONAR_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
+          SONAR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: pnpm ci:run sonar
+      - name: Guardar resumen sin credenciales
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: sonar-temporal
+          path: marleva-local/repositorio/artifacts/ci/sonar/*/summary.json
+          retention-days: 7
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs sonar '${{ job.status }}'
