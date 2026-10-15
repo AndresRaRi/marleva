@@ -1,4 +1,3 @@
-import type { RecoveryProvider } from '../../application/ports/recovery-provider.js';
 export type RecoveryState =
   | 'requested'
   | 'approved'
@@ -8,11 +7,7 @@ export type RecoveryState =
   | 'completed'
   | 'rejected'
   | 'expired';
-export type RecoveryTokens = {
-  access_token: string;
-  refresh_token: string;
-  expires_at: number;
-} & Pick<RecoveryProvider, never>;
+export type RecoveryTokens = { access_token: string; refresh_token: string; expires_at: number };
 export type RecoveryActor = {
   accountId: string;
   authId: string;

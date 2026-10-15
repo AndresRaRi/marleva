@@ -52,7 +52,7 @@ Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó.
 
 | Fase | Preparación local | Resultado en GitHub |
 |---|---|---|
-| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Run 38679348007: cuatro jobs verdes, dfeb9a3; prueba negativa y reversión pendientes antes de fase 2 |
+| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Run 38679348007: cuatro jobs verdes. Negativa 38679688035 falló por capas/ciclo como se esperaba; reversión en commit nuevo, verde posterior pendiente |
 | 2. Seguridad, integración y web accesible | Pendiente; no saltar desde fase 1 | No ejecutada |
 | 3. Sonar, rendimiento, nightly, CD desactivado y dependabot | Comparación temporal Sonar aprobada, sin SonarCloud/gasto | No ejecutada |
 
