@@ -72,6 +72,8 @@
     "vitest": "5.0.4",
     "xcode": "3.0.1",
     "yaml": "2.9.1",
-    "@eslint/compat": "2.1.1"
+    "@eslint/compat": "2.1.1",
+    "react": "19.2.3",
+    "react-test-renderer": "19.2.3"
   }
 }

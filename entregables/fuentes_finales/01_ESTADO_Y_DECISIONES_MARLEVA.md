@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main remoto comprobado en b12bfca2a8a9f7e35b9c1a6dea76264cfedf88ce; PR #1/#2 integrados y CI propio del merge correcto en 38778339532 | [PR #3 documental](https://github.com/AndresRaRi/marleva/pull/3) abierto al comprobar; [PR #4 de consolidación](https://github.com/AndresRaRi/marleva/pull/4) en codex/fix-consolidacion-m1-006, basada en su commit efdefdf. No fusionar; verificar checks del HEAD final y revisión antes de main |
+| Git | main 6fed44f9af0800c2e4eee9d8d33ad546ded6da4a comprobado local/remoto; CI propio correcto en 38805750887. PR #3/#4/#6 integrados por el usuario | PR #5 Sonar permanece borrador/bloqueado en chat separado. Desarrollo UC008 en codex/fix-m1-avisos-reinicio desde main actualizado; cambios preexistentes preservados |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -108,9 +108,11 @@ Objetivo: preservar y consolidar inventario/auditoría/UC001 por procedencia en 
 
 Lectura: instrucciones/README/AGENTS y 00–03 completos, incluidos espejos anteriores y diferencias de las copias editables; protocolo, matriz, ADR001/002 y acta de cierre leídos. Árbol general: inventario inicial de 408 archivos no ignorados; lectura parcial de código, anexos extensos y artefactos generados. No lectura exhaustiva de dependencias, secretos, cachés ni binarios. Originales ausentes permanecen según §4; investigación externa no revalidada por esta consolidación. Inventario de rutas/fechas/tamaños/hashes y copia del diff en artifacts/consolidacion-006, ignorados; no acreditar lectura por calcular hashes.
 
-Revisión independiente estática: un hallazgo de aislamiento PG/Auth corregido y verificado por segunda lectura. Negativa dirigida rechaza Auth 54321 antes de construir DB/servicio. [Acta UC001 y consolidación](../../marleva-local/repositorio/tests/results/uc001-branches.json). [CI del PR #4](https://github.com/AndresRaRi/marleva/pull/4/checks) se consulta por el HEAD vigente; no es aceptación funcional ni autorización de merge. Fase 3 no iniciada: requiere cerrar la integración previa.
+Revisión independiente estática: un hallazgo de aislamiento PG/Auth corregido y verificado por segunda lectura. Negativa dirigida rechaza Auth 54321 antes de construir DB/servicio. [Acta UC001 y consolidación](../../marleva-local/repositorio/tests/results/uc001-branches.json). [CI del PR #4](https://github.com/AndresRaRi/marleva/pull/4/checks) se consulta por el HEAD vigente; no es aceptación funcional ni autorización de merge. Consolidación integrada por el usuario en PR #4, main40c65837f5498b4b91d342269ddf10490c90ab62 y CI propio38789774598. PR #3 documental también integrado. Sonar se inició posteriormente en PR #5, sin control completo acreditado; trabajo separado del desarrollo M1.
 
 Cambios preexistentes en AGENTS raíz y sources/01–03 preservados y fuera de commits propios. Cinco migraciones se comparan por hash, sin alterar ni aplicar DDL. A0/SDK, C01–C26 y Google pendiente se conservan. Fuente 01 es la entrega de estado para reemplazar en Fuentes mediante acceso autorizado; guardado/commit/push no realizan esa carga.
+
+Continuación autorizada, 15-10-2026: el usuario separó Sonar del desarrollo M1. Chat técnico Sonar creado y activo con ID01a1415c-a52f-7fd0-b68d-1a53a5ed7967, copia propia obligatoria, PR #5 draft/bloqueado; no acredita solución. Este MAR-CHAT-006 desarrolla UC008 en codex/fix-m1-avisos-reinicio desde main6fed44f, corrigiendo carga de avisos al reabrir sesión y cancelación de respuestas obsoletas. Diseño/pruebas y límites en matriz/SEQ008; 179 unitarias locales pasan. Paginación cliente, propuesta visual y aceptación/plataformas siguen pendientes. PR #6 fue corrección del lint, no solución Sonar.
 
 ## 7. Prompt de continuidad
 
@@ -123,12 +125,13 @@ inventariar y leer nuevos/modificados, declarar lectura parcial y ausentes.
 Conservar C01–C26, A0/SDK Android, Google pendiente, sources/AGENTS raíz readonly,
 cinco migraciones inmutables y todo trabajo preexistente. No reset/stash/borrado.
 Comprobar rama/HEAD/upstream/origin; pull --ff-only sin descartar cambios.
-main b12bfca tiene CI propio verde 38778339532; PR #3 contiene cierre documental.
-Rama codex/fix-consolidacion-m1-006 consolida inventario/auditoría/UC001 desde
-efdefdf, PR #4. Revisión independiente y corrección de aislamiento PG/Auth hechas;
-verificar estado remoto y CI del HEAD real, sin atribuir otros verdes.
-Primero cerrar revisión y consolidación por procedencia. No fusionar ni iniciar
-fase 3 antes de cumplir su dependencia. Después fase 3 acotada de ADR002 y
+main6fed44f9af0800c2e4eee9d8d33ad546ded6da4a tiene CI propio verde38805750887.
+PR #3/#4/#6 integrados por el usuario; consolidación previa terminada.
+Este chat desarrolla UC008 en codex/fix-m1-avisos-reinicio: avisos al reabrir sesión,
+estados de consulta/error/vacío y cancelación para evitar401 tardío de otra sesión.
+179 unitarias locales y browser con API controlada; comprobar CI del HEAD real.
+Sonar/PR #5 se trabaja en chat separado01a1415c-a52f-7fd0-b68d-1a53a5ed7967;
+no duplicar sus cambios ni atribuirle éxito. Seguir después con
 ramas M1 por matriz: avisos cliente, retorno seguro y B12 esencial integrado;
 propuesta visual revisada antes de pantallas; plataformas/accesibilidad pendientes.
 UC001 permanece abierto; separar diseñado/implementado/probado/aceptado.
