@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import { fixupPluginRules } from '@eslint/compat';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -48,7 +49,7 @@ export default [
   },
   {
     files: ['apps/**/*.{ts,tsx}'],
-    plugins: { sonarjs },
+    plugins: { sonarjs: fixupPluginRules(sonarjs) },
     rules: {
       'sonarjs/no-identical-expressions': 'error',
       'sonarjs/no-duplicated-branches': 'error',
