@@ -10,3 +10,5 @@
 6. Aplicar00 y docs/adr/001-consolidacion-tecnica.md: plan aprobado, fuentes únicas, formato de respuestas y definición de terminado. Avance funcional en docs/avance.md; continuar hasta completar las brechas ejecutables, sin una nueva aprobación por tarea.
 
 7. Reglas de trabajo del 15-10-2026: aplicar autonomía de 00 §6, respuestas concisas de §4 y GitHub Actions como validación principal de §13. Leerlas en cada sesión; las excepciones locales y permisos técnicos están delimitados allí.
+
+8. En cada chat, continuación, respuesta y tarea, aplicar primero la autonomía permanente de 00 §6: ejecutar lo ya autorizado sin confirmaciones rutinarias, incluso si el usuario está ausente. Ese apartado delimita las únicas consultas necesarias y los permisos obligatorios del entorno.

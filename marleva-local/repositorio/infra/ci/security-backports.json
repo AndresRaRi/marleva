@@ -3,7 +3,9 @@
   "packages": {
     "braces": {
       "version": "3.0.3",
-      "advisories": [],
+      "advisories": [
+        "GHSA-vfj7-8cjw-p6xm"
+      ],
       "files": {
         "lib/parse.js": "a65d9ddab4857d90dedc8c61da05d9a1dbb7ee4564aedc57697729029d77fd20",
         "lib/compile.js": "21e2fcb73f2cb3dc8b78334aadd5aaec311474e1a4e234181f8c73d72c54b0cd",

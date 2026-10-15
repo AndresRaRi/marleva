@@ -1,1 +1,77 @@
-{"conclusion":"failure","databaseId":38764322440,"headSha":"69672a58fd75c535ef626a080fe509795b18109b","jobs":[{"conclusion":"failure","name":"seguridad","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448062"},{"conclusion":"success","name":"calidad","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448545"},{"conclusion":"success","name":"codeql","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448558"},{"conclusion":"failure","name":"revision-dependencias","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448683"},{"conclusion":"success","name":"arquitectura-contratos","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448738"},{"conclusion":"success","name":"unitarias","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116523448756"},{"conclusion":"success","name":"contrato","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116524106950"},{"conclusion":"success","name":"web","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116524107117"},{"conclusion":"success","name":"integracion","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116524107242"},{"conclusion":"skipped","name":"build","status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440/job/116526518094"}],"status":"completed","url":"https://github.com/AndresRaRi/marleva/actions/runs/38764322440"}
+{
+  "firstGreen": {
+    "conclusion": "success",
+    "databaseId": 38773873030,
+    "headSha": "9cdde722bfbf7a28b6eb31622c65ecb098af8467",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "codeql",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365259"
+      },
+      {
+        "conclusion": "success",
+        "name": "arquitectura-contratos",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365458"
+      },
+      {
+        "conclusion": "success",
+        "name": "unitarias",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365616"
+      },
+      {
+        "conclusion": "success",
+        "name": "seguridad",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365646"
+      },
+      {
+        "conclusion": "success",
+        "name": "revision-dependencias",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365666"
+      },
+      {
+        "conclusion": "success",
+        "name": "calidad",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556365870"
+      },
+      {
+        "conclusion": "success",
+        "name": "integracion",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712260"
+      },
+      {
+        "conclusion": "success",
+        "name": "contrato",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712469"
+      },
+      {
+        "conclusion": "success",
+        "name": "web",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116556712525"
+      },
+      {
+        "conclusion": "success",
+        "name": "build",
+        "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030/job/116559175071"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/AndresRaRi/marleva/actions/runs/38773873030"
+  },
+  "negative": {
+    "commit": "4c54ea9e56809b93c580a94395c0e85864f63cee",
+    "run": 38775164158,
+    "job": 116560802612,
+    "expected": "Security rejects braces finding without exact advisory correspondence",
+    "observed": "Vulnerabilidades sin correcci\u00f3n comprobada: FAIL",
+    "remainingJobs": "Cancelled after expected failure to avoid redundant work"
+  },
+  "restoration": "Exact manifest from 9cdde72 restored; require all checks on current PR head before integration",
+  "review": {
+    "type": "Independent second agent static review",
+    "result": "No actionable findings",
+    "limits": "No exhaustive third-party or cryptographic certification"
+  },
+  "phase3": "Pending; separate increment after integration",
+  "deployment": "None"
+}
