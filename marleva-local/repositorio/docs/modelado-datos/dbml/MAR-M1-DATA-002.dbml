@@ -198,11 +198,3 @@ Table marleva.FixtureDeletion {
 Ref FixtureAccess_fixture_owner: marleva.FixtureAccess.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)
 Ref FixtureAccess_session_owner: marleva.FixtureAccess.(sessionId, accountId) > marleva.Session.(id, accountId)
 Ref FixtureDeletion_fixture_owner: marleva.FixtureDeletion.(fixtureId, accountId) > marleva.PrivateFixture.(id, accountId)
-
-Ref RoleAssignment_account: marleva.RoleAssignment.accountId > marleva.Account.id
-Ref RoleAssignment_granted: marleva.RoleAssignment.grantedBy > marleva.Account.id
-Ref RoleAssignment_revoked: marleva.RoleAssignment.revokedBy > marleva.Account.id
-Ref Recovery_account: marleva.MfaRecovery.accountId > marleva.Account.id
-Ref Recovery_requester: marleva.MfaRecovery.requestedBy > marleva.Account.id
-Ref Recovery_approver: marleva.MfaRecovery.approvedBy > marleva.Account.id
-Ref Recovery_capability_session: marleva.MfaRecovery.capabilitySessionId > marleva.Session.id [delete: no action, update: no action]
