@@ -57,6 +57,8 @@ Cambiar solo lo afectado, con motivo y fecha necesarios. No copiar reglas entre 
 
 Palabras comunes, frases cortas y nombres claros. Separar confirmado, propuesto, pendiente y no verificado. No inventar cifras, resultados, acceso o aprobaciones. Consultar fuentes primarias para decisiones técnicas y verificar información cambiante cuando afecte una decisión. Registrar fecha, mercado, límites y consecuencia; no extrapolar otro país.
 
+Respuestas concisas: entregar resultados puntuales y útiles, evidencia necesaria y bloqueos accionables. Omitir explicaciones largas, narración de operaciones y pasos intermedios innecesarios; ampliar solo cuando el usuario lo pida o sea indispensable para decidir.
+
 Informar al terminar cada tarea o ante un bloqueo. El resultado debe ir primero en lenguaje sencillo; después, los detalles técnicos. Si una tarea supera el doble de su estimación, avisar con opciones antes de continuar. Las actualizaciones no piden otra aprobación para tareas ordinarias. Un chat abierto o un turno terminado no garantiza ejecución continua. El formato de respuesta está únicamente en §14.
 
 ## 5. Referentes
@@ -72,6 +74,8 @@ Conservar C01–C26, A0 y autorización del SDK Android. La programación base/M
 Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio. Terminar un turno solo con cola vacía, bloqueo real o decisión pendiente del usuario; indicar el motivo. Si queda trabajo autorizado ejecutable, continuar.
 
 Las autorizaciones vigentes cubren correcciones, pruebas y sincronización ordinarias del plan: no solicitar confirmación por cada paso. Tramitar los permisos técnicos que exija el entorno sin omitirlos; agrupar operaciones del mismo alcance y reutilizar permisos válidos. No ampliar permisos por comodidad.
+
+Actuar directamente cuando la solución esté dentro del alcance autorizado y sea reversible. Preguntar solo ante una decisión realmente importante o irreversible que no esté ya autorizada; no convertir elecciones rutinarias de implementación o diagnóstico en solicitudes de aprobación.
 
 Considerar negocio, operación, ingeniería, seguridad, privacidad, accesibilidad, soporte y obligaciones mexicanas cuando afecten el caso. Antes de operar: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, responsables y soporte. Demografía no se reabre. Ideas que amplían alcance van a pendientes para después en 01.
 
@@ -150,6 +154,8 @@ Después de pasar las pruebas de cada incremento pequeño, commit y push inmedia
 Al cerrar: verificar compilación, pruebas, reglas/documentos/README, enlaces, diff e ignorados; commit claro y push de la rama de trabajo. Comprobar SHA local/remoto. No incorporar modificaciones ajenas ni originales sincronizados al commit propio. Commits pequeños Conventional Commits: tipo(módulo/caso): resultado. Ramas codex/feat-… o codex/fix-…; main es la rama principal del remoto activo. Flujo rama → PR → CI → merge, con revisión de §7 antes de integrar. Prohibido push --force, reset --hard o rebase sobre ramas subidas; actualizar ramas publicadas mediante merge. Versiones de releases con SemVer, distintas del historial documental.
 
 Integración continua en GitHub Actions: lint → pruebas → build, sin despliegue. Falla bloquea integración. Sonar y cobertura se validan conforme §9; no sustituir pruebas ni publicar secretos para ejecutar el pipeline. No crear despliegue/cloud/piloto por hacer push.
+
+GitHub Actions es la validación principal del trabajo: subir el incremento a su rama, usar la ejecución automática existente o lanzar el workflow cuando proceda, y trabajar con sus resultados, resúmenes y artefactos. Corregir causas concretas y volver a ejecutar lo afectado. Evitar ejecuciones duplicadas del mismo commit y repetir manualmente en este equipo una suite ya comprobada en CI. Reservar comprobaciones locales para diagnóstico dirigido, casos que el pipeline aún no cubre, revisión de la aplicación y hooks obligatorios; conservar estos controles sin desactivarlos. Un fallo o bloqueo del pipeline se registra y se atiende, sin presentarlo como aprobado ni activar despliegue.
 
 ## 14. Formato de respuestas
 

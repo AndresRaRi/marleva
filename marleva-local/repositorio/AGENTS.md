@@ -8,3 +8,5 @@
 5. Aplicar00§§7–13: Git local actualizado, README cotejado en cada proceso, instructivo con capturas reales y revisión local, porcentajes con criterios/evidencia y commit final claro. Seguir protocolo para Docker, SOLID y validación local. Flyway/PDM/Sonar se evalúan antes de adoptar.
 
 6. Aplicar00 y docs/adr/001-consolidacion-tecnica.md: plan aprobado, fuentes únicas, formato de respuestas y definición de terminado. Avance funcional en docs/avance.md; continuar hasta completar las brechas ejecutables, sin una nueva aprobación por tarea.
+
+7. Reglas de trabajo del 15-10-2026: aplicar autonomía de 00 §6, respuestas concisas de §4 y GitHub Actions como validación principal de §13. Leerlas en cada sesión; las excepciones locales y permisos técnicos están delimitados allí.
