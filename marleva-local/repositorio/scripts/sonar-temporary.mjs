@@ -41,12 +41,14 @@ async function analyze(label, tokenFile) {
       return r.task?.status === 'SUCCESS';
     },
   );
+  summary.snapshots[label].status = 'collecting';
+  summary.snapshots[label].analysisId = task.task.analysisId;
   const analysis = await api('/api/ce/task', { id: taskId, additionalFields: 'warnings' });
   summary.snapshots[label].warnings = analysis.task?.warnings ?? null;
   if (!Array.isArray(analysis.task?.warnings) || analysis.task.warnings.length)
     throw new Error('Análisis Sonar con advertencias o diagnóstico incompleto');
-  const issues = await allPages(api, '/api/issues/search', { componentKeys: project }, 'issues');
-  const hotspots = await allPages(api, '/api/hotspots/search', { projectKey: project }, 'hotspots');
+  const issues = await allPages(api, '/api/issues/search', { components: project }, 'issues');
+  const hotspots = await allPages(api, '/api/hotspots/search', { project }, 'hotspots');
   const files = await allPages(
     api,
     '/api/components/tree',

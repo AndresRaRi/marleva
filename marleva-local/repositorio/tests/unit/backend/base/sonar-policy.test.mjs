@@ -41,6 +41,16 @@ it('Sonar | desplazar líneas conserva incidencia, cambiar contenido introduce o
   const issue = { component: 'project:apps/example.ts', rule: 'rule', message: 'message', line: 1 };
   writeFileSync(file, 'const a = 1;\n');
   const base = fingerprint(issue, root, 'project');
+  const hotspot = {
+    ...issue,
+    rule: undefined,
+    ruleKey: 'typescript:S111',
+    securityCategory: 'others',
+  };
+  expect(fingerprint(hotspot, root, 'project')).not.toBe(
+    fingerprint({ ...hotspot, ruleKey: 'typescript:S222' }, root, 'project'),
+  );
+  expect(() => fingerprint({ ...hotspot, ruleKey: undefined }, root, 'project')).toThrow();
   writeFileSync(file, '\nconst a = 1;\n');
   expect(fingerprint({ ...issue, line: 2 }, root, 'project')).toBe(base);
   writeFileSync(file, 'const a = 2;\n');

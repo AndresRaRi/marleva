@@ -3,7 +3,7 @@ import path from 'node:path';
 export function fingerprint(issue, root, project) {
   const file = issue.component?.slice(project.length + 1);
   const line = issue.line ?? issue.textRange?.startLine;
-  const rule = issue.rule ?? issue.securityCategory;
+  const rule = issue.rule ?? issue.ruleKey;
   if (
     !issue.component?.startsWith(project + ':') ||
     !file?.startsWith('apps/') ||
