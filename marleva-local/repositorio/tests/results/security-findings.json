@@ -1,50 +1,24 @@
 {
-  "date": "2026-10-15T15:34:13.542Z",
-  "scope": "Lockfiles npm/Python completos, desarrollo incluido; no excepción aprobada",
-  "items": [
+  "date": "2026-10-15T16:52:02.973Z",
+  "scope": "Complete npm/Python lockfiles; raw OSV retained; local patches verified in this scan",
+  "rawStatus": 1,
+  "resolved": [
     {
       "name": "braces",
       "version": "3.0.3",
-      "advisories": [
-        {
-          "id": "GHSA-vfj7-8cjw-p6xm",
-          "fixed": []
-        }
-      ]
-    },
-    {
-      "name": "extract-zip",
-      "version": "2.0.1",
-      "advisories": [
-        {
-          "id": "GHSA-7pqw-9j4j-h8q3",
-          "fixed": []
-        },
-        {
-          "id": "GHSA-jmr9-qjv8-65gv",
-          "fixed": []
-        }
-      ]
+      "ecosystem": "npm",
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "state": "resolved_with_pedigree",
+      "patch": "patches/braces@3.0.3.patch"
     },
     {
       "name": "node-forge",
       "version": "1.4.0",
-      "advisories": [
-        {
-          "id": "GHSA-86w9-cpqp-85rv",
-          "fixed": []
-        }
-      ]
-    },
-    {
-      "name": "sprintf-js",
-      "version": "1.0.3",
-      "advisories": [
-        {
-          "id": "GHSA-hp3w-g68c-fv3c",
-          "fixed": []
-        }
-      ]
+      "ecosystem": "npm",
+      "id": "GHSA-86w9-cpqp-85rv",
+      "state": "resolved_with_pedigree",
+      "patch": "patches/node-forge@1.4.0.patch"
     }
-  ]
+  ],
+  "pending": []
 }

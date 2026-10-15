@@ -3,6 +3,12 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { ensureCiTool } from './ci-tool.mjs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { parse } from 'yaml';
+import { securityPatchPackages } from './security-patch-packages.mjs';
+import { verifyBackports } from './security-backport-evidence.mjs';
+import { classifyFindings } from './security-classify-findings.mjs';
+import { addSecurityPedigree } from './security-sbom-pedigree.mjs';
+import { securityLockfile } from './security-lockfile.mjs';
 const root = path.resolve('../..'),
   folder = path.resolve('artifacts/security');
 mkdirSync(folder, { recursive: true, mode: 0o700 });
@@ -48,6 +54,7 @@ if (licenses.status === 0) {
     'BlueOak-1.0.0',
     '0BSD',
     '(MIT OR Apache-2.0)',
+    '(MIT OR CC0-1.0)',
     '(MIT AND CC-BY-3.0)',
     'CC0-1.0',
     'Unlicense',
@@ -75,7 +82,7 @@ if (licenses.status === 0) {
 const osv = await ensureCiTool('osv');
 mkdirSync(folder + '/python', { recursive: true });
 writeFileSync(folder + '/python/requirements.txt', readFileSync('infra/ci/requirements.lock'));
-run('OSV', osv, [
+const osvResult = run('OSV original', osv, [
   'scan',
   'source',
   '--lockfile',
@@ -87,6 +94,48 @@ run('OSV', osv, [
   '--output-file',
   folder + '/osv.json',
 ]);
+const verified = verifyBackports(
+  JSON.parse(readFileSync('infra/ci/security-backports.json', 'utf8')),
+  parse(readFileSync('pnpm-workspace.yaml', 'utf8')),
+  securityLockfile(readFileSync('pnpm-lock.yaml', 'utf8')),
+  securityPatchPackages(),
+);
+const findings = classifyFindings(
+  JSON.parse(readFileSync(folder + '/osv.json', 'utf8')),
+  verified,
+  osvResult.status,
+);
+writeFileSync(
+  folder + '/backports.json',
+  JSON.stringify({ verified, ...findings }, null, 2) + '\n',
+);
+writeFileSync(
+  'tests/results/security-findings.json',
+  JSON.stringify(
+    {
+      date: new Date().toISOString(),
+      scope: 'Complete npm/Python lockfiles; raw OSV retained; local patches verified in this scan',
+      ...findings,
+    },
+    null,
+    2,
+  ) + '\n',
+);
+if (sbom.status === 0)
+  writeFileSync(
+    folder + '/sbom-verified.cdx.json',
+    JSON.stringify(
+      addSecurityPedigree(JSON.parse(readFileSync(folder + '/sbom.cdx.json', 'utf8')), verified),
+      null,
+      2,
+    ) + '\n',
+  );
+outcomes.push({
+  name: 'Vulnerabilidades sin corrección comprobada',
+  status: findings.pending.length ? 1 : 0,
+});
+if (findings.pending.length === 0 && osvResult.status === 1)
+  outcomes.find((item) => item.name === 'OSV original').blocking = false;
 const gitleaks = await ensureCiTool('gitleaks');
 run('Gitleaks', gitleaks, [
   'git',
@@ -110,12 +159,16 @@ writeFileSync(
         'Sin certificación legal; licencias conocidas conservan obligaciones',
         'CLI de GitLeaks analiza historial; informes redactados',
         'OSV examina lockfiles npm/Python completos, incluido desarrollo',
+        'OSV original conserva sus avisos; solo parches con hashes y regresiones comprobados se clasifican como corregidos localmente',
       ],
     },
     null,
     2,
   ) + '\n',
 );
-for (const item of outcomes) console.log(`${item.name}: ${item.status === 0 ? 'PASS' : 'FAIL'}`);
-if (outcomes.some((item) => item.status !== 0))
+for (const item of outcomes)
+  console.log(
+    `${item.name}: ${item.status === 0 ? 'PASS' : item.blocking === false ? 'AVISOS CORREGIDOS LOCALMENTE; ver evidencia' : 'FAIL'}`,
+  );
+if (outcomes.some((item) => item.status !== 0 && item.blocking !== false))
   throw new Error('Seguridad requiere correcciones; revisar informes sin desactivar controles');

@@ -43,6 +43,11 @@ assert.equal(lighthouse('tmp/package.json').version, '0.2.7');
 assert.equal(lighthouse('uuid/package.json').version, '11.1.1');
 const directory = path.resolve('artifacts/security/compat');
 mkdirSync(directory, { recursive: true, mode: 0o700 });
+const yamlFixture = path.join(directory, 'lighthouserc.yaml');
+writeFileSync(yamlFixture, 'ci:\n  collect:\n    numberOfRuns: 3\n');
+assert.deepEqual(lighthouse('@lhci/utils/src/lighthouserc.js').loadRcFile(yamlFixture), {
+  ci: { collect: { numberOfRuns: 3 } },
+});
 const temporary = lighthouse('tmp').fileSync({ tmpdir: directory, postfix: '.txt' });
 try {
   writeFileSync(temporary.name, 'fixture temporal de compatibilidad');
