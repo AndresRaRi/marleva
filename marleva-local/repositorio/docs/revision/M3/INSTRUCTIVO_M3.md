@@ -52,3 +52,13 @@ Cobertura de lógica incluye dominio, casos, DTOs, transporte y estado del clien
 Integrar puertos de identidad M1, elegibilidad M2 y revisión M8 cuando estén listos y se autorice integración; conservar roles actuales, revocación, MFA y no autorrevisión. Completar fotos seguras, gestión autenticada de ofertas, pantallas de gestión revisadas, plataformas y aceptación. No incorporar favoritos, reseñas, ranking pagado, ofertas externas o giros excluidos C25.
 
 No push, PR ni integración main por este encargo de «no operaciones externas». Guardado/commit local no actualizan Fuentes. Solo01 cambia como registro de este avance; conciliar su añadido M3 con el estado paralelo de006/007 antes de reemplazar Fuentes.00/02/03 y configuración permanente no requieren sustitución por estas reglas técnicas locales. No prometer acceso desde otros chats.
+
+## Resultado comprobado del incremento
+
+Commit de código local `44e437a0db239ce6d020c892013c5ca3a363e194`. Hooks obligatorios: calidad sin errores (28 avisos de longitud visibles), 201 unitarias y cobertura global aprobadas. Resultados propios M3: 38/38 unitarias, 6/6 integración backend y 1/1 transporte frontend; recorrido Chrome y caída/recuperación de PostgreSQL aprobados. Cobertura del ámbito M3 medido: líneas 95,58%, ramas 92,60%; no incluye toda la interfaz o SQL.
+
+Nueve escenarios de rendimiento del repositorio, con 10/1000/10000 ofertas y concurrencia 1/5/10, terminaron sin errores. Peor p95 local 405,52 ms; a 10000 ofertas/concurrencia 10, 46,03 ms. No es una medida HTTP ni capacidad productiva. Se conservan las actas fallidas anteriores y su diagnóstico.
+
+Capturas finales revisadas: [catálogo](capturas/01-catalogo.png), [detalle](capturas/02-detalle.png), [perfil](capturas/03-oferente.png). Sin desbordamiento horizontal en los anchos comprobados 320/1280; axe no detectó infracciones en catálogo/detalle. Esto no acredita WCAG completo. Inventario y límites de lectura: [registro](../../proceso/inventario-m3.json).
+
+Comparación con la base: sin cambios en código M1, migraciones M1, contratos compartidos, fuentes sincronizadas o lockfile. El árbol estaba limpio tras el commit. Servicios de revisión locales disponibles en los accesos indicados; no se promete permanencia. Fuentes compartidas no se han subido ni reemplazado.
