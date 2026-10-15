@@ -286,9 +286,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run download "$GITHUB_RUN_ID" --name "coverage-general-$GITHUB_SHA" --dir coverage
-          gh run download "$GITHUB_RUN_ID" --name "m3-$GITHUB_SHA" --dir .
+          gh run download "$GITHUB_RUN_ID" --name "m3-$GITHUB_SHA" --dir artifacts/ci/m3-evidence
       - name: Evaluar línea base y código nuevo con cobertura agregada
         run: |
           export MARLEVA_COVERAGE_BASE="$(git merge-base HEAD origin/main)"
-          export MARLEVA_COVERAGE_EXTRA=coverage/m3-full/lcov.info
+          export MARLEVA_COVERAGE_EXTRA=artifacts/ci/m3-evidence/coverage/m3-full/lcov.info
           pnpm coverage:check

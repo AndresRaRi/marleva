@@ -190,3 +190,6 @@ Fotos UC009, 15-10-2026: cuarentena privada, decodificación y dos JPEG sin meta
 
 
 M3, fotos 15-10-2026: visualización web y derivados probados; 44 unitarias, 16 integraciones, 17 comprobaciones web. Carga autenticada y plataformas pendientes; 3/9 implementados, 0/9 aceptados. Evidencias y límites vigentes en INSTRUCTIVO_M3.md. No se actualizó Fuentes compartidas.
+
+
+M3 CI15-10-2026: d2a53ce subido a codex/feat-m3-catalogo-008; job remoto M3 aprobado en38825249579 con65 pruebas y navegador/recuperación propios. CI general pendiente de cierre; corrección limitada de licencias de herramientas de prueba en curso. M3 no completo; el usuario exige cierre integral de los recorridos inicialmente previstos, conservando aislamiento y sin integrar a main. Estado diseñado/implementado/probado se mantiene separado; no se sustituyó Fuentes.
