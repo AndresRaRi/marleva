@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-15T15:34:13.542Z",
+  "scope": "Lockfiles npm/Python completos, desarrollo incluido; no excepción aprobada",
+  "items": [
+    {
+      "name": "braces",
+      "version": "3.0.3",
+      "advisories": [
+        {
+          "id": "GHSA-vfj7-8cjw-p6xm",
+          "fixed": []
+        }
+      ]
+    },
+    {
+      "name": "extract-zip",
+      "version": "2.0.1",
+      "advisories": [
+        {
+          "id": "GHSA-7pqw-9j4j-h8q3",
+          "fixed": []
+        },
+        {
+          "id": "GHSA-jmr9-qjv8-65gv",
+          "fixed": []
+        }
+      ]
+    },
+    {
+      "name": "node-forge",
+      "version": "1.4.0",
+      "advisories": [
+        {
+          "id": "GHSA-86w9-cpqp-85rv",
+          "fixed": []
+        }
+      ]
+    },
+    {
+      "name": "sprintf-js",
+      "version": "1.0.3",
+      "advisories": [
+        {
+          "id": "GHSA-hp3w-g68c-fv3c",
+          "fixed": []
+        }
+      ]
+    }
+  ]
+}

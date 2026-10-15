@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 if (process.env.APP_MODE !== 'local' || process.env.PAYMENT_MODE !== 'simulated')
   throw new Error('Local only');
 const bootstrap = new URL(process.env.BOOTSTRAP_DATABASE_URL);
-if (bootstrap.hostname !== '127.0.0.1' || bootstrap.port !== '54322')
+const ci = process.env.MARLEVA_CI_STACK === '1';
+if (bootstrap.hostname !== '127.0.0.1' || bootstrap.port !== (ci ? '54622' : '54322'))
   throw new Error('Unexpected destination');
 const db = new pg.Client({ connectionString: bootstrap.toString() });
 await db.connect();
@@ -27,7 +28,7 @@ const grant = spawnSync(
   [
     'docker',
     'exec',
-    'supabase_db_marleva-m1',
+    ci ? 'supabase_db_marleva-ci' : 'supabase_db_marleva-m1',
     'psql',
     '-U',
     'supabase_admin',
@@ -74,7 +75,8 @@ for (const email of [
   users.push({ email, id: user.id });
 }
 await writeFile(
-  new URL('../../infra/local/secrets/fixture-identities.json', import.meta.url),
+  process.env.MARLEVA_FIXTURE_IDENTITIES ??
+    new URL('../../infra/local/secrets/fixture-identities.json', import.meta.url),
   JSON.stringify(users),
   { mode: 0o600 },
 );

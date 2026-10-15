@@ -217,6 +217,7 @@ paths:
                   type: string
                   minLength: 1
                   maxLength: 500
+                  pattern: '\S'
               required:
                 - reason
               additionalProperties: false
@@ -705,6 +706,7 @@ paths:
                 expected_version:
                   type: integer
                   minimum: 1
+                  maximum: 9007199254740991
               required:
                 - expected_version
               additionalProperties: false
@@ -764,6 +766,7 @@ paths:
                 expected_version:
                   type: integer
                   minimum: 1
+                  maximum: 9007199254740991
               required:
                 - expected_version
               additionalProperties: false
@@ -985,6 +988,7 @@ paths:
                 expected_version:
                   type: integer
                   minimum: 1
+                  maximum: 9007199254740991
               required:
                 - expected_version
               additionalProperties: false
@@ -1209,6 +1213,7 @@ paths:
                 expected_version:
                   type: integer
                   minimum: 1
+                  maximum: 9007199254740991
                 factor_id:
                   type: string
                   format: uuid
@@ -1440,10 +1445,12 @@ paths:
                 expected_version:
                   type: integer
                   minimum: 1
+                  maximum: 9007199254740991
                 reason:
                   type: string
                   minLength: 1
                   maxLength: 500
+                  pattern: '\S'
               required:
                 - expected_version
                 - reason

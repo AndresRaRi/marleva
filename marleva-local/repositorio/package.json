@@ -27,17 +27,29 @@
     "test:quota": "vitest run tests/integration/backend/M1/otp-quota.test.mjs",
     "test:coverage": "vitest run --config vitest.coverage.config.mjs --coverage",
     "arch:check": "pnpm exec depcruise apps/api/src --config .dependency-cruiser.cjs && pnpm exec jscpd",
-    "contracts:check": "pnpm exec redocly lint docs/apis/M1/openapi.yaml && pnpm docs:target && pnpm docs:generate && git diff --exit-code -- docs/modelado-datos/ddl docs/apis/M1 packages/contracts",
+    "contracts:check": "pnpm exec redocly lint docs/apis/M1/openapi.yaml && pnpm docs:target && pnpm docs:generate && git diff --exit-code -- docs/modelado-datos/ddl docs/apis/M1 packages/contracts packages/config/http-routes.json",
     "ci:prepare": "node scripts/ci-prepare.mjs",
     "ci:run": "node scripts/ci-stage.mjs",
     "ci:summary": "node scripts/ci-summary.mjs",
     "coverage:check": "node scripts/coverage-ratchet.mjs",
-    "build:container": "node scripts/container-build.mjs"
+    "build:container": "node scripts/container-build.mjs",
+    "ci:tool": "node scripts/ci-tool.mjs",
+    "security:scan": "node scripts/security-scan.mjs",
+    "ci:stack:start": "node scripts/ci-stack.mjs start",
+    "ci:stack:stop": "node scripts/ci-stack.mjs stop",
+    "ci:migrations": "node scripts/ci-migrations.mjs",
+    "ci:integration": "node scripts/ci-integration.mjs backend",
+    "test:e2e": "node scripts/ci-integration.mjs web",
+    "contracts:fuzz": "node scripts/ci-integration.mjs contract",
+    "ci:cert-trust": "node scripts/ci-cert-trust.mjs",
+    "test:recovery:ci": "MARLEVA_RECOVERY_CHECK=1 MARLEVA_ENV_FILE=artifacts/ci/stack/.env.operators node tests/integration/backend/M1/recovery-api.mjs"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "13.1.0",
+    "@axe-core/playwright": "4.13.0",
     "@dbml/core": "10.3.1",
     "@eslint/js": "10.0.1",
+    "@lhci/cli": "0.15.1",
     "@playwright/test": "1.64.0",
     "@redocly/cli": "2.63.0",
     "@supabase/supabase-js": "2.117.3",
@@ -58,6 +70,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.2",
     "vitest": "5.0.4",
+    "xcode": "3.0.1",
     "yaml": "2.9.1"
   }
 }

@@ -92,7 +92,7 @@ export default function Home() {
     </View>
   );
   return (
-    <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+    <ScrollView role="main" contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
       <View style={styles.card}>
         <Text accessibilityRole="header" style={styles.title}>
           Marleva

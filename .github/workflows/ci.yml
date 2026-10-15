@@ -1,10 +1,13 @@
 name: CI
 on:
   push:
-    branches: [main, 'codex/**']
+    branches:
+      - main
+      - codex/**
   pull_request:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - main
+  workflow_dispatch: null
 permissions:
   contents: read
 concurrency:
@@ -59,7 +62,15 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    needs: [calidad, arquitectura-contratos, unitarias]
+    needs:
+      - calidad
+      - arquitectura-contratos
+      - unitarias
+      - seguridad
+      - integracion
+      - contrato
+      - web
+      - codeql
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -71,3 +82,176 @@ jobs:
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs build '${{ job.status }}'
+  seguridad:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Analizar dependencias, secretos, licencias y SBOM
+        run: pnpm ci:run seguridad
+      - name: Guardar evidencia sin credenciales
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: seguridad
+          path: marleva-local/repositorio/artifacts/security/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs seguridad '${{ job.status }}'
+  integracion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    needs:
+      - calidad
+      - arquitectura-contratos
+      - unitarias
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Preparar servicios CI aislados
+        run: pnpm ci:stack:start
+      - name: Verificar migraciones desde cero y versión anterior
+        run: pnpm ci:migrations
+      - name: Ejecutar comprobaciones reales
+        run: pnpm ci:run integracion
+      - name: Guardar evidencia sin credenciales
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: integracion
+          path: |-
+            marleva-local/repositorio/tests/results/ci-integration-backend.json
+            marleva-local/repositorio/tests/results/ci-migrations.json
+            marleva-local/repositorio/tests/results/ci-operators*.json
+          retention-days: 3
+          if-no-files-found: error
+      - name: Detener únicamente el stack de ensayo
+        if: always()
+        run: pnpm ci:stack:stop
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs integracion '${{ job.status }}'
+  contrato:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    needs:
+      - calidad
+      - arquitectura-contratos
+      - unitarias
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version-file: marleva-local/repositorio/infra/ci/.python-version
+          cache: pip
+          cache-dependency-path: marleva-local/repositorio/infra/ci/requirements.lock
+      - name: Preparar servicios CI aislados
+        run: pnpm ci:stack:start
+      - name: Verificar migraciones desde cero y versión anterior
+        run: pnpm ci:migrations
+      - name: Ejecutar comprobaciones reales
+        run: pnpm ci:run contrato
+      - name: Guardar evidencia sin credenciales
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: contrato
+          path: marleva-local/repositorio/artifacts/ci/schemathesis/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Detener únicamente el stack de ensayo
+        if: always()
+        run: pnpm ci:stack:stop
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs contrato '${{ job.status }}'
+  web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    needs:
+      - calidad
+      - arquitectura-contratos
+      - unitarias
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Preparar servicios CI aislados
+        run: pnpm ci:stack:start
+      - name: Verificar migraciones desde cero y versión anterior
+        run: pnpm ci:migrations
+      - name: Instalar Chromium de Playwright
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Confiar en CA temporal del runner
+        run: pnpm ci:cert-trust
+      - name: Ejecutar comprobaciones reales
+        run: pnpm ci:run web
+      - name: Guardar evidencia sin credenciales
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: web
+          path: |-
+            marleva-local/repositorio/artifacts/ci/capturas/
+            marleva-local/repositorio/artifacts/ci/axe.json
+            marleva-local/repositorio/artifacts/ci/lighthouse/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Detener únicamente el stack de ensayo
+        if: always()
+        run: pnpm ci:stack:stop
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs web '${{ job.status }}'
+  revision-dependencias:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294
+        with:
+          fail-on-severity: low
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs revision-dependencias '${{ job.status }}'
+  codeql:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: github/codeql-action/init@f3c49fd1ef3281abc41069b3dd22807a60c963f6
+        with:
+          languages: javascript-typescript
+          build-mode: none
+      - uses: github/codeql-action/analyze@f3c49fd1ef3281abc41069b3dd22807a60c963f6
+      - name: Resumen para revisión
+        if: always()
+        run: node scripts/ci-summary.mjs codeql '${{ job.status }}'

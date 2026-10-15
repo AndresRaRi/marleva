@@ -3,7 +3,7 @@ import { request } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 const root = path.resolve('apps/client/dist'),
-  cert = path.resolve('infra/local/secrets');
+  cert = path.resolve(process.env.MARLEVA_CERT_DIR ?? 'infra/local/secrets');
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',

@@ -9,7 +9,7 @@ import { database } from '../../../../apps/api/dist/database.js';
 import { PrismaFileRepository } from '../../../../apps/api/dist/modules/m1/infrastructure/repositories/prisma-file-repository.js';
 import { LocalPrivateStorage } from '../../../../apps/api/dist/modules/m1/infrastructure/adapters/local-private-storage.js';
 import { ProcessFileDeletions } from '../../../../apps/api/dist/modules/m1/application/use-cases/process-file-deletions.js';
-process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? new URL('../../../../.env', import.meta.url));
 const require = createRequire(new URL('../../../../apps/api/package.json', import.meta.url)),
   { createClient } = require('@supabase/supabase-js');
 const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY, {
@@ -227,7 +227,12 @@ it('MAR-M1-IT-BE-111-E | SEQ011:S100/S120 | caída Storage conserva intención y
   };
   let stopped = false;
   try {
-    docker(['stop', 'supabase_storage_marleva-m1']);
+    docker([
+      'stop',
+      process.env.MARLEVA_CI_STACK === '1'
+        ? 'supabase_storage_marleva-ci'
+        : 'supabase_storage_marleva-m1',
+    ]);
     stopped = true;
     const permission = await access(target.id, b);
     expect(permission.status).toBe(201);
@@ -253,7 +258,13 @@ it('MAR-M1-IT-BE-111-E | SEQ011:S100/S120 | caída Storage conserva intención y
       'delete_pending',
     );
   } finally {
-    if (stopped) docker(['start', 'supabase_storage_marleva-m1']);
+    if (stopped)
+      docker([
+        'start',
+        process.env.MARLEVA_CI_STACK === '1'
+          ? 'supabase_storage_marleva-ci'
+          : 'supabase_storage_marleva-m1',
+      ]);
   }
   for (let i = 0; i < 50; i++) {
     const result = await admin.storage.getBucket('m1-private');

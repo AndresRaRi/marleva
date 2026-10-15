@@ -4,18 +4,23 @@ import { AccountService } from './account.service.js';
 import { config } from './config.js';
 import { database } from './database.js';
 import { fail } from './security.js';
+import { accountRequest } from './modules/m1/presentation/dtos/account-request.js';
 @Controller('v1')
 export class AccountController {
   constructor(private readonly accounts: AccountService) {}
   @Post('auth/challenges') challenges(@Body() b: Record<string, unknown>, @Req() r: Request) {
-    return this.accounts.challenge(b.correo, r.socket.remoteAddress ?? 'unknown');
+    return this.accounts.challenge(
+      accountRequest(b, ['correo']).correo,
+      r.socket.remoteAddress ?? 'unknown',
+    );
   }
   @Post('auth/verifications') async verify(
     @Body() b: Record<string, unknown>,
     @Req() r: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this.accounts.verify(b.challenge_id, b.codigo);
+    const body = accountRequest(b, ['challenge_id', 'codigo']);
+    const result = await this.accounts.verify(body.challenge_id, body.codigo);
     if (r.headers['x-marleva-client'] === 'native' && !r.headers.origin)
       return { session_token: result.token, csrf_token: result.csrf, cuenta: result.account };
     if (r.headers.origin !== config().APP_ORIGIN) fail(403, 'ORIGEN', 'Acceso no permitido');
@@ -62,19 +67,19 @@ export class AccountController {
     return result;
   }
   @Post('auth/email-changes') async change(@Req() r: Request, @Body() b: Record<string, unknown>) {
-    return this.accounts.emailChange(await this.accounts.principal(r, true), b.correo);
+    return this.accounts.emailChange(
+      await this.accounts.principal(r, true),
+      accountRequest(b, ['correo']).correo,
+    );
   }
   @Post('auth/email-changes/:id/confirmations') async confirm(
     @Req() r: Request,
     @Param('id') id: string,
     @Body() b: Record<string, unknown>,
   ) {
-    return this.accounts.confirmEmail(
-      await this.accounts.principal(r, true),
-      id,
-      b.correo,
-      b.codigo,
-    );
+    const principal = await this.accounts.principal(r, true);
+    const body = accountRequest(b, ['correo', 'codigo']);
+    return this.accounts.confirmEmail(principal, id, body.correo, body.codigo);
   }
   @Post('auth/mfa/enrollments') async enroll(@Req() r: Request) {
     return this.accounts.enroll(await this.accounts.principal(r, true));
@@ -83,11 +88,9 @@ export class AccountController {
     @Req() r: Request,
     @Body() b: Record<string, unknown>,
   ) {
-    return this.accounts.verifyFactor(
-      await this.accounts.principal(r, true),
-      b.factor_id,
-      b.codigo,
-    );
+    const principal = await this.accounts.principal(r, true);
+    const body = accountRequest(b, ['factor_id', 'codigo']);
+    return this.accounts.verifyFactor(principal, body.factor_id, body.codigo);
   }
   @Get('operator/access') async operator(@Req() r: Request) {
     return this.accounts.operator(await this.accounts.principal(r));

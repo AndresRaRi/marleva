@@ -11,7 +11,7 @@ import { SmtpOutboxMailer } from '../../../../apps/api/dist/modules/m1/infrastru
 import { DeliverOutbox } from '../../../../apps/api/dist/modules/m1/application/use-cases/deliver-outbox.js';
 import { startWorker } from '../../../../apps/api/dist/worker.js';
 const root = fileURLToPath(new URL('../../../../', import.meta.url));
-process.loadEnvFile(root + '.env');
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? root + '.env');
 const pg = createRequire(new URL('../../../../apps/api/package.json', import.meta.url))('pg');
 const name = 'marleva-outbox-it-' + Date.now();
 let created = false,
@@ -104,7 +104,12 @@ async function captured(subject) {
 
 it('MAR-M1-IT-BE-108-B | SEQ008:S050 | SMTP real caído conserva tarea y reinicio entrega', async () => {
   const item = await fixture();
-  docker(['stop', 'supabase_inbucket_marleva-m1']);
+  docker([
+    'stop',
+    process.env.MARLEVA_CI_STACK === '1'
+      ? 'supabase_inbucket_marleva-ci'
+      : 'supabase_inbucket_marleva-m1',
+  ]);
   try {
     await new DeliverOutbox(repo, mailer, () => clock).execute();
     const row = await db.outbox.findUniqueOrThrow({ where: { id: item.id } });
@@ -112,7 +117,12 @@ it('MAR-M1-IT-BE-108-B | SEQ008:S050 | SMTP real caído conserva tarea y reinici
     expect(row.attempts).toBe(1);
     expect(+row.dueAt - +clock).toBe(60000);
   } finally {
-    docker(['start', 'supabase_inbucket_marleva-m1']);
+    docker([
+      'start',
+      process.env.MARLEVA_CI_STACK === '1'
+        ? 'supabase_inbucket_marleva-ci'
+        : 'supabase_inbucket_marleva-m1',
+    ]);
   }
   let ready = false;
   for (let i = 0; i < 100; i++) {

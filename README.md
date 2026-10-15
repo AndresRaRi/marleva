@@ -38,7 +38,7 @@ Al terminar: releer finales, comprobar enlaces/diff/ignorados, actualizar README
 
 Remoto: https://github.com/AndresRaRi/marleva.git. El 14-10 se subió codex/fix-quality-and-rules, se configuró su seguimiento y pull --ff-only confirmó actualización; comprobar estado/divergencias antes de sincronizar, sin descartar cambios locales. Guardar, hacer commit, subir a Fuentes y publicar son acciones distintas. sources/ y AGENTS raíz son referencias de solo lectura. Historial por Git, sin copias vN/fecha/ZIP de rutina.
 
-Plan técnico aprobado: [decisiones únicas](marleva-local/repositorio/docs/adr/001-consolidacion-tecnica.md), [avance funcional](marleva-local/repositorio/docs/avance.md) y la guía 00. El 14-10 pasaron tipado, lint, formato, 122 pruebas unitarias, cobertura de lógica de cuenta y regresión Chrome. Sonar, CI y la aceptación completa de M1 siguen pendientes. Hooks locales: git config core.hooksPath .githooks; requieren herramientas preparadas y no corrigen archivos automáticamente.
+Plan técnico aprobado: [decisiones únicas](marleva-local/repositorio/docs/adr/001-consolidacion-tecnica.md), [avance funcional](marleva-local/repositorio/docs/avance.md) y la guía 00. La fase 1 del CI pasó en GitHub. La fase 2 tiene pruebas locales de integración, recuperación y accesibilidad; seguridad conserva avisos bloqueantes de terceros. Sonar/fase 3 y aceptación completa de M1 siguen pendientes. Hooks locales: git config core.hooksPath .githooks; requieren herramientas preparadas y no corrigen archivos automáticamente.
 
 Recuperación de operadores: siete operaciones backend integradas, roles persistidos y quinta migración aplicada localmente. Revisión y límites en el instructivo M1 y tests/results/recovery-api.json. UI nueva y aceptación siguen pendientes.
 

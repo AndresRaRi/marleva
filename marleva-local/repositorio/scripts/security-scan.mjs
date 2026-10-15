@@ -1,0 +1,121 @@
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { ensureCiTool } from './ci-tool.mjs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+const root = path.resolve('../..'),
+  folder = path.resolve('artifacts/security');
+mkdirSync(folder, { recursive: true, mode: 0o700 });
+const outcomes = [];
+function run(name, binary, args, options = {}) {
+  const result = spawnSync(binary, args, { encoding: 'utf8', env: process.env, ...options });
+  const status = result.status ?? 1;
+  outcomes.push({ name, status });
+  if (result.error) throw result.error;
+  if (result.stderr)
+    console.log(`${name}: ${status === 0 ? 'correcto' : 'falló'}; ${result.stderr.slice(0, 2000)}`);
+  return result;
+}
+run('Compatibilidad de correcciones', process.execPath, ['scripts/security-compat.mjs']);
+const sbom = run('SBOM', 'pnpm', [
+  'sbom',
+  '--sbom-format',
+  'cyclonedx',
+  '--sbom-spec-version',
+  '1.6',
+  '--lockfile-only',
+  '--out',
+  folder + '/sbom.cdx.json',
+]);
+if (sbom.status === 0) {
+  const data = JSON.parse(readFileSync(folder + '/sbom.cdx.json', 'utf8'));
+  if (data.bomFormat !== 'CycloneDX' || !data.components?.length)
+    throw new Error('SBOM vacío o inválido');
+}
+const licenses = run('Licencias', 'pnpm', ['licenses', 'list', '--json']);
+if (licenses.status === 0) {
+  const data = JSON.parse(licenses.stdout);
+  const known = new Set([
+    'MIT',
+    'Apache-2.0',
+    'LGPL-3.0-only',
+    'BSD-3-Clause',
+    'Python-2.0',
+    'CC-BY-4.0',
+    'ISC',
+    'BSD-2-Clause',
+    'MPL-2.0',
+    'BlueOak-1.0.0',
+    '0BSD',
+    '(MIT OR Apache-2.0)',
+    '(MIT AND CC-BY-3.0)',
+    'CC0-1.0',
+    'Unlicense',
+  ]);
+  // The legacy metadata says BSD; its shipped text is the three-clause license.
+  const reviewedBsd = (data.BSD ?? []).every(
+    (item) =>
+      item.name === 'parse-cache-control' &&
+      item.versions.join() === '1.0.1' &&
+      item.paths.length > 0 &&
+      item.paths.every(
+        (folder) =>
+          createHash('sha256')
+            .update(readFileSync(path.join(folder, 'LICENSE')))
+            .digest('hex') === '111f42b37daecc6c387d037ef25955bd269e7f9a46a736d5257a23560534763f',
+      ),
+  );
+  const pending = Object.keys(data).filter(
+    (license) => !known.has(license) && !(license === 'BSD' && reviewedBsd),
+  );
+  writeFileSync(folder + '/licenses.json', JSON.stringify(data, null, 2) + '\n');
+  if (pending.length)
+    outcomes.push({ name: 'Licencias por revisar: ' + pending.join(', '), status: 1 });
+}
+const osv = await ensureCiTool('osv');
+mkdirSync(folder + '/python', { recursive: true });
+writeFileSync(folder + '/python/requirements.txt', readFileSync('infra/ci/requirements.lock'));
+run('OSV', osv, [
+  'scan',
+  'source',
+  '--lockfile',
+  path.resolve('pnpm-lock.yaml'),
+  '--lockfile',
+  folder + '/python/requirements.txt',
+  '--format',
+  'json',
+  '--output-file',
+  folder + '/osv.json',
+]);
+const gitleaks = await ensureCiTool('gitleaks');
+run('Gitleaks', gitleaks, [
+  'git',
+  root,
+  '--redact',
+  '--config',
+  path.resolve('infra/ci/gitleaks.toml'),
+  '--no-banner',
+  '--report-format',
+  'json',
+  '--report-path',
+  folder + '/gitleaks.json',
+]);
+writeFileSync(
+  'tests/results/security-scan.json',
+  JSON.stringify(
+    {
+      date: new Date().toISOString(),
+      outcomes,
+      limits: [
+        'Sin certificación legal; licencias conocidas conservan obligaciones',
+        'CLI de GitLeaks analiza historial; informes redactados',
+        'OSV examina lockfiles npm/Python completos, incluido desarrollo',
+      ],
+    },
+    null,
+    2,
+  ) + '\n',
+);
+for (const item of outcomes) console.log(`${item.name}: ${item.status === 0 ? 'PASS' : 'FAIL'}`);
+if (outcomes.some((item) => item.status !== 0))
+  throw new Error('Seguridad requiere correcciones; revisar informes sin desactivar controles');

@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-15T15:21:14.443Z",
+  "id": "MAR-M1-IT-BE-114–121-HTTP",
+  "copyPrefix": "ci-no-restoration",
+  "cases": {
+    "prismaDeployTargetOnly": true,
+    "requestReadApprovalPrivacyIdempotencyAndSessionRevocation": true,
+    "providerDownKeepsDurablePending": true,
+    "restartedWorkerConfirmsLostFactorAbsent": true,
+    "newOtpBoundCapabilityIdempotentEnrollmentAndCompletion": true,
+    "freshOtpAndAal2ThenAdministrativeRejection": true,
+    "currentRoleRevocationDeniesAccess": true
+  },
+  "limits": [
+    "Solo backend/API en proveedor aislado; pantallas/Safari/Android/iOS/aceptación visual pendientes",
+    "Personas/roles del ensayo ficticios, no autorización de operadores reales"
+  ],
+  "migrationSha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0",
+  "result": "PASS",
+  "durationMs": 75442,
+  "cleanup": "API del ensayo cerrada; actores propios suspendidos, roles y sesiones revocados; Auth destino activo"
+}

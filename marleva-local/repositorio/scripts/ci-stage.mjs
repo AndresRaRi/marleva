@@ -5,6 +5,10 @@ const stages = {
   'arquitectura-contratos': ['arch:check', 'contracts:check'],
   unitarias: ['test:coverage', 'coverage:check'],
   build: ['build', 'build:container'],
+  seguridad: ['security:scan'],
+  integracion: ['ci:integration', 'test:recovery:ci'],
+  contrato: ['contracts:fuzz'],
+  web: ['test:e2e'],
 };
 const stage = process.argv[2],
   commands = stages[stage];

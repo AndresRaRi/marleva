@@ -1,13 +1,19 @@
 #!/bin/sh
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-export PATH="$ROOT/infra/local/tools/node-v24.21.0-darwin-arm64/bin:$ROOT/infra/local/tools/bin:$ROOT/infra/local/tools/docker:$ROOT/infra/local/tools/package-manager/node_modules/.bin:$PATH"
-export DOCKER_HOST="unix://$HOME/.colima/marleva/docker.sock"
-export JAVA_HOME="$ROOT/infra/local/tools/jdk-17.0.20.1+1/Contents/Home"
-export ANDROID_HOME="$ROOT/infra/local/tools/android-sdk"
-export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export ANDROID_AVD_HOME="$ROOT/infra/local/secrets/avd"
-export GRADLE_USER_HOME="$ROOT/infra/local/downloads/gradle"
-export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/22.0/bin:$PATH"
-export DOCKER_CONFIG="$ROOT/infra/local/docker-config"
+case "$(uname -s)-$(uname -m)" in
+  Darwin-arm64)
+    export PATH="$ROOT/infra/local/tools/node-v24.21.0-darwin-arm64/bin:$ROOT/infra/local/tools/bin:$ROOT/infra/local/tools/docker:$ROOT/infra/local/tools/package-manager/node_modules/.bin:$PATH"
+    export DOCKER_HOST="${DOCKER_HOST:-unix://$HOME/.colima/marleva/docker.sock}"
+    export JAVA_HOME="${JAVA_HOME:-$ROOT/infra/local/tools/jdk-17.0.20.1+1/Contents/Home}"
+    export ANDROID_HOME="${ANDROID_HOME:-$ROOT/infra/local/tools/android-sdk}"
+    export ANDROID_SDK_ROOT="$ANDROID_HOME"
+    export ANDROID_AVD_HOME="$ROOT/infra/local/secrets/avd"
+    export GRADLE_USER_HOME="$ROOT/infra/local/downloads/gradle"
+    export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/22.0/bin:$PATH"
+    export DOCKER_CONFIG="${DOCKER_CONFIG:-$ROOT/infra/local/docker-config}"
+    ;;
+  Linux-x86_64) ;; # The shared CI setup supplies pinned Node/pnpm; preserve runner Docker/JDK.
+  *) echo 'Plataforma no homologada: se requiere Mac ARM64 o Linux x64.' >&2; exit 1 ;;
+esac
 exec "$@"

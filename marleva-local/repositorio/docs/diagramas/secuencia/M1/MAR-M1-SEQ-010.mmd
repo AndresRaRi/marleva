@@ -8,6 +8,9 @@ sequenceDiagram
     participant MAIL as Capturador local
     Note over UI,API: MAR-M1-SEQ-010 - Dependencias y configuración local
     UI->>API: S010 solicitar salud o tarea
+    Note over UI,API: S012 referencia y no-store antes del parser; origen inválido 403 con acción
+    Note over UI,API: S014 método no permitido en ruta conocida: 405 y Allow derivado del contrato
+    Note over UI,API: S016 JSON inválido 400; cuerpo ausente/campos inválidos 422; nunca 503 por entrada
     Note over UI,API: Respuesta inválida o no JSON conserva sesión y paso; error recuperable del cliente
     API->>DB: S020 comprobar PostgreSQL
     API->>AUTH: S030 comprobar identidad y almacenamiento

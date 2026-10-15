@@ -1,6 +1,6 @@
 # Marleva: guía principal
 
-Fecha: 14 de octubre de 2026, America/Merida. Reglas vigentes; Git conserva el historial. Las decisiones C01–C26 y las autorizaciones están en [01](01_ESTADO_Y_DECISIONES_MARLEVA.md); el alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md); la evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
+Fecha: 15 de octubre de 2026, America/Merida. Reglas vigentes; Git conserva el historial. Las decisiones C01–C26 y las autorizaciones están en [01](01_ESTADO_Y_DECISIONES_MARLEVA.md); el alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md); la evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md).
 
 ## 1. Propósito y glosario
 
@@ -71,6 +71,8 @@ Conservar C01–C26, A0 y autorización del SDK Android. La programación base/M
 
 Trabajar por dependencias: delimitar, contrastar, decidir, documentar, ejecutar, comprobar, cerrar y continuar. Resolver elecciones rutinarias dentro del plan aprobado. Consultar cambios materiales de alcance, stack, autenticación, gasto o publicación. Nada se elimina sin confirmación del usuario. Una brecha parcial sigue abierta hasta completar sus criterios; no finalizar el trabajo por terminar una subtarea si quedan dependencias ejecutables. Bloquear solo la acción afectada y avanzar en las demás. Sin aceptación por silencio. Terminar un turno solo con cola vacía, bloqueo real o decisión pendiente del usuario; indicar el motivo. Si queda trabajo autorizado ejecutable, continuar.
 
+Las autorizaciones vigentes cubren correcciones, pruebas y sincronización ordinarias del plan: no solicitar confirmación por cada paso. Tramitar los permisos técnicos que exija el entorno sin omitirlos; agrupar operaciones del mismo alcance y reutilizar permisos válidos. No ampliar permisos por comodidad.
+
 Considerar negocio, operación, ingeniería, seguridad, privacidad, accesibilidad, soporte y obligaciones mexicanas cuando afecten el caso. Antes de operar: proveedor elegible, contratos/costos/saldos, tarifa/tope/fiscalidad, privacidad/calendarios, responsables y soporte. Demografía no se reabre. Ideas que amplían alcance van a pendientes para después en 01.
 
 ## 7. Arquitectura y código
@@ -103,7 +105,7 @@ Antes de cualquier pantalla nueva o cambio visual material: proponer paleta, tip
 
 ## 9. Pruebas, calidad y entorno
 
-Para cambios backend/frontend: unitarias de reglas, integración real necesaria, negativos/permisos/concurrencia/caídas, rendimiento proporcional y regresión. Separar por tipo/lado/módulo. Guardar caso, requisito, versión, entorno/dataset/plataforma, esperado/obtenido, fallos/corrección y límites. Mocks no acreditan integración del proveedor; carpetas o planes no son resultados.
+Para cambios backend/frontend: unitarias de reglas, integración real necesaria, negativos/permisos/concurrencia/caídas, rendimiento proporcional y regresión. Separar por tipo/lado/módulo. Guardar caso, requisito, versión, entorno/dataset/plataforma, esperado/obtenido, fallos/corrección y límites. Mocks no acreditan integración del proveedor; carpetas o planes no son resultados. Agrupar hallazgos por causa antes de corregir. Repetir una validación solo ante cambios que la afecten, fallos o dudas concretas pendientes; conservar hooks y controles obligatorios.
 
 Cobertura objetivo ≥80% de lógica de negocio, incluyendo archivos no ejecutados. Tipado, lint, formato y hooks obligatorios; no apagar reglas ni excluir lógica para aparentar cumplimiento. Sonar local se homologa con versión, recursos, licencia y compatibilidad comprobadas; SonarCloud no se activa por defecto. Pasar una herramienta no acredita seguridad ni módulo terminado.
 

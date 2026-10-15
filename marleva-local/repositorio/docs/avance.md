@@ -1,6 +1,6 @@
 # Avance de Marleva por criterios funcionales
 
-Fecha: 14 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
+Fecha: 15 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
 
 ## Método
 
@@ -48,12 +48,12 @@ Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó.
 
 ## Pipeline de integración continua
 
-14-10-2026. General no tiene porcentaje funcional. Rama codex/feat-ci-pipeline parte de 1d75de3; PR de recuperación #1 abierto hacia main, sin fusión.
+15-10-2026. General no tiene porcentaje funcional. Rama codex/feat-ci-pipeline parte de 1d75de3; el usuario fusionó PR #1 y main quedó incorporado mediante dfeb9a3. Pipeline sin fusión.
 
 | Fase | Preparación local | Resultado en GitHub |
 |---|---|---|
-| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Run 38679348007: cuatro jobs verdes. Negativa 38679688035 falló por capas/ciclo como se esperaba; reversión en commit nuevo, verde posterior pendiente |
-| 2. Seguridad, integración y web accesible | Pendiente; no saltar desde fase 1 | No ejecutada |
+| 1. Setup, calidad, capas/contratos, unitarias y build | Reglas nuevas corrigieron 21 errores; 122 pruebas, cobertura ampliada y trinquete pasan; API/web compilan. Docker mínimo, arranque/salud y Trivy pasan sin altas/críticas | Verde 38679348007; negativa 38679688035 rechazada por capas/ciclo; reversión ee171cf verde en 38679887976. Fase 1 verificada |
+| 2. Seguridad, integración y web accesible | 139 unitarias y 38 integraciones; migraciones cero/previa, axe sin infracciones en tres estados y Lighthouse accesibilidad 1.00 en tres corridas. Correcciones HTTP verificadas; contrato 24/24 y 1480 casos pasó, con aviso de falta de sesión en fuzz; suite de siete operaciones UC014 pasó. Seguridad bloqueada por cuatro paquetes sin parche publicado | No ejecutada |
 | 3. Sonar, rendimiento, nightly, CD desactivado y dependabot | Comparación temporal Sonar aprobada, sin SonarCloud/gasto | No ejecutada |
 
 Avisos de longitud de funciones permanecen visibles como pidió el usuario; complejidad y anidación son errores. Una ejecución local no acredita CI verde. Fases 2–3 no se activan hasta cerrar fase previa. El [ADR002](adr/002-pipeline-ci.md) conserva versiones, fuentes, licencias y límites.

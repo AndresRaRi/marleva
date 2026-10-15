@@ -17,6 +17,11 @@ marleva-local/repositorio/infra/local/secrets/
 **/build/
 **/dist/
 **/coverage/
+**/.lighthouseci/
+**/.hypothesis/
+**/.schemathesis/
+**/__pycache__/
+**/.pytest_cache/
 **/playwright-report/
 **/test-results/
 **/artifacts/

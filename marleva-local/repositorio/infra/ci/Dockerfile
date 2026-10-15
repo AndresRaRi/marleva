@@ -7,6 +7,7 @@ WORKDIR /build
 ENV MIGRATION_DATABASE_URL=postgresql://fixture:fixture@127.0.0.1:54322/postgres
 RUN corepack enable && corepack prepare pnpm@12.11.2 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY patches ./patches
 COPY apps/api/package.json ./apps/api/
 COPY apps/client/package.json ./apps/client/
 COPY packages/contracts/package.json ./packages/contracts/

@@ -2547,6 +2547,8 @@ components:
         correo:
           type: string
           format: email
+          maxLength: 254
+          pattern: '^[^\s@]+@[eE][xX][aA][mM][pP][lL][eE]\.[tT][eE][sS][tT]$'
       required:
         - correo
       additionalProperties: false
@@ -2607,6 +2609,8 @@ components:
         correo:
           type: string
           format: email
+          maxLength: 254
+          pattern: '^[^\s@]+@[eE][xX][aA][mM][pP][lL][eE]\.[tT][eE][sS][tT]$'
       required:
         - correo
       additionalProperties: false
@@ -2628,6 +2632,8 @@ components:
         correo:
           type: string
           format: email
+          maxLength: 254
+          pattern: '^[^\s@]+@[eE][xX][aA][mM][pP][lL][eE]\.[tT][eE][sS][tT]$'
         codigo:
           type: string
           pattern: ^[0-9]{6}$

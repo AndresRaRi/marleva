@@ -47,7 +47,7 @@ export function config() {
     !/[a-f0-9]{64}/.test(result.TOKEN_ENCRYPTION_KEY)
   )
     throw new Error('HTTPS/clave local inválidos');
-  if (result.SMTP_HOST !== '127.0.0.1' || !['54325', '54425'].includes(result.SMTP_PORT))
+  if (result.SMTP_HOST !== '127.0.0.1' || !['54325', '54425', '54625'].includes(result.SMTP_PORT))
     throw new Error('Solo correo capturado local');
   return result;
 }

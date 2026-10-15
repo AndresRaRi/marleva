@@ -1,7 +1,9 @@
 #!/bin/sh
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-cd "$ROOT/infra/local/secrets"
+umask 077
+mkdir -p "${MARLEVA_CERT_DIR:-$ROOT/infra/local/secrets}"
+cd "${MARLEVA_CERT_DIR:-$ROOT/infra/local/secrets}"
 if test -f localhost.crt; then exit 0; fi
 umask 077
 openssl req -x509 -newkey rsa:3072 -sha256 -days 365 -nodes -keyout ca.key -out ca.crt -subj '/CN=Marleva Local Development CA'
