@@ -78,7 +78,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
-| MAR-CHAT-007 | Sonar y elegibilidad, 15-10-2026; chat separado de 006, copia aislada desde PR #5. Investigación en [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#revisión-de-elegibilidad-y-mcp-oficial--mar-chat-007-15-10-2026); scanner bloqueado y PR borrador |
+| MAR-CHAT-007 | Sonar y elegibilidad, CONTINUACIÓN 15-10-2026; copia aislada desde PR #5. Usuario autoriza Cloud Free privado, términos y OAuth. Organización/proyecto creados Free/Private y conexión CI guardada como secreto. Flujo Cloud diseñado e implementado, validación remota pendiente; Community sigue bloqueado. [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026). PR borrador hasta prueba real positiva/negativa/corrección |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 

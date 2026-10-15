@@ -43,7 +43,7 @@
     "contracts:fuzz": "node scripts/ci-integration.mjs contract",
     "ci:cert-trust": "node scripts/ci-cert-trust.mjs",
     "test:recovery:ci": "MARLEVA_RECOVERY_CHECK=1 MARLEVA_ENV_FILE=artifacts/ci/stack/.env.operators node tests/integration/backend/M1/recovery-api.mjs",
-    "ci:sonar": "node scripts/sonar-temporary.mjs"
+    "ci:sonar": "node scripts/sonar-cloud.mjs"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "13.1.0",
