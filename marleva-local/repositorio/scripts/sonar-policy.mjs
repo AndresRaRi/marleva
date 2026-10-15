@@ -35,3 +35,7 @@ export function introduced(base, head) {
     return false;
   });
 }
+
+export function assertNoNew(base, head) {
+  if (introduced(base, head).length) throw new Error('Sonar: incidencias nuevas bloqueantes');
+}

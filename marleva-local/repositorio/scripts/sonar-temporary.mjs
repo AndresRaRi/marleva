@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { isIPv4 } from 'node:net';
 import { sonarApi, waitSonar, allPages } from './sonar-api.mjs';
-import { fingerprint, introduced } from './sonar-policy.mjs';
+import { fingerprint, introduced, assertNoNew } from './sonar-policy.mjs';
 import { command, snapshot, scanner, save, sourceFiles } from './sonar-runtime.mjs';
 if (process.platform !== 'linux' || process.arch !== 'x64')
   throw new Error('Ensayo Sonar homologado solo para Linux x64; no emulación ARM64');
@@ -32,6 +32,7 @@ async function analyze(label, tokenFile) {
     name,
     folder + '/' + label + '.log',
   );
+  summary.snapshots[label] = { revision, taskId, fixture: label === 'negative', status: 'pending' };
   const task = await waitSonar(
     () => api('/api/ce/task', { id: taskId }),
     (r) => {
@@ -41,6 +42,7 @@ async function analyze(label, tokenFile) {
     },
   );
   const analysis = await api('/api/ce/task', { id: taskId, additionalFields: 'warnings' });
+  summary.snapshots[label].warnings = analysis.task?.warnings ?? null;
   if (!Array.isArray(analysis.task?.warnings) || analysis.task.warnings.length)
     throw new Error('Análisis Sonar con advertencias o diagnóstico incompleto');
   const issues = await allPages(api, '/api/issues/search', { componentKeys: project }, 'issues');
@@ -51,14 +53,24 @@ async function analyze(label, tokenFile) {
     { component: project, qualifiers: 'FIL' },
     'components',
   );
+  if (label === 'negative')
+    summary.negativeFixtureDetected = issues.some(
+      (issue) =>
+        issue.component?.endsWith(':apps/api/src/sonar-negative-fixture.ts') &&
+        issue.rule?.endsWith(':S1186'),
+    );
   const expectedFiles = sourceFiles(source);
   const actualFiles = files.map((file) => file.path).sort();
+  summary.snapshots[label].expectedFiles = expectedFiles.length;
+  summary.snapshots[label].actualFiles = files.length;
   if (!expectedFiles.length || JSON.stringify(actualFiles) !== JSON.stringify(expectedFiles))
     throw new Error('Inventario de archivos analizados incompleto');
   const gate = await api('/api/qualitygates/project_status', { projectKey: project });
   save(folder + '/' + label + '-inventory.json', { revision, task, issues, hotspots, files, gate });
   summary.snapshots[label] = {
     revision,
+    fixture: label === 'negative',
+    status: 'analyzed',
     analysisId: task.task.analysisId,
     issues: issues.length,
     hotspots: hotspots.length,
@@ -121,7 +133,7 @@ try {
       try {
         const state = await api('/api/system/status');
         summary.lastStatus = state.status;
-        if (state.status === 'DB_MIGRATION_NEEDED' || state.status === 'DB_MIGRATION_RUNNING')
+        if (state.status === 'DB_MIGRATION_NEEDED')
           throw new Error('Sonar requiere migración de su base temporal: ' + state.status);
         return state;
       } catch (error) {
@@ -149,11 +161,23 @@ try {
   });
   const base = await analyze('base', tokenFile);
   const head = await analyze('head', tokenFile);
-  const additions = introduced(base, head);
-  summary.introduced = additions;
-  summary.negativeComparator = introduced(base, [...base, 'fixture-negative']).length === 1;
-  if (!summary.negativeComparator || additions.length)
-    throw new Error('Sonar: incidencias nuevas bloqueantes');
+  summary.introduced = introduced(base, head);
+  assertNoNew(base, head);
+  const negativeFolder = path.join(folder, 'negative');
+  summary.revisions.negative = snapshot(summary.revisions.head, negativeFolder);
+  writeFileSync(
+    path.join(negativeFolder, 'apps/api/src/sonar-negative-fixture.ts'),
+    'export function sonarNegativeFixture(): void {}\n',
+  );
+  const negative = await analyze('negative', tokenFile);
+  if (!summary.negativeFixtureDetected) throw new Error('Sonar no detectó fixture negativa S1186');
+  try {
+    assertNoNew(head, negative);
+  } catch (error) {
+    if (error.message !== 'Sonar: incidencias nuevas bloqueantes') throw error;
+    summary.negativeEndToEnd = true;
+  }
+  if (!summary.negativeEndToEnd) throw new Error('Sonar no bloqueó fixture negativa');
   summary.status = 'success';
 } catch (error) {
   summary.error = error.message;

@@ -2,7 +2,7 @@ import { it, expect, vi } from 'vitest';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { fingerprint, introduced } from '../../../../scripts/sonar-policy.mjs';
+import { fingerprint, introduced, assertNoNew } from '../../../../scripts/sonar-policy.mjs';
 import { allPages, sonarApi, waitSonar } from '../../../../scripts/sonar-api.mjs';
 it('Sonar | inventario igual no introduce incidencias', () => {
   expect(introduced(['regla|archivo|texto'], ['regla|archivo|texto'])).toEqual([]);
@@ -69,4 +69,9 @@ it('Sonar | error HTTP y espera agotada bloquean', async () => {
     mock.mockRestore();
     vi.useRealTimers();
   }
+});
+
+it('Sonar | el bloqueo rechaza nuevas incidencias sin compensarlas con bajas', () => {
+  expect(() => assertNoNew(['old'], ['new'])).toThrow('incidencias nuevas');
+  expect(() => assertNoNew(['old'], ['old'])).not.toThrow();
 });
