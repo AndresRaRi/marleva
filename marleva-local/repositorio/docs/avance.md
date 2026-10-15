@@ -57,3 +57,5 @@ Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó.
 | 3. Sonar, rendimiento, nightly, CD desactivado y dependabot | Comparación temporal Sonar aprobada, sin SonarCloud/gasto | No ejecutada |
 
 Avisos de longitud de funciones permanecen visibles como pidió el usuario; complejidad y anidación son errores. Una ejecución local no acredita CI verde. Fases 2–3 no se activan hasta cerrar fase previa. El [ADR002](adr/002-pipeline-ci.md) conserva versiones, fuentes, licencias y límites.
+
+Verificación posterior sobre 69672a5, run [38764322440](https://github.com/AndresRaRi/marleva/actions/runs/38764322440): calidad, arquitectura/contratos, unitarias, CodeQL, integración, contrato y web pasaron. La preparación Linux quedó corregida. Seguridad falla por OSV y revisión de dependencias por el gráfico deshabilitado; build permanece omitido por esas dependencias. Evidencia: tests/results/ci-phase2-verified.json. Fase 2 bloqueada, sin negativa deliberada/reversión posteriores ni fase 3; no se pide repetir controles verdes sin cambios relevantes. Borrador PR #2 abierto, sin fusión ni despliegue.
