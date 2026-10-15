@@ -105,7 +105,11 @@ try {
   await waitSonar(
     async () => {
       try {
-        return await api('/api/system/status');
+        const state = await api('/api/system/status');
+        summary.lastStatus = state.status;
+        if (state.status === 'DB_MIGRATION_NEEDED' || state.status === 'DB_MIGRATION_RUNNING')
+          throw new Error('Sonar requiere migración de su base temporal: ' + state.status);
+        return state;
       } catch (error) {
         if (error.cause?.code === 'ECONNREFUSED' || error.message.includes('HTTP 503')) return {};
         throw error;
@@ -137,12 +141,32 @@ try {
   if (!summary.negativeComparator || additions.length)
     throw new Error('Sonar: incidencias nuevas bloqueantes');
   summary.status = 'success';
+} catch (error) {
+  summary.error = error.message;
+  throw error;
 } finally {
   try {
     if (started) {
       try {
         const log = command('docker', ['logs', name], { maxBuffer: 16 * 1024 * 1024 });
         writeFileSync(folder + '/server.log', log, { mode: 0o600 });
+        summary.serverDiagnostics = log
+          .split('\n')
+          .filter((line) =>
+            /ERROR|Exception|Caused by|SonarQube|operational|Process|migration|Database|stopped/.test(
+              line,
+            ),
+          )
+          .slice(-20)
+          .map((line) => line.replace(/[A-Za-z0-9_-]{20,}/g, '[redactado]'));
+        const state = JSON.parse(
+          command('docker', ['inspect', '--format', '{{json .State}}', name]),
+        );
+        summary.serverState = {
+          status: state.Status,
+          exitCode: state.ExitCode,
+          oomKilled: state.OOMKilled,
+        };
         summary.resources = command('docker', [
           'stats',
           '--no-stream',

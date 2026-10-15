@@ -35,7 +35,7 @@ export function snapshot(sha, folder) {
       'apps/client/tsconfig.json',
       'packages/contracts/generated.ts',
     ],
-    { encoding: 'buffer' },
+    { encoding: 'buffer', cwd: command('git', ['rev-parse', '--show-toplevel']).trim() },
   );
   command('tar', ['-xf', '-', '-C', folder], { input: archive });
   return resolved;

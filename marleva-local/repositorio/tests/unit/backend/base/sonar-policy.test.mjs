@@ -1,9 +1,9 @@
-import { it, expect } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fingerprint, introduced } from '../../../../scripts/sonar-policy.mjs';
-import { allPages } from '../../../../scripts/sonar-api.mjs';
+import { allPages, sonarApi, waitSonar } from '../../../../scripts/sonar-api.mjs';
 it('Sonar | inventario igual no introduce incidencias', () => {
   expect(introduced(['regla|archivo|texto'], ['regla|archivo|texto'])).toEqual([]);
 });
@@ -49,4 +49,23 @@ it('Sonar | desplazar líneas conserva incidencia, cambiar contenido introduce o
   expect(() =>
     fingerprint({ ...issue, component: 'other:apps/example.ts' }, root, 'project'),
   ).toThrow();
+});
+
+it('Sonar | error HTTP y espera agotada bloquean', async () => {
+  const mock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: false, status: 503 });
+  try {
+    await expect(sonarApi('http://fixture', () => 'private')('/api/test')).rejects.toThrow(
+      'HTTP 503',
+    );
+    expect(mock.mock.calls[0][1].headers.Authorization).toBe('private');
+    await expect(
+      waitSonar(
+        async () => ({}),
+        () => false,
+        0,
+      ),
+    ).rejects.toThrow('tiempo');
+  } finally {
+    mock.mockRestore();
+  }
 });
