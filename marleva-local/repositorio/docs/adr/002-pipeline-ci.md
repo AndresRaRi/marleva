@@ -8,7 +8,7 @@ Cada etapa llama scripts pnpm locales. Setup compartido toma Node de .node-versi
 
 | Función | Elección / versión / licencia | Motivo |
 |---|---|---|
-| Reglas y complejidad | ESLint 10.12.0 + sonarjs 1.0.4 LGPL-3.0-only + @eslint/compat 2.1.1 Apache-2.0 | Dos reglas conservadas; compatibilidad adaptada comprobada. Corrige metadato de licencia engañoso de 4.2.2; detalle al final |
+| Reglas y complejidad | ESLint 10.12.0 + sonarjs 1.0.4 LGPL-3.0-only + @eslint/compat 2.1.1 Apache-2.0 | Dos reglas conservadas; compatibilidad adaptada comprobada; detalle en acta de lint |
 | Código y dependencias sin uso | knip 6.41.0, ISC | Reconoce workspaces; Node 20.19 o 22.12+ |
 | Capas y ciclos | dependency-cruiser 18.6.0, MIT | Relaciones TS con imports de tipos; Node 22/24/26+ |
 | Duplicación | jscpd 5.4.1, MIT | Ejecutable ARM64 comprobado; soporta TypeScript/TSX; evita un segundo detector |
@@ -132,3 +132,47 @@ Cuarto ensayo 38798902117 sobre 7a6b8134c49e7c4f976b157101273b2075152bd4: metada
 Corrección de elegibilidad, 15-10-2026: inspección del JAR JavaScript 14.0.0.46108 de la imagen fijada confirma SSALv1 y restricción de interacción con IA. SHA256 del JAR: 151150e019176d6e1bcda27174b1cd33a9c17bc7611c8909f2946ff06518c2a4. La licencia incluida en eslint-plugin-sonarjs 4.2.2 también es SSAL, pese al metadato LGPL. No acreditar elegibilidad bajo A0; bloquear ejecución Sonar antes de iniciar recursos. El quinto ensayo 38799757614 analizó base/cambio (62 archivos cada uno), pero la negativa no produjo S1186: control completo no probado.
 
 Diseño previo de corrección del lint: fijar eslint-plugin-sonarjs 1.0.4, cuyo tarball y licencia LGPL-3.0-only se verificaron, sin dependencias runtime; envolverlo con fixupPluginRules de @eslint/compat 2.1.1 (Apache-2.0, ESLint10 declarado). Conservar las dos reglas y sus severidades, TypeScript6 y ESLint10. El plugin declara peers8/9; cualquier excepción será únicamente para este paquete y ESLint10.12.0, respaldada por prueba de compatibilidad local, sin atribuir soporte nativo oficial. Probar positivos y negativos TS/TSX mediante la CLI real y exigir la regla concreta y código de salida, además de calidad y regresión existentes. No sustituye Sonar ni completa fase3.
+
+
+Corrección de licencia del lint, 15-10-2026: el paquete 4.2.2 declara LGPL pero incluye SSAL. Se conserva ESLint10/TypeScript6 y ambas reglas, mediante distribución 1.0.4 LGPL y adaptador oficial Apache. Excepción peer exacta, licencias reales por hash y positivos/negativos TS/TSX obligatorios en quality. Diseño, fuentes, resultados y límites: [acta](../../tests/results/lint-compatibility.md). Este incremento sale de main 40c6583 y no incorpora el ensayo Sonar de PR #5 ni acredita fase3.
+
+## Revisión de elegibilidad y MCP oficial — MAR-CHAT-007, 15-10-2026
+
+Resultado: no hay una vía completa acreditada para ejecutar el flujo actual scanner → REST directo → comparador con este agente bajo A0. Se conserva `blocked-license-review`; no se ejecutaron servidor, scanner ni MCP durante esta revisión. No significa que Sonar prohíba toda integración con IA: el MCP oficial tiene permiso explícito para su uso documentado. La insuficiencia afecta a este flujo concreto; no se presenta una imposibilidad universal ni un dictamen jurídico.
+
+Se incorporó main `6fed44f9af0800c2e4eee9d8d33ad546ded6da4a` en una copia propia desde `59dae3d`. PR #6 aporta la corrección del lint; no es una solución de Sonar. Los dos conflictos eran documentales: se conserva el acta de compatibilidad y la cronología de los ensayos Sonar. No se modifica aplicación, UC008, contratos ni las cinco migraciones. PR #5 permanece borrador y no está listo para merge.
+
+### Evidencia primaria y alcance
+
+Repositorio oficial MCP fijado para esta revisión en `976fa399d1da656bffc1d4bd23fc661a674e0b74`; lectura estática, sin instalarlo ni ejecutarlo. Referencias inmutables:
+
+- [README, License](https://github.com/SonarSource/sonarqube-mcp-server/blob/976fa399d1da656bffc1d4bd23fc661a674e0b74/README.md#license): Sonar declara permitido el uso del MCP conforme a su documentación bajo SSAL. No dice que cualquier llamada a scanner/REST fuera del MCP quede cubierta por añadir una consulta MCP después.
+- [README, configuración y herramientas](https://github.com/SonarSource/sonarqube-mcp-server/blob/976fa399d1da656bffc1d4bd23fc661a674e0b74/README.md#tools): Community Build ≥25.1 y token USER; búsquedas paginadas de incidencias/hotspots, medidas, reglas y gate. El token se generaría solo en el servidor local de ensayo, sin cuenta cloud. Desactivar telemetría requiere `TELEMETRY_DISABLED=true`; esto no demuestra aislamiento ni elegibilidad del scanner.
+- [AnalyzeCodeSnippetTool](https://github.com/SonarSource/sonarqube-mcp-server/blob/976fa399d1da656bffc1d4bd23fc661a674e0b74/src/main/java/org/sonarsource/sonarqube/mcp/tools/analysis/AnalyzeCodeSnippetTool.java): obtiene perfiles/reglas del proyecto y analiza un archivo temporal con el backend SonarLint; devuelve hallazgos de ese archivo. Está deprecado. No envía el snapshot completo al Compute Engine ni produce por ese acto un gate nativo del proyecto.
+- [AnalyzeFileListTool](https://github.com/SonarSource/sonarqube-mcp-server/blob/976fa399d1da656bffc1d4bd23fc661a674e0b74/src/main/java/org/sonarsource/sonarqube/mcp/tools/analysis/AnalyzeFileListTool.java): delega a una instancia de SonarQube for IDE en ejecución. No constituye un scanner de proyecto independiente para el runner actual.
+- [RunAdvancedCodeAnalysisTool](https://github.com/SonarSource/sonarqube-mcp-server/blob/976fa399d1da656bffc1d4bd23fc661a674e0b74/src/main/java/org/sonarsource/sonarqube/mcp/tools/analysis/RunAdvancedCodeAnalysisTool.java): envía un archivo con contexto de rama a A3S/Vortex; el README exige los permisos CAG/A3S. No se comprobó habilitación gratuita en Community ni se contrató ese producto.
+- [SSAL publicada](https://www.sonarsource.com/license/ssal/): hoy muestra v1.0.1, 20-11-2025, y mantiene la exclusión de IA externa en la definición de propósito no competitivo. No sustituye retroactivamente el texto v1.0 inspeccionado en el JAR fijado. Hash del LICENSE del JAR heredado: `b93b383060f0b26e95538455d8a92b0c9bc5bf61c3a1fd42583fc3d535330a03`.
+- [Acuerdo primario vigente](https://www.sonarsource.com/legal/primary-agreement/), definición 1.12: excluye expresamente las descargas gratuitas Community Build y for IDE. Los [términos de Server](https://www.sonarsource.com/legal/sonarqube/terms-and-conditions/) remiten al acuerdo/Order comercial. Corrección de interpretación: esa remisión del README no prueba que Community necesite comprar Server; tampoco concede por sí misma permiso para el flujo directo con el analizador SSAL.
+
+### Comparación contra el criterio aprobado
+
+| Vía | Qué respalda la evidencia | Falta para acreditar el flujo aprobado |
+|---|---|---|
+| Scanner fijado y REST directo actuales | Diseño/ensayos históricos; comparación sintética probada | Elegibilidad para interacción de este agente; diagnóstico de la negativa y prueba real completa |
+| MCP oficial: búsquedas y medidas | Uso documentado permitido; acceso a resultados ya existentes | No crea el análisis completo de ambos snapshots; no autoriza automáticamente el scanner externo |
+| MCP: análisis por archivo | Ruta oficial de revisión de archivos con reglas del proyecto | No equivalente probado a inventario de proyecto, hotspots completos, Compute Engine y gate nativo |
+| MCP con IDE o Vortex | Integraciones oficiales específicas | IDE/entitlements/contexto y compatibilidad no homologados para este CI; no justificar gasto ni instalar por ensayo ciego |
+
+La opción concreta sin ampliar permisos es mantener el gate bloqueante y el PR en borrador, conservando fases 1–2. Si el usuario prefiere cambiar el criterio, evaluar en un incremento separado el MCP oficial como revisión local de archivos, con versión/digest/licencias de sus analizadores, TypeScript 6.0.3, telemetría desactivada y pruebas positivas/negativas. Esa opción requiere aceptar expresamente su alcance distinto; no debe reemplazar silenciosamente la puerta de snapshots aprobada. La otra opción es acreditar una autorización aplicable al scanner/REST actual; no se contactó a Sonar ni se generó una solicitud externa.
+
+### Negativa y siguiente ensayo condicionado
+
+Run `38799757614` sobre `f817fdca5f7c0361b990d4571fb733380bf752dd` conserva base/cambio de 62 archivos, una incidencia, cero hotspots, gate nativo OK y sin advertencias según la evidencia heredada. La negativa agregó el archivo 63 y no produjo S1186; el control falló correctamente por no detectar el defecto. La causa sigue no establecida. Contar archivos indexados no demuestra que la regla concreta estuviera activa o que su código se analizara con el perfil esperado.
+
+Antes de otra ejecución, una vez resuelta la elegibilidad: guardar perfil TypeScript efectivo y reglas activas/parametrizadas para cada proyecto; contrastar la implementación y excepciones de la regla candidata; verificar medidas de líneas/código y texto exacto del fixture en el análisis; conservar log/tarea/warnings completos. Elegir entonces una negativa fundada en esa regla activa y exigir scanner → inventario completo → comparador → bloqueo. Restaurar sin fixture y obtener el resultado propio de ese HEAD. Gate nativo por analysisId separado del comparador. No cambiar S1186 a otra regla, activar reglas a ciegas ni aumentar intentos para fabricar un verde.
+
+### Lectura y límites de MAR-CHAT-007
+
+Registro 01 y lista de chats consultados antes de reservar 007; 006 continúa M1. Inventario de 414 archivos propios no ignorados del origen al consultar, con ruta/tamaño/SHA256 en `artifacts/sonar-review/inventory.json` de la copia aislada; el árbol compartido puede seguir cambiando por 006. Leídos completos usuario/README/AGENTS, 00–03 editables, protocolo/matriz, ADR001/002, acta005 y archivos Sonar/configuración/pruebas pertinentes. Lectura general parcial; inventariar o calcular hashes no acredita lectura. Dependencias, secretos, cachés, binarios y Git internos excluidos; herramientas y dependencias necesarias para hooks copiadas a esta copia, sin usar ni detener servicios ajenos. Los originales ausentes siguen según 01; no se revalidaron antecedentes comerciales/demográficos. `sources/`, AGENTS raíz y cambios locales ajenos permanecen fuera de la entrega.
+
+Revisión independiente estática de ADR002/01/README sin hallazgos accionables; contrastó README MCP y exclusión de Community del acuerdo primario, sin ejecutar Sonar ni revisar UC008. Validación de este incremento: documental, integración de main y hooks obligatorios; sin cambio de carga/negocio y sin nueva prueba de performance. Resultado de hooks, revisión y CI se informa por SHA real al entregar. Un rojo esperado por licencia es bloqueo, nunca Sonar aprobado.

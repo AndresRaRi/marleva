@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main comprobado en 40c65837f5498b4b91d342269ddf10490c90ab62; PR #1–#4 integrados por el usuario y CI propio del último merge correcto en 38789774598 | PR #3 documental integrado en 9a977dc2cb156a8bf8e645597eb6dde983efa738; PR #4 de consolidación integrado en 40c6583. Rama de fase 3: codex/feat-ci-sonar-temporal, desde main actualizado sin descartar cambios |
+| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main comprobado en 6fed44f9af0800c2e4eee9d8d33ad546ded6da4a tras PR #6; CI propio correcto en 38805750887 | PR #5 continúa borrador. MAR-CHAT-007 incorpora ese main en copia aislada desde 59dae3d y documenta la elegibilidad Sonar en ADR002; no fusionar ni atribuir el lint de PR #6 a Sonar |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -78,6 +78,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
+| MAR-CHAT-007 | Sonar y elegibilidad, 15-10-2026; chat separado de 006, copia aislada desde PR #5. Investigación en [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#revisión-de-elegibilidad-y-mcp-oficial--mar-chat-007-15-10-2026); scanner bloqueado y PR borrador |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
