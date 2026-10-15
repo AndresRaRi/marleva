@@ -12,6 +12,7 @@ import {
 } from 'node:fs';
 import path from 'node:path';
 import { command, save, sourceFiles } from './sonar-runtime.mjs';
+import { cloudScope } from './sonar-cloud-scope.mjs';
 
 export function prepareCloudCopy(root, folder, sha) {
   command('git', ['worktree', 'add', '--detach', folder, sha], { cwd: root });
@@ -115,14 +116,18 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       .map((line) => line.split('=')),
   );
   if (!task.ceTaskId) throw new Error('Scanner sin tarea verificable');
+  const files = sourceFiles(folder);
   return {
     exitCode: result.status,
     taskId: task.ceTaskId,
-    sourceFiles: sourceFiles(folder),
+    sourceFiles: files,
+    ...cloudScope(log, files.length),
     diagnostics: log
       .split('\n')
       .filter((line) =>
-        /WARN|ERROR|files? (?:to be analyzed|analyzed)|Quality profile|QUALITY GATE/.test(line),
+        /WARN|ERROR|files? (?:indexed|to be analyzed|analyzed)|cache for|Quality profile|QUALITY GATE/.test(
+          line,
+        ),
       ),
   };
 }
@@ -140,7 +145,13 @@ export async function completedAnalysis(token, taskId) {
   );
   if (!response.ok) throw new Error('No se pudo comprobar tarea Cloud');
   const { task } = await response.json();
-  if (task?.status !== 'SUCCESS' || !task.analysisId || (task.warnings?.length ?? 0) > 0)
+  if (
+    task?.status !== 'SUCCESS' ||
+    !task.analysisId ||
+    task.warningCount !== 0 ||
+    !Array.isArray(task.warnings) ||
+    task.warnings.length > 0
+  )
     throw new Error('Tarea Cloud incompleta o con advertencias');
   return task;
 }

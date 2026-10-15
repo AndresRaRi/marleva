@@ -84,11 +84,14 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     folder,
     path.join(output, label + '-result'),
   );
-  const files = Number(
-    inventory.measures.measures.find((measure) => measure.metric === 'files')?.value,
-  );
+  const measuredFiles = inventory.measures.measures.find(
+    (measure) => measure.metric === 'files',
+  )?.value;
   await verifyCloudRevision(token, manifest.project, pullRequest, task.id);
-  if (files !== scan.sourceFiles.length || !Number.isFinite(files))
+  if (
+    (measuredFiles === undefined && !pullRequest) ||
+    (measuredFiles !== undefined && Number(measuredFiles) !== scan.sourceFiles.length)
+  )
     throw new Error('Inventario de archivos no coincide con análisis Cloud');
   summary.analyses[label] = {
     revision,
@@ -96,6 +99,8 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     ...scan,
     analysisId: task.analysisId,
     gate: inventory.gate.status,
+    nativeConditions: inventory.gate.conditions,
+    warnings: task.warningCount,
     issues: inventory.issues.length,
     hotspots: inventory.hotspots.length,
   };
@@ -124,6 +129,7 @@ async function proveNegative(baseline) {
   }
   if (!blocked) throw new Error('El comparador no bloqueó el defecto real');
   summary.negativeBlocked = true;
+  summary.negativeRule = manifest.negativeRule;
 }
 async function restoreCorrected(baseline) {
   const corrected = await analyze('corrected', head, prContext, pr);
