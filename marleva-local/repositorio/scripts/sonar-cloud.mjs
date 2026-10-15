@@ -1,3 +1,4 @@
+import { verifyCloudFileMeasure } from './sonar-cloud-scope.mjs';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { cloudMcp } from './sonar-cloud-mcp.mjs';
@@ -93,15 +94,12 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     (measure) => measure.metric === 'files',
   )?.value;
   await verifyCloudRevision(token, manifest.project, pullRequest, task.id);
-  if (
-    (measuredFiles === undefined && !pullRequest) ||
-    (measuredFiles !== undefined && Number(measuredFiles) !== scan.sourceFiles.length)
-  )
-    throw new Error('Inventario de archivos no coincide con análisis Cloud');
+  const fileMeasure = verifyCloudFileMeasure(measuredFiles, scan.sourceFiles.length, pullRequest);
   summary.analyses[label] = {
     revision,
     sourceSha: sha,
     ...scan,
+    ...fileMeasure,
     analysisId: task.analysisId,
     gate: inventory.gate.status,
     nativeConditions: inventory.gate.conditions,

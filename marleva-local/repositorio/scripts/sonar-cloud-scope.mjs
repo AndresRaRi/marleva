@@ -20,3 +20,17 @@ export function cloudScope(log, expected) {
     throw new Error('Inventario de lenguaje incompleto');
   return result;
 }
+
+export function verifyCloudFileMeasure(value, expected, pullRequest) {
+  if (value === undefined && pullRequest) return { measureScope: 'pull_request_delta' };
+  const files = Number(value);
+  if (
+    value === undefined ||
+    !Number.isInteger(files) ||
+    files < 0 ||
+    files > expected ||
+    (!pullRequest && files !== expected)
+  )
+    throw new Error('Inventario de archivos no coincide con análisis Cloud');
+  return { measureScope: pullRequest ? 'pull_request_delta' : 'main_total', measuredFiles: files };
+}
