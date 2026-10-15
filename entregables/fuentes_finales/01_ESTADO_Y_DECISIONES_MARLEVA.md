@@ -51,7 +51,7 @@ El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la 
 
 | Área | Estado comprobado | Pendiente / siguiente acción |
 |---|---|---|
-| Git | Git único en raíz; origin=https://github.com/AndresRaRi/marleva.git. main comprobado en 6fed44f9af0800c2e4eee9d8d33ad546ded6da4a tras PR #6; CI propio correcto en 38805750887 | PR #5 continúa borrador. MAR-CHAT-007 incorpora ese main en copia aislada desde 59dae3d y documenta la elegibilidad Sonar en ADR002; no fusionar ni atribuir el lint de PR #6 a Sonar |
+| Git | main remoto db2ec7d incorpora PR #7/UC008; PR #3/#4/#6 previamente integrados. CI propio de 6fed44f correcto en 38805750887 | PR #5 sigue borrador. Copia aislada Sonar incorpora main db2ec7d sin modificar UC008; Cloud Free privado configurado y prueba remota pendiente. No fusionar ni atribuir el lint de PR #6 a Sonar |
 | Entorno | Node 24.21.0, pnpm 12.11.2, PostgreSQL 17 y Supabase local; datos ficticios, HTTPS y correo capturado | Completar instalación limpia general; stack CI separado preparado y probado. Conservar volúmenes y secretos ignorados |
 | Arquitectura | Avisos y archivos separados en casos/puertos/repositorios/adaptadores; cliente/API separados | Separar el resto de AccountService y cliente con responsabilidades reales, sin refactor dependiente de Google |
 | Datos/contrato | Modelo físico: 13 tablas de negocio y cinco migraciones aplicadas. Objetivo: 13 tablas con diferencias identificadas. Contrato canónico: 24 operaciones, siete de recuperación | Roles/recuperación aplicados y probados localmente. No editar migraciones ni intercambiar modelo físico/objetivo |
@@ -113,6 +113,8 @@ Revisión independiente estática: un hallazgo de aislamiento PG/Auth corregido 
 
 Cambios preexistentes en AGENTS raíz y sources/01–03 preservados y fuera de commits propios. Cinco migraciones se comparan por hash, sin alterar ni aplicar DDL. A0/SDK, C01–C26 y Google pendiente se conservan. Fuente 01 es la entrega de estado para reemplazar en Fuentes mediante acceso autorizado; guardado/commit/push no realizan esa carga.
 
+Continuación autorizada, 15-10-2026: el usuario separó Sonar del desarrollo M1. Chat técnico Sonar creado y activo con ID01a1415c-a52f-7fd0-b68d-1a53a5ed7967, copia propia obligatoria, PR #5 draft/bloqueado; no acredita solución. Este MAR-CHAT-006 desarrolla UC008 en codex/fix-m1-avisos-reinicio desde main6fed44f, corrigiendo carga de avisos al reabrir sesión y cancelación de respuestas obsoletas. Diseño/pruebas y límites en matriz/SEQ008; 179 unitarias locales pasan. Paginación cliente, propuesta visual y aceptación/plataformas siguen pendientes. PR #6 fue corrección del lint, no solución Sonar.
+
 ## 7. Prompt de continuidad
 
 ```text
@@ -124,13 +126,13 @@ inventariar y leer nuevos/modificados, declarar lectura parcial y ausentes.
 Conservar C01–C26, A0/SDK Android, Google pendiente, sources/AGENTS raíz readonly,
 cinco migraciones inmutables y todo trabajo preexistente. No reset/stash/borrado.
 Comprobar rama/HEAD/upstream/origin; pull --ff-only sin descartar cambios.
-main 40c65837f5498b4b91d342269ddf10490c90ab62 tiene CI propio verde 38789774598.
-PR #3 y #4 integrados por el usuario; consolidación previa completada.
-Rama codex/feat-ci-sonar-temporal: primer incremento acotado de fase 3 ADR002.
-Comprobar HEAD remoto, pruebas y revisión de la corrección LGPL del lint;
-Sonar bloqueado por elegibilidad SSAL: no ejecutar hasta resolverla;
-no acreditar análisis por diseño ni equivalencia del comparador con gate nativo.
-Continuar las brechas autorizadas por dependencia, sin nuevos permisos rutinarios:
+main6fed44f9af0800c2e4eee9d8d33ad546ded6da4a tiene CI propio verde38805750887.
+PR #3/#4/#6 integrados por el usuario; consolidación previa terminada.
+Este chat desarrolla UC008 en codex/fix-m1-avisos-reinicio: avisos al reabrir sesión,
+estados de consulta/error/vacío y cancelación para evitar401 tardío de otra sesión.
+179 unitarias locales y browser con API controlada; comprobar CI del HEAD real.
+Sonar/PR #5 se trabaja en chat separado01a1415c-a52f-7fd0-b68d-1a53a5ed7967;
+no duplicar sus cambios ni atribuirle éxito. Seguir después con
 ramas M1 por matriz: avisos cliente, retorno seguro y B12 esencial integrado;
 propuesta visual revisada antes de pantallas; plataformas/accesibilidad pendientes.
 UC001 permanece abierto; separar diseñado/implementado/probado/aceptado.

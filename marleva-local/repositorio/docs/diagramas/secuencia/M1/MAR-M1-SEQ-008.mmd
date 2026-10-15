@@ -19,6 +19,7 @@ sequenceDiagram
     else Entregado
      API->>DB: S060 marcar envío
     end
+    Note over UI,API: S065 al recuperar cuenta o actualizarla: consultar; no mostrar vacío antes de respuesta. Descartar respuesta de cuenta desmontada
     UI->>API: S070 consultar avisos propios
     API->>API: S075 sesión vigente y query estricta; cursor v1 de misma cuenta
     API->>DB: S080 leer limit+1 propios por createdAt DESC/id DESC; frontera UTC exacta con microsegundos

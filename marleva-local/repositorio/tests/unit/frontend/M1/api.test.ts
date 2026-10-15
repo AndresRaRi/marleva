@@ -92,3 +92,25 @@ it('MAR-M1-UT-FE-006 | SEQ003:S010 | recurso denegado403 no elimina sesión vál
   await expect(api('/v1/operator/access')).rejects.toMatchObject({ status: 403, code: 'PERMISO' });
   expect(mocks.remove).not.toHaveBeenCalled();
 });
+it('MAR-M1-UT-FE-108-W | respuesta 401 cancelada no borra la nueva credencial móvil', async () => {
+  mocks.platform.OS = 'android';
+  mocks.get.mockResolvedValue('fixture-session-a');
+  let finish: (value: unknown) => void = () => {};
+  const payload = new Promise((resolve) => {
+    finish = resolve;
+  });
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({ ok: false, status: 401, json: () => payload }),
+  );
+  const { api } = await import('../../../../apps/client/src/api');
+  const controller = new AbortController();
+  const result = api('/v1/notifications', 'GET', undefined, controller.signal);
+  const rejected = expect(result).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce());
+  controller.abort();
+  mocks.get.mockResolvedValue('fixture-session-b');
+  finish({ codigo: 'SESION', mensaje: 'Sesión anterior vencida' });
+  await rejected;
+  expect(mocks.remove).not.toHaveBeenCalled();
+});
