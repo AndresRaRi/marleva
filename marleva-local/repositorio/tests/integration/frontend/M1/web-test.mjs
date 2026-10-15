@@ -4,6 +4,7 @@ import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { writeFile, mkdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import { verifyResumedNotices } from './resumed-notices.mjs';
 const browser = await chromium.launch({
   executablePath:
     process.env.CHROME_PATH ??
@@ -96,6 +97,17 @@ try {
   await audit('cuenta');
   await page.getByLabel('Nuevo correo', { exact: true }).scrollIntoViewIfNeeded();
   await page.screenshot({ path: captures + '/05-cambio-correo.png', fullPage: true });
+  const restored = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === '/v1/notifications' && response.status() === 200,
+  );
+  await page.reload({ waitUntil: 'networkidle' });
+  const restoredNotices = await (await restored).json();
+  await page.getByText('Tu cuenta', { exact: true }).waitFor();
+  for (const item of restoredNotices.items)
+    await page.getByText(item.text, { exact: true }).first().waitFor();
+  if (restoredNotices.items.length === 0)
+    await page.getByText('Todavía no hay avisos.', { exact: true }).waitFor();
   await page.getByRole('button', { name: 'Cerrar esta sesión', exact: true }).click();
   await page.getByText('Accede a tu cuenta', { exact: true }).waitFor();
   assert.equal(errors.length, 0);
@@ -103,6 +115,10 @@ try {
     path: captures + '/06-sesion-cerrada.png',
     fullPage: true,
   });
+  const resumedNotices = await verifyResumedNotices(
+    browser,
+    process.env.APP_ORIGIN ?? 'https://localhost:8443',
+  );
   await writeFile(
     'tests/results/web-test.json',
     JSON.stringify(
@@ -118,6 +134,8 @@ try {
           noLocalStorage: true,
           keyboardFocus: true,
           logout: true,
+          realSessionReloadNotices: true,
+          resumedNotices,
         },
         pageErrors: errors,
       },

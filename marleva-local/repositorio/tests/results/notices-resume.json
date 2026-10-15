@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-15",
+  "timezone": "America/Merida",
+  "scope": "UC008/SEQ008:S065-S097; Chrome local construido, API controlada; no PG/Auth en esta prueba",
+  "browser": {
+    "fixtureBrowser": true,
+    "initialPending": true,
+    "reloadRestoresNotices": true,
+    "unavailableNotEmpty": true,
+    "retry": true,
+    "expiredHidesNotices": true,
+    "lateResponseDiscarded": true,
+    "requests": 7,
+    "firstLoadMs": 359
+  },
+  "unitTests": 179,
+  "quality": "0 errores; 19 advertencias anteriores",
+  "security": "PASS; OSV original conserva avisos corregidos con evidencia",
+  "limits": [
+    "CI propio pendiente",
+    "No prueba nativa/Safari/física",
+    "Paginación cliente permanece pendiente",
+    "Sin cambios de API, base, migraciones o diseño visual"
+  ]
+}

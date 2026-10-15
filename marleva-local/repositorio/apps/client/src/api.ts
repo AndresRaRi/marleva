@@ -7,14 +7,28 @@ export async function api<Result = unknown>(
   path: string,
   method = 'GET',
   body?: unknown,
+  signal?: AbortSignal,
 ): Promise<Result> {
-  const headers = await requestHeaders(path, method);
-  const response = await request(path, method, headers, body);
-  const result = await readPayload(response);
-  await checkResponse(response, result, path);
-  await saveSession(result, path);
-  return result as Result;
+  const controller = new AbortController();
+  const cancel = () => controller.abort();
+  signal?.addEventListener('abort', cancel, { once: true });
+  if (signal?.aborted) cancel();
+  const timeout = setTimeout(cancel, 12000);
+  try {
+    const headers = await requestHeaders(path, method);
+    const response = await request(path, method, headers, body, controller.signal);
+    const result = await readPayload(response);
+    if (controller.signal.aborted)
+      throw Object.assign(new Error('Consulta cancelada'), { name: 'AbortError' });
+    await checkResponse(response, result, path);
+    await saveSession(result, path);
+    return result as Result;
+  } finally {
+    clearTimeout(timeout);
+    signal?.removeEventListener('abort', cancel);
+  }
 }
+
 async function requestHeaders(path: string, method: string) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (Platform.OS !== 'web') {
@@ -35,6 +49,7 @@ async function request(
   method: string,
   headers: Record<string, string>,
   body: unknown,
+  signal?: AbortSignal,
 ) {
   try {
     return await fetch(base + path, {
@@ -42,7 +57,7 @@ async function request(
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
       credentials: Platform.OS === 'web' ? 'include' : 'omit',
-      signal: AbortSignal.timeout(12000),
+      signal,
     });
   } catch {
     throw new Error('No hay conexión con Marleva. Conservamos este paso; intenta de nuevo.');
