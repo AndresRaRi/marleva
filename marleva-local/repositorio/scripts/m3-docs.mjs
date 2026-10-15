@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 const model = await readFile('docs/modelado-datos/dbml/MAR-M3-DATA-001.dbml', 'utf8');
 const checks = await readFile('docs/modelado-datos/dbml/MAR-M3-constraints.sql', 'utf8');
 const statistics = await readFile('docs/modelado-datos/dbml/MAR-M3-search-statistics.sql', 'utf8');
+const photos = await readFile('docs/modelado-datos/dbml/MAR-M3-photo-integrity.sql', 'utf8');
 const ddl =
   '-- Generado desde MAR-M3-DATA-001.dbml + restricciones complementarias. Solo M3 aislado.\n' +
   exporter
@@ -14,7 +15,8 @@ const ddl =
     .replace('CREATE SCHEMA "m3";', 'CREATE SCHEMA IF NOT EXISTS "m3";')
     .replaceAll(' DEFERRABLE INITIALLY IMMEDIATE', ' NOT DEFERRABLE') +
   checks +
-  statistics;
+  statistics +
+  photos;
 await mkdir('docs/modelado-datos/ddl', { recursive: true });
 await writeFile('docs/modelado-datos/ddl/MAR-M3-DATA-001.sql', ddl);
 const spec = YAML.parse(await readFile('docs/apis/M3/openapi.yaml', 'utf8'));

@@ -6,7 +6,7 @@ sequenceDiagram
  U->>A: S020 Validar filtro y cursor
  A->>D: S040 Consultar elegibilidad y versión pública con frontera
  A->>D: S060 Proyectar solo campos públicos
- A-->>U: S080 UI001 con encabezado principal accesible; Devolver items y cursor o error recuperable
+ A-->>U: S080 UI001 con encabezado principal accesible y fotos listas o fallback; Devolver items y cursor o error recuperable
  alt Entrada/permiso/estado inválido
  A-->>U: S090 Error estable sin efectos parciales
  else Dependencia caída

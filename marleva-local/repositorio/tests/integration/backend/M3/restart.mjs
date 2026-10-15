@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
-import { writeFile } from 'node:fs/promises';
+import { writeFile, readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 if (process.env.MARLEVA_M3_CHECK !== '1') throw Error('Solo destino M3 propio.');
 function docker(args) {
@@ -19,6 +19,14 @@ const url = 'http://127.0.0.1:3103/v1/catalog/offers?limit=1';
 const before = await fetch(url);
 assert.equal(before.status, 200);
 const original = await before.json();
+const example = JSON.parse(await readFile('tests/results/m3-photo-example.json', 'utf8'));
+assert.match(
+  example.url,
+  /^http:\/\/127\.0\.0\.1:3103\/v1\/catalog\/photos\/[a-f0-9-]{36}\/detail$/u,
+);
+const photoBefore = await fetch(example.url);
+assert.equal(photoBefore.status, 200);
+const photoBytes = Buffer.from(await photoBefore.arrayBuffer());
 const report = {
   date: new Date().toISOString(),
   case: 'MAR-M3-IT-BE-010-RESTART',
@@ -33,6 +41,8 @@ try {
   assert.equal(body.codigo, 'UNAVAILABLE');
   assert.equal('items' in body, false);
   report.outage_status = outage.status;
+  assert.equal((await fetch(example.url)).status, 503);
+  report.photo_outage_status = 503;
 } finally {
   docker(['start', 'marleva-m3-008']);
 }
@@ -42,6 +52,10 @@ for (let i = 0; i < 60; i++) {
     if (response.status === 200) {
       const current = await response.json();
       assert.equal(current.items[0].id, original.items[0].id);
+      const photoAfter = await fetch(example.url);
+      assert.equal(photoAfter.status, 200);
+      assert.equal(Buffer.from(await photoAfter.arrayBuffer()).equals(photoBytes), true);
+      report.photo_bytes_preserved = true;
       report.passed = true;
       break;
     }

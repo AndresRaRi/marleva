@@ -18,7 +18,7 @@ const report = {
   },
   thresholds: { initial_p95_ms: 3000, search_p95_ms: 1000, detail_p95_ms: 1000 },
   limits:
-    'Objetivos locales previos al ensayo, sin throttling. Contexto limpio por muestra. No INP de campo, Safari, Android/iOS, capacidad comercial o presupuesto productivo. Memoria JS no equivale a memoria total del navegador.',
+    'Objetivos locales previos al ensayo, sin throttling. Contexto limpio por muestra. Carga/detalle incluyen primera imagen decodificada. No INP de campo, Safari, Android/iOS, capacidad comercial o presupuesto productivo. Memoria JS no equivale a memoria total del navegador.',
   samples: [],
 };
 try {
@@ -32,6 +32,11 @@ try {
       await page.goto(report.environment.origin, { waitUntil: 'domcontentloaded' });
       const offers = page.getByRole('button', { name: 'Ver oferta', exact: true });
       await offers.first().waitFor();
+      await page.waitForFunction(() =>
+        [...document.images].some(
+          (img) => img.src.includes('/v1/catalog/photos/') && img.complete && img.naturalWidth > 0,
+        ),
+      );
       const initial_ms = performance.now() - start;
       await page.getByRole('textbox', { name: 'Buscar productos o servicios' }).fill('Pan');
       const response = page.waitForResponse(
@@ -45,6 +50,11 @@ try {
       start = performance.now();
       await offers.first().click();
       await page.getByRole('button', { name: /Ver oferente:/ }).waitFor();
+      await page.waitForFunction(() =>
+        [...document.images].some(
+          (img) => img.src.includes('/detail') && img.complete && img.naturalWidth > 0,
+        ),
+      );
       const detail_ms = performance.now() - start;
       const resources = await page.evaluate(() => ({
         scripts: performance

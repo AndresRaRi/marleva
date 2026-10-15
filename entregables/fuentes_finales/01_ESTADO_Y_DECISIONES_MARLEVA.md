@@ -150,7 +150,7 @@ no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierr
 
 Copia: `/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a`. Rama `codex/feat-m3-catalogo-008`, base `6fed44f`. PostgreSQL propio en 55432, API en 3103 y web en 8103. No se modifican M1, contratos compartidos ni migraciones aplicadas. Commit y push de la rama aislada autorizados. Sin integración a main, publicación, gasto, contactos o datos reales.
 
-Incremento: catálogo público Nest/Expo/PostgreSQL con búsqueda, filtros, cursor, detalle y perfil. Casos internos de versiones, revisión y pausa usan actores ficticios; no sustituyen identidad, elegibilidad o revisión reales. Fotos, gestión autenticada, integración autorizada M1/M2/M8, plataformas nativas y aceptación siguen pendientes. M3 permanece abierto.
+Incremento: catálogo público Nest/Expo/PostgreSQL con búsqueda, filtros, cursor, detalle y perfil. Casos internos de versiones, revisión y pausa usan actores ficticios; no sustituyen identidad, elegibilidad o revisión reales. Procesamiento interno y entrega pública de derivados de fotos implementados; visualización web probada; carga autenticada, gestión e integración autorizada M1/M2/M8, plataformas nativas y aceptación siguen pendientes. M3 permanece abierto.
 
 Documentación, resultados y límites: [instructivo](../../marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md), [matriz](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M3.md) y [avance](../../marleva-local/repositorio/docs/avance.md). Se conservan fallos y correcciones. Diseñado, implementado, probado y aceptado son estados distintos.
 
@@ -169,7 +169,8 @@ Respetar C01–C26, límites C25, autorización local y revisión visual ya apro
 No tocar M1, M2/M8, contratos compartidos, migraciones aplicadas, main o cambios ajenos.
 Usar recursos propios M3: PG55432, API3103, web8103; herramientas existentes en lectura.
 Consultar instructivo, matriz, actas y avance para estado real. M3 sigue incompleto.
-Próximo: cerrar brechas por matriz; diseñar fotos seguras y gestión antes de programarlas.
+Próximo: cerrar brechas por matriz; procesamiento/entrega de fotos ya implementados.
+Completar carga autenticada cuando correspondan revisión e integración autorizada.
 Integrar identidad/elegibilidad/revisión solo cuando esté disponible y autorizada esa integración.
 No acreditar Auth/MFA reales con fixtures. Mantener pruebas propias y hooks obligatorios.
 Conservar migraciones aplicadas; corregir mediante nuevas migraciones. Releer finales.
@@ -184,3 +185,8 @@ Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
 El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
 
 Continuación comprobada 15-10-2026: rama M3 sincronizada, sin integración a main. Se amplían a 13 las comprobaciones web y se mide rendimiento del cliente con diez muestras. Preparación M3 sin conexión añadida al preparador de CI; integración propia separada del patrón general para no exigir su base en M1. Arquitectura: cero violaciones y cero duplicados en código propio; derivados en carpetas generated. Siete integraciones M3 pasaron. Resultados locales, no CI remoto. Pendientes funcionales y aceptación permanecen según matriz; no se solicita nueva confirmación rutinaria.
+
+Fotos UC009, 15-10-2026: cuarentena privada, decodificación y dos JPEG sin metadatos, integridad/versionado/permisos, API pública de derivados y migración003 propias. Visualización web probada; sin ruta de carga autenticada; no acredita M1/M2/M8. Conservar pruebas y fallos de rendimiento con diagnóstico en matriz. Sharp 0.35.5/libvips bundle1.3.4 fijados; fuentes compartidas no se han actualizado.
+
+
+M3, fotos 15-10-2026: visualización web y derivados probados; 44 unitarias, 16 integraciones, 17 comprobaciones web. Carga autenticada y plataformas pendientes; 3/9 implementados, 0/9 aceptados. Evidencias y límites vigentes en INSTRUCTIVO_M3.md. No se actualizó Fuentes compartidas.

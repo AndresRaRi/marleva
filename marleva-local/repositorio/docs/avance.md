@@ -72,13 +72,13 @@ Autorización explícita15-10-2026, independiente de base/M1. Nueve criterios de
 | Criterio | Salida | Implementado | Aceptado | Evidencia y límite |
 |---|---|---|---|---|
 | UC001 | Búsqueda/filtros/cursor y paginación con carga/vacío/error | Sí | No | Código M3 separado; PG/Nest ycliente universal/web; actas m3-*. Plataformas/aceptación pendientes |
-| UC002 | Detalle público elegible o retirada404 | Sí | No | API/cliente integrados; sin fotos procesadas, caso009 separado |
+| UC002 | Detalle público elegible o retirada404 | Sí | No | API/cliente integrados; fotos procesadas en backend; visualización web probada; caso009 completo separado |
 | UC003 | Perfil público y ofertas por oferente | Sí | No | Campos públicos explícitos; elegibilidad ficticia, integraciónM2 pendiente |
 | UC004 | Crear/editar ofertas propias autenticadas | No | No | Casos internos yPG probados; ruta privada/UI de gestión pendientes |
 | UC005 | Enviar versión propia revisable | No | No | Caso interno; identidad real/cliente pendientes |
 | UC006 | Revisión autorizada conMFA sin conflicto | No | No | Caso interno yconcurrenciaPG; M1/M8 reales no integrados |
 | UC007 | Pausar/disponibilidad por titular | No | No | Caso interno; recorrido autenticado pendiente |
 | UC008 | Elegibilidad vigente integrada conM2 | No | No | Proyección ficticia con ocultación comprobada; noM2 real |
-| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Diseño/tablas; sin pipeline ni fotos públicas |
+| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Procesamiento y entrega pública de derivados probados; carga autenticada pendiente; visualización web de fotos implementada y probada |
 
 Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptación=0/9=0%. M1 conserva su cálculo anterior; Proyecto sigue Por calcular. Las pruebas/archivos/commits no suman criterios. No integración a main ni operación real.

@@ -62,6 +62,8 @@ model Photo {
   bytes Int
   sha256 String
   metadata_removed Boolean @default(false)
+  source_sha256 String?
+  derivatives Json?
   @@unique([version_id, position])
   @@schema("m3")
 }

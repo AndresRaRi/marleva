@@ -6,7 +6,7 @@ sequenceDiagram
  U->>A: S020 Validar UUID
  A->>D: S040 Revalidar elegibilidad y versión pública
  A->>D: S060 Proyectar detalle público o404
- A-->>U: S080 UI002 con encabezado principal accesible; Descartar detalle anterior ante retirada
+ A-->>U: S080 UI002 con encabezado principal accesible y fotos listas o fallback; Descartar detalle anterior ante retirada
  alt Entrada/permiso/estado inválido
  A-->>U: S090 Error estable sin efectos parciales
  else Dependencia caída

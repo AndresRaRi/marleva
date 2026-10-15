@@ -48,6 +48,21 @@ function validatePricing(row: Record<string, unknown>): void {
   if (row.kind === 'service' && row.price_cents !== null)
     throw new CatalogFailure('El servicio requiere cotización.', 503);
 }
+function parsePhotos(value: unknown): CatalogOffer['photos'] {
+  if (!Array.isArray(value) || value.length > 6)
+    throw new CatalogFailure('No pudimos leer las fotos.', 503);
+  return value.map((raw) => {
+    const { id, url } = record(raw);
+    if (
+      typeof id !== 'string' ||
+      typeof url !== 'string' ||
+      !/^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u.test(id) ||
+      url !== `http://127.0.0.1:3103/v1/catalog/photos/${id}/card`
+    )
+      throw new CatalogFailure('No pudimos leer las fotos.', 503);
+    return { id, url };
+  });
+}
 export function parseOffer(value: unknown): CatalogOffer {
   const row = record(value);
   validateShape(row);
@@ -65,7 +80,7 @@ export function parseOffer(value: unknown): CatalogOffer {
     )
   )
     throw new CatalogFailure('Cobertura inválida.', 503);
-  return row as unknown as CatalogOffer;
+  return { ...row, photos: parsePhotos(row.photos) } as unknown as CatalogOffer;
 }
 export function parsePage(value: unknown): CatalogPage {
   const row = record(value);

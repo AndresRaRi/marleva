@@ -64,6 +64,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/catalog/photos/{id}/{size}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Leer derivado público de foto vigente
+         * @description UC009 → SEQ009:S080. Revalida oferta, versión y elegibilidad; nunca original. no-store y nosniff.
+         */
+        get: operations["MAR_M3_API_009"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -300,6 +320,58 @@ export interface operations {
                 };
             };
             /** @description Dependencia temporalmente no disponible */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    MAR_M3_API_009: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                size: "card" | "detail";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description JPEG recodificado sin metadatos; integridad comprobada */
+            200: {
+                headers: {
+                    "Cache-Control"?: "no-store";
+                    "X-Content-Type-Options"?: "nosniff";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/jpeg": string;
+                };
+            };
+            /** @description No disponible sin distinguir existencia */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Error recuperable */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Error recuperable */
             503: {
                 headers: {
                     [name: string]: unknown;

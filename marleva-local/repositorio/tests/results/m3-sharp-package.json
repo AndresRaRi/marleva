@@ -1,0 +1,8 @@
+{
+  "version": "0.35.5",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "license": "Apache-2.0",
+  "dist.integrity": "sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g=="
+}

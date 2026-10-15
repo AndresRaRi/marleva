@@ -1,14 +1,21 @@
-%% MAR-M3-SEQ-009; UC-009; diseño previo, no prueba de ejecución
+%% MAR-M3-SEQ-009; UC009; reglas y pruebas en matriz M3
 sequenceDiagram
- actor U as Actor
- participant A as Caso M3
- participant D as Datos/puerto M3
- U->>A: S020 Autorizar carga y límites por dueño
- A->>D: S040 Guardar original en cuarentena privada
- A->>D: S060 Validar formato real, analizar y eliminar metadatos
- A-->>U: S080 Derivar tamaños y habilitar únicamente foto segura
- alt Entrada/permiso/estado inválido
- A-->>U: S090 Error estable sin efectos parciales
- else Dependencia caída
- A-->>U: S095 503, conservar paso y reintentar
+ actor U as Caso interno con actor ficticio
+ participant A as AttachPhoto
+ participant R as Repositorio M3
+ participant F as Almacén privado M3
+ participant P as Decodificador en proceso hijo
+ U->>A: S020 Version borrador, posicion, UUID foto y bytes
+ A->>R: S025 Comprobar dueño/elegibilidad/estado y repetición
+ A->>F: S040 Guardar original privado sin nombre del usuario
+ A->>P: S060 Firma, límites, decodificar, orientar y recodificar
+ P-->>A: S065 Dos JPEG sin metadatos y con integridad
+ A->>F: S070 Guardar derivados privados
+ A->>R: S080 Revalidar y bloquear oferta, insertar foto lista
+ R-->>U: S085 Resultado idempotente
+ alt Error de formato, permiso, posición o estado
+ A-->>U: S090 422/404/409; no foto pública
+ else Dependencia, saturación o timeout
+ A-->>U: S095 503; original conservado privado
  end
+ Note over R,F: API009 revalida versión pública y elegibilidad; sirve solo derivado íntegro

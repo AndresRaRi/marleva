@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-15",
+  "command": [
+    "./scripts/tool",
+    "node",
+    "node_modules/eslint/bin/eslint.js",
+    "apps/api/src/modules/m3"
+  ],
+  "status": 0,
+  "output": "\n/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a/marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/adapters/sharp-photo-processor.ts\n  27:3   warning  Method 'run' has too many lines (34). Maximum allowed is 30    max-lines-per-function\n  28:42  warning  Arrow function has too many lines (32). Maximum allowed is 30  max-lines-per-function\n\n/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a/marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/repositories/prisma-catalog-repository.ts\n  42:1  warning  Function 'conditions' has too many lines (31). Maximum allowed is 30  max-lines-per-function\n\n/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a/marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/repositories/prisma-offer-repository.ts\n  82:3   warning  Method 'change' has too many lines (50). Maximum allowed is 30       max-lines-per-function\n  88:50  warning  Async arrow function has too many lines (43). Maximum allowed is 30  max-lines-per-function\n\n/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a/marleva-local/repositorio/apps/api/src/modules/m3/presentation/dtos/offer-data.ts\n  36:8  warning  Function 'parseOfferData' has too many lines (39). Maximum allowed is 30  max-lines-per-function\n\n\u2716 6 problems (0 errors, 6 warnings)\n\n"
+}

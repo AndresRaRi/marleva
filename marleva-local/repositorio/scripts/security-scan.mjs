@@ -72,8 +72,17 @@ if (licenses.status === 0) {
             .digest('hex') === '111f42b37daecc6c387d037ef25955bd269e7f9a46a736d5257a23560534763f',
       ),
   );
+  // M3 pins this reviewed prebuilt library; other LGPL-or-later packages remain blocked.
+  const reviewedVips = (data['LGPL-3.0-or-later'] ?? []).every(
+    (item) =>
+      /^@img\/sharp-libvips-(darwin|linux|linuxmusl|win32)-[a-z0-9]+$/u.test(item.name) &&
+      item.versions.join() === '1.3.4',
+  );
   const pending = Object.keys(data).filter(
-    (license) => !known.has(license) && !(license === 'BSD' && reviewedBsd),
+    (license) =>
+      !known.has(license) &&
+      !(license === 'BSD' && reviewedBsd) &&
+      !(license === 'LGPL-3.0-or-later' && reviewedVips),
   );
   writeFileSync(folder + '/licenses.json', JSON.stringify(data, null, 2) + '\n');
   if (pending.length)

@@ -56,8 +56,10 @@ Table m3.Photo {
  bytes integer [not null]
  sha256 text [not null]
  metadata_removed boolean [not null, default: false]
+ source_sha256 text
+ derivatives jsonb [note: 'card/detail: bytes, sha256, width, height; JPEG recodificado sin metadatos.']
  indexes { (version_id, position) [unique] }
- Note: 'Solo derivados seguros listos, sin URLs externas. Pipeline de ingreso pendiente; tabla no acredita procesamiento.'
+ Note: 'Solo derivados seguros listos, sin URLs externas. Ingreso interno con actor ficticio; cuarentena local privada, solo derivados listos. HTTP de carga depende de M1.'
 }
 Table m3.CommandReceipt {
  actor_id uuid [not null]

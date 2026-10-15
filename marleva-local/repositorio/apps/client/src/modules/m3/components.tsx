@@ -1,3 +1,4 @@
+import { OfferPhotos } from './offer-photos';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { CatalogOffer } from './catalog-client';
@@ -85,6 +86,7 @@ export function Price({ offer }: { offer: CatalogOffer }) {
 export function OfferCard({ offer, open }: { offer: CatalogOffer; open: () => void }) {
   return (
     <View style={styles.card}>
+      <OfferPhotos offer={offer} />
       <Text style={styles.small}>{offer.seller.name}</Text>
       <Text accessibilityRole="header" style={styles.heading}>
         {offer.title}

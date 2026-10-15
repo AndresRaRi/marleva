@@ -166,3 +166,17 @@ it('MAR-M3-UT-FE-001-HTTP | respuesta ilegible y503 muestran recuperación', asy
     status: 503,
   });
 });
+
+it('MAR-M3-UT-FE-009 | fotos limitadas a rutas propias; metadatos inválidos recuperables', () => {
+  const id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+  const photo = { id, url: `http://127.0.0.1:3103/v1/catalog/photos/${id}/card` };
+  expect(parseOffer({ ...offer, photos: [photo] }).photos).toEqual([photo]);
+  for (const photos of [
+    [{ ...photo, url: 'https://example.invalid/x.jpg' }],
+    [{ ...photo, id: '../private' }],
+    [{ ...photo, url: null }],
+    Array(7).fill(photo),
+    [null],
+  ])
+    expect(() => parseOffer({ ...offer, photos })).toThrow();
+});

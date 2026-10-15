@@ -1,9 +1,9 @@
 openapi: 3.1.1
 info:
   title: Marleva M3 — lecturas públicas aisladas
-  version: 0.1.0
-  description: Datos ficticios. Tres operaciones públicas; mutaciones internas no
-    expuestas por HTTP. Contrato objetivo privado en matriz.
+  version: 0.2.0
+  description: Datos ficticios. Lecturas públicas y derivados de fotos; carga
+    privada no expuesta.
 servers:
   - url: http://127.0.0.1:3103
     description: Solo loopback, sin credenciales ni datos privados
@@ -202,6 +202,63 @@ paths:
                 $ref: "#/components/schemas/Error"
         "503":
           description: Dependencia temporalmente no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/catalog/photos/{id}/{size}:
+    get:
+      operationId: MAR_M3_API_009
+      summary: Leer derivado público de foto vigente
+      description: UC009 → SEQ009:S080. Revalida oferta, versión y elegibilidad; nunca
+        original. no-store y nosniff.
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: size
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - card
+              - detail
+      responses:
+        "200":
+          description: JPEG recodificado sin metadatos; integridad comprobada
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+            X-Content-Type-Options:
+              schema:
+                type: string
+                const: nosniff
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: No disponible sin distinguir existencia
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Error recuperable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Error recuperable
           content:
             application/json:
               schema:

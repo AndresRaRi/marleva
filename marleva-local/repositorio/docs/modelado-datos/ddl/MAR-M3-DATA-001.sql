@@ -52,7 +52,9 @@ CREATE TABLE "m3"."Photo" (
   "mime_type" text NOT NULL,
   "bytes" integer NOT NULL,
   "sha256" text NOT NULL,
-  "metadata_removed" boolean NOT NULL DEFAULT false
+  "metadata_removed" boolean NOT NULL DEFAULT false,
+  "source_sha256" text,
+  "derivatives" jsonb
 );
 
 CREATE TABLE "m3"."CommandReceipt" (
@@ -86,7 +88,9 @@ COMMENT ON TABLE "m3"."OfferVersion" IS 'Estadísticas de expresión de búsqued
 
 COMMENT ON COLUMN "m3"."OfferVersion"."food" IS 'Ingredientes/alérgenos/conservación estructurados. No datos clínicos.';
 
-COMMENT ON TABLE "m3"."Photo" IS 'Solo derivados seguros listos, sin URLs externas. Pipeline de ingreso pendiente; tabla no acredita procesamiento.';
+COMMENT ON TABLE "m3"."Photo" IS 'Solo derivados seguros listos, sin URLs externas. Ingreso interno con actor ficticio; cuarentena local privada, solo derivados listos. HTTP de carga depende de M1.';
+
+COMMENT ON COLUMN "m3"."Photo"."derivatives" IS 'card/detail: bytes, sha256, width, height; JPEG recodificado sin metadatos.';
 
 COMMENT ON COLUMN "m3"."CommandReceipt"."result" IS 'Resultado estructurado idempotente, sin secretos.';
 
@@ -130,3 +134,18 @@ CREATE STATISTICS m3."OfferVersion_search_stats" ON (title || ' ' || description
 ANALYZE m3."OfferVersion";
 ANALYZE m3."Offer";
 ANALYZE m3."SellerEligibility";
+-- MAR-M3-UC009: archivos listos requieren ambos derivados e integridad.
+ALTER TABLE m3."Photo" ADD CONSTRAINT "Photo_ready_derivatives_check" CHECK (
+ state<>'ready' OR COALESCE((
+ source_sha256 ~ '^[a-f0-9]{64}$' AND object_key=id::text AND
+ jsonb_typeof(derivatives)='object' AND derivatives ?& ARRAY['card','detail'] AND
+ (derivatives->'card'->>'sha256') ~ '^[a-f0-9]{64}$' AND
+ (derivatives->'detail'->>'sha256')=sha256 AND
+ (derivatives->'detail'->>'bytes')::int=bytes AND
+ (derivatives->'card'->>'bytes')::int BETWEEN 1 AND 5000000 AND
+ (derivatives->'card'->>'width')::int BETWEEN 1 AND 480 AND
+ (derivatives->'card'->>'height')::int BETWEEN 1 AND 480 AND
+ (derivatives->'detail'->>'width')::int BETWEEN 1 AND 1600 AND
+ (derivatives->'detail'->>'height')::int BETWEEN 1 AND 1600
+ ),false)
+);

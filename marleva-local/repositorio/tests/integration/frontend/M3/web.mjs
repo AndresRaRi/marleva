@@ -38,6 +38,12 @@ try {
   await page.getByRole('button', { name: 'Buscar', exact: true }).click();
   await search;
   await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().waitFor();
+  await page.waitForFunction(() =>
+    [...document.images].some(
+      (img) => img.src.includes('/v1/catalog/photos/') && img.complete && img.naturalWidth > 0,
+    ),
+  );
+  record('MAR-M3-IT-FE-009-CATALOG-IMAGE');
   await page.screenshot({ path: shots + '/01-catalogo.png', fullPage: true });
   report.screenshots.push(shots + '/01-catalogo.png');
   const next = page.waitForResponse((response) => response.url().includes('cursor='));
@@ -47,6 +53,12 @@ try {
   await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().click();
   await page.getByRole('button', { name: /Ver oferente:/ }).waitFor();
   record('MAR-M3-IT-FE-002-DETAIL');
+  await page.waitForFunction(() =>
+    [...document.images].some(
+      (img) => img.src.includes('/detail') && img.complete && img.naturalWidth > 0,
+    ),
+  );
+  record('MAR-M3-IT-FE-009-DETAIL-IMAGES');
   await page.screenshot({ path: shots + '/02-detalle.png', fullPage: true });
   report.screenshots.push(shots + '/02-detalle.png');
   const detailAxe = await new AxeBuilder({ page }).analyze();
@@ -133,6 +145,21 @@ try {
     );
     record('MAR-M3-IT-FE-001-WIDTH-' + viewport.width);
   }
+  await page.route('**/v1/catalog/photos/**', (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }),
+  );
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.getByText('La foto no está disponible.', { exact: true }).first().waitFor();
+  await page.getByRole('button', { name: 'Ver oferta', exact: true }).first().waitFor();
+  record('MAR-M3-IT-FE-009-FALLBACK-CONTROLLED');
+  await page.unroute('**/v1/catalog/photos/**');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() =>
+    [...document.images].some(
+      (img) => img.src.includes('/v1/catalog/photos/') && img.complete && img.naturalWidth > 0,
+    ),
+  );
+  record('MAR-M3-IT-FE-009-IMAGE-RECOVERY');
   report.passed = true;
 } catch (error) {
   report.passed = false;

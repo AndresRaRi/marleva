@@ -18,7 +18,7 @@ Web: http://127.0.0.1:8103. API: http://127.0.0.1:3103/v1/catalog/offers. Son ac
 6. Ver oferente carga su perfil público y sus ofertas. Nunca muestra domicilio residencial, correo, expediente, rol o cuenta de pago.
 7. Volver al catálogo conserva la búsqueda. Una oferta pausada o un oferente no elegible devuelve404 recuperable. Fallo de base devuelve503, nunca catálogo vacío.
 
-El catálogo no crea compras, cotizaciones, comisiones ni ventas. No hay botones de compra que simulen una transacción inexistente. Fotos actuales: ninguna; pipeline de carga/análisis/derivados pendiente. Los casos internos de borrador, envío, revisión y pausa se prueban con actores ficticios; no están expuestos por HTTP ni sustituyen M1/M2/M8.
+El catálogo no crea compras, cotizaciones, comisiones ni ventas. No hay botones de compra que simulen una transacción inexistente. Fotos: procesamiento interno y entrega pública de derivados disponibles; carga autenticada pendiente; visualización web de fotos implementada y probada. Los casos internos de borrador, envío, revisión y pausa se prueban con actores ficticios; no están expuestos por HTTP ni sustituyen M1/M2/M8.
 
 ## Preparación y comandos
 
@@ -49,7 +49,7 @@ Cobertura de lógica incluye dominio, casos, DTOs, transporte y estado del clien
 
 ## Pendientes que impiden declarar M3 completo
 
-Integrar puertos de identidad M1, elegibilidad M2 y revisión M8 cuando estén listos y se autorice integración; conservar roles actuales, revocación, MFA y no autorrevisión. Completar fotos seguras, gestión autenticada de ofertas, pantallas de gestión revisadas, plataformas y aceptación. No incorporar favoritos, reseñas, ranking pagado, ofertas externas o giros excluidos C25.
+Integrar puertos de identidad M1, elegibilidad M2 y revisión M8 cuando estén listos y se autorice integración; conservar roles actuales, revocación, MFA y no autorrevisión. Completar carga autenticada de fotos, gestión autenticada de ofertas, pantallas de gestión revisadas, plataformas y aceptación. No incorporar favoritos, reseñas, ranking pagado, ofertas externas o giros excluidos C25.
 
 Push de la rama aislada autorizado por la instrucción posterior del usuario; sin integración a main. Guardado/commit local no actualizan Fuentes. Solo01 cambia como registro de este avance; conciliar su añadido M3 con el estado paralelo de006/007 antes de reemplazar Fuentes.00/02/03 y configuración permanente no requieren sustitución por estas reglas técnicas locales. No prometer acceso desde otros chats.
 
@@ -74,3 +74,30 @@ La integración M3 tiene configuración propia: primero generar y compilar con `
 Recorrido web ampliado: 13 comprobaciones aprobadas, con filtros reales, Enter, retorno con búsqueda y retirada 404 simulada con recuperación. Diez muestras Chrome limpias tras calentamiento: p95 carga 145,45 ms, búsqueda 97,74 ms y detalle 478,69 ms. Acta `tests/results/m3-performance-frontend.json`; objetivos locales 3000/1000/1000 ms definidos previamente y cumplidos. Medición local sin limitación de red/CPU, no resultados de dispositivos físicos.
 
 Verificación posterior de preparación: generación y compilación M3 aprobadas, siete integraciones propias aprobadas. El descubrimiento general de integración muestra únicamente M1; M3 se ejecuta con su configuración explícita. Arquitectura aprobada con cero violaciones y duplicación cero en código propio. Los derivados se mantienen fuera de ese análisis según la exclusión de carpetas generated existente; los primeros fallos quedan registrados. No se ha ejecutado ni acreditado CI remoto de este incremento.
+
+## Fotos: incremento aislado UC009
+
+El procesamiento interno recibe bytes JPEG/PNG y actor ficticio autorizado; no hay carga HTTP ni cabeceras que asignen un rol. Guarda el original privado y produce dos JPEG nuevos: tarjeta hasta 480 px y detalle hasta 1600 px, sin ampliar. Revalida dueño, elegibilidad y borrador al guardar. Límite de seis posiciones, 5 MB por original, 16 millones de píxeles y dimensiones hasta 8192. Proceso hijo con plazo máximo de cinco segundos y un trabajo por instancia; espacio antiguo de V8 limitado a 96 MiB. Esto no limita toda la memoria nativa ni sustituye un aislamiento de producción.
+
+Los originales, fallos y archivos sin referencia quedan privados en artifacts/m3/photos; no se borran automáticamente y no se sirven estáticamente. Rutas de archivos y tamaños son cerrados. Una fila ready exige manifest de ambos derivados, dimensiones y hashes válidos. Nueva migración M3 003; 001/002 y M1 no se reescriben.
+
+La lectura `GET /v1/catalog/photos/{id}/card` o `/detail` comprueba la versión pública aprobada, oferta activa y oferente vigente, y verifica longitud/hash antes de enviar JPEG con no-store/nosniff. Original no permitido, oculta404, corrupción503 con recuperación. El JSON del catálogo enumera fotos de su propia versión; la tarjeta muestra la primera foto y el detalle hasta seis, con texto alternativo y recuperación ante fallos.
+
+Ejecutar las pruebas propias con la configuración de integración M3 indicada arriba; las nueve pruebas IT-BE009 cubren EXIF GPS ficticio/orientación, PNG/transparencia, corrupta, cabecera APNG, límite de seis/concurrencia, idempotencia, permisos antes/después de procesamiento, archivo alterado/recuperación, rol de solo lectura y timeout real. Los casos son locales y no acreditan autenticación real o moderación. El análisis consiste en decodificar y recodificar imágenes; antivirus y revisión humana no se dan por cumplidos.
+
+Ejemplo público generado por las pruebas: consultar `tests/results/m3-photo-example.json` para UUID y URL actuales; solo funciona mientras los servicios M3 de esta copia estén activos. No contiene una foto ni datos reales. Rendimiento del procesador: `MARLEVA_M3_CHECK=1 ./scripts/tool node tests/performance/backend/M3/photos.mjs`. Regresión de catálogo y fallos conservados en actas m3-performance*.json.
+
+Dependencia fijada: Sharp 0.35.5 (Apache-2.0), binario @img/sharp-libvips 1.3.4 (LGPL-3.0-or-later). Versiones de bibliotecas efectivamente cargadas y plataforma en el acta de rendimiento; integridades npm en lockfile/acta m3-sharp-package.json. Instalación local con scripts desactivados y binarios precompilados. README de la biblioteca conserva su inventario de licencias. El control de licencias solo reconoce esta familia/version de binarios bajo esa licencia; otras dependencias desconocidas siguen bloqueadas. No certifica obligaciones de una distribución futura. Fuentes oficiales consultadas 15-10-2026: [Sharp](https://sharp.pixelplumbing.com/changelog/v0.35.5/), [decodificador](https://sharp.pixelplumbing.com/api-constructor/), [salida](https://sharp.pixelplumbing.com/api-output/), [identificador de licencia](https://spdx.org/licenses/LGPL-3.0-or-later.html).
+
+
+## Resultado vigente de fotos — 15-10-2026, MAR-CHAT-008
+
+Procesamiento interno y entrega pública de derivados implementados; tarjeta y detalle web muestran imágenes ficticias y conservan oferta/acciones ante error recuperable. Las capturas reales finales de catálogo, detalle y perfil fueron revisadas localmente. No hay carga HTTP autenticada. UC009 permanece incompleto; M3 conserva 3/9 criterios implementados y 0/9 aceptados. Android/iOS/Safari, integración M1/M2/M8 y aceptación pendientes.
+
+Resultados verificables en tests/results: 44/44 unitarias M3; cobertura de líneas 96,24% y ramas 93,55% del ámbito declarado; 16/16 integraciones, incluidas nueve de fotos; 17 comprobaciones web aprobadas. Axe sin infracciones detectadas en catálogo/detalle y sin desbordamiento a 320/1280; no acredita WCAG completo. Reinicio de PostgreSQL aislado: catálogo/foto devolvieron 503 y recuperaron contenido e integridad.
+
+Rendimiento local: procesador Sharp 0.35.5, diez muestras tras calentamiento, p95 109,590 ms frente al objetivo local de 2000 ms. Nueve escenarios de repositorio sin errores; peor p95 83,32 ms frente a 500 ms. Navegador con primera imagen decodificada: p95 carga 326,566 ms, búsqueda 159,638 ms y detalle 152,610 ms; objetivos 3000/1000/1000 ms. Sin extrapolar a producción ni dispositivos físicos.
+
+Se conservan fallos y diagnóstico: la consulta inicial estimaba tres coincidencias frente a 10000 y excedía el objetivo. La corrección final usa proyección pública explícita y búsqueda lateral de versión, pagina antes de agregar fotos y no amplía permisos. EXPLAIN final local: 1,468 ms. Migración M3 003 aplicada e inmutable; 001/002 y migraciones M1 intactas. Sharp y su grafo nuevo están fijados en lockfile; la afirmación anterior de lockfile sin cambios corresponde al incremento anterior.
+
+Originales privados y derivados operativos están ignorados por Git. Fuentes sincronizadas no se editaron ni subieron. Solo el añadido M3 de 01 debe conciliarse con 006/007 antes de reemplazar la fuente compartida; 00/02/03 y configuración no cambian. Continuidad: completar ingreso autenticado cuando existan contratos de identidad/elegibilidad/revisión compatibles, manteniendo aislamiento y sin integrar a main.

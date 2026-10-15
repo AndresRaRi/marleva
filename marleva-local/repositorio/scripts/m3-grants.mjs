@@ -42,6 +42,7 @@ GRANT USAGE ON SCHEMA m3 TO m3_api;
 REVOKE ALL ON ALL TABLES IN SCHEMA m3 FROM m3_api;
 GRANT SELECT(id,public_name,membership_current,enabled) ON m3."SellerEligibility" TO m3_api;
 GRANT SELECT(id,seller_id,paused,public_version_id,updated_at) ON m3."Offer" TO m3_api;
+GRANT SELECT(id,version_id,position,state,metadata_removed,derivatives) ON m3."Photo" TO m3_api;
 GRANT SELECT(id,offer_id,number,state,title,description,kind,category,price_cents,unit,stock,made_to_order,developments,modalities,response_minutes,preparation_minutes,food) ON m3."OfferVersion" TO m3_api;
 `,
 );

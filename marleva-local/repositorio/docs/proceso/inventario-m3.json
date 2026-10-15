@@ -3373,9 +3373,9 @@
     {
       "root": "aislado",
       "path": "README.md",
-      "bytes": 6816,
-      "mtime": "2026-10-15T22:14:01.029873+00:00",
-      "sha256": "bb813d23b82597c987971469f06e889e04ca363120de29c9b22a6394f4241a9f",
+      "bytes": 6903,
+      "mtime": "2026-10-15T23:26:45.653978+00:00",
+      "sha256": "af0ccfb9525b140ac6880c946b0559e75e21828bc219e802ff0648455ab5f191",
       "lectura": "completa"
     },
     {
@@ -3469,9 +3469,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/README.md",
-      "bytes": 9395,
-      "mtime": "2026-10-15T22:14:01.030137+00:00",
-      "sha256": "389f008d2fefc94b70596b367ba926cb66f422cc5e62e49a8c54c80b1f2b3c55",
+      "bytes": 9503,
+      "mtime": "2026-10-15T23:26:45.658554+00:00",
+      "sha256": "6a174c831665a1032ce378597b55c60762b3a649b9e9811b707cdce1fd29d62a",
       "lectura": "completa"
     },
     {
@@ -3493,9 +3493,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/api/package.json",
-      "bytes": 907,
-      "mtime": "2026-10-15T21:30:41.013475+00:00",
-      "sha256": "ca3e38398202008ba1e083dd2c0170eb41ef184165bbec680e7c05db1ab888f9",
+      "bytes": 930,
+      "mtime": "2026-10-15T23:03:14.381391+00:00",
+      "sha256": "761da347afb139b695bba348c925c433cd967842f597cef85f4edf4d5e1e49ce",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -4061,9 +4061,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/api/src/modules/m3/catalog.module.ts",
-      "bytes": 701,
-      "mtime": "2026-10-15T22:14:03.066560+00:00",
-      "sha256": "2f287ab22665248313cc96b7a4137dbc140992056d15d9558869a9115eb2386e",
+      "bytes": 1191,
+      "mtime": "2026-10-15T22:51:25.711628+00:00",
+      "sha256": "8257421b2f7219e03b5e2f7a7e7b60d91814e03315a3c819711edcac5ed92ebd",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -4101,9 +4101,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/repositories/prisma-catalog-repository.ts",
-      "bytes": 3318,
-      "mtime": "2026-10-15T22:14:03.140854+00:00",
-      "sha256": "521001a416e2685209f44865fc849b5463d93bb39f77b477bfae69f63dd8a066",
+      "bytes": 4299,
+      "mtime": "2026-10-15T23:09:05.484023+00:00",
+      "sha256": "c93d3fcb73817e3e5b1ed3ffb2707bbb1e460cd35ae93ad15134a61fc8268777",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -4621,17 +4621,17 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/client/src/modules/m3/components.tsx",
-      "bytes": 3651,
-      "mtime": "2026-10-15T22:14:03.393159+00:00",
-      "sha256": "af2ba1b758d159e7f7ed67f1cc738baa242b8b18519e6c29f0950a60ba0a729d",
+      "bytes": 3733,
+      "mtime": "2026-10-15T23:19:31.147679+00:00",
+      "sha256": "51ebb9a035124098fc41b38561d83e0ed154288e50eb798f9889b17f9450020b",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/client/src/modules/m3/detail-screen.tsx",
-      "bytes": 3675,
-      "mtime": "2026-10-15T22:14:03.378240+00:00",
-      "sha256": "acaf3752ee573a84bc008af9fea195e92450c25f4dcf694029198833d9eb2351",
+      "bytes": 3764,
+      "mtime": "2026-10-15T23:19:31.147874+00:00",
+      "sha256": "fdba2016861fff7cd4783522600ed7b019cad04103b2c72764e22ee1cf76b960",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -4781,9 +4781,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/apis/M3/README.md",
-      "bytes": 1075,
-      "mtime": "2026-10-15T22:14:01.006237+00:00",
-      "sha256": "687239b844973940ef6527a44ad5ad78bdbc07252f199736ee1ff965654d8ca3",
+      "bytes": 1205,
+      "mtime": "2026-10-15T23:26:45.659843+00:00",
+      "sha256": "e9eb1c39808000caeb255e3e8562de0042b99d80b3904c3bafe9d90d5beccc9e",
       "lectura": "completa"
     },
     {
@@ -4797,41 +4797,41 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/apis/M3/openapi.json",
-      "bytes": 14597,
-      "mtime": "2026-10-15T22:27:07.823706+00:00",
-      "sha256": "5006d67cd5014b6faadb971bea6cfd94cf74f62095efc1da9806e5d101382e49",
+      "bytes": 16968,
+      "mtime": "2026-10-15T22:51:24.071338+00:00",
+      "sha256": "f5ffb27bf82f72c5e0fa776853fa980e7177421ba026a82f636343e077354551",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/apis/M3/openapi.yaml",
-      "bytes": 10007,
-      "mtime": "2026-10-15T22:14:01.006835+00:00",
-      "sha256": "f9e1d5fcd67dd1860404a629e36786f57a93a8c1651b253137b03ba7c405fd39",
+      "bytes": 11602,
+      "mtime": "2026-10-15T22:51:21.965095+00:00",
+      "sha256": "054bac3b9ae5ce0991e265764689e6d91c1083ab28700ef6288c6e25c7b8e9f8",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/apis/M3/swagger-target.html",
       "bytes": 17149,
-      "mtime": "2026-10-15T22:27:08.428176+00:00",
+      "mtime": "2026-10-15T22:51:24.628012+00:00",
       "sha256": "014dd896ad4b3a638c4a443895166885b2bc1e324eb25e9deb728d11539db00d",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/apis/M3/swagger.html",
-      "bytes": 7308,
-      "mtime": "2026-10-15T22:27:08.373341+00:00",
-      "sha256": "7874faf7209ab3b66aa504f6fd7217863530894bb4bca4e84558d45826199a66",
+      "bytes": 8421,
+      "mtime": "2026-10-15T22:51:24.570416+00:00",
+      "sha256": "ef52f65dc5f5e8b274bd84f4284531747a065eb76c2ef9b140422afdbfa1fff9",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/avance.md",
-      "bytes": 10135,
-      "mtime": "2026-10-15T22:14:01.030288+00:00",
-      "sha256": "600873d6945bd8b2655919cbd7ee07e7be204715155d30793b08c2454abdde24",
+      "bytes": 10267,
+      "mtime": "2026-10-15T23:26:45.660807+00:00",
+      "sha256": "fd4a286136775259e0415617ca9236f09553aac92bc5984eedd1542f643ccdd4",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -4957,17 +4957,17 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M3/MAR-M3-SEQ-001.mmd",
-      "bytes": 577,
-      "mtime": "2026-10-15T22:14:01.009101+00:00",
-      "sha256": "d8cf899197c4add2b43437ac4494a3a395ca8d744c7628d8cdd3093541c9de3d",
+      "bytes": 603,
+      "mtime": "2026-10-15T23:19:31.145984+00:00",
+      "sha256": "850ee9bbaf7019297fcbbcafa35a9953f1c6f0f22113846884933c4415601598",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M3/MAR-M3-SEQ-002.mmd",
-      "bytes": 550,
-      "mtime": "2026-10-15T22:14:01.009630+00:00",
-      "sha256": "22912b784604532b2478c55022ba544a17bce18d6596c84ff153e661971b6858",
+      "bytes": 576,
+      "mtime": "2026-10-15T23:19:31.146222+00:00",
+      "sha256": "d8b9dad96dfd8da15f4bfd224afbe7a0176638ed4a21b41cd05df1ee538a2ba8",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5021,9 +5021,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/diagramas/secuencia/M3/MAR-M3-SEQ-009.mmd",
-      "bytes": 561,
-      "mtime": "2026-10-15T22:14:01.010105+00:00",
-      "sha256": "88ffd101ac78bb754db66e96c026daa296163638d514b1e2127eda795871013d",
+      "bytes": 990,
+      "mtime": "2026-10-15T22:48:40.285677+00:00",
+      "sha256": "b8473477e0506d8a62b1610c18f6b9c6869f3b75d6733ba2fc3805667661709e",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5093,9 +5093,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/modelado-datos/dbml/MAR-M3-DATA-001.dbml",
-      "bytes": 2900,
-      "mtime": "2026-10-15T22:14:01.011097+00:00",
-      "sha256": "17fabda7cd9b327b3e0a3b9d23eb197b3d211e01db021ada0d0d6125494f4e1e",
+      "bytes": 3075,
+      "mtime": "2026-10-15T22:51:21.811836+00:00",
+      "sha256": "37af52350624ec126f772a8929eda970df56e27ff5d629dbe66abd91339a5364",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5133,9 +5133,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/modelado-datos/ddl/MAR-M3-DATA-001.sql",
-      "bytes": 6101,
-      "mtime": "2026-10-15T22:27:07.733137+00:00",
-      "sha256": "533e2b9c3940fd9c5e3f8f5444b422c3dc5b42b08b94ff2a75f10d8f76fb4a51",
+      "bytes": 7126,
+      "mtime": "2026-10-15T22:51:23.983610+00:00",
+      "sha256": "a45f50aa15eea4d1970293c5a7a8351cd67c280b34146f51222d55aec64d3f26",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5285,17 +5285,17 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/revision/M3/DISENO_PANTALLAS_M3.md",
-      "bytes": 2213,
-      "mtime": "2026-10-15T22:14:01.011865+00:00",
-      "sha256": "49657e3cfcaf0573b844e3a3728690cf1f452b3bed833fa02db0eef30d72848a",
+      "bytes": 2811,
+      "mtime": "2026-10-15T23:26:45.663617+00:00",
+      "sha256": "31cd6da5e09060fa7df6cdbbad39fbf4c152f73532afee2daa28df707f9235d4",
       "lectura": "parcial o no acreditada"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/revision/M3/capturas/03-oferente.png",
-      "bytes": 56010,
-      "mtime": "2026-10-15T22:23:15.851528+00:00",
-      "sha256": "ad8fc6f9ece7a345f6a066d0b8ca15c1aa66b71ed710b2300a9c91975db2b0c2",
+      "bytes": 43860,
+      "mtime": "2026-10-15T23:21:17.184127+00:00",
+      "sha256": "48e154558934b382d2af8caa40248a26ca3df0fae57e77ff812437007129ddfb",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5453,9 +5453,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/package.json",
-      "bytes": 3976,
-      "mtime": "2026-10-15T21:30:41.060291+00:00",
-      "sha256": "246178eb66bd72c28bd2403ca5b03e5f436fea4e79b7ba528fe66f3b735f9743",
+      "bytes": 3999,
+      "mtime": "2026-10-15T23:12:31.769505+00:00",
+      "sha256": "063f2ad0f4e80aef816d5e9e2f582422fc3c056fb479ac761fbd42d6ffd57c16",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5541,9 +5541,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/pnpm-lock.yaml",
-      "bytes": 482379,
-      "mtime": "2026-10-15T21:30:41.063019+00:00",
-      "sha256": "7ba2c8a1bcd0e9d1273a8bd0b6dbba6ab9821947ba0c9115456df428cac5a6bb",
+      "bytes": 492761,
+      "mtime": "2026-10-15T23:12:31.118309+00:00",
+      "sha256": "0a2035674db0242d105c4de70b0c05f8e7c81024824e70c8de0d59cb00de10e5",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5717,9 +5717,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/scripts/m3-grants.mjs",
-      "bytes": 1413,
-      "mtime": "2026-10-15T22:19:04.015960+00:00",
-      "sha256": "95d8428e81c4110d8984e75aa0e150f847832ef4b323dbd6c35201e8a4db375e",
+      "bytes": 1510,
+      "mtime": "2026-10-15T22:51:24.649590+00:00",
+      "sha256": "f1dff291bff3702ab9331094a3da0d814c7a67125759355ebade33f25983df17",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -5829,9 +5829,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/scripts/security-scan.mjs",
-      "bytes": 5799,
-      "mtime": "2026-10-15T21:30:41.067936+00:00",
-      "sha256": "ea985f4a5c67faf0f6c1c93f0422ebc056279a99649596f7762358c1ad28f9c3",
+      "bytes": 6175,
+      "mtime": "2026-10-15T23:04:38.180669+00:00",
+      "sha256": "a988b7538d54a96781b43f768e74de98970599a5eb18b248a2f61f4749b53903",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -6061,9 +6061,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/integration/backend/M3/restart.mjs",
-      "bytes": 1803,
-      "mtime": "2026-10-15T22:14:02.975786+00:00",
-      "sha256": "fec80e99fc3fb68866a3e9efac6319ec98d24b9445497d1b7ee8c27a4e52b1b2",
+      "bytes": 2485,
+      "mtime": "2026-10-15T23:16:22.981745+00:00",
+      "sha256": "e9887187bec84a77836bd790c54c17d9ad6a3d7899e3f8a9e9e6667694b17354",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -6525,9 +6525,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-frontend-transport.json",
-      "bytes": 3673,
-      "mtime": "2026-10-15T22:27:19.630623+00:00",
-      "sha256": "6a6978b527d52c2480f97febb55179d7a244e9b852711a330b6fb203d863d4f4",
+      "bytes": 1039,
+      "mtime": "2026-10-15T22:27:28.365941+00:00",
+      "sha256": "c8b5114b7d91d3d7fa3b9a85b241c47dbb5a3b4a52a7a8eb1ce7d649b21bd6a3",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -6541,9 +6541,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-performance.json",
-      "bytes": 4156,
-      "mtime": "2026-10-15T21:58:05.771172+00:00",
-      "sha256": "ebabee3807be017df575590a9620a1aa90d0cf5fb02de6d9bc5dfedb3acad11d",
+      "bytes": 4159,
+      "mtime": "2026-10-15T23:10:11.552981+00:00",
+      "sha256": "ebaca43802c65efdeaecc5d57cff436bd36f322fa69c2882d487fb820d2dcc2c",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -6557,9 +6557,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-restart.json",
-      "bytes": 156,
-      "mtime": "2026-10-15T22:23:17.848861+00:00",
-      "sha256": "44f6bda194ad1328f8386e65e7395fded86a3b075e5b47884305973a6ba4b485",
+      "bytes": 219,
+      "mtime": "2026-10-15T23:16:30.217604+00:00",
+      "sha256": "e21c80ff6a2282ce5675987a4ce70262a87a2177a363496e8acb8df6b1c138a7",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -6573,9 +6573,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-unit-coverage.json",
-      "bytes": 100723,
-      "mtime": "2026-10-15T22:27:01.900617+00:00",
-      "sha256": "d22eac1aa85f12b02876461f656178f0af1474b5eda5a0a98fdc165cce23735b",
+      "bytes": 116859,
+      "mtime": "2026-10-15T23:20:58.957739+00:00",
+      "sha256": "f8289b9e5754c4ad67b2f8f37b4300c0075db6510cd74abf6d24eee898e9e6d1",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -7197,9 +7197,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/unit/frontend/M3/catalog.test.ts",
-      "bytes": 6507,
-      "mtime": "2026-10-15T22:14:02.882867+00:00",
-      "sha256": "57b98e05034053a7526c24698317c5821442d30c963acc880dc2fe490c4b617c",
+      "bytes": 7082,
+      "mtime": "2026-10-15T23:19:31.940654+00:00",
+      "sha256": "3e11d457d1453a27fced6892dee11213a24db7d78017a279d49c9d9f149faf6d",
       "lectura": "parcial o no acreditada"
     },
     {
@@ -7253,9 +7253,9 @@
     {
       "root": "aislado",
       "path": "entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md",
-      "bytes": 28923,
-      "mtime": "2026-10-15T22:46:10.825403+00:00",
-      "sha256": "02406288e7e2172ae4fbd1ecbe76cfb39e4eb3e5ca94c7d5088f79451a5126b0",
+      "bytes": 29803,
+      "mtime": "2026-10-15T23:26:45.664293+00:00",
+      "sha256": "711be3232b740b3a8cfa1fee3d04f0085b00989a52056a7cb2642c65212216ed",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7269,9 +7269,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/api/prisma-m3/schema.prisma",
-      "bytes": 2054,
-      "mtime": "2026-10-15T22:40:54.418672+00:00",
-      "sha256": "b98536896807a47e170233b607ddb7d6b0e7fc3da603ed4688a868eeb49ce5ff",
+      "bytes": 2098,
+      "mtime": "2026-10-15T22:51:21.812988+00:00",
+      "sha256": "36bff0511f44cfe32e25efaa6433f3c9595cce419c93a31f5a828dc5323683d0",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7285,49 +7285,49 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/client/src/modules/m3/catalog-client.ts",
-      "bytes": 4951,
-      "mtime": "2026-10-15T22:43:59.574659+00:00",
-      "sha256": "2f228c558c07b6d68cd7ee89cf65134628fb4e0484a22b6d7363c1097d58e0bb",
+      "bytes": 5577,
+      "mtime": "2026-10-15T23:19:31.744072+00:00",
+      "sha256": "d94e89520fbd59efff28464f44ac3b1fdfe53fefa165305cb8751d678aa0a345",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/apps/client/src/modules/m3/generated/api.ts",
-      "bytes": 9492,
-      "mtime": "2026-10-15T22:45:32.795259+00:00",
-      "sha256": "c63662f34fbb5f10eda859f1ca6f64bf11731fb5806909a574ebe6d446dc1516",
+      "bytes": 11702,
+      "mtime": "2026-10-15T22:51:24.562358+00:00",
+      "sha256": "cec745b091465e9ae995f88079a76f346f4f8d520c2d77f2659b7a71cac53cb4",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M3.md",
-      "bytes": 15128,
-      "mtime": "2026-10-15T22:46:10.827394+00:00",
-      "sha256": "1315bac76b044adc58c7667d0d80394ffba69cb066997fa73611055a316dc8b0",
+      "bytes": 23533,
+      "mtime": "2026-10-15T23:26:45.664089+00:00",
+      "sha256": "1fd868c6db6e066fe67a4834feede861a15f9f2e1764ce0e49579a9fe432e2f8",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md",
-      "bytes": 10132,
-      "mtime": "2026-10-15T22:46:10.826629+00:00",
-      "sha256": "352ca0769e53118d56b67cbac20a376142cbb93e702b0d24fc506c4d8dd77992",
+      "bytes": 15713,
+      "mtime": "2026-10-15T23:26:45.663813+00:00",
+      "sha256": "55099d80c9c342c5a905898a33bdfc3d45c970a11d83bc08fdf60ab8928e0043",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/revision/M3/capturas/01-catalogo.png",
-      "bytes": 53784,
-      "mtime": "2026-10-15T22:39:11.226573+00:00",
-      "sha256": "321b804eb80d6aae9b0e718f10149e910fb9fb282ca1f3343f9be09185becac8",
+      "bytes": 47951,
+      "mtime": "2026-10-15T23:21:14.495033+00:00",
+      "sha256": "da4a0c688a6a348837ddf0a59d769f0acfcf97cc1c51190885c837b54ec8e361",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/docs/revision/M3/capturas/02-detalle.png",
-      "bytes": 76409,
-      "mtime": "2026-10-15T22:39:11.666007+00:00",
-      "sha256": "84aeb397d4de50b294a881d6c2f249dd0fac566764fe7d71fcb84ae9b83dd430",
+      "bytes": 32756,
+      "mtime": "2026-10-15T23:21:15.338194+00:00",
+      "sha256": "e6ba4ce67d86f3595aa57f05dfd75def56dec29666195809c1456648b5ab6233",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7341,9 +7341,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/knip.json",
-      "bytes": 777,
-      "mtime": "2026-10-15T22:46:10.822124+00:00",
-      "sha256": "59a950cf105823e7092e3dcae181371b46f8369e8a0e8ac76a88435abdf3f3d0",
+      "bytes": 889,
+      "mtime": "2026-10-15T22:51:25.875301+00:00",
+      "sha256": "f454bbc0205c3255a4793bc3313d663ceda26dfc868769443e1bc09b1696887d",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7357,9 +7357,9 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/scripts/m3-docs.mjs",
-      "bytes": 2854,
-      "mtime": "2026-10-15T22:43:59.576465+00:00",
-      "sha256": "2379f6d27934fcc321147e7c0a704e34c0520dfe9ee6764463a53b653e67b24a",
+      "bytes": 2959,
+      "mtime": "2026-10-15T22:51:25.866381+00:00",
+      "sha256": "d3f259ed766eedae4a982d0ce8703b63c56c3956cb87dec671f686c03f4be196",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7381,17 +7381,17 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/integration/frontend/M3/web.mjs",
-      "bytes": 7080,
-      "mtime": "2026-10-15T22:39:06.583131+00:00",
-      "sha256": "464d2bb875a54eeac5cd8f2f4df0bea208e7063e0064b4426cfdcf78b3565de0",
+      "bytes": 8257,
+      "mtime": "2026-10-15T23:20:51.700163+00:00",
+      "sha256": "806101acf93e180a68da833f059065f6ff118b3ae2f7e38f2d123d108abfb65a",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/performance/frontend/M3/catalog.mjs",
-      "bytes": 3988,
-      "mtime": "2026-10-15T22:39:06.606422+00:00",
-      "sha256": "814cf76986c46ceaaddf2a7a483e62b5bba6410d0e4794cf54d283e7505a40ee",
+      "bytes": 4416,
+      "mtime": "2026-10-15T23:20:52.022003+00:00",
+      "sha256": "e80addfabe29ee7c26e576e38ddf1d76489ec38597241b3caef254f03907db85",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
@@ -7405,43 +7405,275 @@
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-architecture.json",
-      "bytes": 5359,
-      "mtime": "2026-10-15T22:44:02.549258+00:00",
-      "sha256": "c7a8626fd45d8b0905730a338ce3e1c6d60c7945d361deb74347403d99507feb",
+      "bytes": 5399,
+      "mtime": "2026-10-15T23:16:31.827894+00:00",
+      "sha256": "6b94c19918305d8ec6f1117e48fb9e176e3dac601df85db0be1ff92d5b67cd54",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-integration.json",
-      "bytes": 3144,
-      "mtime": "2026-10-15T22:40:59.101914+00:00",
-      "sha256": "16fd7089326363fd789d1c1507552ba035f48247e66e394400524f5ecc0520de",
+      "bytes": 6201,
+      "mtime": "2026-10-15T23:12:42.218761+00:00",
+      "sha256": "331f8980ee2d177fb9ba0e68f938e6be2f2631e74547f5eaa63b9a0942415e2f",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-performance-frontend.json",
-      "bytes": 7135,
-      "mtime": "2026-10-15T22:39:21.319713+00:00",
-      "sha256": "a10e1490aff5a58339a85c8f0b721f0458c19d7dcb939b36a9e8aea1d6a1075a",
+      "bytes": 7201,
+      "mtime": "2026-10-15T23:21:37.412028+00:00",
+      "sha256": "c56c26748808e7b8e0425fdb493e08e91bbcfbec592432e331b71ff07a1666d5",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/tests/results/m3-web.json",
-      "bytes": 1474,
-      "mtime": "2026-10-15T22:39:14.404810+00:00",
-      "sha256": "f2187b667cbde9e30873212686cebfd736b4e047e9e9b72c6cb3a0d8faca651e",
+      "bytes": 1801,
+      "mtime": "2026-10-15T23:21:21.587665+00:00",
+      "sha256": "1c5975ecdbc814ca320b6239f30fdff8a5c87d38fe33cbd0fdd3516ef9a0b08c",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
     },
     {
       "root": "aislado",
       "path": "marleva-local/repositorio/vitest.m3.integration.config.mjs",
-      "bytes": 227,
-      "mtime": "2026-10-15T22:40:54.690732+00:00",
-      "sha256": "d68804445bc0951065bd268d3b4e4429f19a7ae7b37adc7ca6151d406d9b0872",
+      "bytes": 249,
+      "mtime": "2026-10-15T22:53:16.857240+00:00",
+      "sha256": "eacbc4ee7c6653c5176570b7c3b4d667ccf05018d0c4acf701d538eb561e8183",
       "lectura": "cambio revisado; derivados y binarios no acreditan lectura textual"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150003_photo_derivatives/migration.sql",
+      "bytes": 884,
+      "mtime": "2026-10-15T22:51:21.814092+00:00",
+      "sha256": "3b0b68146065a9b25421925d783469086e67e8449c1f637a9121f87d70a910d7",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/application/ports/photos.ts",
+      "bytes": 789,
+      "mtime": "2026-10-15T22:51:25.666757+00:00",
+      "sha256": "9de54ae668c58110adf2f828e3d8d58947176fbe6cafb3ad078152ed8f3c64fa",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/application/use-cases/attach-photo.ts",
+      "bytes": 1460,
+      "mtime": "2026-10-15T22:51:25.680488+00:00",
+      "sha256": "4eb8a0430a73a0c6dd2d401f3686e010716f90929321de63e19e20746a6a01d1",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/application/use-cases/read-photo.ts",
+      "bytes": 862,
+      "mtime": "2026-10-15T22:51:25.705200+00:00",
+      "sha256": "b397c45b215ea16f16ceeeaf70b2306706f46e4506f6272415e65d0f7ecc2f22",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/domain/photo.ts",
+      "bytes": 1586,
+      "mtime": "2026-10-15T23:12:31.836168+00:00",
+      "sha256": "d4c7525b5b017181708ec7b5aeadaf43de9a8b689e9b1dd1b14311310ba31eb3",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/adapters/local-photo-store.ts",
+      "bytes": 2148,
+      "mtime": "2026-10-15T22:58:40.558630+00:00",
+      "sha256": "ebe4314fe27c3cb623bb9507b5afdb07dd7109aad4ce3a83dd47fbdec495d0e4",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/adapters/sharp-photo-processor.ts",
+      "bytes": 2157,
+      "mtime": "2026-10-15T22:53:16.726727+00:00",
+      "sha256": "26d6fe180beaac2a01c50dadf4731cd0a83c41638e069db1c6fddbd232e3a5a4",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/adapters/sharp-photo-worker.ts",
+      "bytes": 2235,
+      "mtime": "2026-10-15T23:00:07.486148+00:00",
+      "sha256": "c4dc5b67165f72381b200f425ca0bcf0da5f161b9d1aca316273451d329ba865",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/repositories/prisma-photo-repository.ts",
+      "bytes": 3224,
+      "mtime": "2026-10-15T22:51:25.811058+00:00",
+      "sha256": "54b97f8efda836a0769885f5d27870896532638550f4d421761a5ded9758d882",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/infrastructure/repositories/prisma-public-photo-reader.ts",
+      "bytes": 873,
+      "mtime": "2026-10-15T22:51:25.814803+00:00",
+      "sha256": "8e71250cb4305331639189d0911e165a2b11254cee92b2d2ce60ace235c2af76",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m3/presentation/photo.controller.ts",
+      "bytes": 893,
+      "mtime": "2026-10-15T22:51:25.849088+00:00",
+      "sha256": "4a9566102059011dc6a8d828ffca95614997e8dabde4725f66a8d718ae716f3c",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/client/src/modules/m3/offer-photos.tsx",
+      "bytes": 1408,
+      "mtime": "2026-10-15T23:19:31.899275+00:00",
+      "sha256": "b977c39f1bac1fb3c80934bda5a58a5deed684fb24890fde80387e933eb440e5",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/docs/modelado-datos/dbml/MAR-M3-photo-integrity.sql",
+      "bytes": 800,
+      "mtime": "2026-10-15T22:51:21.813691+00:00",
+      "sha256": "0b2810a237c86e685473d3081bce9ca7337f0fe55efa516daabaf45faa605c3c",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/integration/backend/M3/photos.m3.mjs",
+      "bytes": 13712,
+      "mtime": "2026-10-15T23:12:31.838238+00:00",
+      "sha256": "f2e028fc7b5b4e39d8c487e554c309731faacbdd5af77dc8ab59aef42fa58d24",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/performance/backend/M3/photos.mjs",
+      "bytes": 2245,
+      "mtime": "2026-10-15T23:12:31.838099+00:00",
+      "sha256": "3d9506cc0a2871739f408511376a5871ef46235c50788773936ad2de54bcd62a",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-performance-materialized-failure.json",
+      "bytes": 4119,
+      "mtime": "2026-10-15T23:07:54.059263+00:00",
+      "sha256": "4220d22339d0e7dd9ba514c97205a9ed57699a7250f751582b7c72c4f7fe49bb",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-performance-photo-first-failure.json",
+      "bytes": 4103,
+      "mtime": "2026-10-15T23:03:08.340587+00:00",
+      "sha256": "b0af6a616c9c14c063bece642ede8d7c1081ec8818013114feb24814ab56d3fe",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-example.json",
+      "bytes": 303,
+      "mtime": "2026-10-15T23:12:37.362291+00:00",
+      "sha256": "d78cc9b902d7e52023b795026ae39c858c5cc7f231d748d1571ca5f8e6c589e1",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-licenses.json",
+      "bytes": 397,
+      "mtime": "2026-10-15T23:14:52.837535+00:00",
+      "sha256": "8a934a94cc1281c59964996e76ec87f4d7f78ab8d2d4eb19831a8cfe3d6fec81",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-lint.json",
+      "bytes": 1664,
+      "mtime": "2026-10-15T23:00:10.291913+00:00",
+      "sha256": "0294d0ed991ade0abf13b82f8c5f35f5a3c2fb25f331a92f3e604db724cc77f1",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-performance.json",
+      "bytes": 2768,
+      "mtime": "2026-10-15T23:10:12.887853+00:00",
+      "sha256": "015222f99f11b0794a95c92914b53ffd33883fdda5b2f95898636923bcbec17b",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-quality-first-failure.json",
+      "bytes": 402,
+      "mtime": "2026-10-15T23:12:31.855448+00:00",
+      "sha256": "e04455e95df8ce31c20fc9e2ec028f9bf6838c629302023b6c2119bdfee36dcd",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-query-permission-failure.json",
+      "bytes": 24618,
+      "mtime": "2026-10-15T23:09:05.483785+00:00",
+      "sha256": "80bcebbca1240c673417c095b9a0af72a9432f354ad0a294f0e6194a1a71baa4",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-query-plan-final.json",
+      "bytes": 15346,
+      "mtime": "2026-10-15T23:14:51.979437+00:00",
+      "sha256": "680adcb264b882b858b04b82b4aff94442a3c804f74578bd29719c804eb3fdd6",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-photo-query-plan-first.json",
+      "bytes": 16596,
+      "mtime": "2026-10-15T23:03:09.006321+00:00",
+      "sha256": "7b13fd68cb3e4c5b1b9d3352ab63d47feae8840b222fafd86d4bb3f59423f4fd",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/results/m3-sharp-package.json",
+      "bytes": 215,
+      "mtime": "2026-10-15T23:03:09.801085+00:00",
+      "sha256": "a95b6a9a0039489eecb6829dbcc09a273677ae0940f001f03108a6902fd7477a",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/tests/unit/backend/M3/photo.test.mjs",
+      "bytes": 5201,
+      "mtime": "2026-10-15T23:12:32.044199+00:00",
+      "sha256": "3453d8345360d8f4a4fb0fb1b8af2b14d09957a7e4d6268684b16fa170d5f4d7",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/.env.example",
+      "bytes": 433,
+      "mtime": "2026-10-15T21:30:41.012480+00:00",
+      "sha256": "d1b319115c685032d2a74b385563cb8ab4151d2671de7f3e5d912becf81f012a",
+      "lectura": "metadatos; lectura completa no acreditada"
+    },
+    {
+      "root": "aislado",
+      "path": "marleva-local/repositorio/apps/api/src/modules/m1/infrastructure/adapters/recovery-secrets.ts",
+      "bytes": 880,
+      "mtime": "2026-10-15T21:30:41.021580+00:00",
+      "sha256": "4a583031e792676cc6c5bbe7c963797c527ed874d13fc5a7635f5a5f2ffeabcb",
+      "lectura": "metadatos; lectura completa no acreditada"
     }
   ],
-  "continuacion": "2026-10-15: metadatos actualizados de archivos cambiados en la copia aislada; no acredita lectura exhaustiva."
+  "continuacion": "2026-10-15: metadatos aislados actualizados tras fotos; no acredita lectura exhaustiva."
 }

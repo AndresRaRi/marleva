@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-15T22:39:08.149Z",
-  "browser": "155.0.8059.40",
+  "date": "2026-10-15T23:21:10.469Z",
+  "browser": "155.0.8059.84",
   "source": "Expo web M3 + API Nest/PG propios",
   "cases": [
     {
@@ -12,11 +12,19 @@
       "passed": true
     },
     {
+      "id": "MAR-M3-IT-FE-009-CATALOG-IMAGE",
+      "passed": true
+    },
+    {
       "id": "MAR-M3-IT-FE-001-PAGE",
       "passed": true
     },
     {
       "id": "MAR-M3-IT-FE-002-DETAIL",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-009-DETAIL-IMAGES",
       "passed": true
     },
     {
@@ -53,6 +61,14 @@
     },
     {
       "id": "MAR-M3-IT-FE-001-WIDTH-1280",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-009-FALLBACK-CONTROLLED",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-009-IMAGE-RECOVERY",
       "passed": true
     }
   ],

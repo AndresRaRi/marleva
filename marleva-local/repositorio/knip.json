@@ -5,7 +5,13 @@
       "project": ["scripts/*.{mjs,cjs}", "tests/**/*.{mjs,ts}"]
     },
     "apps/api": {
-      "entry": ["src/main.ts", "bootstrap.mjs", "seed.mjs", "src/m3-main.ts"],
+      "entry": [
+        "src/main.ts",
+        "bootstrap.mjs",
+        "seed.mjs",
+        "src/m3-main.ts",
+        "src/modules/m3/infrastructure/adapters/sharp-photo-worker.ts"
+      ],
       "project": ["src/**/*.ts", "*.mjs", "prisma/**/*.prisma"],
       "ignoreDependencies": ["@prisma/client"]
     },

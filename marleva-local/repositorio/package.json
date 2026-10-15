@@ -48,6 +48,7 @@
     "@apidevtools/swagger-parser": "13.1.0",
     "@axe-core/playwright": "4.13.0",
     "@dbml/core": "10.3.1",
+    "@eslint/compat": "2.1.1",
     "@eslint/js": "10.0.1",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "1.64.0",
@@ -65,13 +66,13 @@
     "knip": "6.41.0",
     "otplib": "13.5.0",
     "prettier": "3.9.10",
+    "sharp": "0.35.5",
     "supertest": "7.3.1",
     "swagger-ui-dist": "5.33.2",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.2",
     "vitest": "5.0.4",
     "xcode": "3.0.1",
-    "yaml": "2.9.1",
-    "@eslint/compat": "2.1.1"
+    "yaml": "2.9.1"
   }
 }

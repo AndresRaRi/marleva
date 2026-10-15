@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-15T21:57:10.387Z",
+  "date": "2026-10-15T23:09:15.021Z",
   "node": "v24.21.0",
   "destination": "127.0.0.1:55432/marleva_m3_008",
   "measurement": "Repositorio Prisma/PG real. No HTTP/Auth ni capacidad productiva.",
@@ -10,17 +10,17 @@
       "concurrency": 1,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 327,
+      "requests": 1021,
       "errors": 0,
-      "p50": 14.277875000000222,
-      "p95": 21.572000000000116,
-      "p99": 30.186417000000347,
-      "requests_per_second": 65.4,
-      "rss_start": 110739456,
-      "rss_end": 80936960,
+      "p50": 3.946124999999938,
+      "p95": 8.33895799999982,
+      "p99": 13.303957999999511,
+      "requests_per_second": 204.2,
+      "rss_start": 110870528,
+      "rss_end": 109592576,
       "cpu": {
-        "user": 396887,
-        "system": 47341
+        "user": 851666,
+        "system": 87811
       }
     },
     {
@@ -28,17 +28,17 @@
       "concurrency": 5,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 199,
+      "requests": 1640,
       "errors": 0,
-      "p50": 103.03879100000086,
-      "p95": 203.698042,
-      "p99": 287.1223749999999,
-      "requests_per_second": 39.8,
-      "rss_start": 80953344,
-      "rss_end": 85377024,
+      "p50": 6.412083000000166,
+      "p95": 65.3051660000001,
+      "p99": 70.07883399999992,
+      "requests_per_second": 328,
+      "rss_start": 109592576,
+      "rss_end": 142589952,
       "cpu": {
-        "user": 237330,
-        "system": 27933
+        "user": 720203,
+        "system": 104455
       }
     },
     {
@@ -46,17 +46,17 @@
       "concurrency": 10,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 188,
+      "requests": 1371,
       "errors": 0,
-      "p50": 273.72745799999757,
-      "p95": 405.51837499999965,
-      "p99": 493.78362500000003,
-      "requests_per_second": 37.6,
-      "rss_start": 85377024,
-      "rss_end": 79331328,
+      "p50": 19.09479199999987,
+      "p95": 83.31762499999968,
+      "p99": 99.31512499999735,
+      "requests_per_second": 274.2,
+      "rss_start": 142589952,
+      "rss_end": 184221696,
       "cpu": {
-        "user": 142716,
-        "system": 22685
+        "user": 681114,
+        "system": 109404
       }
     },
     {
@@ -64,17 +64,17 @@
       "concurrency": 1,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 2247,
+      "requests": 2058,
       "errors": 0,
-      "p50": 1.9579169999997248,
-      "p95": 4.321457999998529,
-      "p99": 5.721291999998357,
-      "requests_per_second": 449.4,
-      "rss_start": 82247680,
-      "rss_end": 216481792,
+      "p50": 1.7617920000011509,
+      "p95": 5.362582999998267,
+      "p99": 11.346541000002617,
+      "requests_per_second": 411.6,
+      "rss_start": 176685056,
+      "rss_end": 232243200,
       "cpu": {
-        "user": 1491339,
-        "system": 176521
+        "user": 1116884,
+        "system": 117202
       }
     },
     {
@@ -82,17 +82,17 @@
       "concurrency": 5,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 6483,
+      "requests": 3592,
       "errors": 0,
-      "p50": 1.9437910000015108,
-      "p95": 8.163833999999042,
-      "p99": 44.51204199999847,
-      "requests_per_second": 1296.6,
-      "rss_start": 216481792,
-      "rss_end": 236535808,
+      "p50": 2.842500000002474,
+      "p95": 42.770416000003024,
+      "p99": 52.411457999998674,
+      "requests_per_second": 718.4,
+      "rss_start": 232243200,
+      "rss_end": 239435776,
       "cpu": {
-        "user": 2249955,
-        "system": 218974
+        "user": 1812229,
+        "system": 177079
       }
     },
     {
@@ -100,17 +100,17 @@
       "concurrency": 10,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 6277,
+      "requests": 4389,
       "errors": 0,
-      "p50": 4.361417000000074,
-      "p95": 43.12975000000006,
-      "p99": 49.789249999994354,
-      "requests_per_second": 1255.4,
-      "rss_start": 236535808,
-      "rss_end": 238845952,
+      "p50": 6.036791999998968,
+      "p95": 52.41716699999961,
+      "p99": 60.306791000002704,
+      "requests_per_second": 877.8,
+      "rss_start": 239468544,
+      "rss_end": 242876416,
       "cpu": {
-        "user": 1986497,
-        "system": 202214
+        "user": 1909618,
+        "system": 184239
       }
     },
     {
@@ -118,17 +118,17 @@
       "concurrency": 1,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 2892,
+      "requests": 2158,
       "errors": 0,
-      "p50": 1.3953750000000582,
-      "p95": 3.6856249999982538,
-      "p99": 5.764999999999418,
-      "requests_per_second": 578.4,
-      "rss_start": 239648768,
-      "rss_end": 232849408,
+      "p50": 1.760374999998021,
+      "p95": 4.346958999994968,
+      "p99": 7.457542000003741,
+      "requests_per_second": 431.6,
+      "rss_start": 243384320,
+      "rss_end": 230342656,
       "cpu": {
-        "user": 1134835,
-        "system": 102441
+        "user": 1347448,
+        "system": 125201
       }
     },
     {
@@ -136,17 +136,17 @@
       "concurrency": 5,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 3293,
+      "requests": 4790,
       "errors": 0,
-      "p50": 3.3100829999966663,
-      "p95": 29.753375000000233,
-      "p99": 49.53812499999913,
-      "requests_per_second": 658.6,
-      "rss_start": 232849408,
-      "rss_end": 223297536,
+      "p50": 2.3682499999995343,
+      "p95": 31.223540999999386,
+      "p99": 53.84070899999642,
+      "requests_per_second": 958,
+      "rss_start": 230342656,
+      "rss_end": 243449856,
       "cpu": {
-        "user": 1452634,
-        "system": 173159
+        "user": 1893653,
+        "system": 187595
       }
     },
     {
@@ -154,21 +154,21 @@
       "concurrency": 10,
       "seconds": 5,
       "warmup_seconds": 1,
-      "requests": 5938,
+      "requests": 4735,
       "errors": 0,
-      "p50": 4.0622500000026776,
-      "p95": 46.03191700000025,
-      "p99": 52.110249999997905,
-      "requests_per_second": 1187.6,
-      "rss_start": 223297536,
-      "rss_end": 223756288,
+      "p50": 5.306375000000116,
+      "p95": 51.446750000002794,
+      "p99": 59.39824999999837,
+      "requests_per_second": 947,
+      "rss_start": 243449856,
+      "rss_end": 242155520,
       "cpu": {
-        "user": 1766829,
-        "system": 218759
+        "user": 1915784,
+        "system": 184604
       }
     }
   ],
-  "dataset_prefix": "PF-M3-367c9cce-b540-4142-b20f-4c7b1baceccd",
+  "dataset_prefix": "PF-M3-f4fe7b17-d029-472d-bd6a-a03b153fd973",
   "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
   "passed": true
 }

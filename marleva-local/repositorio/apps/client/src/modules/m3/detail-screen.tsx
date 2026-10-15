@@ -1,3 +1,4 @@
+import { OfferPhotos } from './offer-photos';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { CatalogClient, type CatalogOffer } from './catalog-client';
@@ -12,6 +13,7 @@ const modeLabels: Record<string, string> = {
 function Details({ offer, seller }: { offer: CatalogOffer; seller: (id: string) => void }) {
   return (
     <>
+      <OfferPhotos offer={offer} detail />
       <Text accessibilityRole="header" aria-level={1} style={styles.title}>
         {offer.title}
       </Text>

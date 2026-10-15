@@ -49,4 +49,4 @@ Cierre MAR-CHAT-005 solicitado el 15-10-2026: PR #2 integrado a main en b12bfca.
 
 ## M3 aislado — MAR-CHAT-008
 
-Desarrollo paralelo autorizado15-10-2026 en copia/rama propias. [Revisión y arranque M3](marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md). Catálogo, filtros, cursor, detalle y perfil públicos con datos ficticios; API3103, web8103 y PostgreSQL55432 exclusivos. No conecta identidad/base de M1 ni publica. Gestión privada, fotos y plataformas siguen pendientes. Estado y pruebas en la matriz M3; no declarar módulo completo ni reutilizar resultados de M1.
+Desarrollo paralelo autorizado15-10-2026 en copia/rama propias. [Revisión y arranque M3](marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md). Catálogo, filtros, cursor, detalle y perfil públicos con datos ficticios; API3103, web8103 y PostgreSQL55432 exclusivos. No conecta identidad/base de M1 ni publica. Procesamiento interno y entrega de fotos disponibles; gestión privada, carga autenticada y plataformas pendientes; visualización web probada. Estado y pruebas en la matriz M3; no declarar módulo completo ni reutilizar resultados de M1.
