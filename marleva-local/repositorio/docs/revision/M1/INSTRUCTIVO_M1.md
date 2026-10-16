@@ -1,6 +1,6 @@
 # M1: prueba de aceptación en Chrome
 
-Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome; comprobar la versión y CI finales en PR14. La aceptación corresponde al usuario. Android/iOS están aplazados y apagados por instrucción del usuario; Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
+Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome comprobado en [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443), código0d3b7ba; comprobar la integración y CI finales de PR14 antes de aceptar. La aceptación corresponde al usuario. Android/iOS están aplazados y apagados por instrucción del usuario; Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
 
 ## Abrir y preparar la prueba
 
@@ -73,6 +73,8 @@ Los rechazos, caducidad, capacidad ligada, rol actual y caída/reinicio también
 ## 7. Teclado, lectura y ampliación
 
 Repetir acceso, Cuenta/Avisos/Ayuda y salida sin ratón: Tab/Mayús+Tab y Enter. El foco debe ser visible, alcanzar controles y permitir corregir errores. Ampliar Chrome al200% y comprobar texto/controles sin desbordamiento horizontal. Revisar nombres de campos, mensajes y selección de pestañas con el lector de pantalla que utilice el tester. Las auditorías Axe/árbol accesible/teclado no sustituyen esa revisión humana ni acreditan WCAG completa.
+
+![Teclado y ampliación200% comprobados en Chrome](capturas/07-teclado-zoom.png)
 
 ## 8. Base sin pantalla de usuario
 

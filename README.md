@@ -51,3 +51,5 @@ Consolidación vigente: MAR-CHAT-009, [estado y cola única](entregables/fuentes
 ## M3 aislado — MAR-CHAT-008
 
 Trabajo aislado de008 incorporado a la consolidación009. [Revisión y arranque M3](marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md). Catálogo, filtros, cursor, detalle y perfil públicos con datos ficticios; API3103, web8103 y PostgreSQL55432 exclusivos. No conecta identidad/base de M1 ni publica. Catálogo y gestión privada inyectable con fotos probados en aislamiento; identidad/elegibilidad/revisión reales, plataformas y aceptación pendientes. Estado y pruebas en la matriz M3; no declarar módulo completo ni reutilizar resultados de M1.
+
+Entrega Chrome009: [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443) aprobó14trabajos para0d3b7ba. Teclado/zoom y carga100cuentas a1/5/10 sin errores comprobados; guía y actas actualizadas. La integración final se verifica en PR14 yCI del main resultante, sin atribuir resultados futuros.
