@@ -88,3 +88,7 @@ Integración de proveedor de identidad M1, elegibilidad M2 y revisión M8; selec
 Fuentes sincronizadas permanecen de solo lectura. Solo la sección M3 de01 editable se actualiza; debe conciliarse con avances paralelos antes de reemplazar la fuente compartida.00/02/03 y configuración no requieren sustitución por este incremento. Commit/push/merge y ubicación final se informan tras comprobarlos; guardar local no implica subida a Fuentes ni despliegue.
 
 PF-BE004 local:20 muestras por escenario tras tres calentamientos, concurrencia1; p95 creación66,613ms y lista94,231ms, cero errores, objetivo local500ms cumplido. Acta m3-management-performance.json; no capacidad productiva.
+
+## Cierre de chat solicitado por el usuario
+
+MAR-CHAT-008 se cierra para consolidar pendientes. PR9 publicado, sin merge. CI38841960927 del commit bfae37b aprobó M3 y cobertura, calidad, unitarias, arquitectura, integración y web; seguridad, alertasCodeQL e inventarioSonar impiden integrar. Correcciones posteriores deben verificarse por su propio SHA. Prompt revisado y estado actual en01; cierre no acredita aceptación ni proveedor real. No se iniciará más alcance funcional en este chat.

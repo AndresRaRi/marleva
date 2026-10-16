@@ -81,7 +81,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
 | MAR-CHAT-007 | Sonar y elegibilidad, CONTINUACIÓN 15-10-2026; copia aislada desde PR #5. Usuario autoriza Cloud Free privado, términos y OAuth. Organización/proyecto creados Free/Private y conexión CI guardada como secreto. Flujo Cloud diseñado, implementado y probado en 38821867592: positivo OK, negativa S1764 ERROR y comparador bloquea, corrección OK; Community sigue bloqueado. [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026). Acta sonar-cloud.json; preparar PR para revisión tras CI del HEAD final, sin merge |
-| MAR-CHAT-008 | M3 Catálogo aislado, autorizado15-10-2026 por solicitud actual; tema abierto |
+| MAR-CHAT-008 | Cierre solicitado por el usuario15-10-2026 para consolidar pendientes en otro chat; M3 y PR9 incompletos, sin merge |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
@@ -163,18 +163,33 @@ Revisión independiente estática detectó lista privada/cursor conservados al c
 
 Fuentes sincronizadas no editadas ni subidas. Solo esta sección editable de01 se actualiza; conciliar con avances de otros chats al integrar, sin sustituirlos por estado de rama antigua.00/02/03 y configuración no cambian por M3. Inventario/lectura en docs/proceso/inventario-m3.json; dependencias/cachés/secretos no se declaran leídos.
 
-Continuidad revisada:
+Cierre solicitado por el usuario15-10-2026: consolidar pendientes en otro chat y no prolongar ejecuciones paralelas. PR [#9](https://github.com/AndresRaRi/marleva/pull/9), HEAD remoto comprobado bfae37b. CI [38841960927](https://github.com/AndresRaRi/marleva/actions/runs/38841960927): M3, cobertura, calidad,273 unitarias, arquitectura/contratos, revisión de dependencias, integración y web aprobados; seguridad falló por14 detecciones en refs M2 ajenas a ascendencia, CodeQL publicó siete alertas de tipo/ruta y Sonar falló inventario. No merge realizado. Correcciones de tipo/ruta, ámbito HEAD y diagnóstico/inclusión TS de Sonar guardadas en f03535a; hooks273/273 y calidad aprobados en el reintento. Verificar push y CI posteriores en PR antes de acreditar corrección remota. La revisión estática de esas correcciones no encontró bloqueos. Un hook local falló por timeout5s de prueba del gate de cobertura durante carga concurrente,272/273; no por una aserción de negocio. No desactivar controles ni atribuir resultado previo al nuevo SHA.
+
+Título sugerido del siguiente chat: Consolidación final de Marleva: CI, PR y pendientes.
+
+Prompt completo de continuidad:
 
 ```text
-PROYECTO Marleva. MAR-CHAT-008, CONTINUACIÓN: cierre de incremento M3.
-Comprobar copia/rama/SHA y acceso real al remoto antes de operar.
-Leer instrucciones, AGENTS,00–03, protocolo y matrices M1/M3; inventariar cambios.
-Conservar C01–C26/C25, datos ficticios y recursos aislados. No tocar servicios M1.
-Catálogo y gestión privada inyectable implementados; consultar instructivo/matriz/avance.
-Autorizado commit, push y merge mediante PR/revisión/CI; sin gasto ni despliegue.
-Cerrar validación del SHA final, resolver integración con main conservando avances ajenos.
-No acreditar proveedor M1/M2/M8 real, plataformas nativas o aceptación con fixtures.
-Releer finales y comprobar ignorados, manual, pruebas y evidencias reales.
-Actualizar solo fuentes afectadas y señalar subida efectiva; no prometer persistencia temporal.
-Continuar sin confirmaciones rutinarias; permisos obligatorios del entorno conservados.
+PROYECTO Marleva. Nuevo chat de consolidación; comprobar próximo ID disponible en01.
+MAR-CHAT-008 cierra por solicitud del usuario, sin declarar M3 completo ni aceptado.
+Comprobar accesos reales, raíz, ramas, cambios locales y SHA antes de operar.
+Copia ejecutora M3: /private/tmp/marleva-m3-008/repo; es temporal.
+Copia managed previa: /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a.
+Remoto: AndresRaRi/marleva, PR9, rama codex/feat-m3-catalogo-008.
+Leer AGENTS,00–03 completos/en orden, protocolo, matricesM1/M3, avance e instructivos.
+Inventariar archivos nuevos/modificados y comprobar el trabajo paralelo sin detenerlo ni sobrescribirlo.
+Consultar PR9 y sus Actions por SHA: bfae37b tuvo M3/cobertura/calidad/integración/web verdes,
+pero seguridad/Gitleaks, alertasCodeQL y Sonar bloquearon merge. Hay correcciones posteriores;
+comprobar qué quedó comprometido/subido y su CI, no asumir aprobación ni repetir suites verdes.
+Cerrar causas concretas: UUID/tipo y confinamiento de fotos; Gitleaks revisa historial completoHEAD,
+no refs ajenas; coherencia de inventario TS/TSX de Sonar sin omitir lógica ni relajar gates.
+El gate local de cobertura tuvo timeout bajo concurrencia; conservar hooks, resolver causa sin apagarlos.
+Consolidar pendientes de otros chats usando sus estados reales;007 figura Sonar y006 M1 en main.
+M3 aislado incluye catálogo y gestión privada inyectable con fotos/versiones/envío/revisión/corrección/pausa.
+Fixtures no acreditan proveedor real M1/M2/M8, selector nativo, plataformas/accesibilidad o aceptación.
+Usar matriz/avance para criterios pendientes; no ampliar MVP1 ni C25, no rehacer trabajo aprobado.
+Usuario autoriza commits,push,PR y merge a main tras revisión/CI; sin confirmaciones básicas.
+Sin gasto,despliegue,contactos,datos reales ni cambios destructivos. No tocar servicios o migracionesM1.
+Fuentes sincronizadas readonly. Conciliar01 editable con avances de otros chats antes de reemplazarla.
+Entregar commits,push,CI,merge y accesos verificables; cerrar incremento sin fingir módulo terminado.
 ```
