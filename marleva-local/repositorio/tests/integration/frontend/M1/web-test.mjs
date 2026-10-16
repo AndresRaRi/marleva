@@ -1,3 +1,4 @@
+import { verifyLiveAccountContinuity } from './live-account-continuity.mjs';
 import { verifyPaginatedNotices } from './paginated-notices.mjs';
 import path from 'node:path';
 process.chdir(path.resolve(new URL('../../../..', import.meta.url).pathname));
@@ -45,6 +46,7 @@ try {
   await audit('acceso');
   await page.getByLabel('Correo', { exact: true }).fill(`web-${Date.now()}@example.test`);
   const address = await page.getByLabel('Correo', { exact: true }).inputValue();
+  const challengeStartedAt = Date.now();
   await page.getByRole('button', { name: 'Recibir código', exact: true }).click();
   await page.getByLabel('Código de seis cifras', { exact: true }).waitFor();
   await page.screenshot({
@@ -109,6 +111,12 @@ try {
     await page.getByText(item.text, { exact: true }).first().waitFor();
   if (restoredNotices.items.length === 0)
     await page.getByText('Todavía no hay avisos.', { exact: true }).waitFor();
+  const liveAccountContinuity = await verifyLiveAccountContinuity(
+    page,
+    address,
+    challengeStartedAt,
+    audit,
+  );
   await page.getByRole('button', { name: 'Cerrar esta sesión', exact: true }).click();
   await page.getByText('Accede a tu cuenta', { exact: true }).waitFor();
   assert.equal(errors.length, 0);
@@ -140,6 +148,7 @@ try {
           keyboardFocus: true,
           logout: true,
           realSessionReloadNotices: true,
+          liveAccountContinuity,
           resumedNotices,
           paginatedNotices,
         },
