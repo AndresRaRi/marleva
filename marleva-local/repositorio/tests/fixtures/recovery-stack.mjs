@@ -87,23 +87,10 @@ const targetNames = Object.fromEntries(
   Object.keys(originals).map((s) => [s, names.prefix + '-' + s + '-provider']),
 );
 const created = [];
-// Reuse only stopped containers created by this exact run; volumes remain intact.
+// Preserve every existing target, including failed attempts, for inspection.
 for (const name of Object.values(targetNames)) {
   const found = spawnSync('docker', ['inspect', name], { encoding: 'utf8' });
-  if (found.status === 0) {
-    const existing = JSON.parse(found.stdout)[0];
-    assert.equal(existing.State.Running, false);
-    assert.equal(existing.Config.Labels['marleva.b12.run'], run);
-    assert.ok(
-      existing.Mounts.every(
-        (m) =>
-          !['supabase_db_' + context.project, 'supabase_storage_' + context.project].includes(
-            m.Name,
-          ),
-      ),
-    );
-    docker(['rm', name]);
-  }
+  assert.notEqual(found.status, 0, 'Destino existente: conservar e inspeccionar ' + name);
 }
 const sourceUrl = new URL(process.env.DATABASE_URL),
   businessRole = decodeURIComponent(sourceUrl.username);

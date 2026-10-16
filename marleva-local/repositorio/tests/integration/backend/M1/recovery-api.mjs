@@ -8,6 +8,8 @@ import { generate } from 'otplib';
 import path from 'node:path';
 process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? context.envFile ?? '.env');
 const ci = process.env.MARLEVA_CI_STACK === '1';
+const resumeOperator = process.env.MARLEVA_RECOVERY_RESUME_OPERATOR === '1';
+if (resumeOperator) assert.ok(context.isolated && !ci, 'Reanudación solo B12 aislado');
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
 const copy = ci
   ? { names: { prefix: 'ci-no-restoration' } }
@@ -154,7 +156,7 @@ try {
         providerTokens: seal(tokens(verified.data.session), process.env.TOKEN_ENCRYPTION_KEY),
       },
     });
-    return { account, token, original };
+    return { account, token, original, providerAuthenticatedAt: Date.now() };
   };
   const owner = await prepare('owner'),
     reviewer = await prepare('reviewer', owner.account.id);
@@ -211,168 +213,193 @@ try {
     );
     return enrolled.body;
   };
-  const lost = await factor(owner);
-  let result = await call(
-    '/auth/mfa-recoveries',
-    'POST',
-    { reason: 'Factor ficticio perdido' },
-    owner.token,
-    idempotency('request'),
-  );
-  expectStatus(result, 202, 'Solicitud');
-  const recoveryId = result.body.id;
-  const ownCurrent = await call('/auth/mfa-recoveries/current', 'GET', undefined, owner.token);
-  expectStatus(ownCurrent, 200, 'Consulta actual propia');
-  assert.deepEqual(ownCurrent.body, { recuperacion: result.body });
-  const otherCurrent = await call('/auth/mfa-recoveries/current', 'GET', undefined, reviewer.token);
-  expectStatus(otherCurrent, 200, 'Consulta actual de otra cuenta');
-  assert.deepEqual(otherCurrent.body, { recuperacion: null });
-  expectStatus(
-    await call(
-      '/auth/mfa-recoveries/current?accountId=' + owner.account.id,
+  let recoveryId, lost, row;
+  if (resumeOperator) {
+    const pending = await db.mfaRecovery.findFirstOrThrow({
+      where: { accountId: owner.account.id, state: 'reenrollment' },
+    });
+    assert.equal(pending.approvedBy, reviewer.account.id);
+    assert.equal(pending.capabilityHash, null);
+    assert.equal(pending.factorId, null);
+    const oldFactors = await admin.auth.admin.mfa.listFactors({ userId: owner.account.authId });
+    assert.ok(
+      !oldFactors.error &&
+        !oldFactors.data.factors.some((item) => item.id === owner.original.factorId),
+    );
+    recoveryId = pending.id;
+    await factor(reviewer);
+    report.previousEvidence = context.report('api-failure');
+    report.cases.resumeRestoredOwnerAfterConfirmedFactorRemoval = true;
+  } else {
+    lost = await factor(owner);
+    let result = await call(
+      '/auth/mfa-recoveries',
+      'POST',
+      { reason: 'Factor ficticio perdido' },
+      owner.token,
+      idempotency('request'),
+    );
+    expectStatus(result, 202, 'Solicitud');
+    recoveryId = result.body.id;
+    const ownCurrent = await call('/auth/mfa-recoveries/current', 'GET', undefined, owner.token);
+    expectStatus(ownCurrent, 200, 'Consulta actual propia');
+    assert.deepEqual(ownCurrent.body, { recuperacion: result.body });
+    const otherCurrent = await call(
+      '/auth/mfa-recoveries/current',
       'GET',
       undefined,
       reviewer.token,
-    ),
-    422,
-    'No selector de cuenta',
-  );
+    );
+    expectStatus(otherCurrent, 200, 'Consulta actual de otra cuenta');
+    assert.deepEqual(otherCurrent.body, { recuperacion: null });
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries/current?accountId=' + owner.account.id,
+        'GET',
+        undefined,
+        reviewer.token,
+      ),
+      422,
+      'No selector de cuenta',
+    );
 
-  assert.deepEqual(Object.keys(result.body).sort(), ['id', 'state', 'version']);
-  expectStatus(
-    await call(
+    assert.deepEqual(Object.keys(result.body).sort(), ['id', 'state', 'version']);
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries',
+        'POST',
+        { reason: 'Otro cuerpo' },
+        owner.token,
+        idempotency('request'),
+      ),
+      409,
+      'Clave contradictoria',
+    );
+    const repeat = await call(
       '/auth/mfa-recoveries',
       'POST',
-      { reason: 'Otro cuerpo' },
+      { reason: 'Factor ficticio perdido' },
       owner.token,
       idempotency('request'),
-    ),
-    409,
-    'Clave contradictoria',
-  );
-  const repeat = await call(
-    '/auth/mfa-recoveries',
-    'POST',
-    { reason: 'Factor ficticio perdido' },
-    owner.token,
-    idempotency('request'),
-  );
-  expectStatus(repeat, 202, 'Repetición');
-  assert.equal(repeat.body.id, recoveryId);
-  expectStatus(
-    await call(
-      '/auth/mfa-recoveries',
-      'POST',
-      { reason: 'Nueva solicitud' },
-      owner.token,
-      idempotency('another'),
-    ),
-    409,
-    'Proceso activo único',
-  );
-  expectStatus(
-    await call(
-      '/auth/mfa-recoveries',
-      'POST',
-      { reason: 'x', role: 'm1_access_admin' },
-      owner.token,
-      idempotency('invalid'),
-    ),
-    422,
-    'Campos extra',
-  );
-  expectStatus(
-    await call('/auth/mfa/enrollments', 'POST', {}, owner.token),
-    409,
-    'Ruta normal no salta recuperación',
-  );
-  expectStatus(
-    await call(
-      '/auth/mfa-recoveries/' + recoveryId + '/approvals',
-      'POST',
-      { expected_version: 1 },
-      owner.token,
-      idempotency('self'),
-    ),
-    403,
-    'Autorrevisión',
-  );
-  expectStatus(
-    await call('/auth/mfa-recoveries/' + recoveryId, 'GET', undefined, reviewer.token),
-    404,
-    'Consulta ajena AAL1',
-  );
-  expectStatus(
-    await call(
+    );
+    expectStatus(repeat, 202, 'Repetición');
+    assert.equal(repeat.body.id, recoveryId);
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries',
+        'POST',
+        { reason: 'Nueva solicitud' },
+        owner.token,
+        idempotency('another'),
+      ),
+      409,
+      'Proceso activo único',
+    );
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries',
+        'POST',
+        { reason: 'x', role: 'm1_access_admin' },
+        owner.token,
+        idempotency('invalid'),
+      ),
+      422,
+      'Campos extra',
+    );
+    expectStatus(
+      await call('/auth/mfa/enrollments', 'POST', {}, owner.token),
+      409,
+      'Ruta normal no salta recuperación',
+    );
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries/' + recoveryId + '/approvals',
+        'POST',
+        { expected_version: 1 },
+        owner.token,
+        idempotency('self'),
+      ),
+      403,
+      'Autorrevisión',
+    );
+    expectStatus(
+      await call('/auth/mfa-recoveries/' + recoveryId, 'GET', undefined, reviewer.token),
+      404,
+      'Consulta ajena AAL1',
+    );
+    expectStatus(
+      await call(
+        '/auth/mfa-recoveries/' + recoveryId + '/approvals',
+        'POST',
+        { expected_version: 1 },
+        reviewer.token,
+        idempotency('aal1'),
+      ),
+      403,
+      'Revisión AAL1',
+    );
+    await factor(reviewer);
+    expectStatus(
+      await call('/auth/mfa-recoveries/' + recoveryId, 'GET', undefined, reviewer.token),
+      200,
+      'Consulta administrador',
+    );
+    const approved = await call(
       '/auth/mfa-recoveries/' + recoveryId + '/approvals',
       'POST',
       { expected_version: 1 },
       reviewer.token,
-      idempotency('aal1'),
-    ),
-    403,
-    'Revisión AAL1',
-  );
-  await factor(reviewer);
-  expectStatus(
-    await call('/auth/mfa-recoveries/' + recoveryId, 'GET', undefined, reviewer.token),
-    200,
-    'Consulta administrador',
-  );
-  const approved = await call(
-    '/auth/mfa-recoveries/' + recoveryId + '/approvals',
-    'POST',
-    { expected_version: 1 },
-    reviewer.token,
-    idempotency('approve'),
-  );
-  expectStatus(approved, 202, 'Aprobación durable');
-  assert.equal(approved.body.state, 'approved');
-  expectStatus(
-    await call('/me', 'GET', undefined, owner.token),
-    401,
-    'Sesión anterior revocada antes de proveedor',
-  );
-  report.cases.requestReadApprovalPrivacyIdempotencyAndSessionRevocation = true;
-  docker(['stop', '--time', '10', stack.names.auth]);
-  authStopped = true;
-  await processRecovery.execute();
-  assert.equal(
-    (await db.mfaRecovery.findUniqueOrThrow({ where: { id: recoveryId } })).state,
-    'provider_pending',
-  );
-  report.cases.providerDownKeepsDurablePending = true;
-  docker(['start', stack.names.auth]);
-  authStopped = false;
-  let healthy = false;
-  for (let i = 0; i < 100; i++) {
-    try {
-      const r = await fetch(process.env.SUPABASE_URL + '/auth/v1/health', {
-        headers: { apikey: process.env.SUPABASE_ANON_KEY },
-        signal: AbortSignal.timeout(1000),
-      });
-      if (r.ok) {
-        healthy = true;
-        break;
+      idempotency('approve'),
+    );
+    expectStatus(approved, 202, 'Aprobación durable');
+    assert.equal(approved.body.state, 'approved');
+    expectStatus(
+      await call('/me', 'GET', undefined, owner.token),
+      401,
+      'Sesión anterior revocada antes de proveedor',
+    );
+    report.cases.requestReadApprovalPrivacyIdempotencyAndSessionRevocation = true;
+    docker(['stop', '--time', '10', stack.names.auth]);
+    authStopped = true;
+    await processRecovery.execute();
+    assert.equal(
+      (await db.mfaRecovery.findUniqueOrThrow({ where: { id: recoveryId } })).state,
+      'provider_pending',
+    );
+    report.cases.providerDownKeepsDurablePending = true;
+    docker(['start', stack.names.auth]);
+    authStopped = false;
+    let healthy = false;
+    for (let i = 0; i < 100; i++) {
+      try {
+        const r = await fetch(process.env.SUPABASE_URL + '/auth/v1/health', {
+          headers: { apikey: process.env.SUPABASE_ANON_KEY },
+          signal: AbortSignal.timeout(1000),
+        });
+        if (r.ok) {
+          healthy = true;
+          break;
+        }
+      } catch {
+        /* Bounded readiness. */
       }
-    } catch {
-      /* Bounded readiness. */
+      await new Promise((r) => setTimeout(r, 100));
     }
-    await new Promise((r) => setTimeout(r, 100));
+    assert.ok(healthy);
+    await processRecovery.execute();
+    row = await db.mfaRecovery.findUniqueOrThrow({ where: { id: recoveryId } });
+    assert.equal(row.state, 'reenrollment');
+    const oldFactors = await admin.auth.admin.mfa.listFactors({ userId: owner.account.authId });
+    assert.ok(!oldFactors.error && !oldFactors.data.factors.some((f) => f.id === lost.id));
+    report.cases.restartedWorkerConfirmsLostFactorAbsent = true;
   }
-  assert.ok(healthy);
-  await processRecovery.execute();
-  let row = await db.mfaRecovery.findUniqueOrThrow({ where: { id: recoveryId } });
-  assert.equal(row.state, 'reenrollment');
-  const oldFactors = await admin.auth.admin.mfa.listFactors({ userId: owner.account.authId });
-  assert.ok(!oldFactors.error && !oldFactors.data.factors.some((f) => f.id === lost.id));
-  report.cases.restartedWorkerConfirmsLostFactorAbsent = true;
   const login = async () => {
     const latest = await db.challenge.findFirst({
       where: { email: owner.account.email },
       orderBy: { createdAt: 'desc' },
     });
-    const delay = latest ? Math.max(0, 61000 - (Date.now() - +latest.createdAt)) : 0;
+    const lastAuth = Math.max(owner.providerAuthenticatedAt, latest ? +latest.createdAt : 0);
+    const delay = Math.max(0, 61000 - (Date.now() - lastAuth));
     if (delay) {
       console.log(
         'Ensayo: respetar espera real de reenvío OTP (' + Math.ceil(delay / 1000) + ' s)',
@@ -482,7 +509,11 @@ try {
     await call(
       '/auth/mfa-recoveries/' + recoveryId + '/verifications',
       'POST',
-      { expected_version: row.version, factor_id: lost.id, codigo: '000000' },
+      {
+        expected_version: row.version,
+        factor_id: owner.original?.factorId ?? lost.id,
+        codigo: '000000',
+      },
       freshToken,
       { ...idempotency('wrong-factor'), ...privateHeader },
     ),
@@ -596,7 +627,9 @@ try {
   writeFileSync(
     ci
       ? 'tests/results/ci-operators' + (report.result === 'FAIL' ? '-failure' : '') + '.json'
-      : context.report('api' + (report.result === 'FAIL' ? '-failure' : '')),
+      : context.report(
+          'api' + (resumeOperator ? '-resumed' : '') + (report.result === 'FAIL' ? '-failure' : ''),
+        ),
     JSON.stringify(report, null, 2) + '\n',
   );
 }

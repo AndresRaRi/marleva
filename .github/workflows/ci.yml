@@ -219,6 +219,7 @@ jobs:
           path: |-
             marleva-local/repositorio/artifacts/ci/capturas/
             marleva-local/repositorio/artifacts/ci/axe.json
+            marleva-local/repositorio/tests/results/web-test.json
             marleva-local/repositorio/artifacts/ci/lighthouse/
           retention-days: 3
           if-no-files-found: error

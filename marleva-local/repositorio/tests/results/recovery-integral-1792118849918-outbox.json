@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-16T15:26:40.629Z",
+  "copyPrefix": "marleva-b12-1792118849918",
+  "fixturePrefix": "b12-1792118117954",
+  "cases": {
+    "queueFromSamePhysicalBackup": true,
+    "postgresRestartPreservesQueue": true,
+    "smtpDownKeepsPendingAndExpiresOld": true,
+    "newProcessesDeliverOnlyTargetWithoutRepeatingBusiness": true
+  },
+  "limits": [
+    "Reloj explícito para backoff, sin RPO/RTO productivo",
+    "SMTP puede repetir una entrega aceptada antes del ACK; no exactly-once"
+  ],
+  "result": "PASS",
+  "durationMs": 17316
+}
