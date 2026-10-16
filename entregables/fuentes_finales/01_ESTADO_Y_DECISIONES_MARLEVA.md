@@ -39,7 +39,7 @@ C01–C26 conservadas. Las fuentes de cada fila registran su confirmación origi
 
 A0, autorización de desarrollo local, confirmada el 12 de octubre de 2026: herramientas gratuitas elegibles, dependencias/imágenes, servicios y construcción/pruebas de base/M1 en web, Android e iOS con datos ficticios y simulador aislado. SDK Android y licencia autorizados. No volver a pedirlos. Xcode 27 está instalado y seleccionado; comprobación inicial pasó. Runtime iOS y prueba física siguen pendientes.
 
-El usuario aprobó el plan técnico auditado y pidió cerrar cada brecha y resolver contradicciones. También indicó el repositorio GitHub y autorizó commit/push de la rama de trabajo. No eliminar archivos sin confirmación. Revisión de código antes de integrar a main por el usuario o segundo agente. La tarea vigente implementa y prueba el pipeline por fases en su rama; no fusionar a main ni desplegar.
+El usuario aprobó el plan técnico auditado y pidió cerrar cada brecha y resolver contradicciones. También indicó el repositorio GitHub y autorizó commit/push de la rama de trabajo. No eliminar archivos sin confirmación. Revisión de código antes de integrar a main por el usuario o segundo agente. La tarea vigente implementa y prueba el pipeline por fases en su rama; integración a main del conjunto009 autorizada tras CI y revisión final según§8; no desplegar.
 
 Decisión B12-PILOTO-A, 14-10-2026: el usuario respondió «Aprueno A». Exigir recuperación esencial antes del piloto; diferir ensayos prolongados de capacidad y escenarios avanzados de caída/migración. Detalle y trazabilidad en [procedimiento B12](../../marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md). Confirmación adicional del usuario, 14-10-2026: antes del piloto exige restauración/reinicio, permisos, borrados, revocación, cola y recuperación MFA de operadores. Ensayos prolongados de capacidad y escenarios avanzados de migración/caída pueden esperar, conservando prueba básica. No declara B12 ni M1 completos y no autoriza activar el piloto.
 
@@ -83,7 +83,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-007 (Sonar; ID duplicado con diseño M2/M8) | Sonar y elegibilidad, CONTINUACIÓN 15-10-2026; copia aislada desde PR #5. Usuario autoriza Cloud Free privado, términos y OAuth. Organización/proyecto creados Free/Private y conexión CI guardada como secreto. Flujo Cloud diseñado, implementado y probado en 38821867592: positivo OK, negativa S1764 ERROR y comparador bloquea, corrección OK; Community sigue bloqueado. [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026). Acta sonar-cloud.json; preparar PR para revisión tras CI del HEAD final, sin merge |
 | MAR-CHAT-007 (diseño M2/M8; ID histórico duplicado) | Diseño documental d34fb3e, incorporado en consolidación009; sin implementación ni aceptación |
 | MAR-CHAT-008 | Cerrado por solicitud del usuario para consolidar; M3 aislado/PR9 sin aceptación |
-| MAR-CHAT-009 | Abierto: consolidación única en rama existente; sin merge a main ni borrados |
+| MAR-CHAT-009 | Abierto: consolidación única en rama existente; merge autorizado tras CI/revisión final; sin borrados |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
@@ -133,7 +133,7 @@ Cierre006,15-10-2026: dirección visual verde/fondo cálido/tipografía sistema/
 
 ## 8. Consolidación única MAR-CHAT-009
 
-15-10-2026. Motivo: encargo del usuario de reunir pendientes y corregir lo autorizado sin más trabajo paralelo. El registro accesible001–008 no contiene009. Se conserva la colisión histórica007: Sonar y diseño M2/M8 son trabajos distintos, identificados por tema/rama/SHA; no renumerados retrospectivamente. La prohibición actual de merge a main prevalece sobre la autorización anterior registrada en008. Sin borrados, reset, stash, cambios de migraciones ni operación real.
+15-10-2026. Motivo: encargo del usuario de reunir pendientes y corregir lo autorizado sin más trabajo paralelo. El registro accesible001–008 no contiene009. Se conserva la colisión histórica007: Sonar y diseño M2/M8 son trabajos distintos, identificados por tema/rama/SHA; no renumerados retrospectivamente. Al iniciar009 el usuario prohibió merge a main; instrucción posterior expresa del15-10-2026: «Sí, autorizo el merge a main de todo lo consolidado cuando terminen de pasar el CI y la revisión final. Continúa y no borres nada». Esta autorización condicionada reemplaza la prohibición anterior, sin aprobar producto ni piloto. Sin borrados, reset, stash, cambios de migraciones ni operación real.
 
 ### Estado remoto y local comprobado
 
@@ -154,7 +154,7 @@ Ejecutor M1 reutilizado: artifacts/marleva-pr8-integracion, rama codex/integrate
 |---|---|---|
 | CON-01 / P0 | Corregido y probado en902308e/38847365871; asistente | GitLeaks analiza HEAD con toda su ascendencia; no refs ajenas. Regenerar Swagger objetivo. Tres controles del detector, determinismo, hooks y CI del SHA nuevo; acta consolidacion-009.json |
 | CON-02 / P0 | Corregido y probado en87fdc5c/38846202699; asistente | Leer seis incidencias y bloques duplicados; corregir causas sin bajar gates ni ocultar lógica. Pruebas M3 proporcionales y CI propio; conservar identidad real pendiente |
-| CON-03 / P1 | Conjunto preparado y CI correcto; revisión humana pendiente | CON01/02, comparar archivos compartidos/contratos/lockfile y documentación por procedencia. Prohibido merge a main; no borrar ramas integradas |
+| CON-03 / P1 | Conjunto preparado y CI correcto; revisión humana pendiente | CON01/02, comparar archivos compartidos/contratos/lockfile y documentación por procedencia. Merge del conjunto autorizado tras CI y revisión final; no borrar ramas integradas |
 | CON-04 / P1 | Completar pruebas M1 por matriz; asistente | Contrastar resultados CI902308e con matriz; cerrar solo ramas restantes deUC008/UC009, cambio correo/MFA/revocación, errores y manual. No repetir lo ya cubierto sin causa. Dirección visual verde/fondo cálido/tipografía sistema/Cuenta-Avisos-Ayuda ya aprobada; aceptación integral pendiente |
 | CON-05 / P1 | B12 esencial único; asistente | Revisar helpers antes de copiar/restaurar en destino propio; atributos/ledger/borrados/revocación/cola/operador/cliente/runnerPrisma/repetición/mediciones en mismo run. Contexto1792118849918 solo source3/3/3; no restauración aprobada |
 | CON-06 / P1 | Integración real M3 y puertas M2/M8 | M1 A8; M2 elegibilidad y M8 autorización reales; no reemplazarlos por fixtures. Revisión visual M2/M8, D08-R y designación/provisión D09-R por usuario antes de activación |
@@ -187,6 +187,10 @@ Diagnóstico browser009 contra build propio: Chrome155, respuestas controladas; 
 
 Entrega009:00/01/02 editables y entregables/INSTRUCCIONES_FINALES_PARA_PEGAR.txt son versiones conciliadas para reemplazo manual en Fuentes/configuración;03 consolidada se conserva sin edición009. Acceso local y pushGit comprobables; subida compartida no realizada. Inventario general parcial, no auditoría exhaustiva. Siguiente tarea ejecutable: CON04 y después CON05; no reabrir las correcciones cerradas por rutina.
 
+### Integración autorizada y revisión final
+
+15-10-2026. El usuario autoriza integrar todo lo consolidado a main al terminar CI y revisión final; conserva prohibición de borrar. Revisión independiente limitada a lectura por segundo agente conforme00§7, sin implementación paralela. PR8 contiene los tres historiales; comprobar ascendencia al integrar y no realizar un segundo merge dePR9 si su HEAD ya está contenido. Conservar ramas/copias y modificaciones originales. El CI de main tras la integración tiene resultado propio; no confundir integración Git con aceptación funcional o activación.
+
 ### Prompt activo revisado
 
 ```text
@@ -197,7 +201,7 @@ Ejecutor único artifacts/marleva-pr8-integracion, rama codex/integrate-m1-pagin
 main bf948c9 tiene CI38823862320 correcto y sigue intacto. Conjunto902308e enPR8,CI38847365871 correcto en13trabajos; comprobarCI del HEAD documental posterior; M3 corregido87fdc5c tieneCI38846202699 correcto e historial incorporado; PR9 conservada. Fallos inicialesdbec16d/4641875 en acta009; no heredar verdes de otrosSHA.
 M3 copia managed /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a; ejecutor /private/tmp/marleva-m3-008/repo: comprobar diferencias antes de editar.
 M2/M8 codex/docs-m2-m8-007 d34fb3e documental con CI38841680647; no implementado/aceptado, no incorporado a main. Conservar007 duplicado por tema/rama; no renumerar historia.
-Mantener C01–C26,A0/SDKAndroid,SonarCloud Free privado autorizado,Google pendiente y dirección visualM1 aprobada. sources/AGENTS raíz readonly, migraciones inmutables, datos ficticios. No merge a main,borrados,reset,stash,gasto,despliegue,contactos ni dinero/datos reales.
+Mantener C01–C26,A0/SDKAndroid,SonarCloud Free privado autorizado,Google pendiente y dirección visualM1 aprobada. sources/AGENTS raíz readonly, migraciones inmutables, datos ficticios. Merge a main autorizado solo del conjunto tras CI y revisión final; no borrar,reset,stash,gasto,despliegue,contactos ni dinero/datos reales.
 Verificar CI del HEAD vigente y estado deCON01–03; no repetir correcciones ya probadas sin fallo nuevo. ContinuarCON04/05: M1/B12 por matriz con mismo run/destino, manual/plataformas; M3 exige identidad/elegibilidad reales, M2/M8 D07/A8,D08-R,D09-R/visual.
 Releer finales, verificar enlaces/hashes/ignorados/hook,commit/push y SHA real. Actualizar solo fuentes afectadas por procedencia; no sobrescribir01 original con trabajo previo. Informar archivos para reemplazar Fuentes y acceso/subida real; no afirmar aceptación ni terminar módulos por CI.
 ```

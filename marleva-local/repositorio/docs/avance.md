@@ -17,19 +17,19 @@ Implementación: criterio cuya salida funcional descrita abajo tiene código dis
 | UC005 | Iniciar cambio de correo propio con conflictos controlados | Sí | No | AccountService.emailChange; API/unitarias; recorrido completo UI/nativo pendiente |
 | UC006 | Confirmar ambos buzones, conservar ID, revocar y avisar | Sí | No | confirmEmail/finishEmailChange/reconcile; API/unitarias; caídas/recorridos completos restantes |
 | UC007 | Segundo factor básico del operador y nivel de garantía AAL2 | Sí | No | enroll/verifyFactor/operator; API/unitarias; plataforma/rol/revisión completos pendientes; recuperación en UC014 |
-| UC008 | Avisos durables y navegación paginada propia en cliente | No | No | Backend cursor/outbox probado; cliente con siguiente página y reintento en incremento006; validación integrada/plataformas y operación completa pendientes |
-| UC009 | Recuperar acceso y retomar acción interna segura | No | No | Mensaje de límite de buzón presente; retorno de acción completa pendiente |
+| UC008 | Avisos durables y navegación paginada propia en cliente | Sí | No | Cursor/outbox y NoticePages/AccountNotices conectados a API009. CI902308e prueba backend, reanudación web y paginación con respuestas controladas; paginación integral PG/Auth/navegador y plataformas pendientes |
+| UC009 | Recuperar acceso y retomar acción interna segura | Sí | No | M1App/SafeReturn/AccountWorkspace enlazan intención en memoria, nueva autenticación y consultas propias API025–027; unitarias de misma/otra identidad y cancelación en CI902308e. Recorridos integrales por acción/plataforma pendientes |
 | UC010 | Salud/configuración/dependencias locales y fallo recuperable | Sí | No | HealthController/config/adaptador; completar caídas/rendimiento/regresión de plataformas |
 | UC011 | Permiso/lectura/borrado de archivo ficticio privado con integridad | Sí | No | B09 código y actas files/recovery; sin pantalla M2 exigida; aceptación/recuperación completa pendiente |
 | UC012 | Simulador aislado: idempotencia, eventos, fallos y reembolso | Sí | No | PaymentSimulator y pruebas; no acredita M6; completar contrato/medición/aceptación aplicables |
 | UC013 | Restauración/repetibilidad sin revivir accesos o borrados | No | No | Fases B12 y cola restaurada probadas en ensayos separados; plataformas/ensayo integral restantes |
-| UC014 | Recuperación administrativa MFA con otro autorizado | Sí | No | Siete operaciones backend integradas y roles persistidos; recovery-api.json y recovery-schema.json. UI, plataformas y aceptación pendientes |
+| UC014 | Recuperación administrativa MFA con otro autorizado | Sí | No | Siete operaciones backend integradas y roles persistidos; recovery-api.json y recovery-schema.json. Cliente parcial implementado; recorrido integral de UI, plataformas y aceptación pendientes |
 
-Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Aceptación M1 = 0/14 = 0%. El numerador de aceptación cero refleja criterios completos aún no entregados/aceptados; no ausencia de código o pruebas. El encabezado muestra 78,57%, nunca la cobertura como avance funcional.
+Implementación M1 = 13/14 = 92,86%. Barra: █████████░. Aceptación M1 = 0/14 = 0%. El numerador de aceptación cero refleja criterios completos aún no entregados/aceptados; no ausencia de código o pruebas. El encabezado muestra 92,86%, nunca la cobertura como avance funcional.
 
 | Módulo | Implementación | Aceptación | Estado |
 |---|---|---|---|
-| M1 Acceso/cuenta | 11/14: 78,57% | 0/14: 0% | Criterios arriba; pendientes reales |
+| M1 Acceso/cuenta | 13/14: 92,86% | 0/14: 0% | Criterios arriba; pendientes reales |
 | M2 Comunidad/oferentes | 0% | 0% | Diseño; sin implementación del módulo |
 | M3 Catálogo | 3/9: 33,33% | 0/9: 0% | Catálogo público aislado; criterios abajo |
 | M4 Compra directa | 0% | 0% | Diseño; sin implementación |
@@ -40,11 +40,11 @@ Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Acep
 | M9 Avisos transversales | 0% | 0% | Infraestructura M1 no acredita módulo completo |
 | M10 Medición | 0% | 0% | Diseño; sin implementación |
 
-Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; M3 tiene autorización paralela y cálculo propio abajo; M2 yM4–M10 permanecen0% de implementación. General: no es un módulo funcional, Por calcular.
+Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; M3 conserva su autorización específica y cálculo propio abajo, reunido en consolidación009; M2 yM4–M10 permanecen0% de implementación. General: no es un módulo funcional, Por calcular.
 
 ## Verificación técnica independiente del porcentaje
 
-Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó. Cobertura de lógica medida con fuente TS y AccountService incluido superó 80% global; resumen en tests/results/coverage-summary.json. Cobertura no implica funcionalidad completa ni Sonar/CI aprobados. Manual único en docs/revision/M1/INSTRUCTIVO_M1.md; usuario revisará. Google pendiente, diseño visual nuevo pendiente de alta prioridad en 01. Datos ficticios; no despliegue.
+Tipado/lint/formato global y regresión API/Chrome pasaron; build API/web pasó. Cobertura de lógica medida con fuente TS y AccountService incluido superó 80% global; resumen en tests/results/coverage-summary.json. Cobertura no implica funcionalidad completa ni Sonar/CI aprobados. Manual único en docs/revision/M1/INSTRUCTIVO_M1.md; usuario revisará. Google pendiente; dirección visual M1 aprobada, aceptación integral pendiente en01. Datos ficticios; no despliegue.
 
 ## Pipeline de integración continua
 
@@ -82,4 +82,6 @@ Autorización explícita15-10-2026, independiente de base/M1. Nueve criterios de
 
 Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptación=0/9=0%. M1 conserva su cálculo anterior; Proyecto sigue Por calcular. Las pruebas/archivos/commits no suman criterios. No integración a main ni operación real.
 
-15-10-2026, incremento gestión: UC004/005/006/007/009 tienen recorridos completos en composición aislada con identidad ficticia (87 pruebas M3 y nueve comprobaciones de navegador). Se conserva el numerador3/9 por criterio de recorrido autenticado integrado con proveedor real; el avance aislado se describe en evidencia, sin presentarlo como aceptación. Autorización de008 histórica: consolidación009 conserva el trabajo y prohíbe merge a main; no despliegue.
+15-10-2026, incremento gestión: UC004/005/006/007/009 tienen recorridos completos en composición aislada con identidad ficticia (87 pruebas M3 y nueve comprobaciones de navegador). Se conserva el numerador3/9 por criterio de recorrido autenticado integrado con proveedor real; el avance aislado se describe en evidencia, sin presentarlo como aceptación. Autorización de008 histórica: consolidación009 conserva el trabajo; el usuario autorizó posteriormente merge del conjunto a main tras CI y revisión final, sin borrados ni despliegue.
+
+Conciliación documental009,15-10-2026: la tabla anterior aún descontabaUC008/009 por pruebas pendientes. Cotejo de API009/025–027, M1App, SafeReturn, AccountWorkspace y NoticePages muestra sus salidas funcionales implementadas. Se aplica el mismo método de esta página, sin cambiar criterios/pesos: implementación13/14; aceptación permanece0/14 yUC013 sigue abierto. No es funcionalidad nueva ni acredita las pruebas faltantes, B12 o aceptación. Evidencia de código y CI902308e/38847365871; matriz M1 concilia los límites de cada prueba.

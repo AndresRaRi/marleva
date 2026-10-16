@@ -54,13 +54,13 @@ Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.jso
 
 Recuperación B12: copia con atributos, borrado posterior, revocación, cola restaurada y recuperación de operador probados en ensayos separados. Falta el ensayo integral y la aceptación de plataformas. [Procedimiento](docs/proceso/RECUPERACION_B12_M1.md). No mezclar destinos ni dar por restaurado todo por pasar una fase.
 
-Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Pantallas y aceptación pendientes.
+Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Cliente parcial implementado; recorrido integral de pantallas/plataformas y aceptación pendientes.
 
 ## Leer el CI
 
 [![CI](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml)
 
-Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español, corregir la causa y repetir el mismo comando local.
+Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español y corregir la causa según00§13; CI es validación principal y los diagnósticos locales se limitan a lo necesario.
 
 | Etapa | Ejecutar desde esta carpeta |
 |---|---|
@@ -85,7 +85,7 @@ Requisito de GitHub: la revisión de dependencias necesita Dependency graph habi
 
 ## Continuación UC008, 15-10-2026
 
-PR #7 integrado en main db2ec7d. Incremento siguiente en codex/feat-m1-paginacion-avisos: cargar más avisos conserva lista y cursor ante error, impide petición duplicada y termina al agotar cursor. Actualizar cuenta vuelve a primera página. Pruebas: notice-pages/account-notices y recorrido paginated-notices incorporado al ensayo web de CI. API009, modelo y migraciones conservados. SonarCloud conservado; CI del conjunto y aceptaciónM1 pendientes.
+PR #7 integrado en main db2ec7d. Incremento siguiente en codex/feat-m1-paginacion-avisos: cargar más avisos conserva lista y cursor ante error, impide petición duplicada y termina al agotar cursor. Actualizar cuenta vuelve a primera página. Pruebas: notice-pages/account-notices y recorrido paginated-notices incorporado al ensayo web de CI. API009, modelo y migraciones conservados. SonarCloud conservado; CI del código consolidado902308e aprobado en38847365871. Consultar HEAD documental vigente enPR8; aceptaciónM1 pendiente.
 
 ## M3 aislado
 
