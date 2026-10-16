@@ -265,3 +265,8 @@ CI38960434618 dePR19/fa3719c detectó un único falso positivoGitleaks: SHA256 p
 
 
 Diagnóstico conservado deCI38960434618: rendimiento pasó1concurrente, falló a5/10 con1638respuestas401SESION en cada grupo; el contador del transporte identifica3276respuestas500 del proveedorAuth al consultar usuario. No errores de identidad/datos ajenos ni umbral de latencia rebasado. No se atribuye causa interna deAuth ni corrección de backend inexistente; conservar ejecución/artefactos y exigir CI completo del siguienteSHA sin relajar concurrencia/corrección. La excepciónGitleaks no corrige ese fallo de proveedor.
+
+
+Continuación de PR19: el usuario autorizó también únicamente el hallazgo histórico de la línea 230 de MATRIZ_CASOS_M1.md en 8c9dc79, cifras públicas del informe confundidas con clave. Se registra su fingerprint exacto y se corrige la redacción. Diagnóstico CI sanitizado añadido antes de volver a medir: solo recuentos SQLSTATE/categorías, sin mensajes, correos o credenciales. Dos unitarias nuevas y hooks con 412 pruebas pasan; revisión estática secuencial sin bloqueos.
+
+La carga de CI 38970796932 pasó con cero errores y respuestas incorrectas a una, cinco y diez solicitudes concurrentes. El fallo anterior del proveedor no se reprodujo; su causa sigue sin demostrarse y no se afirma corrección de backend. Los informes y diagnósticos se conservan. La integración de PR19 y CI de main siguen condicionados a la ejecución completa del SHA siguiente, incluida seguridad con ambas excepciones exactas autorizadas. Android apagado y datos preservados.

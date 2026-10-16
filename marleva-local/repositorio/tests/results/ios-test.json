@@ -68,6 +68,13 @@
       "history": "PASS: all HEAD ancestors scanned, zero unresolved findings",
       "existingControls": "PASS: exact profile allowed; other path/value rejected",
       "newCommitSamePath": "PASS: new fictional key rejected despite historical fingerprint exception"
+    },
+    "additionalExactAuthorization": {
+      "commit": "8c9dc795cb4a947d1af50a4f64fcd76208ab1b40",
+      "file": "marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md",
+      "rule": "generic-api-key",
+      "line": 230,
+      "reason": "Public error-count prose, not a credential; user explicitly authorized only this historical finding."
     }
   }
 }
