@@ -9,7 +9,7 @@ sequenceDiagram
  U->>A: S020 Version borrador, posicion, UUID foto y bytes
  A->>R: S025 Comprobar dueño/elegibilidad/estado y repetición
  A->>F: S040 Guardar original privado sin nombre del usuario
- A->>P: S060 Firma, límites, decodificar, orientar y recodificar
+ A->>P: S060 Original regular sin symlink; bytes por stdin acotado, nunca ruta CLI; decodificar y recodificar
  P-->>A: S065 Dos JPEG sin metadatos y con integridad
  A->>F: S070 Guardar derivados privados
  A->>R: S080 Revalidar y bloquear oferta, insertar foto lista

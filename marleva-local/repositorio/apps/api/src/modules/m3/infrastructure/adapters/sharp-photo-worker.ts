@@ -1,5 +1,4 @@
 import sharp from 'sharp';
-import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 sharp.cache(false);
 sharp.concurrency(1);
@@ -39,8 +38,18 @@ function rejectAnimation(input: Buffer): void {
       throw Error('Animated PNG rejected');
   }
 }
+async function readInput(): Promise<Buffer> {
+  const chunks: Buffer[] = [];
+  let bytes = 0;
+  for await (const chunk of process.stdin) {
+    bytes += chunk.length;
+    if (bytes > 5000000) throw Error('Size');
+    chunks.push(Buffer.from(chunk));
+  }
+  return Buffer.concat(chunks);
+}
 async function main() {
-  const input = await readFile(process.argv[2]);
+  const input = await readInput();
   if (input.length > 5000000) throw Error('Size');
   rejectAnimation(input);
   const info = await sharp(input, options).metadata();

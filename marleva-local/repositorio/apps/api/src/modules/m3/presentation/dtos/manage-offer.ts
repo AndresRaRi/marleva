@@ -43,7 +43,7 @@ export function managedQuery(raw: unknown): ManagedQuery {
   };
   if (data.limit !== undefined) {
     const text = string(data.limit, 1, 2);
-    result.limit = integer(/^\d+$/u.test(text) ? Number(text) : NaN, 1, 50);
+    result.limit = integer(/^\d+$/u.test(text) ? Number(text) : Number.NaN, 1, 50);
   }
   if (data.cursor !== undefined) result.cursor = string(data.cursor, 1, 2048);
   return result;

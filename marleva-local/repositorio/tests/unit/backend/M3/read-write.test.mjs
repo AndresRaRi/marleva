@@ -119,3 +119,25 @@ it.each([
     else process.env.M3_DATABASE_URL = previous;
   }
 });
+
+it('MAR-M3-UT-BE-010-CONFIG | ausencia y rol administrativo fallan antes de conectar', () => {
+  const previous = { ...process.env };
+  try {
+    delete process.env.M3_DATABASE_URL;
+    delete process.env.M3_ADMIN_DATABASE_URL;
+    expect(() => destination()).toThrow('Configuración');
+    expect(() => destination(true)).toThrow('Configuración');
+    process.env.M3_DATABASE_URL = 'postgresql://postgres:fixture@127.0.0.1:55432/marleva_m3_008';
+    expect(() => destination()).toThrow('rol');
+    process.env.M3_ADMIN_DATABASE_URL =
+      'postgresql://m3_api:fixture@127.0.0.1:55432/marleva_m3_008';
+    expect(() => destination(true)).toThrow('rol');
+    process.env.M3_DATABASE_URL = 'postgresql://m3_api:fixture@127.0.0.1:55432/marleva_m3_008';
+    expect(destination()).toBe(process.env.M3_DATABASE_URL);
+  } finally {
+    for (const key of ['M3_DATABASE_URL', 'M3_ADMIN_DATABASE_URL']) {
+      if (previous[key] === undefined) delete process.env[key];
+      else process.env[key] = previous[key];
+    }
+  }
+});

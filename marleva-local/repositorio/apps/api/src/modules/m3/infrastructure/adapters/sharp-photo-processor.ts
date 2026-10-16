@@ -1,3 +1,5 @@
+import { open } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { fail, CatalogError } from '../../domain/catalog.js';
@@ -19,19 +21,31 @@ export class SharpPhotoProcessor implements PhotoProcessor {
       return fail('PHOTO_BUSY', 'Estamos procesando otra foto. Vuelve a intentar.', 503);
     this.busy = true;
     try {
-      return await this.run(path);
+      const input = await this.readOriginal(path).catch(() => {
+        throw new CatalogError(503, 'PHOTO_READ', 'No pudimos leer la foto. Vuelve a intentar.');
+      });
+      return await this.run(input);
     } finally {
       this.busy = false;
     }
   }
-  private run(path: string): Promise<{ card: EncodedPhoto; detail: EncodedPhoto }> {
+  private async readOriginal(path: string): Promise<Buffer> {
+    const file = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
+    try {
+      const stat = await file.stat();
+      if (!stat.isFile() || stat.size > 5000000) throw Error('Invalid original');
+      return await file.readFile();
+    } finally {
+      await file.close();
+    }
+  }
+  private run(input: Buffer): Promise<{ card: EncodedPhoto; detail: EncodedPhoto }> {
     return new Promise((resolve, reject) => {
-      execFile(
+      const child = execFile(
         process.execPath,
         [
           '--max-old-space-size=96',
           fileURLToPath(new URL('./sharp-photo-worker.js', import.meta.url)),
-          path,
         ],
         { timeout: this.timeoutMs, maxBuffer: 8000000, encoding: 'utf8' },
         (error, stdout) => {
@@ -56,6 +70,10 @@ export class SharpPhotoProcessor implements PhotoProcessor {
           }
         },
       );
+      child.stdin?.on('error', (error: NodeJS.ErrnoException) => {
+        if (error.code !== 'EPIPE') reject(error);
+      });
+      child.stdin?.end(input);
     });
   }
 }

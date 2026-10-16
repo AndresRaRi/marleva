@@ -89,6 +89,7 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       '-Dsonar.sourceEncoding=UTF-8',
       '-Dsonar.scanner.skipJreProvisioning=true',
       '-Dsonar.qualitygate.wait=true',
+      '-Dsonar.cpd.exclusions=apps/client/src/modules/m3/generated/api.ts',
       ...(existsSync(path.join(folder, 'coverage/lcov.info'))
         ? ['-Dsonar.javascript.lcov.reportPaths=coverage/lcov.info']
         : []),

@@ -27,7 +27,9 @@ function boundary(value: unknown, filters: Filters): Boundary {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw Error('object');
   const row = value as Record<string, unknown>;
   if (
-    Object.keys(row).sort().join(',') !== 'at,f,id,v' ||
+    Object.keys(row)
+      .sort((a, b) => a.localeCompare(b))
+      .join(',') !== 'at,f,id,v' ||
     row.v !== 1 ||
     row.f !== fingerprint(filters)
   )

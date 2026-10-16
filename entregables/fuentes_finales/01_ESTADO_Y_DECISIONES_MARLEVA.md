@@ -193,3 +193,11 @@ Sin gasto,despliegue,contactos,datos reales ni cambios destructivos. No tocar se
 Fuentes sincronizadas readonly. Conciliar01 editable con avances de otros chats antes de reemplazarla.
 Entregar commits,push,CI,merge y accesos verificables; cerrar incremento sin fingir módulo terminado.
 ```
+
+## Consolidación009: correcciones CI M3
+
+15-10-2026. Encargo actual: consolidar sin más trabajo paralelo, sin merge a main ni borrados; prevalece sobre la autorización anterior de008. Ejecutor existente/private/tmp/marleva-m3-008/repo limpio en4641875 antes del cambio; managed sigue preservado, no modificado por inferencia.
+
+Sonar38843137074 tiene seis incidencias nuevas y duplicación6,2%. Corrección documentada en matriz/SEQ009 antes de código: credenciales explícitas de entorno y destinos/roles cerrados; hijo de fotos consume stdin acotado en vez de ruta CLI, padre rechaza symlinks; comparador yNumber.NaN. Las279líneas duplicadas pertenecen solo a tipos OpenAPI generated/api.ts: se conserva su análisis/generación y se limita exclusivamente su cálculoCPD, sin ocultar lógica ni bajar gate.
+
+Pruebas:35unitarias backend,89M3 completas con PG/HTTP y render/identidad controlada; cobertura92,24%líneas/86,34%ramas del ámbito definido. Incluye nueva negativa de symlink y CLI ignorado por hijo. Calidad corregida respeta anidación; hooks/CI del SHA final se verifican aparte. PF009PIPE diez muestras tras tres calentamientos, PNG1600×1200, concurrencia1: p95 153,07ms, cero errores; solo RSSpadre, sin capacidad productiva. [Acta](../../marleva-local/repositorio/tests/results/m3-consolidacion009.json). M1/M2/M8 real, plataformas y aceptación siguen pendientes. Cola única de consolidación en01§8 del ejecutorM1 artifacts/marleva-pr8-integracion, no otro chat. Fuentes/configuración sin subida.

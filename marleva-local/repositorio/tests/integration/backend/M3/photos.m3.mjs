@@ -1,6 +1,7 @@
 import { beforeAll, afterAll, it, expect } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import { writeFile, readFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { writeFile, readFile, symlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import sharp from 'sharp';
 import request from 'supertest';
@@ -343,4 +344,21 @@ it('MAR-M3-IT-BE-009-ALPHA | transparencia a blanco y PNG animado rechazado', as
   await expect(store.quarantine(item.id, Buffer.from('different'))).rejects.toMatchObject({
     status: 409,
   });
+});
+
+it('MAR-M3-IT-BE-009-PIPE | hijo consume bytes, ignora rutas CLI y padre rechaza symlink', async () => {
+  const path = await store.quarantine(randomUUID(), png);
+  const link = path + '-link';
+  await symlink(path, link);
+  await expect(new SharpPhotoProcessor().process(link)).rejects.toMatchObject({ status: 503 });
+  const child = spawnSync(
+    process.execPath,
+    [
+      resolve('apps/api/dist-m3/modules/m3/infrastructure/adapters/sharp-photo-worker.js'),
+      '/ruta-ajena-no-autorizada',
+    ],
+    { input: png, encoding: 'utf8', timeout: 5000, maxBuffer: 8000000 },
+  );
+  expect(child.status).toBe(0);
+  expect(JSON.parse(child.stdout).card.width).toBe(480);
 });

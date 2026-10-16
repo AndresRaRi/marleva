@@ -12,13 +12,11 @@ function assertDestination(url: URL): void {
     throw Error('Destino M3 exclusivo requerido.');
 }
 export function destination(migration = false): string {
-  const value = migration
-    ? 'postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008'
-    : (process.env.M3_DATABASE_URL ??
-      'postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008');
+  const value = migration ? process.env.M3_ADMIN_DATABASE_URL : process.env.M3_DATABASE_URL;
+  if (!value) throw Error('Configuración de destino M3 requerida.');
   const url = new URL(value);
   assertDestination(url);
-  if (!migration && url.username !== 'm3_api')
+  if (url.username !== (migration ? 'postgres' : 'm3_api'))
     throw Error('La API M3 requiere rol de solo lectura.');
   return value;
 }

@@ -2,7 +2,7 @@ import { categories, modalities, type CatalogQuery } from '../../domain/catalog.
 import { object, keys, string, integer, choice, uuid } from './validation.js';
 function queryInteger(value: unknown, min: number, max: number): number {
   const text = string(value, 1, 10);
-  if (!/^\d+$/u.test(text)) return integer(NaN, min, max);
+  if (!/^\d+$/u.test(text)) return integer(Number.NaN, min, max);
   return integer(Number(text), min, max);
 }
 export function parseQuery(value: unknown): CatalogQuery {

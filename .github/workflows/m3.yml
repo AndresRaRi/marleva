@@ -17,6 +17,8 @@ jobs:
     env:
       MARLEVA_M3_CHECK: '1'
       M3_CI: '1'
+      M3_DATABASE_URL: 'postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008'
+      M3_ADMIN_DATABASE_URL: 'postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008'
       EXPO_NO_TELEMETRY: '1'
       CI: '1'
     steps:
