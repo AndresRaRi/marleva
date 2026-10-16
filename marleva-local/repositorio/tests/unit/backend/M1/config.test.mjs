@@ -16,7 +16,7 @@ it('MAR-M1-UT-BE-113-F | SMTP limitado a capturadores locales de origen y destin
       SMTP_HOST: '127.0.0.1',
       MAILPIT_URL: 'http://127.0.0.1:54424',
     });
-    for (const port of ['54325', '54425', '54625']) {
+    for (const port of ['54325', '54425', '54625', '54725']) {
       process.env.SMTP_PORT = port;
       expect(config().SMTP_PORT).toBe(port);
     }

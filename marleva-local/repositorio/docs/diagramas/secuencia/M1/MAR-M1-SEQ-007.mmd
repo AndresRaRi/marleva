@@ -6,6 +6,7 @@ sequenceDiagram
     participant DB as PostgreSQL privado
     participant AUTH as Supabase Auth y Storage
     participant MAIL as Capturador local
+    UI->>API: S015 consultar factores propios API027; solo ID nombre y estado, sin secretos
     Note over UI,API: MAR-M1-SEQ-007 - Segundo factor y permiso de operador
     U->>UI: S010 preparar o verificar factor
     UI->>API: S020 operación sensible

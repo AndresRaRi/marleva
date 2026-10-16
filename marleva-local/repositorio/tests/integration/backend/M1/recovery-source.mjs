@@ -1,9 +1,11 @@
+import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-const fixture = JSON.parse(readFileSync('artifacts/recovery/fixtures.private.json', 'utf8'));
+const fixture = JSON.parse(readFileSync(context.fixture, 'utf8'));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
-const base = 'http://127.0.0.1:3000/v1/local/file-fixtures';
+const base = context.sourceApi + '/v1/local/file-fixtures';
 const report = {
   date: new Date().toISOString(),
   case: 'MAR-M1-IT-BE-113-B-PRE',
@@ -18,7 +20,10 @@ for (const file of fixture.files) {
     method: 'POST',
     headers: { authorization: 'Bearer ' + own.credential, 'x-marleva-client': 'native' },
   });
-  assert.equal(issued.status, 201);
+  if (issued.status !== 201) {
+    const failure = await issued.json();
+    assert.fail('Permiso de archivo: HTTP ' + issued.status + ', código ' + failure.codigo);
+  }
   const access = await issued.json();
   const read = await fetch(`${base}/${file.id}/content`, {
     headers: {
@@ -44,10 +49,10 @@ for (const file of fixture.files) {
   report.publicDenied++;
   file.capability = access.capability;
 }
-writeFileSync('artifacts/recovery/fixtures.private.json', JSON.stringify(fixture, null, 2), {
+writeFileSync(context.fixture, JSON.stringify(fixture, null, 2), {
   mode: 0o600,
 });
-writeFileSync('tests/results/recovery-source.json', JSON.stringify(report, null, 2) + '\n');
+writeFileSync(context.report('source'), JSON.stringify(report, null, 2) + '\n');
 console.log(
   'B12: tres contenidos propios/hash válidos; otra cuenta y público denegados antes de copia',
 );

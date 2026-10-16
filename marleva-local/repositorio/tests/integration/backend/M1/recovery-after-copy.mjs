@@ -1,12 +1,14 @@
+import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { database } from '../../../../apps/api/dist/database.js';
-process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+process.loadEnvFile(context.envFile ?? new URL('../../../../.env', import.meta.url));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
 assert.equal(process.env.APP_MODE, 'local');
-const copy = JSON.parse(readFileSync('tests/results/recovery-copy.json', 'utf8'));
+const copy = JSON.parse(readFileSync(context.report('copy'), 'utf8'));
 assert.equal(copy.cases.storageHashes, true);
-const fixture = JSON.parse(readFileSync('artifacts/recovery/fixtures.private.json', 'utf8'));
+const fixture = JSON.parse(readFileSync(context.fixture, 'utf8'));
 const file = fixture.files.find((f) => f.purpose === 'delete-after-copy'),
   actor = fixture.actors.find((a) => a.name === file.owner);
 const db = database(),
@@ -21,12 +23,12 @@ const ledger = {
   state: 'not_requested',
 };
 const save = () =>
-  writeFileSync('artifacts/recovery/deletions.private.json', JSON.stringify([ledger], null, 2), {
+  writeFileSync(context.ledger, JSON.stringify([ledger], null, 2), {
     mode: 0o600,
   });
 try {
   save();
-  const response = await fetch('http://127.0.0.1:3000/v1/local/file-fixtures/' + file.id, {
+  const response = await fetch(context.sourceApi + '/v1/local/file-fixtures/' + file.id, {
     method: 'DELETE',
     headers: {
       authorization: 'Bearer ' + actor.credential,
@@ -53,7 +55,7 @@ try {
   ledger.state = 'deleted';
   save();
   writeFileSync(
-    'tests/results/recovery-after-copy.json',
+    context.report('after-copy'),
     JSON.stringify(
       {
         date: new Date().toISOString(),

@@ -7,7 +7,13 @@ if (process.env.APP_MODE !== 'local' || process.env.PAYMENT_MODE !== 'simulated'
   throw new Error('Local only');
 const bootstrap = new URL(process.env.BOOTSTRAP_DATABASE_URL);
 const ci = process.env.MARLEVA_CI_STACK === '1';
-if (bootstrap.hostname !== '127.0.0.1' || bootstrap.port !== (ci ? '54622' : '54322'))
+const isolated = process.env.MARLEVA_STACK_CONTEXT === 'b12-source-006';
+if (ci && isolated) throw new Error('Conflicting test destinations');
+const project = isolated ? 'marleva-b12-source-006' : ci ? 'marleva-ci' : 'marleva-m1';
+if (
+  bootstrap.hostname !== '127.0.0.1' ||
+  bootstrap.port !== (isolated ? '54722' : ci ? '54622' : '54322')
+)
   throw new Error('Unexpected destination');
 const db = new pg.Client({ connectionString: bootstrap.toString() });
 await db.connect();
@@ -28,7 +34,7 @@ const grant = spawnSync(
   [
     'docker',
     'exec',
-    ci ? 'supabase_db_marleva-ci' : 'supabase_db_marleva-m1',
+    'supabase_db_' + project,
     'psql',
     '-U',
     'supabase_admin',

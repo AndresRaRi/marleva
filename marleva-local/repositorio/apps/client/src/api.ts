@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+export type ApiActionHeaders = { 'idempotency-key'?: string; 'x-recovery-capability'?: string };
 let csrf = '';
 const base =
   Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_API_URL ?? 'https://10.0.2.2:8443');
@@ -8,6 +9,7 @@ export async function api<Result = unknown>(
   method = 'GET',
   body?: unknown,
   signal?: AbortSignal,
+  actionHeaders?: ApiActionHeaders,
 ): Promise<Result> {
   const controller = new AbortController();
   const cancel = () => controller.abort();
@@ -15,12 +17,15 @@ export async function api<Result = unknown>(
   if (signal?.aborted) cancel();
   const timeout = setTimeout(cancel, 12000);
   try {
-    const headers = await requestHeaders(path, method);
+    const headers = {
+      ...(await requestHeaders(path, method, controller.signal)),
+      ...actionHeaders,
+    };
     const response = await request(path, method, headers, body, controller.signal);
     const result = await readPayload(response);
     if (controller.signal.aborted)
       throw Object.assign(new Error('Consulta cancelada'), { name: 'AbortError' });
-    await checkResponse(response, result, path);
+    await checkResponse(response, result);
     await saveSession(result, path);
     return result as Result;
   } finally {
@@ -29,7 +34,7 @@ export async function api<Result = unknown>(
   }
 }
 
-async function requestHeaders(path: string, method: string) {
+async function requestHeaders(path: string, method: string, signal: AbortSignal) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (Platform.OS !== 'web') {
     headers['x-marleva-client'] = 'native';
@@ -37,7 +42,7 @@ async function requestHeaders(path: string, method: string) {
     if (token) headers.Authorization = `Bearer ${token}`;
   } else if (method !== 'GET') {
     if (!csrf && path !== '/v1/auth/challenges' && path !== '/v1/auth/verifications') {
-      const r = await api<{ csrf_token: string }>('/v1/auth/csrf');
+      const r = await api<{ csrf_token: string }>('/v1/auth/csrf', 'GET', undefined, signal);
       csrf = r.csrf_token;
     }
     headers['x-csrf-token'] = csrf;
@@ -79,13 +84,9 @@ async function readPayload(response: Response) {
   const result = payload as Record<string, unknown>;
   return result;
 }
-async function checkResponse(response: Response, result: Record<string, unknown>, path: string) {
+async function checkResponse(response: Response, result: Record<string, unknown>) {
   if (response.ok) return;
-  if (
-    response.status === 401 &&
-    path !== '/v1/auth/verifications' &&
-    !path.includes('/confirmations')
-  )
+  if (response.status === 401 && !['CODIGO_NO_VALIDO', 'FACTOR'].includes(String(result.codigo)))
     await clearSession();
   throw Object.assign(
     new Error(
@@ -102,7 +103,13 @@ async function saveSession(result: Record<string, unknown>, path: string) {
   if (typeof result.csrf_token === 'string') csrf = result.csrf_token;
   if (typeof result.session_token === 'string' && Platform.OS !== 'web')
     await SecureStore.setItemAsync('marleva_session', result.session_token);
-  if (path.startsWith('/v1/auth/sessions') || result.estado === 'completo') {
+  if (
+    path.startsWith('/v1/auth/sessions') ||
+    result.estado === 'completo' ||
+    (path.startsWith('/v1/auth/mfa-recoveries/') &&
+      path.endsWith('/verifications') &&
+      result.state === 'completed')
+  ) {
     await clearSession();
   }
 }

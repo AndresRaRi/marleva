@@ -502,3 +502,43 @@ it('UT-BE-103-G | renovación ajena que no termina conserva error recuperable', 
   await work;
   expect(fixture.auth.getUser).not.toHaveBeenCalled();
 });
+
+it('MAR-M1-UT-BE-109-RECONCILE | cambio incierto bloquea otro aun tras vencer plazo', async () => {
+  database.emailChange.findFirst.mockResolvedValue({
+    ...change,
+    state: 'reconcile',
+    expiresAt: new Date(Date.now() - 1),
+  });
+  await expect(service.emailChange(principal, 'c@example.test')).rejects.toMatchObject({
+    response: { codigo: 'CAMBIO_EN_CURSO' },
+  });
+  expect(database.emailChange.findFirst.mock.calls[0][0].where.OR).toEqual([
+    { state: { in: ['open', 'sending', 'verifying'] }, expiresAt: { gt: new Date() } },
+    { state: 'reconcile' },
+  ]);
+  expect(database.emailChange.create).not.toHaveBeenCalled();
+});
+
+it('MAR-M1-UT-BE-107-FACTORS | lista propia requiere rol y no devuelve secretos', async () => {
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'PERMISO' },
+  });
+  account.operator = true;
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: {
+      totp: [
+        {
+          id,
+          friendly_name: 'Mi autenticador',
+          status: 'verified',
+          secret: 'never-exposed',
+          uri: 'never-exposed',
+        },
+      ],
+    },
+    error: null,
+  });
+  expect(await service.factors(principal)).toEqual({
+    items: [{ id, nombre: 'Mi autenticador', estado: 'verified' }],
+  });
+});

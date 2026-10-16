@@ -1,13 +1,15 @@
+import { recoveryContext } from './recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, chmodSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import path from 'node:path';
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
-process.loadEnvFile(new URL('../../.env', import.meta.url));
+process.loadEnvFile(context.envFile ?? new URL('../../.env', import.meta.url));
 assert.equal(process.env.APP_MODE, 'local');
 const root = process.cwd(),
-  copy = JSON.parse(readFileSync('tests/results/recovery-copy.json', 'utf8'));
+  copy = JSON.parse(readFileSync(context.report('copy'), 'utf8'));
 const names = copy.names,
   run = names.prefix.slice('marleva-b12-'.length);
 assert.match(run, /^\d{13}$/);
@@ -15,7 +17,7 @@ assert.equal(names.prefix, 'marleva-b12-' + run);
 const folder = 'artifacts/recovery/' + names.prefix + '/provider';
 mkdirSync(folder, { recursive: true, mode: 0o700 });
 chmodSync(folder, 0o700);
-const keys = JSON.parse(readFileSync('artifacts/recovery/target-keys/keys.private.json', 'utf8'));
+const keys = JSON.parse(readFileSync(context.keys + '/keys.private.json', 'utf8'));
 const docker = (args, input) => {
   try {
     return execFileSync('docker', args, {
@@ -75,7 +77,7 @@ assert.equal(accessInfo.Options['com.docker.network.bridge.host_binding_ipv4'], 
 assert.equal(accessInfo.Options['com.docker.network.bridge.enable_ip_masquerade'], 'false');
 const originals = Object.fromEntries(
   ['db', 'auth', 'storage', 'kong', 'inbucket'].map((s) => {
-    const name = 'supabase_' + s + '_marleva-m1',
+    const name = 'supabase_' + s + '_' + context.project,
       value = inspect(name);
     assert.equal(value.Image, copy.sourceImages.find((i) => i.name === '/' + name).image);
     return [s, value];
@@ -94,7 +96,10 @@ for (const name of Object.values(targetNames)) {
     assert.equal(existing.Config.Labels['marleva.b12.run'], run);
     assert.ok(
       existing.Mounts.every(
-        (m) => !['supabase_db_marleva-m1', 'supabase_storage_marleva-m1'].includes(m.Name),
+        (m) =>
+          !['supabase_db_' + context.project, 'supabase_storage_' + context.project].includes(
+            m.Name,
+          ),
       ),
     );
     docker(['rm', name]);
@@ -144,6 +149,10 @@ function start(service, env, mounts = [], ports = [], command) {
     '--env-file',
     envFile(service, env),
   ];
+  for (const alias of source.NetworkSettings.Networks[context.network]?.Aliases ?? []) {
+    assert.match(alias, /^[a-zA-Z0-9_.-]+$/);
+    args.push('--network-alias', alias);
+  }
   for (const mount of mounts) args.push('--mount', mount);
   for (const [host, inside] of ports) args.push('-p', `127.0.0.1:${host}:${inside}`);
   const entry = service === 'db' ? ['docker-entrypoint.sh'] : source.Config.Entrypoint;
@@ -265,11 +274,20 @@ execFileSync(
 );
 chmodSync(folder + '/localhost.key', 0o600);
 chmodSync(folder + '/localhost.crt', 0o600);
-gatewayEnv.KONG_PORT_MAPS = gatewayEnv.KONG_PORT_MAPS?.replaceAll('54321', '54421') ?? '54421:8000';
+gatewayEnv.KONG_PORT_MAPS =
+  gatewayEnv.KONG_PORT_MAPS?.replaceAll(context.isolated ? '54721' : '54321', '54421') ??
+  '54421:8000';
 const gatewayMounts = originals.kong.Mounts.map((m) => {
   assert.equal(m.Type, 'bind');
   assert.ok(
-    path.resolve(m.Source).startsWith(root + '/infra/local/supabase/templates/'),
+    path
+      .resolve(m.Source)
+      .startsWith(
+        root +
+          (context.isolated
+            ? '/artifacts/recovery/source-006/supabase/templates/'
+            : '/infra/local/supabase/templates/'),
+      ),
     'Template fuera del proyecto',
   );
   return `type=bind,src=${m.Source},dst=${m.Destination},readonly`;
@@ -380,7 +398,7 @@ try {
   }
   assert.ok(storageReady, 'Storage del destino no listo');
   writeFileSync(
-    'tests/results/recovery-stack.json',
+    context.report('stack'),
     JSON.stringify(
       {
         date: new Date().toISOString(),
@@ -400,7 +418,7 @@ try {
   for (const name of created.reverse())
     spawnSync('docker', ['stop', '--time', '10', name], { encoding: 'utf8' });
   writeFileSync(
-    'tests/results/recovery-stack-failure.json',
+    context.report('stack-failure'),
     JSON.stringify(
       {
         date: new Date().toISOString(),

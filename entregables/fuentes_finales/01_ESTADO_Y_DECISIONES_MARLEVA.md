@@ -1,6 +1,6 @@
 # Marleva: estado y decisiones
 
-Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 cerrado por solicitud del usuario; MAR-CHAT-006 en CONTINUACIÓN: consolidación de main y siguientes brechas de M1. ID comprobado contra el registro y acta; no reabre 004/005. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
+Fecha: 15 de octubre de 2026, America/Merida. MAR-CHAT-005 cerrado por solicitud del usuario; MAR-CHAT-006 cerrado por solicitud expresa del usuario para consolidar pendientes en otro chat; M1 sigue incompleta. ID comprobado contra el registro y acta; no reabre 004/005. Reglas y glosario en [00](00_GUIA_PRINCIPAL_MARLEVA.md), alcance en [02](02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md), evidencia en [03](03_REFERENTES_Y_EVIDENCIA_MARLEVA.md). Este archivo contiene estado vigente; el historial está en Git y actas.
 
 ## 1. Decisiones confirmadas
 
@@ -79,7 +79,7 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-001–003 | Cerrados; antecedentes en Git y evidencia 03 |
 | MAR-CHAT-004 | Cerrado el 13 de octubre de 2026, 14:25 America/Merida; commit 538c351 |
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
-| MAR-CHAT-006 | CONTINUACIÓN confirmada el 15-10-2026, 11:48 America/Merida; consolidación de main y siguientes brechas de M1. Tema abierto |
+| MAR-CHAT-006 | Cerrado por solicitud expresa el15-10-2026; [acta y prompt unificado](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_006.md). M1/B12 y PR8 incompletos; no equivale a aceptación |
 | MAR-CHAT-007 | Sonar y elegibilidad, CONTINUACIÓN 15-10-2026; copia aislada desde PR #5. Usuario autoriza Cloud Free privado, términos y OAuth. Organización/proyecto creados Free/Private y conexión CI guardada como secreto. Flujo Cloud diseñado, implementado y probado en 38821867592: positivo OK, negativa S1764 ERROR y comparador bloquea, corrección OK; Community sigue bloqueado. [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026). Acta sonar-cloud.json; preparar PR para revisión tras CI del HEAD final, sin merge |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
@@ -117,36 +117,13 @@ Cambios preexistentes en AGENTS raíz y sources/01–03 preservados y fuera de c
 
 Continuación autorizada, 15-10-2026: el usuario separó Sonar del desarrollo M1. Chat técnico Sonar creado y activo con ID01a1415c-a52f-7fd0-b68d-1a53a5ed7967, copia propia obligatoria, PR #5 draft/bloqueado; no acredita solución. Este MAR-CHAT-006 desarrolla UC008 en codex/fix-m1-avisos-reinicio desde main6fed44f, corrigiendo carga de avisos al reabrir sesión y cancelación de respuestas obsoletas. Diseño/pruebas y límites en matriz/SEQ008; 179 unitarias locales pasan. Paginación cliente, propuesta visual y aceptación/plataformas siguen pendientes. PR #6 fue corrección del lint, no solución Sonar.
 
-## 7. Prompt de continuidad
+## 7. Continuidad unificada
 
-```text
-PROYECTO: Marleva. CHAT: MAR-CHAT-006, CONTINUACIÓN; no cerrar ni renumerar.
-Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a.
-Registrar fecha real America/Merida. Leer usuario/README/AGENTS, 00–03 editables
-completos, protocolo, matriz, ADR001/002 y acta CIERRE_MAR_CHAT_005.md;
-inventariar y leer nuevos/modificados, declarar lectura parcial y ausentes.
-Conservar C01–C26, A0/SDK Android, Google pendiente, sources/AGENTS raíz readonly,
-cinco migraciones inmutables y todo trabajo preexistente. No reset/stash/borrado.
-Comprobar rama/HEAD/upstream/origin; pull --ff-only sin descartar cambios.
-main6fed44f9af0800c2e4eee9d8d33ad546ded6da4a tiene CI propio verde38805750887.
-PR #3/#4/#6 integrados por el usuario; consolidación previa terminada.
-Este chat desarrolla UC008 en codex/fix-m1-avisos-reinicio: avisos al reabrir sesión,
-estados de consulta/error/vacío y cancelación para evitar401 tardío de otra sesión.
-179 unitarias locales y browser con API controlada; comprobar CI del HEAD real.
-Sonar/PR #5 se trabaja en chat separado01a1415c-a52f-7fd0-b68d-1a53a5ed7967;
-no duplicar sus cambios ni atribuirle éxito. Seguir después con
-ramas M1 por matriz: avisos cliente, retorno seguro y B12 esencial integrado;
-propuesta visual revisada antes de pantallas; plataformas/accesibilidad pendientes.
-UC001 permanece abierto; separar diseñado/implementado/probado/aceptado.
-Usar CI principal, diagnóstico local dirigido y hooks obligatorios. Porcentajes
-solo docs/avance.md. Sin nuevos módulos completos, gasto, despliegue, contactos,
-contratación, datos o dinero reales. No eliminar archivos/ramas sin confirmación.
-Aplicar autonomía 00 §6: corregir/probar/documentar/sincronizar lo autorizado sin
-confirmaciones rutinarias. Releer finales, verificar enlaces/diff/ignorados,
-commit/push y SHA local/remoto real. Indicar Fuentes/configuración a reemplazar;
-no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierre real.
-```
+El usuario solicita cerrar006 y reunir los pendientes de los trabajos paralelos. [Acta de cierre006 y prompt completo](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_006.md): ubicaciones ejecutoras, PR8/9, evidencia y límites, estado B12 y orden del siguiente chat. Comprobar próximo ID; conciliar registro007/Sonar/diseño documental y cierre008/M3 antes de registrar. No volver a pedir dirección visual ni consulta GitHub ya aprobadas. La instrucción de cierre más reciente reemplaza mantener006 abierto; no declara M1/M3 terminados.
 
 Continuación UC008,15-10-2026: PR #8 implementa siguiente página, reintento sin perder lista, exclusión concurrente y cancelación.188 unitarias de cobertura y Chrome con55 avisos pasaron; CI7870d1a pasó diez controles antes de actualizar main. PR #5 quedó integrado en mainbf948c9 durante esa ejecución; se conserva su resultado Cloud, configuración y registro007. Integración de conflictos en copia aislada, sin tocar las aportaciones preexistentes de raíz/fuentes ni migraciones. Validar el nuevo SHA en GitHub, incluido el gate Sonar ya incorporado por main. M1/aceptación permanecen incompletas. Guardar o subir Git no actualiza Fuentes compartidas.
 
 Instrucción vigente del usuario,15-10-2026: terminar la solución integral inicialmente planeada antes de cerrar MAR-CHAT-006; PRs o controles aislados no cierran el tema. Puertas ejecutables: integración UC008 real, retorno UC009, B12 esencial en un único destino y dataset, migración/recuperación básica con runner, ramas M1 por matriz, fase3 acotada, propuesta/manual y plataformas disponibles. Mantener separadas implementación, pruebas y aceptación humana. La propuesta visual material se presenta antes del código según00§8; otros trabajos autorizados continúan mientras se revisa. Consultar GitHub/SHA/CI está autorizado para todos los PR de Marleva, sin preguntar por cada uno; subsisten únicamente permisos técnicos obligatorios del entorno.
+
+
+Cierre006,15-10-2026: dirección visual verde/fondo cálido/tipografía sistema/Cuenta-Avisos-Ayuda aprobada expresamente; aplicada en cliente M1 separado por módulos. API025–027 y retorno seguro implementados, comprobación integral/CI pendiente del HEAD final. Helpers B12 preparados con origen adicional separado; copia1792111223763 falló por ruta Docker y reanudó origen; último precontrol1792118849918 pasó3/3/3. Nuevo arranque de restauración rechazado automáticamente al solicitarse cierre y no ejecutado. No usar preparación o pruebas anteriores como cierre de B12. M3/PR9,HEAD46418758e7902621ebdf3d1f312bfdd7afbd9c79, tiene cierre008 en su rama y controles posteriores por comprobar. Rutas y siguiente acción exactas en acta006. Fuentes/configuración compartidas sin subida; conciliar01 con aportaciones preexistentes antes de reemplazarla.

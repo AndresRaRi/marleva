@@ -114,3 +114,62 @@ it('MAR-M1-UT-FE-108-W | respuesta 401 cancelada no borra la nueva credencial m�
   await rejected;
   expect(mocks.remove).not.toHaveBeenCalled();
 });
+it.each([
+  '/v1/auth/verifications',
+  '/v1/auth/email-changes/fixture/confirmations',
+  '/v1/auth/mfa/verifications',
+])('MAR-M1-UT-FE-109-OTP | código inválido en %s conserva credencial', async (path) => {
+  mocks.platform.OS = 'android';
+  mocks.get.mockResolvedValue('fixture-opaque-token');
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({
+        codigo: path.includes('/mfa/') ? 'FACTOR' : 'CODIGO_NO_VALIDO',
+        mensaje: 'Revisa el código',
+      }),
+    }),
+  );
+  const { api } = await import('../../../../apps/client/src/api');
+  await expect(api(path, 'POST', {})).rejects.toMatchObject({ status: 401 });
+  expect(mocks.remove).not.toHaveBeenCalled();
+});
+it('MAR-M1-UT-FE-109-SESSION | sesión vencida durante confirmación sí elimina credencial', async () => {
+  mocks.platform.OS = 'android';
+  mocks.get.mockResolvedValue('fixture-opaque-token');
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({ codigo: 'SESION', mensaje: 'Inicia sesión' }),
+    }),
+  );
+  const { api } = await import('../../../../apps/client/src/api');
+  await expect(
+    api('/v1/auth/email-changes/fixture/confirmations', 'POST', {}),
+  ).rejects.toMatchObject({ code: 'SESION' });
+  expect(mocks.remove).toHaveBeenCalledOnce();
+});
+it('MAR-M1-UT-FE-114-COMPLETE | completar recuperación confirmada limpia credencial y no persiste capacidad', async () => {
+  mocks.platform.OS = 'android';
+  mocks.get.mockResolvedValue('fixture-opaque-token');
+  const fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({ state: 'completed', id: 'r', version: 2 }),
+  });
+  vi.stubGlobal('fetch', fetch);
+  const { api } = await import('../../../../apps/client/src/api');
+  await api('/v1/auth/mfa-recoveries/r/verifications', 'POST', {}, undefined, {
+    'idempotency-key': 'fixture-operation',
+    'x-recovery-capability': 'fixture-capability',
+  });
+  expect(fetch.mock.calls[0][1].headers).toMatchObject({
+    'idempotency-key': 'fixture-operation',
+    'x-recovery-capability': 'fixture-capability',
+  });
+  expect(mocks.remove).toHaveBeenCalledOnce();
+  expect(mocks.set).not.toHaveBeenCalled();
+});

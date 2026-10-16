@@ -196,6 +196,30 @@ describe('M1 integración real local PG17/Auth/correo/API', () => {
       b = await login();
     expect((await call('/v1/me', 'get', undefined, a.token)).body.id).toBe(a.account.id);
     expect(a.account.id).not.toBe(b.account.id);
+    expect((await call('/v1/auth/email-changes/current', 'get', undefined, a.token)).body).toEqual({
+      cambio: null,
+    });
+    expect(
+      (
+        await call(
+          '/v1/auth/email-changes/current?accountId=' + b.account.id,
+          'get',
+          undefined,
+          a.token,
+        )
+      ).status,
+    ).toBe(422);
+    expect((await call('/v1/auth/mfa-recoveries/current', 'get', undefined, a.token)).status).toBe(
+      403,
+    );
+    expect((await call('/v1/auth/mfa/factors', 'get', undefined, a.token)).status).toBe(403);
+    for (const endpoint of [
+      '/v1/auth/email-changes/current',
+      '/v1/auth/mfa-recoveries/current',
+      '/v1/auth/mfa/factors',
+    ])
+      expect((await call(endpoint)).status).toBe(401);
+
     expect((await call('/v1/operator/access', 'get', undefined, a.token)).status).toBe(403);
     expect((await call('/v1/auth/mfa/enrollments', 'post', {}, a.token)).status).toBe(403);
     await db.query(
@@ -250,6 +274,30 @@ it('MAR-M1-IT-BE-010 | UC006/SEQ006:S030-S090 | cambio de correo exige ambos buz
     time = Date.now();
   const change = await call('/v1/auth/email-changes', 'post', { correo: next }, a.token);
   expect(change.status).toBe(201);
+  const draft = await call('/v1/auth/email-changes/current', 'get', undefined, a.token);
+  expect(draft.status).toBe(200);
+  expect(draft.headers['cache-control']).toBe('no-store');
+  expect(draft.body.cambio).toMatchObject({
+    id: change.body.id,
+    account_id: a.account.id,
+    correo_actual: a.address,
+    correo_nuevo: next,
+    actual_confirmado: false,
+    nuevo_confirmado: false,
+  });
+  expect(Object.keys(draft.body.cambio).sort()).toEqual(
+    [
+      'id',
+      'account_id',
+      'correo_actual',
+      'correo_nuevo',
+      'actual_confirmado',
+      'nuevo_confirmado',
+      'estado',
+      'vence_en',
+    ].sort(),
+  );
+
   const oldCode = await captured(a.address, time, 'Cambio de correo Marleva local'),
     newCode = await captured(next, time, 'Cambio de correo Marleva local');
   expect(
@@ -293,6 +341,24 @@ it('MAR-M1-IT-BE-011 | UC007/SEQ007:S030-S090 | TOTP estándar eleva AAL; revoca
   );
   const factor = await call('/v1/auth/mfa/enrollments', 'post', {}, a.token);
   expect(factor.status).toBe(201);
+  const listed = await call('/v1/auth/mfa/factors', 'get', undefined, a.token);
+  expect(listed.status).toBe(200);
+  expect(listed.body.items).toContainEqual({
+    id: factor.body.id,
+    nombre: expect.any(String),
+    estado: 'unverified',
+  });
+  expect(JSON.stringify(listed.body)).not.toContain(factor.body.totp.secret);
+  expect(
+    (await call('/v1/auth/mfa/factors?accountId=other', 'get', undefined, a.token)).status,
+  ).toBe(422);
+  expect((await call('/v1/auth/mfa-recoveries/current', 'get', undefined, a.token)).body).toEqual({
+    recuperacion: null,
+  });
+  expect(
+    (await call('/v1/auth/mfa-recoveries/current?accountId=other', 'get', undefined, a.token))
+      .status,
+  ).toBe(422);
   const token = await generate({ secret: factor.body.totp.secret });
   expect(
     (

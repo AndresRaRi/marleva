@@ -81,6 +81,11 @@ export class AccountController {
     const body = accountRequest(b, ['correo', 'codigo']);
     return this.accounts.confirmEmail(principal, id, body.correo, body.codigo);
   }
+  @Get('auth/mfa/factors') async factors(@Req() r: Request) {
+    const principal = await this.accounts.principal(r);
+    if (Object.keys(r.query).length) fail(422, 'CAMPOS', 'La consulta no admite parámetros');
+    return this.accounts.factors(principal);
+  }
   @Post('auth/mfa/enrollments') async enroll(@Req() r: Request) {
     return this.accounts.enroll(await this.accounts.principal(r, true));
   }

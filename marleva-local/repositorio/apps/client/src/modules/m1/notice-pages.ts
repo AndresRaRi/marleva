@@ -12,11 +12,11 @@ export class NoticePages {
   private state: NoticePageState = { items: null, cursor: null, loading: true, error: '' };
   private controller: AbortController | null = null;
   private disposed = false;
-  private seen = new Set<string>();
+  private readonly seen = new Set<string>();
   constructor(
-    private accountId: string,
-    private publish: (state: NoticePageState) => void,
-    private expired: (account: null) => void,
+    private readonly accountId: string,
+    private readonly publish: (state: NoticePageState) => void,
+    private readonly expired: (account: null) => void,
   ) {}
   dispose() {
     this.disposed = true;

@@ -1,3 +1,5 @@
+import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, chmodSync, readFileSync } from 'node:fs';
@@ -12,10 +14,12 @@ import {
 process.chdir(path.resolve(new URL('../../../..', import.meta.url).pathname));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1', 'Requiere ensayo local autorizado');
 const repeatWithAttributes = process.env.MARLEVA_RECOVERY_ATTRIBUTES === '1';
-const reportFile = repeatWithAttributes
-  ? 'tests/results/recovery-copy-with-attributes.json'
-  : 'tests/results/recovery-copy.json';
-const run = String(Date.now()),
+const reportFile = context.isolated
+  ? context.report('copy')
+  : repeatWithAttributes
+    ? 'tests/results/recovery-copy-with-attributes.json'
+    : 'tests/results/recovery-copy.json';
+const run = context.run ?? String(Date.now()),
   names = recoveryNames(run),
   started = Date.now();
 const privateDir = 'artifacts/recovery/' + names.prefix;
@@ -24,19 +28,44 @@ chmodSync(privateDir, 0o700);
 const docker = (args) =>
   execFileSync('docker', args, { encoding: 'utf8', timeout: 60000, maxBuffer: 20000000 });
 const inspect = (name) => JSON.parse(docker(['inspect', name]))[0];
-const sourceDb = 'supabase_db_marleva-m1',
-  sourceStorage = 'supabase_storage_marleva-m1';
-const services = ['pg_meta', 'storage', 'rest', 'realtime', 'inbucket', 'auth', 'kong'].map(
-  (s) => 'supabase_' + s + '_marleva-m1',
-);
+const sourceDb = 'supabase_db_' + context.project,
+  sourceStorage = 'supabase_storage_' + context.project;
+const sourceVolumes = {
+  supabase_db_marleva_m1: sourceDb,
+  supabase_storage_marleva_m1: sourceStorage,
+};
+const services = (
+  context.isolated
+    ? ['storage', 'rest', 'inbucket', 'auth', 'kong']
+    : ['pg_meta', 'storage', 'rest', 'realtime', 'inbucket', 'auth', 'kong']
+).map((s) => 'supabase_' + s + '_' + context.project);
 const sources = [sourceDb, ...services].map(inspect);
+if (context.isolated) {
+  for (const source of sources) {
+    assert.equal(source.Config.Labels['com.supabase.cli.project'], context.project);
+    assert.equal(
+      source.Config.Labels['com.supabase.cli.workdir'],
+      path.resolve('artifacts/recovery/source-006'),
+    );
+  }
+  let serving = false;
+  try {
+    serving = (
+      await fetch(context.sourceApi + '/health/live', { signal: AbortSignal.timeout(1000) })
+    ).ok;
+  } catch {
+    /* No API writes are allowed during the copy. */
+  }
+  assert.equal(serving, false, 'Detener exclusivamente API del origen de ensayo antes de copiar');
+}
+
 assert.ok(
   sources.every((s) => s.State.Running),
   'El origen debe comenzar activo',
 );
-assertRecoverySource(sources[0], sourceDb, sourceDb, '/var/lib/postgresql/data');
+assertRecoverySource(sources[0], sourceDb, sourceDb, '/var/lib/postgresql/data', context.network);
 const storage = sources.find((s) => s.Name === '/' + sourceStorage);
-assertRecoverySource(storage, sourceStorage, sourceStorage, '/mnt');
+assertRecoverySource(storage, sourceStorage, sourceStorage, '/mnt', context.network);
 for (const name of Object.values(names)) {
   for (const kind of ['container', 'volume', 'network']) {
     const found = execFileSync(
@@ -142,7 +171,7 @@ function manifest(volume) {
   return result;
 }
 function copy(from, to) {
-  assertRecoveryCopy(from, to, names);
+  assertRecoveryCopy(from, to, names, sourceVolumes);
   docker(['volume', 'create', '--label', 'marleva.b12.run=' + run, to]);
   docker([
     ...helperBase,
@@ -222,10 +251,11 @@ async function ready(container) {
 try {
   console.log('B12: origen identificado; destino nuevo sin puertos');
   paused = true;
-  execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'stop', 'api'], {
-    stdio: 'pipe',
-    timeout: 20000,
-  });
+  if (!context.isolated)
+    execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'stop', 'api'], {
+      stdio: 'pipe',
+      timeout: 20000,
+    });
   docker(['stop', '--time', '20', ...services]);
   before = rows(sourceDb);
   const availableIds = new Set(
@@ -243,11 +273,12 @@ try {
   copy(names.storageBackup, names.storageTarget);
   const pgManifest = manifest(names.pgBackup),
     storageManifest = manifest(names.storageBackup);
-  const dataset = JSON.parse(readFileSync('artifacts/recovery/fixtures.private.json', 'utf8'));
+  const dataset = JSON.parse(readFileSync(context.fixture, 'utf8'));
   assert.equal(dataset.files.length, 3, 'Preparar los tres objetos del ensayo');
-  const expectedFiles = repeatWithAttributes
-    ? dataset.files.filter((file) => availableIds.has(file.id))
-    : dataset.files;
+  const expectedFiles =
+    repeatWithAttributes && !context.isolated
+      ? dataset.files.filter((file) => availableIds.has(file.id))
+      : dataset.files;
   assert.ok(expectedFiles.length > 0, 'No acreditar contenido con Storage vacío');
   for (const file of expectedFiles)
     assert.ok(storageManifest.includes(file.sha256 + ' '), 'Falta contenido esperado en Storage');
@@ -264,6 +295,8 @@ try {
     storageManifestSha256: createHash('sha256').update(storageManifest).digest('hex'),
   };
   report.cases.completeVolumeCopy = true;
+  report.sourceProject = context.project;
+  report.fixturePrefix = dataset.prefix;
   console.log('B12: copias y hashes coinciden; reanudando origen');
 } catch (error) {
   report.error = error.message;
@@ -273,18 +306,16 @@ try {
     docker(['start', sourceDb]);
     await ready(sourceDb);
     docker(['start', ...services]);
-    execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'start', 'api'], {
-      stdio: 'pipe',
-      timeout: 20000,
-    });
+    if (!context.isolated)
+      execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'start', 'api'], {
+        stdio: 'pipe',
+        timeout: 20000,
+      });
     report.sourceResumed = true;
   }
   privateFile('phase-copy.json', JSON.stringify(report, null, 2));
   if (report.error)
-    writeFileSync(
-      'tests/results/recovery-copy-failure.json',
-      JSON.stringify(report, null, 2) + '\n',
-    );
+    writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
 }
 try {
   docker(['network', 'create', '--internal', '--label', 'marleva.b12.run=' + run, names.network]);
@@ -348,7 +379,7 @@ try {
   console.log('B12: PG restaurado; filas e identidad coinciden y Storage conserva hashes');
 } catch (error) {
   report.error = error.message;
-  writeFileSync('tests/results/recovery-copy-failure.json', JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
   throw error;
 } finally {
   try {
@@ -357,10 +388,7 @@ try {
   } catch (error) {
     report.targetStopError = error.message;
     report.error ??= 'No se comprobó destino detenido';
-    writeFileSync(
-      'tests/results/recovery-copy-failure.json',
-      JSON.stringify(report, null, 2) + '\n',
-    );
+    writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
   }
   report.duration_ms = Date.now() - started;
   privateFile('phase-final.json', JSON.stringify(report, null, 2));
