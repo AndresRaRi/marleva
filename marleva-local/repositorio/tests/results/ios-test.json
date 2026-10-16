@@ -52,7 +52,7 @@
   },
   "limits": [
     "Simulator trial, not a physical iPhone or production distribution.",
-    "No iOS full email change, MFA/recovery, accessibility or human acceptance claimed.",
+    "Original trial covered access/session only; later native flows are recorded separately in extendedFlows.",
     "Android remained off; no deletion, uninstall, device reset, migration or data cleanup.",
     "App session persistence proven across process restart; provider token renewal not independently forced by this trial.",
     "Generated native project/Pods and private logs/backups retained locally; not included wholesale in Git."
@@ -75,6 +75,71 @@
       "rule": "generic-api-key",
       "line": 230,
       "reason": "Public error-count prose, not a credential; user explicitly authorized only this historical finding."
+    }
+  },
+  "extendedFlows": {
+    "date": "2026-10-16T22:23:51.529Z",
+    "sourceCommit": "21560780cd60aa1ce7539a9f2012847dd507db3f",
+    "emailChange": {
+      "invalidCodePreservedStep": true,
+      "firstMailbox": true,
+      "relaunchRecoveredPending": true,
+      "secondMailbox": true,
+      "accountIdPreserved": true,
+      "oldSessionsRevoked": true,
+      "completedAt": "2026-10-16T22:23:51.529Z"
+    },
+    "revocation": {
+      "at": "2026-10-16T22:25:52.605Z",
+      "secondOwnSessionVerified": true,
+      "logoutAll": true,
+      "secondSessionDenied": true
+    },
+    "return": {
+      "privateDataHiddenAfterRevocation": true,
+      "sameIdentityOtp": true,
+      "destination": "cuenta",
+      "ownNoticeAfterReentry": true
+    },
+    "fixtureBefore": "ios-009-1792173900@example.test",
+    "fixtureAfter": "ios-009-cambio-1792189200@example.test",
+    "artifacts": [
+      "docs/revision/M1/capturas/11-ios-primer-buzon.png",
+      "docs/revision/M1/capturas/12-ios-correo-completado.png",
+      "docs/revision/M1/capturas/13-ios-avisos-tras-retorno.png",
+      "docs/revision/M1/capturas/14-ios-permiso-mfa.png",
+      "docs/revision/M1/capturas/15-ios-recuperacion-completada.png",
+      "docs/revision/M1/capturas/16-ios-acceso-recuperado.png"
+    ],
+    "limits": [
+      "Return observed to Cuenta for the same identity; no claim of all native destinations or another identity.",
+      "One real account notice, not native pagination or a new restored B12 trial.",
+      "Hybrid recovery passed with real local provider; request and reviewer approval were not exercised from native UI. Native accessibility, physical iPhone and remaining matrix combinations are not accredited."
+    ],
+    "mfa": {
+      "operator": "operator1@example.test",
+      "deniedBeforeFactor": true,
+      "enrolledFromNativeUi": true,
+      "verifiedFromNativeUi": true,
+      "permissionAfterFactor": true,
+      "factorId": "5eecfdb2-3a30-4479-b6a9-4c5f50df3b49"
+    },
+    "recovery": {
+      "oldAuthorizedFactorAbsent": true,
+      "onlyOneVerifiedReplacement": true,
+      "newFactorId": "c1e1ea62-89e8-48c6-a0b8-6eeaeb801cdd",
+      "capabilityConsumed": true,
+      "completed": true,
+      "nativeNewOtp": true,
+      "nativePermissionDeniedBeforeTotp": true,
+      "nativePermissionPassedAfterTotp": true,
+      "at": "2026-10-16T22:52:52.666Z",
+      "selfReviewDenied": true,
+      "reviewer": "operator2@example.test",
+      "reviewerRoleExplicitlyAuthorized": true,
+      "removedFactorId": "5eecfdb2-3a30-4479-b6a9-4c5f50df3b49",
+      "scope": "Hybrid: request/reviewer OTP, MFA and approval via real API; owner status, session revocation, OTP return to Ayuda, capability, replacement enrollment, completion and final OTP/TOTP/operator permission through native iOS UI.",
+      "requestId": "d21018db-f27d-4892-a806-dad59fe12241"
     }
   }
 }

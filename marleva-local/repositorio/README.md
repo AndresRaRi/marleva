@@ -44,7 +44,7 @@ Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integr
 
 ## Estado real y entrega Chrome
 
-Main91b0d19 integra PR8–13; su [CI38935513484](https://github.com/AndresRaRi/marleva/actions/runs/38935513484) está aprobado. Acceso/cuenta, cambio por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA tienen pruebas reales Chrome/API. B12 esencial Chrome está probado y repetido desde el mismo backup; no RPO/RTO productivos. [Actas y límites](docs/proceso/RECUPERACION_B12_M1.md). M1 conserva implementación y aceptación separadas en [avance](docs/avance.md).
+Main2156078 integra hasta PR19; su [CI38972892582](https://github.com/AndresRaRi/marleva/actions/runs/38972892582) está aprobado. Acceso/cuenta, cambio por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA tienen pruebas reales Chrome/API. B12 esencial Chrome está probado y repetido desde el mismo backup; no RPO/RTO productivos. [Actas y límites](docs/proceso/RECUPERACION_B12_M1.md). M1 conserva implementación y aceptación separadas en [avance](docs/avance.md).
 
 [PR14](https://github.com/AndresRaRi/marleva/pull/14) completa verificaciones de carreras de sesión, teclado/foco/navegación/zoom y rendimiento remoto, junto con controles periódicos y manual. Consultar su SHA/CI y el main posterior antes de integrar; no heredar verdes. Revisión estática resuelta y401unitarias/cobertura locales aprobadas al guardar el incremento inicial. No despliegue ni módulos nuevos.
 
@@ -108,3 +108,6 @@ xcrun simctl launch 588D3E9B-A421-4F94-836F-8F15C92225BD mx.marleva.local
 ```
 
 Conservar firma ad hoc predeterminada del simulador: no usar CODE_SIGNING_ALLOWED=NO, porque SecureStore necesita el contexto de firma. No hace falta cuenta Apple ni firma de distribución para este ensayo. Instalar actualiza la app conservando sus datos; no desinstalar/resetear ni usar clean. El acceso por OTP, relanzamiento con sesión y salida/relanzamiento sin sesión pasaron; demás recorridos iOS, accesibilidad, físico y aceptación integral no se acreditan. Android no se encendió.
+
+
+Continuación iOS16-10: ambos buzones, error/progreso tras relanzar, revocación, aviso/retorno a Cuenta y MFA básico pasaron. Recuperación híbrida: solicitud y revisión por API real; iOS comprobó cierre de sesión anterior, retorno a Ayuda por OTP, capacidad, nuevo factor, finalización y OTP/TOTP con permiso recuperado. Acta ios-test.json, sección extendedFlows; matriz inicial e instructivo distinguen pasos nativos y API. Este incremento documental requiere su propio CI/revisión; no acredita recuperación íntegra por UI nativa, accesibilidad, físico ni aceptación integral. Android apagado, datos y migraciones preservados.

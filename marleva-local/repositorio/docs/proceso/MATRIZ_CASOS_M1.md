@@ -1,8 +1,29 @@
 # M1: casos, estados y pruebas antes de implementar
 
-## Cierre Chrome009 — diseño previo,16-10-2026
+## Estado vigente conciliado — 16 de octubre de 2026
 
-Instrucción vigente: Android/iOS apagados y pendientes; Chrome es el navegador de esta entrega. No borrar recursos ni abrir trabajo paralelo. El cierre para revisión del usuario no acredita plataformas aplazadas ni aceptación humana.
+Main 2156078 integra PR19 y tiene [CI propio aprobado](https://github.com/AndresRaRi/marleva/actions/runs/38972892582). Esta tabla sustituye los pendientes genéricos de las fotografías anteriores; los planes y fallos fechados se conservan como historial. Implementado, probado y aceptado se registran por separado. Ningún resultado Chrome acredita por sí solo iOS o Android.
+
+| Casos | Evidencia ya comprobada | Pendiente concreto |
+|---|---|---|
+| UC001/002: acceso | OTP, cuotas y errores en API/Chrome; acceso iOS Release y Android básico histórico | Cobertura móvil restante y accesibilidad; Android actual sigue pausado |
+| UC003: sesión | API: renovación concurrente, reserva ocupada y revocación durante consulta; iOS conserva sesión tras relanzar | Renovación forzada y combinaciones entre dispositivos nativos |
+| UC004: salida | Chrome actual/total entre sesiones; iOS salida/reinicio y salida total desde segunda sesión propia con rechazo nativo | Salida total iniciada desde iOS y combinaciones restantes entre dispositivos |
+| UC005/006: correo | Chrome completo; iOS confirma ambos buzones, conserva el paso ante código inválido y tras relanzar, mantiene ID y revoca sesiones anteriores | Combinaciones nativas restantes, accesibilidad y físico; no repetir el flujo ya aprobado sin cambio |
+| UC007: segundo factor | API/Chrome; iOS prepara y verifica factor, deniega permiso antes y lo concede después de AAL2 | Accesibilidad y combinaciones nativas restantes; Android actual pausado |
+| UC008: avisos | Chrome real: 55 avisos, tres páginas; iOS muestra el aviso real del cambio de correo | Paginación nativa y accesibilidad |
+| UC009: retorno | Chrome: Avisos con misma/otra identidad; iOS: retorno a Cuenta con misma identidad tras revocación remota | Demás destinos y otra identidad en nativo |
+| UC010: salud/fallos/rendimiento | API, contrato, Chrome y carga aprobados en CI propio de main; últimos grupos con cero errores | Causa del fallo intermitente previo de Auth sin demostrar; no atribuir corrección inexistente |
+| UC011: archivos privados | B09 y recuperación esencial con permisos/integridad comprobados | Aceptación y condiciones de operación real; no exige crear pantalla M2 |
+| UC012: simulador | Pruebas aisladas aprobadas en CI | Aceptación de su alcance; no acredita M6 ni dinero real |
+| UC013: recuperación | B12 esencial Chrome probado y repetido desde el mismo backup; datos/Auth/Storage/cola/revocación/Prisma | Aceptación y condiciones previas a operación; ensayos avanzados conservan aplazamiento aprobado |
+| UC014: recuperación MFA | API/Chrome; ensayo híbrido iOS con revocación, retorno a Ayuda, capacidad, nuevo factor y permiso final; solicitud/aprobación por API real | Solicitud y revisión desde UI nativa, accesibilidad y demás combinaciones; no repetir retiro del factor |
+
+Acta iOS actual: [ios-test.json](../../tests/results/ios-test.json), sección extendedFlows. Capturas y pasos en [instructivo M1](../revision/M1/INSTRUCTIVO_M1.md). Aceptación integral y pruebas físicas pendientes. Las PR de mantenimiento 15–17 y el prototipo visual 18 no son requisitos de este cierre funcional.
+
+## Cierre Chrome009 — diseño previo histórico,16-10-2026
+
+Alcance de aquella entrega: Android/iOS apagados y pendientes; Chrome fue el navegador elegido. No borrar recursos ni abrir trabajo paralelo. El cierre para revisión del usuario no acredita plataformas aplazadas ni aceptación humana.
 
 Brechas ejecutables: IT-BE-103-CONCURRENT (UC003→SEQ003:S020–S090→API003/004→Session/Auth): ocho lecturas con renovación necesaria, proveedor/PG reales y una sola renovación; IT-BE-103-LEASE: reserva ocupada devuelve503 sin rotar credenciales y permite reintento; IT-BE-104-RACE (SEQ004:S020–S070→API005): revocar durante consulta al proveedor impide devolver cuenta y no revive sesión. Intercalar transporte con barreras explícitas, sin sustituir respuestas del proveedor. Conservar fixtures y cerrar conexiones, sin limpieza de filas.
 
@@ -10,9 +31,9 @@ Accesibilidad Chrome: completar recorrido solo con teclado, nombres/roles accesi
 
 PF-BE-103/108: ejecutar el plan de rendimiento existente en runner GitHub aislado:100cuentas/sesiones ficticias,10/50/1000avisos, calentamiento10s y medición60s en1/5/10concurrentes; latencias/corrección/errores/recursos medidos. PF-FE-101:30navegaciones Chrome con caché fría identificada, p95 y recursos. Umbrales de ingeniería ya propuestos arriba se informan como tales, no compromisos productivos. Ningún emulador local para estas pruebas. Consolidar actas B12 existentes y mediciones, sin repetir retiros del factor ni borrados.
 
-## Estado actual y trazabilidad documental — 15-10-2026
+## Fotografía documental y trazabilidad — 15-10-2026
 
-Corrección documental autorizada por el usuario tras auditoría de solo lectura. Esta sección es el estado actual; los planes y resultados fechados posteriores conservan su contexto histórico. No acredita pruebas nuevas ni aceptación. Diseñado significa proceso documentado, con ramas aún por cerrar; implementado no significa probado. Se conservan todos los IDs. Prefijos: UC/SEQ/UI = MAR-M1-; API = MAR_M1_API_.
+Corrección documental autorizada por el usuario tras auditoría de solo lectura. Esta sección conserva la fotografía de esa fecha; el estado vigente está en la tabla conciliada inicial. No acredita pruebas nuevas ni aceptación. Diseñado significa proceso documentado, con ramas aún por cerrar; implementado no significa probado. Se conservan todos los IDs. Prefijos: UC/SEQ/UI = MAR-M1-; API = MAR_M1_API_.
 
 | UC / SEQ:pasos | API | Datos | UI | Diseñado | Implementado | Probado y pendiente |
 |---|---|---|---|---|---|---|
