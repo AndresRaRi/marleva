@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-16",
+  "type": "DOM simulado con jsdom; no navegador",
+  "results": [
+    {
+      "id": "DOM-loading",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-empty",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-error",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-removed",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-expired-session",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-error-reintento",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-paginacion-error-preserva",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-filtros",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-busqueda-sin-inyeccion",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-codigo-invalido-conserva-contexto",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-reenvio-espera",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-codigo-vencido-no-pasa-reintentando",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-retorno-no-concede-compra",
+      "result": "PASS"
+    },
+    {
+      "id": "DOM-salida-limpia",
+      "result": "PASS"
+    }
+  ],
+  "limits": [
+    "Dialog simulado para probar filtros; foco y Escape reales no acreditados aquí",
+    "No llamadas a API, base o correo",
+    "No WCAG integral ni plataformas nativas"
+  ],
+  "browserObserved": [
+    "Chrome: explorar, detalle, correo, código incorrecto/correcto y regreso al mismo detalle",
+    "M1 existente: acceso con correo capturado local, cuenta, avisos vacíos y salida"
+  ],
+  "browserPending": [
+    "Filtros/estados restantes interrumpidos por timeout de conexión; no se acreditan por jsdom"
+  ]
+}
