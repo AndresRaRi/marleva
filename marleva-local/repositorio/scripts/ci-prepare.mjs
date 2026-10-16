@@ -8,4 +8,8 @@ const run = spawnSync('pnpm', ['--filter', '@marleva/api', 'generate'], {
   },
 });
 if (run.error) throw run.error;
-process.exitCode = run.status ?? 1;
+if (run.status === 0) {
+  const m3 = spawnSync(process.execPath, ['scripts/m3-prepare.mjs'], { stdio: 'inherit' });
+  if (m3.error) throw m3.error;
+  process.exitCode = m3.status ?? 1;
+} else process.exitCode = run.status ?? 1;

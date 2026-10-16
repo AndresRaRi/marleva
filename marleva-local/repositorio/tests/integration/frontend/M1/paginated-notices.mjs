@@ -19,6 +19,9 @@ export async function verifyPaginatedNotices(browser, origin) {
   }));
   const cursors = [];
   let fail = true;
+  await page.route('**/v1/auth/email-changes/current', (route) =>
+    route.fulfill({ json: { cambio: null } }),
+  );
   await page.route('**/v1/me', (route) => route.fulfill({ json: account }));
   await page.route('**/v1/notifications*', (route) => {
     const cursor = new URL(route.request().url()).searchParams.get('cursor');

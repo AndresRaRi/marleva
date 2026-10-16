@@ -117,7 +117,13 @@
   "secondCorrection": {
     "scope": "API027 all TOTP statuses; complete browser fixtures without weakening validation",
     "directedUnit": "54/54",
-    "remoteCI": "pending"
+    "remoteCI": {
+      "sha": "8ef53dbb01debce5f5a64de8365afb08f57c1070",
+      "run": 38846330015,
+      "integration": "success",
+      "web": "failure: API025 fixture missing; corrected in combined tree",
+      "overall": "pending when inspected"
+    }
   },
   "m2DocumentaryIntegration": {
     "source": "d34fb3e1f6a25efa28644fd8d32221350fb4d3e3",
@@ -129,5 +135,52 @@
     "productTests": 0,
     "acceptance": false,
     "modelTool": "Use documented MARLEVA_DBML_MODULE package path; default package.json export resolution failed"
+  },
+  "browserFixtureDiagnostic": {
+    "browser": "155.0.8059.84",
+    "origin": "http://127.0.0.1:8189",
+    "resumed": {
+      "fixtureBrowser": true,
+      "initialPending": true,
+      "reloadRestoresNotices": true,
+      "unavailableNotEmpty": true,
+      "retry": true,
+      "expiredHidesNotices": true,
+      "lateResponseDiscarded": true,
+      "requests": 7,
+      "firstLoadMs": 342
+    },
+    "paginated": {
+      "fixtureBrowser": true,
+      "items": 55,
+      "requests": 5,
+      "retryPreservesList": true,
+      "refreshResets": true
+    },
+    "limits": "Controlled HTTP responses, not PG/Auth, no TLS claim; full real CI required"
+  },
+  "m3CorrectionCI": {
+    "sha": "87fdc5c873f67824b9c45f51044ad2d083682f25",
+    "run": 38846202699,
+    "conclusion": "success",
+    "jobs": 13
+  },
+  "combination": {
+    "m1": "8ef53dbb01debce5f5a64de8365afb08f57c1070",
+    "m2": "d34fb3e1f6a25efa28644fd8d32221350fb4d3e3",
+    "m3": "87fdc5c873f67824b9c45f51044ad2d083682f25",
+    "mainUnchanged": "bf948c946bd328aacba09b90d02340c0c29a3816",
+    "conflictsResolved": [
+      "README.md",
+      "entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md",
+      "marleva-local/repositorio/README.md"
+    ],
+    "checks": {
+      "frozenInstall": "passed after offline cache miss; lockfile unchanged",
+      "prismaGenerate": "passed for both modules, no DB connection",
+      "architecture": "passed, no dependency violations or duplication"
+    },
+    "combinedCI": "pending",
+    "acceptance": false
   }
 }

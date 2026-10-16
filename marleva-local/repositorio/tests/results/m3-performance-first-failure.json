@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-15T21:53:55.683Z",
+  "node": "v24.21.0",
+  "destination": "127.0.0.1:55432/marleva_m3_008",
+  "measurement": "Repositorio Prisma/PG real. No HTTP/Auth ni capacidad productiva.",
+  "objective": "Propuesto: p95<=500ms; cero errores de respuesta.",
+  "samples": [
+    {
+      "size": 10,
+      "concurrency": 1,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 3924,
+      "errors": 0,
+      "p50": 1.032709000000068,
+      "p95": 2.7345829999999296,
+      "p99": 3.9972500000003492,
+      "requests_per_second": 784.8,
+      "rss_start": 110493696,
+      "rss_end": 202522624,
+      "cpu": {
+        "user": 1385806,
+        "system": 176988
+      }
+    },
+    {
+      "size": 10,
+      "concurrency": 5,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 8733,
+      "errors": 0,
+      "p50": 1.4552089999997406,
+      "p95": 5.391500000000633,
+      "p99": 36.53587500000049,
+      "requests_per_second": 1746.6,
+      "rss_start": 202522624,
+      "rss_end": 224346112,
+      "cpu": {
+        "user": 1979260,
+        "system": 244445
+      }
+    },
+    {
+      "size": 10,
+      "concurrency": 10,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 10713,
+      "errors": 0,
+      "p50": 2.5873330000031274,
+      "p95": 8.832291999999143,
+      "p99": 42.412209000000075,
+      "requests_per_second": 2142.6,
+      "rss_start": 224346112,
+      "rss_end": 236683264,
+      "cpu": {
+        "user": 1915422,
+        "system": 285432
+      }
+    },
+    {
+      "size": 1000,
+      "concurrency": 1,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 696,
+      "errors": 0,
+      "p50": 5.845665999997436,
+      "p95": 10.210583000000042,
+      "p99": 29.80225000000064,
+      "requests_per_second": 139.2,
+      "rss_start": 237240320,
+      "rss_end": 217055232,
+      "cpu": {
+        "user": 468267,
+        "system": 57664
+      }
+    },
+    {
+      "size": 1000,
+      "concurrency": 5,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 700,
+      "errors": 0,
+      "p50": 12.217541999998502,
+      "p95": 87.56654100000014,
+      "p99": 109.7912920000017,
+      "requests_per_second": 140,
+      "rss_start": 217071616,
+      "rss_end": 212451328,
+      "cpu": {
+        "user": 458528,
+        "system": 71493
+      }
+    },
+    {
+      "size": 1000,
+      "concurrency": 10,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 699,
+      "errors": 0,
+      "p50": 85.8493750000016,
+      "p95": 107.08445799999754,
+      "p99": 331.85145800000464,
+      "requests_per_second": 139.8,
+      "rss_start": 212451328,
+      "rss_end": 192512000,
+      "cpu": {
+        "user": 420296,
+        "system": 51230
+      }
+    },
+    {
+      "size": 10000,
+      "concurrency": 1,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 115,
+      "errors": 0,
+      "p50": 41.32300000000396,
+      "p95": 52.537875000001804,
+      "p99": 70.90750000000116,
+      "requests_per_second": 23,
+      "rss_start": 184860672,
+      "rss_end": 180322304,
+      "cpu": {
+        "user": 108519,
+        "system": 45169
+      }
+    },
+    {
+      "size": 10000,
+      "concurrency": 5,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 43,
+      "errors": 0,
+      "p50": 584.9309170000051,
+      "p95": 898.4741670000003,
+      "p99": 905.8209999999963,
+      "requests_per_second": 8.6,
+      "rss_start": 180322304,
+      "rss_end": 107347968,
+      "cpu": {
+        "user": 37739,
+        "system": 6750
+      }
+    },
+    {
+      "size": 10000,
+      "concurrency": 10,
+      "seconds": 5,
+      "warmup_seconds": 1,
+      "requests": 49,
+      "errors": 0,
+      "p50": 1013.890916999997,
+      "p95": 1414.6740409999984,
+      "p99": 1597.806832999995,
+      "requests_per_second": 9.8,
+      "rss_start": 107364352,
+      "rss_end": 106414080,
+      "cpu": {
+        "user": 41132,
+        "system": 8340
+      }
+    }
+  ],
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "passed": false
+}

@@ -21,3 +21,5 @@ tests/results/**
 pnpm-lock.yaml
 .env
 .env.*
+
+apps/client/src/modules/m3/generated/api.ts

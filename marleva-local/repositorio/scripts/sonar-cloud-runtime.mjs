@@ -84,10 +84,12 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       '-Dsonar.scanner.metadataFilePath=' + folder + '/.scannerwork/report-task.txt',
       '-Dsonar.sources=apps/api/src,apps/client/app,apps/client/src',
       '-Dsonar.exclusions=apps/api/src/generated/**',
+      '-Dsonar.inclusions=**/*.ts,**/*.tsx',
       '-Dsonar.typescript.tsconfigPaths=apps/api/tsconfig.json,apps/client/tsconfig.json',
       '-Dsonar.sourceEncoding=UTF-8',
       '-Dsonar.scanner.skipJreProvisioning=true',
       '-Dsonar.qualitygate.wait=true',
+      '-Dsonar.cpd.exclusions=apps/client/src/modules/m3/generated/api.ts',
       ...(existsSync(path.join(folder, 'coverage/lcov.info'))
         ? ['-Dsonar.javascript.lcov.reportPaths=coverage/lcov.info']
         : []),

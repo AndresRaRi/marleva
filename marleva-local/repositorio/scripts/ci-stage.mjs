@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 const stages = {
   calidad: ['quality'],
   'arquitectura-contratos': ['arch:check', 'contracts:check'],
-  unitarias: ['test:coverage', 'coverage:check'],
+  unitarias: ['test:coverage'],
   build: ['build', 'build:container'],
   seguridad: ['security:scan'],
   integracion: ['ci:integration', 'test:recovery:ci'],

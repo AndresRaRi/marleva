@@ -24,6 +24,9 @@ export async function verifyResumedNotices(browser, origin) {
     text: 'Aviso conservado al reabrir',
     createdAt: '2026-10-15T12:00:00Z',
   };
+  await page.route('**/v1/auth/email-changes/current', (route) =>
+    route.fulfill({ json: { cambio: null } }),
+  );
   await page.route('**/v1/me', (route) => route.fulfill({ json: account }));
   await page.route('**/v1/notifications', async (route) => {
     calls++;

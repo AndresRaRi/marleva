@@ -31,7 +31,7 @@ Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Acep
 |---|---|---|---|
 | M1 Acceso/cuenta | 11/14: 78,57% | 0/14: 0% | Criterios arriba; pendientes reales |
 | M2 Comunidad/oferentes | 0% | 0% | Diseño; sin implementación del módulo |
-| M3 Catálogo | 0% | 0% | Diseño; sin implementación |
+| M3 Catálogo | 3/9: 33,33% | 0/9: 0% | Catálogo público aislado; criterios abajo |
 | M4 Compra directa | 0% | 0% | Diseño; sin implementación |
 | M5 Cotización | 0% | 0% | Diseño; sin implementación |
 | M6 Dinero | 0% | 0% | Diseño; simulador no suma como módulo |
@@ -40,7 +40,7 @@ Implementación M1 = 11/14 = 78,57%. Barra: ████████░░. Acep
 | M9 Avisos transversales | 0% | 0% | Infraestructura M1 no acredita módulo completo |
 | M10 Medición | 0% | 0% | Diseño; sin implementación |
 
-Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; todos permanecen 0% de implementación, fuera del alcance de construcción de esta etapa. General: no es un módulo funcional, Por calcular.
+Proyecto: Por calcular. No promediar módulos con denominadores diferentes ni inventar criterios de M2–M10. Primero fijar sus matrices funcionales antes de calcular el total; M3 tiene autorización paralela y cálculo propio abajo; M2 yM4–M10 permanecen0% de implementación. General: no es un módulo funcional, Por calcular.
 
 ## Verificación técnica independiente del porcentaje
 
@@ -63,3 +63,23 @@ Cierre técnico de este incremento: primer verde completo y negativa de segurida
 Dependency graph habilitado por solicitud del usuario. Lighthouse/YAML retiran extract-zip/sprintf-js. braces/node-forge conservan versiones originales con parches locales: OSV sigue identificándolas, pero solo se reconocen como corregidas tras comprobar hashes y regresiones en la misma corrida. Avisos desconocidos o evidencia alterada bloquean. Estos controles no modifican el avance funcional ni acreditan M1 completa.
 
 Cierre MAR-CHAT-005: [acta y continuidad](proceso/CIERRE_MAR_CHAT_005.md). Integración del pipeline no cambia el avance funcional. Consolidación UC001 integrada por el usuario mediante PR #4 en main 40c65837f5498b4b91d342269ddf10490c90ab62. CI propio de main pasó en 38789774598; el avance funcional no cambia por consolidar pruebas.
+
+## M3: catálogo aislado — MAR-CHAT-008
+
+Autorización explícita15-10-2026, independiente de base/M1. Nueve criterios de [matriz M3](proceso/MATRIZ_CASOS_M3.md), todos peso1. Implementado exige salida integradaAPI/cliente local; lógica interna sin recorrido autenticado completo no suma. Aceptación exige además proveedores reales autorizados, plataformas/accesibilidad, calidad/manual y revisión. Fixtures no acreditan M1/M2/M8 ni personas aprobadas.
+
+| Criterio | Salida | Implementado | Aceptado | Evidencia y límite |
+|---|---|---|---|---|
+| UC001 | Búsqueda/filtros/cursor y paginación con carga/vacío/error | Sí | No | Código M3 separado; PG/Nest ycliente universal/web; actas m3-*. Plataformas/aceptación pendientes |
+| UC002 | Detalle público elegible o retirada404 | Sí | No | API/cliente integrados; fotos procesadas en backend; visualización web probada; caso009 completo separado |
+| UC003 | Perfil público y ofertas por oferente | Sí | No | Campos públicos explícitos; elegibilidad ficticia, integraciónM2 pendiente |
+| UC004 | Crear/editar ofertas propias autenticadas | No | No | Ruta privada/UI de gestión probadas con identidad ficticia; proveedor M1 real pendiente |
+| UC005 | Enviar versión propia revisable | No | No | Envío integrado API/cliente probado con fixture; identidad real pendiente |
+| UC006 | Revisión autorizada conMFA sin conflicto | No | No | Revisión API/cliente con otro actor ficticio probada; M1/M8 reales no integrados |
+| UC007 | Pausar/disponibilidad por titular | No | No | Pausa API/cliente probada con sesión ficticia; proveedor real pendiente |
+| UC008 | Elegibilidad vigente integrada conM2 | No | No | Proyección ficticia con ocultación comprobada; noM2 real |
+| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Carga privada con identidad inyectada/derivados públicos y web probados; proveedor real/selector nativo pendientes |
+
+Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptación=0/9=0%. M1 conserva su cálculo anterior; Proyecto sigue Por calcular. Las pruebas/archivos/commits no suman criterios. No integración a main ni operación real.
+
+15-10-2026, incremento gestión: UC004/005/006/007/009 tienen recorridos completos en composición aislada con identidad ficticia (87 pruebas M3 y nueve comprobaciones de navegador). Se conserva el numerador3/9 por criterio de recorrido autenticado integrado con proveedor real; el avance aislado se describe en evidencia, sin presentarlo como aceptación. Autorización de008 histórica: consolidación009 conserva el trabajo y prohíbe merge a main; no despliegue.

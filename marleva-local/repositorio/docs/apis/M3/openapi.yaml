@@ -1,0 +1,453 @@
+openapi: 3.1.1
+info:
+  title: Marleva M3 — lecturas públicas aisladas
+  version: 0.2.0
+  description: Datos ficticios. Lecturas públicas y derivados de fotos; carga
+    privada no expuesta.
+servers:
+  - url: http://127.0.0.1:3103
+    description: Solo loopback, sin credenciales ni datos privados
+paths:
+  /v1/catalog/offers:
+    get:
+      operationId: MAR_M3_API_001
+      summary: Explorar ofertas
+      description: MAR-M3-UC-001 → MAR-M3-SEQ-001:S020/S040/S060/S080. Sin
+        autenticación; proyección pública elegible.
+      security: []
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+            maxLength: 120
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum:
+              - food
+              - everyday
+              - classes
+              - repairs
+              - personal_care
+        - name: kind
+          in: query
+          schema:
+            type: string
+            enum:
+              - product
+              - service
+        - name: development
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 7
+        - name: modality
+          in: query
+          schema:
+            type: string
+            enum:
+              - delivery
+              - pickup
+              - home
+              - establishment
+        - name: seller_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+      responses:
+        "200":
+          description: Resultado público actual
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "400":
+          description: Solicitud ilegible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Recurso no visible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Entrada inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Dependencia temporalmente no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/catalog/offers/{id}:
+    get:
+      operationId: MAR_M3_API_002
+      summary: Consultar oferta pública
+      description: MAR-M3-UC-002 → MAR-M3-SEQ-002:S020/S040/S060/S080. Sin
+        autenticación; proyección pública elegible.
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado público actual
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Offer"
+        "400":
+          description: Solicitud ilegible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Recurso no visible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Entrada inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Dependencia temporalmente no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/catalog/sellers/{id}:
+    get:
+      operationId: MAR_M3_API_003
+      summary: Consultar perfil público
+      description: MAR-M3-UC-003 → MAR-M3-SEQ-003:S020/S040/S060/S080. Sin
+        autenticación; proyección pública elegible.
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado público actual
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seller"
+        "400":
+          description: Solicitud ilegible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Recurso no visible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Entrada inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Dependencia temporalmente no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/catalog/photos/{id}/{size}:
+    get:
+      operationId: MAR_M3_API_009
+      summary: Leer derivado público de foto vigente
+      description: UC009 → SEQ009:S080. Revalida oferta, versión y elegibilidad; nunca
+        original. no-store y nosniff.
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: size
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - card
+              - detail
+      responses:
+        "200":
+          description: JPEG recodificado sin metadatos; integridad comprobada
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+            X-Content-Type-Options:
+              schema:
+                type: string
+                const: nosniff
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: No disponible sin distinguir existencia
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Error recuperable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Error recuperable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+        - codigo
+        - mensaje
+        - request_id
+        - accion_recuperacion
+      properties:
+        codigo:
+          type: string
+        mensaje:
+          type: string
+        request_id:
+          type: string
+        accion_recuperacion:
+          type: string
+    Seller:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+    Offer:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - version_id
+        - version
+        - title
+        - description
+        - kind
+        - category
+        - price_cents
+        - unit
+        - stock
+        - made_to_order
+        - developments
+        - modalities
+        - response_minutes
+        - preparation_minutes
+        - food
+        - seller
+        - photos
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        version_id:
+          type: string
+          format: uuid
+        version:
+          type: integer
+          minimum: 1
+        title:
+          type: string
+          minLength: 3
+          maxLength: 120
+        description:
+          type: string
+          minLength: 20
+          maxLength: 2000
+        kind:
+          type: string
+          enum:
+            - product
+            - service
+        category:
+          type: string
+          enum:
+            - food
+            - everyday
+            - classes
+            - repairs
+            - personal_care
+        price_cents:
+          type:
+            - integer
+            - "null"
+        unit:
+          type:
+            - string
+            - "null"
+        stock:
+          type:
+            - integer
+            - "null"
+        made_to_order:
+          type: boolean
+        developments:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+        modalities:
+          type: array
+          items:
+            type: string
+            enum:
+              - delivery
+              - pickup
+              - home
+              - establishment
+          minItems: 1
+          maxItems: 4
+          uniqueItems: true
+        response_minutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+        preparation_minutes:
+          type: integer
+          minimum: 0
+          maximum: 525600
+        food:
+          oneOf:
+            - type: "null"
+            - type: object
+              additionalProperties: false
+              required:
+                - ingredients
+                - allergens
+                - storage
+              properties:
+                ingredients:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                allergens:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                storage:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+        seller:
+          $ref: "#/components/schemas/Seller"
+        photos:
+          type: array
+          maxItems: 6
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - id
+              - url
+            properties:
+              id:
+                type: string
+                format: uuid
+              url:
+                type: string
+        updated_at:
+          type: string
+          format: date-time
+    Page:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - next_cursor
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            $ref: "#/components/schemas/Offer"
+        next_cursor:
+          type:
+            - string
+            - "null"

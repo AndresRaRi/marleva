@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-16T03:32:01.062Z",
+  "base": "46418758e7902621ebdf3d1f312bfdd7afbd9c79",
+  "scope": "M3 config/streamed image processing/Sonar generated types CPD",
+  "unit": "35/35",
+  "regression": "89/89 M3 with PostgreSQL real and controlled identity",
+  "coverage": {
+    "lines": 92.24,
+    "statements": 90.34,
+    "branches": 86.34,
+    "functions": 92.59
+  },
+  "performance": {
+    "input": "synthetic PNG1600x1200",
+    "warmup": 3,
+    "samples": 10,
+    "concurrency": 1,
+    "p50": 117.96808299999998,
+    "p95": 153.0732079999999,
+    "maximum": 153.0732079999999,
+    "parentRss": 84246528,
+    "thresholdP95": 500,
+    "pass": true
+  },
+  "limits": [
+    "No real M1/M2/M8 identity or eligibility",
+    "No acceptance/platform claim",
+    "Parent RSS does not measure child memory",
+    "Migrations unchanged; CI pending"
+  ]
+}

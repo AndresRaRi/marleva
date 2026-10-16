@@ -30810,6 +30810,20 @@
           "sources"
         ]
       }
-    ]
+    ],
+    "currentExecution": {
+      "root": "/Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a/artifacts/marleva-pr8-integracion",
+      "parents": [
+        "8ef53db",
+        "d34fb3e",
+        "87fdc5c"
+      ],
+      "m2Additions": 82,
+      "m1Migrations": 5,
+      "m3Migrations": 3,
+      "originalCheckoutModifiedBy009": false,
+      "sharedSourcesUploaded": false,
+      "reading": "Guías, estados, alcance, evidencia, protocolo y matrices consultados en partes/diferencias; árbol general parcial. Generadores/documentos afectados revisados; dependencias y binarios no declarados leídos."
+    }
   }
 }

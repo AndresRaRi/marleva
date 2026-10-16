@@ -1,53 +1,30 @@
 {
   "workspaces": {
     ".": {
-      "entry": [
-        "scripts/*.{mjs,cjs}",
-        "tests/**/*.{mjs,ts}"
-      ],
-      "project": [
-        "scripts/*.{mjs,cjs}",
-        "tests/**/*.{mjs,ts}"
-      ]
+      "entry": ["scripts/*.{mjs,cjs}", "tests/**/*.{mjs,ts}"],
+      "project": ["scripts/*.{mjs,cjs}", "tests/**/*.{mjs,ts}"]
     },
     "apps/api": {
       "entry": [
         "src/main.ts",
         "bootstrap.mjs",
-        "seed.mjs"
+        "seed.mjs",
+        "src/m3-main.ts",
+        "src/m3-management.ts",
+        "src/modules/m3/infrastructure/adapters/sharp-photo-worker.ts"
       ],
-      "project": [
-        "src/**/*.ts",
-        "*.mjs",
-        "prisma/**/*.prisma"
-      ],
-      "ignoreDependencies": [
-        "@prisma/client"
-      ]
+      "project": ["src/**/*.ts", "*.mjs", "prisma/**/*.prisma"],
+      "ignoreDependencies": ["@prisma/client"]
     },
     "apps/client": {
-      "entry": [
-        "app/**/*.{ts,tsx}"
-      ],
-      "project": [
-        "app/**/*.{ts,tsx}",
-        "src/**/*.{ts,tsx}"
-      ],
-      "ignoreDependencies": [
-        "expo-updates"
-      ]
+      "entry": ["app/**/*.{ts,tsx}", "m3/index.ts", "src/modules/m3/generated/api.ts"],
+      "project": ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}", "m3/**/*.{ts,tsx}"],
+      "ignoreDependencies": ["expo-updates"]
     },
     "packages/contracts": {
-      "entry": [
-        "generated.ts"
-      ]
+      "entry": ["generated.ts"]
     }
   },
-  "ignoreBinaries": [
-    "openssl",
-    "adb"
-  ],
-  "ignoreUnresolved": [
-    "./scripts/tool"
-  ]
+  "ignoreBinaries": ["openssl", "adb"],
+  "ignoreUnresolved": ["./scripts/tool"]
 }

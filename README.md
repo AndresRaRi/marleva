@@ -46,4 +46,8 @@ El PR #1 de recuperación fue incorporado a main. El pipeline continúa en codex
 
 Cierre MAR-CHAT-005 solicitado el 15-10-2026: PR #2 integrado a main en b12bfca. [Auditoría, contradicciones, limpieza propuesta, chats y siguiente paso](marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). La consolidación por procedencia quedó integrada en PR #4; se conservan cambios preexistentes readonly fuera de commits propios. MAR-CHAT-006 continúa M1; Sonar Cloud corresponde a MAR-CHAT-007, con estado y límites en 01/ADR002.
 
-Consolidación vigente: MAR-CHAT-009, [estado y cola única](entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md#8-consolidación-única-mar-chat-009). MAR-CHAT-006/008 cerrados para reunir pendientes. PR8/9 abiertos con bloqueos CI propios; M2/M8 documental en rama separada. Sin merge ni borrados autorizados. Copias y límites de lectura en inventario; no se acredita M1/M3 completos o aceptados.
+Consolidación vigente: MAR-CHAT-009, [estado y cola única](entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md#8-consolidación-única-mar-chat-009). MAR-CHAT-006/008 cerrados para reunir pendientes. PR8/9 abiertos con bloqueos CI propios; diseño M2/M8 incorporado a esta rama. Sin merge a main ni borrados autorizados. Copias y límites de lectura en inventario; no se acredita M1/M3 completos o aceptados.
+
+## M3 aislado — MAR-CHAT-008
+
+Trabajo aislado de008 incorporado a la consolidación009. [Revisión y arranque M3](marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md). Catálogo, filtros, cursor, detalle y perfil públicos con datos ficticios; API3103, web8103 y PostgreSQL55432 exclusivos. No conecta identidad/base de M1 ni publica. Catálogo y gestión privada inyectable con fotos probados en aislamiento; identidad/elegibilidad/revisión reales, plataformas y aceptación pendientes. Estado y pruebas en la matriz M3; no declarar módulo completo ni reutilizar resultados de M1.

@@ -85,4 +85,10 @@ Requisito de GitHub: la revisión de dependencias necesita Dependency graph habi
 
 ## Continuación UC008, 15-10-2026
 
-PR #7 integrado en main db2ec7d. Incremento siguiente en codex/feat-m1-paginacion-avisos: cargar más avisos conserva lista y cursor ante error, impide petición duplicada y termina al agotar cursor. Actualizar cuenta vuelve a primera página. Pruebas: notice-pages/account-notices y recorrido paginated-notices incorporado al ensayo web de CI. API009, modelo y migraciones conservados. Sonar separado y pendiente; M1 no aceptada ni completa.
+PR #7 integrado en main db2ec7d. Incremento siguiente en codex/feat-m1-paginacion-avisos: cargar más avisos conserva lista y cursor ante error, impide petición duplicada y termina al agotar cursor. Actualizar cuenta vuelve a primera página. Pruebas: notice-pages/account-notices y recorrido paginated-notices incorporado al ensayo web de CI. API009, modelo y migraciones conservados. SonarCloud conservado; CI del conjunto y aceptaciónM1 pendientes.
+
+## M3 aislado
+
+Composición aislada autorizada en008, ahora reunida en009: [revisión y comandos](docs/revision/M3/INSTRUCTIVO_M3.md). No usar los scripts de arranque/parada M1 para M3. API3103, web8103 yPG55432 propios; solo datos ficticios. Catálogo público y gestión privada inyectable: borrador/edición, fotos, envío, revisión y pausa, probados con identidad ficticia. Integración real M1/M2/M8, plataformas y aceptación pendientes; M3 no completo.
+
+Consolidación009: la API M3 requiere M3_DATABASE_URL explícita y los ensayos/admin M3_ADMIN_DATABASE_URL; destino127.0.0.1:55432/marleva_m3_008 y rolesm3_api/postgres respectivamente. Configuración exclusivamente ficticia del entorno local existente: `export M3_DATABASE_URL=postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008` y `export M3_ADMIN_DATABASE_URL=postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008`. No usar en producción. CI las proporciona explícitamente; no hay contraseña predeterminada en runtime.

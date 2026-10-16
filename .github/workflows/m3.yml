@@ -1,0 +1,103 @@
+name: M3 aislado
+on:
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: m3-${{ github.ref }}
+  cancel-in-progress: true
+defaults:
+  run:
+    working-directory: marleva-local/repositorio
+jobs:
+  catalogo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      MARLEVA_M3_CHECK: '1'
+      M3_CI: '1'
+      M3_DATABASE_URL: 'postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008'
+      M3_ADMIN_DATABASE_URL: 'postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008'
+      EXPO_NO_TELEMETRY: '1'
+      CI: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: PostgreSQL exclusivo M3
+        run: |
+          docker run -d --name marleva-m3-008 --label mx.marleva.module=M3 --memory 512m --cpus 1 -p 127.0.0.1:55432:5432 -e POSTGRES_DB=marleva_m3_008 -e POSTGRES_PASSWORD=fixture-only postgres:17.11@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3
+          for i in {1..60}; do
+            if docker exec marleva-m3-008 pg_isready -U postgres -d marleva_m3_008; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Migraciones y rol M3
+        run: |
+          node apps/api/node_modules/prisma/build/index.js migrate deploy --config apps/api/prisma-m3/prisma.config.ts
+          node scripts/m3-grants.mjs
+          pnpm exec tsc -p apps/api/tsconfig.m3.json
+      - name: Contratos y modelo M3
+        run: |
+          node scripts/m3-docs.mjs
+          git diff --exit-code -- docs/apis/M3 docs/modelado-datos/ddl/MAR-M3-DATA-001.sql apps/client/src/modules/m3/generated
+      - name: API exclusiva M3
+        run: |
+          mkdir -p artifacts/m3/ci
+          node apps/api/dist-m3/m3-main.js >artifacts/m3/ci/api.log 2>&1 &
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3103/v1/catalog/offers >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Cobertura M3 de lógica, persistencia y render
+        run: pnpm exec vitest run --config vitest.m3.full-coverage.config.mjs --coverage --reporter=json --outputFile=tests/results/m3-full-coverage.json
+      - name: Compilar Expo web M3
+        working-directory: marleva-local/repositorio/apps/client/m3
+        run: node ../node_modules/expo/bin/cli export --platform web --output-dir dist
+      - name: Chromium y servidor web M3
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          node scripts/m3-preview.mjs >artifacts/m3/ci/web.log 2>&1 &
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8103/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Navegador, fotos, errores y accesibilidad automatizada
+        run: node tests/integration/frontend/M3/web.mjs
+      - name: Gestión privada con identidad ficticia inyectada
+        run: |
+          node tests/fixtures/m3-management-server.mjs >artifacts/m3/ci/private.log 2>&1 &
+          for i in {1..30}; do
+            if curl --silent http://127.0.0.1:3104/v1/offers/context >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/integration/frontend/M3/management-web.mjs
+      - name: Rendimiento proporcional de gestión
+        run: node tests/performance/backend/M3/management.mjs
+      - name: Caída y recuperación exclusivas M3
+        run: node tests/integration/backend/M3/restart.mjs
+      - name: Evidencia M3 del SHA ejecutado
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: m3-${{ github.sha }}
+          path: |
+            marleva-local/repositorio/tests/results/m3-full-coverage.json
+            marleva-local/repositorio/tests/results/m3-integration.json
+            marleva-local/repositorio/tests/results/m3-web.json
+            marleva-local/repositorio/tests/results/m3-management-web.json
+            marleva-local/repositorio/tests/results/m3-management-performance.json
+            marleva-local/repositorio/tests/results/m3-restart.json
+            marleva-local/repositorio/docs/revision/M3/capturas/
+            marleva-local/repositorio/coverage/m3-full/
+            marleva-local/repositorio/artifacts/m3/ci/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Detener solo PostgreSQL M3
+        if: always()
+        run: node scripts/m3-stack.mjs stop

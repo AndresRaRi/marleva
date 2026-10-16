@@ -1,0 +1,14 @@
+%% MAR-M3-SEQ-008; UC-008; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S020 Recibir proyección ficticia M2 identificada
+ A->>D: S040 Comprobar versión de elegibilidad vigente
+ A->>D: S060 Persistir restricción sin tocar M1/M2
+ A-->>U: S080 Lista/detalle/perfil revalidan o fallan cerrado
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

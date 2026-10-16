@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-16T02:39:01.207Z",
+  "scope": "HTTP Nest/PG local; identidad ficticia; no proveedor M1 ni capacidad productiva",
+  "plan": {
+    "warmup": 3,
+    "samples": 20,
+    "concurrency": 1,
+    "p95_ms": 500,
+    "unexpected_errors": 0
+  },
+  "cases": [
+    {
+      "name": "create-draft",
+      "p50_ms": 33.035415999999714,
+      "p95_ms": 66.61300000000006,
+      "max_ms": 87.98916699999995,
+      "errors": 0
+    },
+    {
+      "name": "own-list-24",
+      "p50_ms": 68.28454099999999,
+      "p95_ms": 94.23074999999972,
+      "max_ms": 96.31079200000022,
+      "errors": 0
+    }
+  ],
+  "passed": true
+}

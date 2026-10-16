@@ -73,8 +73,32 @@ if (licenses.status === 0) {
             .digest('hex') === '111f42b37daecc6c387d037ef25955bd269e7f9a46a736d5257a23560534763f',
       ),
   );
+  // M3 pins this reviewed prebuilt library; other LGPL-or-later packages remain blocked.
+  const reviewedVips = (data['LGPL-3.0-or-later'] ?? []).every(
+    (item) =>
+      /^@img\/sharp-libvips-(darwin|linux|linuxmusl|win32)-[a-z0-9]+$/u.test(item.name) &&
+      item.versions.join() === '1.3.4',
+  );
+  const reviewedMit0 = (data['MIT-0'] ?? []).every(
+    (item) =>
+      ({
+        '@csstools/color-helpers': '6.1.2',
+        '@csstools/css-syntax-patches-for-csstree': '1.1.15',
+      })[item.name] === item.versions.join() &&
+      item.paths.length > 0 &&
+      item.paths.every(
+        (folder) =>
+          createHash('sha256')
+            .update(readFileSync(path.join(folder, 'LICENSE.md')))
+            .digest('hex') === '947e32047a166cd05f04e45938d172b412c07cbee0b9735afd14bae30e02c2f6',
+      ),
+  );
   const pending = Object.keys(data).filter(
-    (license) => !known.has(license) && !(license === 'BSD' && reviewedBsd),
+    (license) =>
+      !known.has(license) &&
+      !(license === 'BSD' && reviewedBsd) &&
+      !(license === 'LGPL-3.0-or-later' && reviewedVips) &&
+      !(license === 'MIT-0' && reviewedMit0),
   );
   writeFileSync(folder + '/licenses.json', JSON.stringify(data, null, 2) + '\n');
   if (pending.length)

@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-15",
+  "findings": [
+    "validatePhoto complexity13; encode complexity11",
+    "Knip: unused derivative type exports, compiled adapter reference, fixture dependency scope"
+  ],
+  "correction": "Separate signature detection; inspect metadata fields as a list; remove unused exports; unit timeout configuration and declare fixture Sharp dependency. No thresholds/rules disabled."
+}

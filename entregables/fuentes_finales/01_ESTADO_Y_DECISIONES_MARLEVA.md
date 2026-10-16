@@ -81,6 +81,9 @@ Raíz: /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b7396
 | MAR-CHAT-005 | Cerrado el 15-10-2026 por solicitud del usuario; implementación/CI y continuidad en [acta](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_005.md). M1 sigue incompleta |
 | MAR-CHAT-006 | Cerrado por solicitud expresa el15-10-2026; [acta y prompt unificado](../../marleva-local/repositorio/docs/proceso/CIERRE_MAR_CHAT_006.md). M1/B12 y PR8 incompletos; no equivale a aceptación |
 | MAR-CHAT-007 (Sonar; ID duplicado con diseño M2/M8) | Sonar y elegibilidad, CONTINUACIÓN 15-10-2026; copia aislada desde PR #5. Usuario autoriza Cloud Free privado, términos y OAuth. Organización/proyecto creados Free/Private y conexión CI guardada como secreto. Flujo Cloud diseñado, implementado y probado en 38821867592: positivo OK, negativa S1764 ERROR y comparador bloquea, corrección OK; Community sigue bloqueado. [ADR002](../../marleva-local/repositorio/docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026). Acta sonar-cloud.json; preparar PR para revisión tras CI del HEAD final, sin merge |
+| MAR-CHAT-007 (diseño M2/M8; ID histórico duplicado) | Diseño documental d34fb3e, incorporado en consolidación009; sin implementación ni aceptación |
+| MAR-CHAT-008 | Cerrado por solicitud del usuario para consolidar; M3 aislado/PR9 sin aceptación |
+| MAR-CHAT-009 | Abierto: consolidación única en rama existente; sin merge a main ni borrados |
 
 Historial técnico verificable: cd0a019 (avisos), 5c03240 (archivos), 86f553a (cuota/Android), a37d02c/2278cac/94cf015 (fases B12). El relato previo de este documento se conserva en 94cf015 y commits posteriores.
 
@@ -156,7 +159,7 @@ Ejecutor M1 reutilizado: artifacts/marleva-pr8-integracion, rama codex/integrate
 | CON-05 / P1 | B12 esencial único; asistente | Revisar helpers antes de copiar/restaurar en destino propio; atributos/ledger/borrados/revocación/cola/operador/cliente/runnerPrisma/repetición/mediciones en mismo run. Contexto1792118849918 solo source3/3/3; no restauración aprobada |
 | CON-06 / P1 | Integración real M3 y puertas M2/M8 | M1 A8; M2 elegibilidad y M8 autorización reales; no reemplazarlos por fixtures. Revisión visual M2/M8, D08-R y designación/provisión D09-R por usuario antes de activación |
 | CON-07 / P2 | Fase3 restante, plataformas y accesibilidad | CON04/05 y recursos disponibles; nightly/rendimiento/dependabot/CD inactivo según plan, sin despliegue. Safari/Android/iOS/físicos y revisión humana por evidencia propia |
-| CON-08 / P2 | Conciliar entrega Fuentes/configuración | Mantener idea preexistente distancia/minutos para después, fueraMVP1. Revisar diferencias00/02/03 entre ramas antes de reemplazar; solo01 afectada en esta consolidación. Guardar/push no realiza subida compartida |
+| CON-08 / P2 | Conciliar entrega Fuentes/configuración | Mantener idea preexistente distancia/minutos para después, fueraMVP1. Revisar diferencias00/02/03 entre ramas antes de reemplazar; 00/01/02 y configuración conciliadas por cambios necesarios. Guardar/push no realiza subida compartida |
 
 SonarCloud Free privado y A0/SDK conservados; Google pendiente y límites de activación de §2 permanecen. Avance exclusivamente en docs/avance.md de cada rama hasta conciliar criterios; no convertir0%M3 de M1 en ausencia de trabajo M3 ni sumar porcentajes incompatibles.
 
@@ -172,13 +175,23 @@ M3: corrección guardada87fdc5c873f67824b9c45f51044ad2d083682f25;89M3 reales/fix
 
 Idea preexistente conservada para después: mostrar distancia aproximada entre comprador y productos/servicios y evaluar minutos de traslado. Sin exponer domicilios privados; cercanía no sustituye pertenencia a los siete desarrollos. Solicitud15-10-2026 del chat Cercanía de servicios; no aprobada, implementada ni incorporada aMVP1.
 
+### M3 incorporado por procedencia
+
+M3 de87fdc5c conserva catálogo/gestión/fotos y pruebas propias, sin integrar sus proveedores realesM1/M2/M8. Se incorpora su historial a la rama ejecutora única; PR9 y copias previas se conservan. La simulación identificó tres conflictos: READMEraíz, READMEcódigo y01; se conservan M1/retorno/API025–027/B12 y M3/identidad/fotos/recursos sin copiar el prompt antiguo008 sobre la continuidad009. Código/lockfile/CI/Sonar se combinaron sin conflictos textuales; falta comprobar integración semántica mediante hooks y CI conjunto. MigracionesM1 yM3 inmutables; no se aplicó ninguna nueva por consolidar.
+
+CopiaM3 ejecutora previa/private/tmp/marleva-m3-008/repo y managed anterior se preservan; ya no abren trabajo paralelo. Recursos existentes PG55432/API3103/web8103/pruebas3104 no detenidos. M3 usa configuración explícita M3_DATABASE_URL/M3_ADMIN_DATABASE_URL, limitada a localhost55432/base propia/roles definidos; sin contraseñas predeterminadas en runtime. EvidenciaM3 en tests/results/m3-consolidacion009.json. CI87fdc5c38846202699 completó13jobs correctos, incluidoSonar/build. No acredita integración del conjunto.
+
+Reglas00: se concilia la precisión de autonomía ya presente en00editable de la raíz, sin modificar esa raíz.03 de la raíz contiene evidencia Sonar anterior; se conserva03 de la rama consolidada con comprobaciones posteriores ya documentadas, sin nueva investigación ni edición.02 tenía errores de estado heredados: actualizada a27operaciones y paginación/retorno existentes, sin cambiar alcance. Se entrega configuración con referencia al estado vigente009; no se toca AGENTS/sources sincronizados. Plantilla/ZIP previos quedan inventariados y fuera del commit por procedencia distinta y lectura no acreditada; no se borran ni se publican por inferencia.
+
+Diagnóstico browser009 contra build propio: Chrome155, respuestas controladas; reanudación/503/401/cancelación y55avisos/paginación pasan, siete y cinco peticiones respectivamente. La fixture incluye ahora API025 cambio:null; no se altera producto para simular sesión. No prueba PG/Auth/TLS en ese diagnóstico; el ensayo realCI del conjunto sigue obligatorio. Instalación congelada completó dependencias ausentes sin cambiar lockfile; PrismaM1/M3 generado sin DB. Cinco migracionesM1 y tresM3 conservan bytes de sus ramas.
+
 ### Prompt activo revisado
 
 ```text
 PROYECTO Marleva. MAR-CHAT-009, CONTINUACIÓN: consolidación única, sin crear chats ni ejecutores paralelos.
 Leer usuario/AGENTS/README y00–03 editables, protocolo/matricesM1/M2/M3, acta006 y archivos nuevos/modificados; registrar lectura parcial/ausentes.
 Raíz original /Users/andresramos/.codex/.chatgpt-projects/g-p-6ac952169b2081918f82b73968bd9d1a con trabajo preexistente preservado.
-Ejecutor M1 artifacts/marleva-pr8-integracion, rama codex/integrate-m1-paginacion; PR8 remoto codex/feat-m1-paginacion-avisos. Comprobar SHA/estado actual y acta tests/results/consolidacion-009.json antes de continuar CON01–08 de01§8.
+Ejecutor único artifacts/marleva-pr8-integracion, rama codex/integrate-m1-paginacion; PR8 remoto codex/feat-m1-paginacion-avisos. Comprobar SHA/estado actual y acta tests/results/consolidacion-009.json antes de continuar CON01–08 de01§8.
 main bf948c9 tiene CI38823862320 correcto. PR8 dbec16d falló seguridad/contratos en38843912870; PR9 4641875 falló Sonar en38843137074, demás controles detallados en01. Verificar correcciones/CI posteriores, nunca heredar verdes.
 M3 copia managed /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a; ejecutor /private/tmp/marleva-m3-008/repo: comprobar diferencias antes de editar.
 M2/M8 codex/docs-m2-m8-007 d34fb3e documental con CI38841680647; no implementado/aceptado, no incorporado a main. Conservar007 duplicado por tema/rama; no renumerar historia.

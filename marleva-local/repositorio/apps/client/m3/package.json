@@ -1,0 +1,14 @@
+{
+  "name": "marleva-catalog-preview",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.ts",
+  "description": "Composición local M3; usa las dependencias fijadas del cliente padre, sin instalar otro conjunto.",
+  "dependencies": {
+    "expo": "57.0.28",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-web": "0.21.2"
+  }
+}
