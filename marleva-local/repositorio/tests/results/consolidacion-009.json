@@ -68,7 +68,7 @@
   "negativeControls": "Profile exact permitted; other path and other value blocked, exit0",
   "contracts": "Target generator repeated; generated HTML unchanged against staged version",
   "limits": [
-    "No runtime, migrations, UI or business performance change",
+    "Initial tool/Swagger correction had no runtime change; later M1/M3 runtime corrections and their tests are recorded separately",
     "No acceptance or merge",
     "General reading partial"
   ],
@@ -93,6 +93,18 @@
     {
       "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql",
       "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150001_catalog/migration.sql",
+      "sha256": "af75d78b3c43e21189e59ca9150e781bc94b063e7014214bdda1e7d8a3c79bc9"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150002_search_statistics/migration.sql",
+      "sha256": "ef33ba64661571a2dfb387a96bb1bd98e4de9433b8770f1f5322d471972d3f02"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150003_photo_derivatives/migration.sql",
+      "sha256": "3b0b68146065a9b25421925d783469086e67e8449c1f637a9121f87d70a910d7"
     }
   ],
   "firstCorrection": {
@@ -122,7 +134,7 @@
       "run": 38846330015,
       "integration": "success",
       "web": "failure: API025 fixture missing; corrected in combined tree",
-      "overall": "pending when inspected"
+      "overall": "failure: web API025 fixture missing; fixed in combined tree"
     }
   },
   "m2DocumentaryIntegration": {
@@ -178,9 +190,40 @@
     "checks": {
       "frozenInstall": "passed after offline cache miss; lockfile unchanged",
       "prismaGenerate": "passed for both modules, no DB connection",
-      "architecture": "passed, no dependency violations or duplication"
+      "architecture": "passed, no dependency violations or duplication",
+      "mandatoryHooks": "342 tests passed; typecheck/lint/format and coverage passed",
+      "contractsAfterCommit": "passed; generated files unchanged",
+      "originalCheckout": "420 inventoried file hashes unchanged",
+      "ignored": "env, tools/secrets, dependencies and generated M3 client ignored",
+      "deletedTrackedFiles": 0
     },
-    "combinedCI": "pending",
-    "acceptance": false
+    "combinedCI": {
+      "run": 38847365871,
+      "sha": "902308e8d02362b06689b1d04d03ae23793faa50",
+      "conclusion": "success",
+      "jobs": 13,
+      "url": "https://github.com/AndresRaRi/marleva/actions/runs/38847365871"
+    },
+    "acceptance": false,
+    "sha": "902308e8d02362b06689b1d04d03ae23793faa50"
+  },
+  "delivery": {
+    "sharedSourcesUploaded": false,
+    "configurationAppliedToSharedProject": false,
+    "replace": [
+      "00_GUIA_PRINCIPAL_MARLEVA.md",
+      "01_ESTADO_Y_DECISIONES_MARLEVA.md",
+      "02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md",
+      "INSTRUCCIONES_FINALES_PARA_PEGAR.txt"
+    ],
+    "source03": "existing consolidated version preserved, no edit009",
+    "remaining": [
+      "CON04 M1 matrix branches",
+      "CON05 essential B12 one run and destination",
+      "CON06 real M3 identity and M2/M8 gates",
+      "CON07 platforms and phase3",
+      "CON08 shared replacement"
+    ],
+    "topicClosed": false
   }
 }
