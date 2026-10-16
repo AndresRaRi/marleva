@@ -8,7 +8,7 @@ const categories = {
   missingRelation: /relation .* does not exist/i,
 };
 const diagnosticWords = new Set(
-  'error failed finding loading user session database querying schema sql scan column index cannot null string into storing driver value type unsupported connection already closed busy timeout context canceled unexpected eof prepared statement does not exist duplicate key violates unique constraint permission denied invalid input syntax uuid integer timestamp time zone bad conn broken pipe transaction rollback committed aborted found refused too many clients cached plan must change result'.split(
+  'error failed finding loading user session database querying schema sql scan column index cannot null string into storing driver value type unsupported connection already closed busy timeout context canceled unexpected eof prepared statement does not exist duplicate key violates unique constraint permission denied invalid input syntax uuid integer timestamp time zone bad conn broken pipe transaction rollback committed aborted found refused too many clients cached plan must change result acquire acquiring allocate allocation allocated memory address requested dial tcp connect socket network unavailable exhausted resource resources limit open files read write read-only execute executing command commands select update insert delete serialize serialization access due concurrent conflict reflect reflection retrieve retrieving coerce convert converting marshal unmarshal marshaling unmarshaling encode encoding decode decoding encrypt encryption decrypt decryption assign assignment fetch fetching lookup look up empty zero nil pointer operation model slice association associations primary use after before driver registered mapping get load start pool release released expected arguments argument parameters parameter bind supplies protocol cache format binary text parsing parse rows row idle deadline exceeded field fields table tables'.split(
     ' ',
   ),
 );
@@ -21,6 +21,7 @@ export function providerErrorShape(line) {
     // PostgreSQL also emits plain text; only the same closed vocabulary can leave memory.
   }
   return (message.toLowerCase().match(/[a-z][a-z0-9_@.-]*/g) ?? [])
+    .map((word) => word.replace(/\.$/, ''))
     .filter((word) => diagnosticWords.has(word))
     .slice(0, 40)
     .join(' ');
