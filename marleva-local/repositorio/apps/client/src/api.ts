@@ -2,8 +2,9 @@ import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 export type ApiActionHeaders = { 'idempotency-key'?: string; 'x-recovery-capability'?: string };
 let csrf = '';
-const base =
-  Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_API_URL ?? 'https://10.0.2.2:8443');
+const localNativeOrigin =
+  Platform.OS === 'ios' ? 'https://localhost:8443' : 'https://10.0.2.2:8443';
+const base = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_API_URL ?? localNativeOrigin);
 export async function api<Result = unknown>(
   path: string,
   method = 'GET',

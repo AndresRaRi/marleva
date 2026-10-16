@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-16T20:07:48Z",
+  "chat": "MAR-CHAT-009",
+  "base_commit": "6fd9551575bcce35d96e86939e87119af967cbb3",
+  "platform": {
+    "device": "iPhone 18 Pro",
+    "runtime": "iOS 27.0",
+    "xcode": "27.0 (27A266a)",
+    "architecture": "arm64",
+    "mode": "Release, embedded bundle, default local ad hoc signing; no Metro"
+  },
+  "endpoint": "https://localhost:8443",
+  "tls": "local development CA trusted in this simulator; certificate validation retained",
+  "dataset": "ios-009-1792173900@example.test; local fictitious account; mail captured locally",
+  "ids": [
+    "MAR-M1-IT-FE-103-IOS-BOOT",
+    "MAR-M1-IT-FE-103-IOS-SESSION",
+    "MAR-M1-IT-FE-104-IOS-LOGOUT"
+  ],
+  "cases": {
+    "releaseBuild": true,
+    "launch": true,
+    "otpAccount": true,
+    "secureStoreRestart": true,
+    "logout": true,
+    "revokedRestart": true
+  },
+  "observations": [
+    "OTP requested and verified through native UI; own account displayed without SecureStore exception.",
+    "Terminated process90760, launched91245; same account displayed without a new OTP.",
+    "Pressed Cerrar esta sesión; Sesión cerrada displayed. Terminated91245 and launched92284; access form displayed, without account data."
+  ],
+  "failures_preserved": [
+    "Initial Release crashed: UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption; official Expo scene support enabled.",
+    "Unsigned build inherited CODE_SIGNING_ALLOWED=NO and failed SecureStore entitlement; rebuilt using normal simulator ad hoc signing.",
+    "Native client defaulted to Android host10.0.2.2 on iOS; iOS now defaults tolocalhost, explicit native env override retained.",
+    "Device Hub intermittently returned blank/stale accessibility state or noWindowsAvailable after actions; app process and simctl screenshot verified, then native window rebound. No business fix inferred from that tool behavior."
+  ],
+  "tests": {
+    "targeted": "20 passed: API/session/origin regression plus official scene plugin transformation/idempotence/ownership",
+    "quality": "passed; zero errors,62 existing lint warnings"
+  },
+  "artifacts": {
+    "accountAfterRelaunch": "docs/revision/M1/capturas/08-ios-sesion-conservada.png",
+    "logout": "docs/revision/M1/capturas/09-ios-sesion-cerrada.png",
+    "accessAfterRelaunch": "docs/revision/M1/capturas/10-ios-salida-tras-relanzar.png"
+  },
+  "sha256": {
+    "apps/client/src/api.ts": "3b29cadb152664584df4ff8f6bf718c04fee08445f2942fd3818ebcaeeec7491",
+    "apps/client/app.json": "23f348ae4fd972681039c624db313bb3ff94f637545e82c38576bc7914d2070c",
+    "artifacts/native-ios/Build/Products/Release-iphonesimulator/Marlevalocal.app/main.jsbundle": "7bdcfd85c298f21481e2a77b1e02cedb9d11fd104be580acd9c28012315422e1"
+  },
+  "limits": [
+    "Simulator trial, not a physical iPhone or production distribution.",
+    "No iOS full email change, MFA/recovery, accessibility or human acceptance claimed.",
+    "Android remained off; no deletion, uninstall, device reset, migration or data cleanup.",
+    "App session persistence proven across process restart; provider token renewal not independently forced by this trial.",
+    "Generated native project/Pods and private logs/backups retained locally; not included wholesale in Git."
+  ]
+}

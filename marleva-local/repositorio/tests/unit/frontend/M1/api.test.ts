@@ -16,7 +16,10 @@ beforeEach(() => {
   vi.clearAllMocks();
   mocks.platform.OS = 'web';
 });
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
+});
 it('MAR-M1-UT-FE-001 | SEQ003:S010 | web usa cookie y no credencial móvil', async () => {
   const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ estado: 'active' }) });
   vi.stubGlobal('fetch', fetch);
@@ -173,3 +176,24 @@ it('MAR-M1-UT-FE-114-COMPLETE | completar recuperación confirmada limpia creden
   expect(mocks.remove).toHaveBeenCalledOnce();
   expect(mocks.set).not.toHaveBeenCalled();
 });
+
+it.each([
+  ['web', undefined, '/v1/me'],
+  ['ios', undefined, 'https://localhost:8443/v1/me'],
+  ['android', undefined, 'https://10.0.2.2:8443/v1/me'],
+  ['ios', 'https://fixture.example.test:8443', 'https://fixture.example.test:8443/v1/me'],
+  ['android', 'https://fixture.example.test:8443', 'https://fixture.example.test:8443/v1/me'],
+  ['web', 'https://fixture.example.test:8443', '/v1/me'],
+])(
+  'MAR-M1-UT-FE-IOS-ORIGIN | SEQ003:S007 | %s conecta al origen previsto',
+  async (platform, origin, expected) => {
+    mocks.platform.OS = platform;
+    vi.stubEnv('EXPO_PUBLIC_API_URL', origin);
+    const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ estado: 'active' }) });
+    vi.stubGlobal('fetch', fetch);
+    const { api } = await import('../../../../apps/client/src/api');
+    await api('/v1/me');
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(fetch.mock.calls[0][0]).toBe(expected);
+  },
+);

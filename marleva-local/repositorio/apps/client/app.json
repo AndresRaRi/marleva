@@ -5,7 +5,19 @@
     "scheme": "marleva",
     "version": "0.1.0",
     "platforms": ["android", "ios", "web"],
-    "plugins": ["expo-router", "expo-secure-store", "./plugins/local-debug-tls.cjs"],
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "./plugins/local-debug-tls.cjs",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ]
+    ],
     "web": {
       "bundler": "metro",
       "output": "single"

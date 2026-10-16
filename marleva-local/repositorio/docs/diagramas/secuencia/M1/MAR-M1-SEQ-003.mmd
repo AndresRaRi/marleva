@@ -7,6 +7,8 @@ sequenceDiagram
     participant AUTH as Supabase Auth y Storage
     participant MAIL as Capturador local
     Note over UI,API: MAR-M1-SEQ-003 - Consultar cuenta y renovar sesión
+    UI->>UI: S005 iniciar ventana nativa iOS mediante UIScene antes de recuperar sesión
+    UI->>UI: S007 resolver origen HTTPS local según plataforma o configuración explícita
     UI->>API: S010 consultar cuenta con sesión
     API->>DB: S020 revisar revocación máximo inactividad y estado
     alt Sesión vencida o revocada
