@@ -65,7 +65,8 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
   save(path.join(output, label + '-profile.json'), await cloudProfile(token, manifest));
   const folder = prepareCloudCopy(root, path.join(output, label), sha);
   if (label !== 'base') copyCloudCoverage(process.cwd(), folder);
-  const revision = negative ? createCloudNegative(folder) : sha;
+  const fixture = negative ? createCloudNegative(folder) : undefined;
+  const revision = fixture?.revision ?? sha;
   const scan = scanCloud(
     manifest,
     root,
@@ -97,6 +98,7 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
   const fileMeasure = verifyCloudFileMeasure(measuredFiles, scan.sourceFiles.length, pullRequest);
   summary.analyses[label] = {
     revision,
+    negativeFile: fixture?.file,
     sourceSha: sha,
     ...scan,
     ...fileMeasure,
@@ -117,7 +119,7 @@ async function proveNegative(baseline) {
   const detected = negative.inventory.issues.some(
     (issue) =>
       issue.rule === manifest.negativeRule &&
-      issue.component.endsWith(':apps/api/src/sonar-negative-fixture.ts'),
+      issue.component === manifest.project + ':' + summary.analyses.negative.negativeFile,
   );
   if (
     !detected ||
