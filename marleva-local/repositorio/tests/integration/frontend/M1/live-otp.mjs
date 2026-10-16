@@ -32,7 +32,7 @@ export async function liveOtp(page, address) {
   );
   await page.getByRole('button', { name: 'Verificar código', exact: true }).click();
   const response = await verified;
-  assert.equal(response.status(), 200);
+  assert.equal(response.status(), 201);
   return (await response.json()).cuenta.id;
 }
 export async function waitOtpCooldown(startedAt) {
