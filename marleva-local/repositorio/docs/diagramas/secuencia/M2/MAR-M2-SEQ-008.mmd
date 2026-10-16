@@ -1,0 +1,23 @@
+%% MAR-M2-SEQ-008: Enviar alta comercial
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+participant W as Tareas y avisos durables
+T->>A: S010 Enviar perfil, versión, condiciones aceptadas y clave
+A->>I: S020 Verificar titular y sesión
+A->>D: S030 Revalidar pertenencia aprobada y ausencia de restricción
+A->>A: S040 Comprobar campos públicos/privados, modalidades coherentes y política activa exacta con aceptación expresa por versión
+alt Incompleto o no elegible
+ A-->>T: S050 Error recuperable, sin alta automática
+else Envío válido
+ A->>D: S060 Congelar versión, crear envío único pending y aceptación con hash, evento/recibo/revisiones atómicos
+ A-->>T: S070 Recibo pendiente de revisión comercial
+ A->>W: S080 Aviso después del commit
+end
+Note over A,D: S090 pickup exige punto privado, remote exige modalidad remote, contrato no es dato público
+Note over T,A: S100 Política draft/retirada/cambiada409, refrescar y aceptar versión actual, sin aceptación tácita
+Note over A,D: S110 Revalidar elegibilidad bajo bloqueo, envío no habilita ofertas ni pagos
+Note over T,A: S120 Respuesta perdida: consultar recibo original y reintentar solo mismo cuerpo/clave

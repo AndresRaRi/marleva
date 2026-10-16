@@ -1,0 +1,41 @@
+// Solo documentación M2/M8: YAML canónico -> JSON y Swagger. Sin red o base de datos.
+import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const folder=path.dirname(fileURLToPath(import.meta.url));
+const require=createRequire(process.env.MARLEVA_DOCUMENTATION_PACKAGE || import.meta.url);
+const YAML=require('yaml');
+const SwaggerParser=require('@apidevtools/swagger-parser');
+const pins={yaml:'2.9.1','@apidevtools/swagger-parser':'13.1.0','swagger-ui-dist':'5.33.2'};
+for(const [name,version] of Object.entries(pins)) {
+ const metadata=require(name+'/package.json');
+ if(metadata.version!==version) throw new Error('Versión documental inesperada: '+name);
+}
+const source=await readFile(path.join(folder,'openapi.yaml'),'utf8');
+const doc=YAML.parseDocument(source,{uniqueKeys:true});
+if(doc.errors.length) throw new Error(doc.errors.join('\n'));
+const spec=doc.toJS();
+const serialized=JSON.stringify(spec);
+if([...serialized.matchAll(/"\$ref":"([^"]+)"/g)].some(m=>!m[1].startsWith('#/'))) throw new Error('Referencia externa no permitida');
+await SwaggerParser.validate(structuredClone(spec),{resolve:{external:false},validate:{spec:true,schema:true}});
+const methods=['get','post','put','patch','delete'];
+const operations=Object.entries(spec.paths).flatMap(([route,item])=>Object.entries(item).filter(([m])=>methods.includes(m)).map(([method,op])=>({route,method,...op})));
+if(operations.length!==61 || operations.some(o=>!/^\/v1\/m[28]\//.test(o.route))) throw new Error('Alcance API inesperado');
+if(new Set(operations.map(o=>o.operationId)).size!==operations.length) throw new Error('ID de API duplicado');
+const assets=path.dirname(require.resolve('swagger-ui-dist/package.json'));
+await mkdir(path.join(folder,'vendor'),{recursive:true});
+const assetNames=['swagger-ui.css','swagger-ui-bundle.js','LICENSE'];
+for(const name of assetNames) await copyFile(path.join(assets,name),path.join(folder,'vendor',name));
+const json=JSON.stringify(spec,null,2)+'\n';
+await writeFile(path.join(folder,'openapi.json'),json);
+const swaggerSpec=await SwaggerParser.dereference(structuredClone(spec),{resolve:{external:false}});
+const script='"use strict";\nwindow.ui=SwaggerUIBundle({spec:'+JSON.stringify(swaggerSpec).replaceAll('<','\\u003c')+',dom_id:"#swagger-ui",supportedSubmitMethods:[],tryItOutEnabled:false,persistAuthorization:false,validatorUrl:null,deepLinking:true,displayOperationId:true,defaultModelsExpandDepth:0,onComplete:function(){document.documentElement.dataset.swaggerReady="true";},requestInterceptor:function(){throw new Error("Vista documental sin solicitudes");}});\n';
+await writeFile(path.join(folder,'swagger-init.js'),script);
+const html='<!doctype html>\n<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data:; font-src \'self\'; connect-src \'none\'; base-uri \'none\'; form-action \'none\'"><title>Marleva M2/M8 — contrato documental</title><link rel="stylesheet" href="vendor/swagger-ui.css"></head><body><header><h1>M2 y soporte M8: comunidad y oferentes</h1><p>MAR-CHAT-007 · 15-10-2026 · Solo documentación propuesta. Sin servicios implementados, solicitudes o publicación.</p><p><a href="openapi.yaml">YAML canónico</a> · <a href="README.md">Alcance y trazabilidad</a></p></header><main id="swagger-ui"></main><script src="vendor/swagger-ui-bundle.js"></script><script src="swagger-init.js"></script></body></html>\n';
+await writeFile(path.join(folder,'swagger.html'),html);
+const hash=s=>createHash('sha256').update(s).digest('hex');
+const hashes={};
+for(const name of ['openapi.yaml','openapi.json','swagger.html','swagger-init.js',...assetNames.map(n=>'vendor/'+n)]) hashes[name]=hash(await readFile(path.join(folder,name)));
+console.log(JSON.stringify({operations:operations.length,schemas:Object.keys(spec.components.schemas).length,parser:'passed',versions:pins,hashes,implementation:false,requestsExecuted:false},null,2));

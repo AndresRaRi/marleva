@@ -1,0 +1,29 @@
+%% MAR-M8-SEQ-002: Decisión sobre pertenencia
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+actor R as Revisor M8
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+participant W as Tareas y avisos durables
+R->>A: S010 Abrir versión enviada asignada
+A->>I: S020 Comprobar rol vecinal, MFA y sesión actual
+A->>D: S030 Comprobar asignación y ausencia de autorrevisión
+A->>D: S035 Emitir permiso corto ligado a actor/sesión/asignación/documento de versión enviada
+A-->>R: S040 Versión, motivo de reconsideración y decisión fuente visible, evidencia actual con acceso limitado
+R->>A: S050 Aprobar/corrección/rechazo, criterio, motivo, campos y versión
+A->>I: S060 Revalidar rol, MFA y autenticación reciente
+A->>D: S070 Bloquear expediente/casos/concesiones/documentos/versión/enlaces/envío/asignación M8 y comparar revisión vigente y antecedente de nueva versión
+A->>A: S075 Cotejar versión e identidad validadas en S060, sin llamada externa bajo bloqueo
+alt Alguna condición cambió
+ D-->>A: S080 Sin transición, denegación/conflicto
+ A-->>R: S090 Consultar estado, no forzar otra decisión
+else Condiciones válidas
+ A->>D: S100 Transición M2 y cierre de envío/asignación, decisión/privado/recibo/evento atómicos
+ D-->>A: S110 Commit confirmado
+ A-->>R: S120 Recibo de decisión sobre versión exacta
+ A->>W: S130 Aviso sin documento o nota interna
+ T->>A: S140 Consultar motivo visible y siguientes acciones
+end
+Note over A,D: S145 Decisión provisional sin fecha C14, finalización administrativa separada según D08-0.1, activación D08-R pendiente

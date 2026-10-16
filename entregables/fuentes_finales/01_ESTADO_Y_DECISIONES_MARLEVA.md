@@ -139,7 +139,7 @@ Cierre006,15-10-2026: dirección visual verde/fondo cálido/tipografía sistema/
 | main | Base incorporada; CI propio correcto; no acredita aceptación M1 | bf948c946bd328aacba09b90d02340c0c29a3816, [38823862320](https://github.com/AndresRaRi/marleva/actions/runs/38823862320). main local db2ec7d atrasado; no cambiado |
 | M1 PR8 | Retorno/API025–027/cliente implementados; pruebas parciales; no aceptado | dbec16d52a45c6163a2a246dfb561c2639e82b60, [run fallido](https://github.com/AndresRaRi/marleva/actions/runs/38843912870). Calidad/unitarias/CodeQL/dependencias correctos; seguridad/contratos fallaron; integración/web/Sonar/build omitidos por dependencia |
 | M3 PR9 | Catálogo/gestión/fotos implementados en aislamiento; proveedor ficticio; no aceptado |46418758e7902621ebdf3d1f312bfdd7afbd9c79, [run fallido](https://github.com/AndresRaRi/marleva/actions/runs/38843137074). M3, integración, web, calidad, CodeQL, seguridad, cobertura y contratos correctos; Sonar seis incidencias y duplicación6,2%; build omitido |
-| M2/M8 | Diseño documental0.4.0; sin implementación/pruebas funcionales/aceptación | d34fb3e1f6a25efa28644fd8d32221350fb4d3e3, rama codex/docs-m2-m8-007, [CI correcto38841680647](https://github.com/AndresRaRi/marleva/actions/runs/38841680647). Sin PR abierto ni incorporación a main; puertas D07/A8, D08-R, D09-R y revisión visual pendientes |
+| M2/M8 | Diseño documental0.4.0; sin implementación/pruebas funcionales/aceptación | d34fb3e1f6a25efa28644fd8d32221350fb4d3e3, rama codex/docs-m2-m8-007, [CI correcto38841680647](https://github.com/AndresRaRi/marleva/actions/runs/38841680647). Incorporación documental a rama de consolidación009, sin main ni implementación; puertas D07/A8, D08-R, D09-R y revisión visual pendientes |
 
 Solo PR8 y PR9 abiertos al consultar. PR8 draft; no revisiones formales ni comentarios en la consulta. PR9 tiene revisión COMMENTED del SHA anterior y siete comentariosCodeQL; su CodeQL actual pasó, sin atribuir a esos comentarios cierre manual. No aprobar ni fusionar por un verde parcial.
 
@@ -159,6 +159,10 @@ Ejecutor M1 reutilizado: artifacts/marleva-pr8-integracion, rama codex/integrate
 | CON-08 / P2 | Conciliar entrega Fuentes/configuración | Mantener idea preexistente distancia/minutos para después, fueraMVP1. Revisar diferencias00/02/03 entre ramas antes de reemplazar; solo01 afectada en esta consolidación. Guardar/push no realiza subida compartida |
 
 SonarCloud Free privado y A0/SDK conservados; Google pendiente y límites de activación de §2 permanecen. Avance exclusivamente en docs/avance.md de cada rama hasta conciliar criterios; no convertir0%M3 de M1 en ausencia de trabajo M3 ni sumar porcentajes incompatibles.
+
+### Incorporación documental M2/M8
+
+Se reutiliza rama ejecutora existente; merge documental de d34fb3e conserva historia sin main, sin cambios de runtimeM1/contratos compartidos/migraciones. Generación YAML/Swagger61operaciones/82esquemas y validación75negativos/114FK/SEQ-tablas pasan en la copia consolidada. Modelo se ejecuta con MARLEVA_DBML_MODULE al paquete10.3.1 homologado; la ruta predeterminada encontró export package.json no disponible, se conserva fallo de configuración y se usa entrada documentada. No SQL aplicado ni pruebas funcionales M2/M8. Los archivos incorporados conservan hashes del entregabled34fb3e; aceptación y puertasD07/D08/D09 pendientes.
 
 ### Correcciones y evidencia009
 

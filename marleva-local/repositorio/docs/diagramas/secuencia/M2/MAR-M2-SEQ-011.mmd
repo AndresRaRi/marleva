@@ -1,0 +1,44 @@
+%% MAR-M2-SEQ-011: Conservación, borrado y recuperación documental
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor C as Conservador autorizado M8
+actor T as Titular
+participant A as Contratos propios M2 M8
+participant I as M1 identidad existente
+participant D as Persistencia objetivo por módulos
+participant S as Archivos privados objetivo M2
+participant W as Tareas y avisos durables
+W->>D: S001 Validar política aprobada y finalidad, nunca activar propuesta documental
+C->>A: S005 Solicitar cierre administrativo con ancla, sin renuncia de derechos
+A->>I: S006 Revalidar conservador, MFA reciente y actor distinto del titular
+A->>D: S007 Verificar política activa, cierre o archivo correctivo, aviso disponible y ausencia de finalidad activa
+A->>D: S008 Guardar evento de finalización y calendario por recurso
+W->>D: S010 Leer resolución final, fecha de inicio y referencias vivas
+alt Finalidad o fecha no resueltas
+ W->>D: S020 Escalar caso sin calendario o pendiente de revisión, no retener indefinidamente
+else Plazo C14 vencido
+ W->>D: S030 Revalidar bloqueos y referencias bajo exclusión
+ alt Bloqueo vigente
+  W->>D: S040 Mantener acceso ordinario denegado y revisión del bloqueo
+ else Borrado permitido
+  W->>D: S050 Intención durable y revocación de acceso
+  W->>D: S055 Confirmar ledger externo, cercado y catálogo de todas las copias
+  W->>S: S060 Borrar todas las copias por referencia estable bajo exclusión con bloqueos
+  alt Fallo o resultado incierto
+   W->>D: S070 Reintentar/confirmar ausencia sin revivir acceso
+  else Ausencia confirmada
+   W->>D: S075 Confirmar ausencia en todas las réplicas, purgar textos aplicables
+   W->>D: S080 Registrar borrado y prueba mínima
+  end
+ end
+end
+W->>D: S090 Ante restauración: mantener destino cerrado
+W->>D: S100 Reaplicar ledger externo, restricciones y revocar accesos obsoletos
+W->>S: S110 Verificar ausencia de documentos borrados antes de abrir destino
+
+opt Titular consulta conservación
+ T->>A: S120 Consultar estado de conservación propio
+ A->>I: S125 Autorizar sesión del titular
+ A->>D: S127 Paginar casos propios sin causas legales ni referencias internas
+ A-->>T: S130 Estado y fecha prevista efectiva o motivo genérico pendiente, sin promesa falsa
+end

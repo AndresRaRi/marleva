@@ -118,5 +118,16 @@
     "scope": "API027 all TOTP statuses; complete browser fixtures without weakening validation",
     "directedUnit": "54/54",
     "remoteCI": "pending"
+  },
+  "m2DocumentaryIntegration": {
+    "source": "d34fb3e1f6a25efa28644fd8d32221350fb4d3e3",
+    "operations": 61,
+    "schemas": 82,
+    "invalidExamplesRejected": 75,
+    "foreignKeys": 114,
+    "sqlApplied": false,
+    "productTests": 0,
+    "acceptance": false,
+    "modelTool": "Use documented MARLEVA_DBML_MODULE package path; default package.json export resolution failed"
   }
 }

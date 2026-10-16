@@ -1,0 +1,35 @@
+%% MAR-M2-SEQ-002: Carga privada y validación de evidencia
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+participant S as Archivos privados objetivo M2
+T->>A: S010 Solicitar carga para expediente editable propio
+A->>I: S020 Sesión y titular vigentes
+A->>D: S030 Comprobar versión, cupo y finalidad
+alt Campos o cupo inválidos
+ A-->>T: S040 Error corregible sin permiso de carga
+else Carga autorizada
+ A->>D: S050 Reservar objeto nuevo, borrador y recibo idempotentes con vencimiento
+ A-->>T: S060 Permiso limitado a objeto, tamaño y finalidad
+ T->>S: S070 Cargar bytes por permiso temporal
+ T->>A: S080 Finalizar carga por referencia
+ A->>I: S085 Reautorizar sesión actual del titular al finalizar
+ A->>S: S090 Verificar objeto real, formato, bytes y hash
+ alt Proveedor o análisis no disponibles
+  A->>D: S100 Conservar estado pendiente recuperable
+  A-->>T: S110 Informar análisis pendiente, no enviar expediente
+ else Archivo inseguro o no permitido
+  A->>D: S120 Rechazar archivo y planificar limpieza
+  A-->>T: S130 Motivo seguro, sustituir archivo
+ else Validación técnica correcta
+  A->>D: S140 CAS: revalidar borrador editable y privacidad, reemplazar solo su enlace y guardar recibo
+  alt Estado o versión cambiaron antes de enlazar
+  A-->>T: S145 409, sin enlace, objeto para limpieza controlada
+ else Enlace confirmado
+  A-->>T: S150 Listo para envío, no residencia aprobada
+ end
+ end
+end

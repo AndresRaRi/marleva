@@ -1,0 +1,25 @@
+%% MAR-M2-SEQ-005: Cambio de residencia y bloqueo de operaciones nuevas
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+participant C as Consumidor autorizado
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+participant W as Tareas y avisos durables
+T->>A: S010 Declarar cambio de residencia con versión esperada
+A->>I: S020 Verificar titular y sesión
+A->>D: S030 Bloquear expediente, leer revisión, aprobación actual y restricciones
+A->>D: S040 Transacción: nueva residence_change sin copiar documentos, corrección, eligibilityRevision, recibo y evento
+alt Conflicto concurrente
+ A-->>T: S050 409, consultar estado actual
+else Commit confirmado
+ A-->>T: S060 Cambio registrado, nuevas operaciones no permitidas
+ A->>W: S070 Publicar evento durable tras commit
+ C->>A: S080 Consultar elegibilidad para nueva operación
+ A->>D: S090 Leer estado actual y restricciones
+ A-->>C: S100 Denegar operación nueva con razón mínima
+end
+Note over A,C: S110 La integración futura conserva pedidos, restituciones y ayuda anteriores
+Note over A,D: S120 approvedVersionId conserva evidencia histórica, no permiso actual, declaración false
+Note over A,D: S130 Una clave actor/operación serializada y anillo HMAC evitan duplicados aun al rotar llaves

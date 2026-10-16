@@ -1,0 +1,158 @@
+{
+  "status": "consumer_proposal_only",
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "shared_contracts_modified": false,
+  "providers_implemented": false,
+  "ports": {
+    "IdentityContext": {
+      "owner": "M1 authority, interface agreement pending D07-I",
+      "input": [
+        "transport_credential"
+      ],
+      "output": {
+        "account_id": "uuid",
+        "session_id": "uuid",
+        "checked_at": "date-time",
+        "authenticated_at": "date-time",
+        "mfa_level": "single_factor | multi_factor",
+        "mfa_checked_at": "date-time | null",
+        "session_active": "boolean",
+        "account_active": "boolean"
+      },
+      "errors": [
+        "unauthenticated",
+        "forbidden",
+        "unavailable"
+      ],
+      "rules": [
+        "No client supplied identity/MFA facts",
+        "Operator boolean does not grant M8 capabilities",
+        "Fresh check before sensitive effect; no external atomicity guarantee"
+      ]
+    },
+    "MembershipEventSink": {
+      "owner": "agreed M1/M9 consumer, D07-E",
+      "input": {
+        "event_id": "uuid",
+        "event_type": "membership_submitted | membership_decided",
+        "recipient_account_id": "uuid",
+        "application_id": "uuid",
+        "submission_id": "uuid",
+        "decision_id": "uuid | null"
+      },
+      "output": {
+        "accepted_durably": "boolean",
+        "consumer_reference": "opaque string"
+      },
+      "errors": [
+        "unavailable",
+        "conflict"
+      ],
+      "rules": [
+        "Deduplicate by event_id",
+        "No private payload",
+        "Acknowledgment is not email delivery",
+        "Timeout preserves same event and pending state"
+      ]
+    },
+    "PrivateEvidenceStore": {
+      "owner": "M2 private adapter, D07-S",
+      "operations": [
+        "reserve",
+        "write_conditionally",
+        "inspect_and_analyze",
+        "read_authorized",
+        "delete",
+        "confirm_all_replicas_absent"
+      ],
+      "errors": [
+        "unavailable",
+        "rejected",
+        "conflict",
+        "absent_confirmed"
+      ],
+      "rules": [
+        "No public URL or service credential in client",
+        "Object immutable after finalization",
+        "Absent must be verified, never inferred from timeout",
+        "Deletion fenced against link and hold"
+      ]
+    },
+    "CommandFingerprint": {
+      "owner": "M2/M8 server, D07-K",
+      "canonicalization": "RFC8785 JCS",
+      "algorithm": "HMAC-SHA256",
+      "domains": [
+        "marleva:m2:key:v1",
+        "marleva:m2:body:v1"
+      ],
+      "stored_metadata": [
+        "hashKeyId",
+        "keyHash",
+        "requestHash"
+      ],
+      "conservation_metadata": [
+        "commandId",
+        "commandKeyId",
+        "commandHash"
+      ],
+      "rules": [
+        "Key material outside Git/database/logs",
+        "Retain verification keys while receipts/commands require them",
+        "Missing key fails closed with recovery, no new business effect",
+        "No silent Unicode normalization or string trimming"
+      ]
+    },
+    "EligibilityGuard": {
+      "owner": "M2 consumer proposal D07-G; no shared interface modified",
+      "input": {
+        "account_id": "trusted uuid",
+        "capability": "buy | offer",
+        "unit_of_work": "opaque authorized transaction context"
+      },
+      "output": {
+        "allowed": "boolean",
+        "reason_codes": "closed minimal array",
+        "eligibility_revision": "positive integer"
+      },
+      "rules": [
+        "Hold M2 aggregate lock through consumer commit; fail closed on unavailable authority",
+        "No direct cross-module table access",
+        "GET eligibility is not a reservation",
+        "No global atomicity claim with external Auth"
+      ]
+    },
+    "CommunityEventSink": {
+      "owner": "agreed M1/M9 durable consumer D07-E",
+      "input": {
+        "event_id": "uuid",
+        "event_type": "closed M2CommunityEvent enum",
+        "recipient_account_id": "uuid owner",
+        "application_id": "uuid",
+        "profile_id": "uuid | null",
+        "restriction_id": "uuid | null"
+      },
+      "output": {
+        "accepted_durably": "boolean",
+        "consumer_reference": "opaque"
+      },
+      "rules": [
+        "Deduplicate event_id, no private text",
+        "accepted is durable availability, not email receipt/read",
+        "Archive notice grace starts only when available in account"
+      ]
+    },
+    "ArchiveTask": {
+      "owner": "M2 internal worker proposal D07-A",
+      "schema": "OpenAPI components/schemas/ArchiveCommand",
+      "rules": [
+        "30d confirmed owner inactivity;7d after durable notice",
+        "CAS version/revision/activity/state under common aggregate lock",
+        "Pending reviews never archived",
+        "No scheduler or worker implemented"
+      ]
+    }
+  },
+  "version": "0.4.0"
+}

@@ -1,0 +1,420 @@
+{
+  "date": "2026-10-15",
+  "timezone": "America/Merida",
+  "chat": "MAR-CHAT-007",
+  "scope": "UC M2 001-004/011, M8 001-002; coherencia documental del recorrido",
+  "findings": [
+    {
+      "id": "MAR-M2-AUD-A01",
+      "title": "Finalidad contradictoria",
+      "correction": "M8SEQ002:S145 y ejemplos de decisión aún usaban pendiente de definición. Se alinean con provisional, comando de cierre separado y D08-R.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A02",
+      "title": "Proyección privada contradictoria",
+      "correction": "Version false con PII y VisibleDecision sin indicador propio eran aceptados por esquema. Se cierran condiciones de nulidad/declaración y se agrega private_data_available a decisión visible.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A03",
+      "title": "Borrado incompatible con integridad",
+      "correction": "El documento válido exigía hash/objeto después de purgarlos. CHECKs distinguen evidencia disponible de veredicto técnico histórico; deleted limpia referencias/huellas. Purga privada reinicia declaración.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A04",
+      "title": "Tareas/calendario incompletos",
+      "correction": "scheduled/delete_pending/error/deleted requieren calendario; completed respeta vencimiento. running exige lease y complete referencia de ledger externo; no se afirma garantía entre proveedores.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A05",
+      "title": "Órdenes de bloqueo distintos",
+      "correction": "Envío, revisión y política usaban órdenes diferentes. Se normaliza expediente→casos→concesiones→documentos→versiones/enlaces→envíos/asignaciones→bloqueos/tareas, conservando IDs.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A06",
+      "title": "Acciones de pantalla heredadas",
+      "correction": "Borrador preparado no vuelve a preparar; respuesta incierta consulta; vacío inicia solicitud; carga espera; pérdida de permiso vuelve. state_actions es fuente canónica por vista.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A07",
+      "title": "Origen del envío y resultado M8",
+      "correction": "Se agregan vistas de envío de corrección/reconsideración y resultado de corrección confirmado; resultados M8 cierran acciones de decidir. Revisión inicial no muestra motivo de reconsideración.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A08",
+      "title": "Pruebas genéricas incorrectas",
+      "correction": "La transferencia es204 sin JSON y own/creación de B no es404 ajeno. Se concretan fixtures/pasos, escenarios de UI y negativos/recuperación para23 operaciones.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A09",
+      "title": "Trazabilidad y pendientes desactualizados",
+      "correction": "Se enlazan pasos de conservación en contratos propios; D05/D06 ya tienen propuesta del recorrido. Se separan pendientes reales de integración/aceptación/otros recorridos.",
+      "status": "corregido_documentalmente"
+    },
+    {
+      "id": "MAR-M2-AUD-A10",
+      "title": "Ejemplos temporales y privacidad",
+      "correction": "Se alinea fecha del resumen con su envío anidado; se rechazan estados final sin fecha, provisional con fecha y pendiente de borrado como complete. Todas las verificaciones son documentales.",
+      "status": "corregido_documentalmente"
+    }
+  ],
+  "data": {
+    "dbmlPackage": "10.3.1",
+    "externalDefinitionsExcluded": [
+      "Account",
+      "Session",
+      "Development"
+    ],
+    "newTables": [
+      "M2MembershipApplication",
+      "M2MembershipVersion",
+      "M2MembershipVersionPrivate",
+      "M2MembershipDocument",
+      "M2MembershipVersionDocument",
+      "M2MembershipSubmission",
+      "M8MembershipReviewGrant",
+      "M8MembershipAssignment",
+      "M2MembershipDecision",
+      "M2MembershipDecisionPrivate",
+      "M2MembershipDocumentAccess",
+      "M2MembershipEvent",
+      "M2MembershipCommandReceipt",
+      "M2MembershipRetentionCase",
+      "M2MembershipRetentionHold",
+      "M2MembershipDeletionTask",
+      "M2MembershipRetentionEvent",
+      "M2MembershipReplica",
+      "M8MembershipReviewerProfile"
+    ],
+    "foreignKeys": 47,
+    "checks": 82,
+    "partialIndexes": 4,
+    "sourceSha256": "5227c5f751189124a3598ff3031b3b982ad2c3c1cf9238d2f81256e07e31b61e",
+    "complementSha256": "ac549d67c738b121ae262de0bde7320403bc2aea3e18dadcefcfa27055ed2d21",
+    "ddlSha256": "44ae94173e13bdb9c5a5df06a57e373ed81286b90d9033c07e83e86ca96d8b23",
+    "dbmlParse": "passed",
+    "sqlDocumentaryRoundtrip": "passed",
+    "postgresParse": "not_run",
+    "sqlApplied": false,
+    "roundtripContext": "referencias externas minimas solo en memoria"
+  },
+  "api": {
+    "operations": 23,
+    "schemas": 40,
+    "parser": "passed",
+    "versions": {
+      "yaml": "2.9.1",
+      "@apidevtools/swagger-parser": "13.1.0",
+      "swagger-ui-dist": "5.33.2"
+    },
+    "hashes": {
+      "openapi.yaml": "cff47773b5ffb0898c31869e6570111a2cd12d45466faa6e05d68ae2f00544b9",
+      "openapi.json": "2e2cbc49380d47b0c55b02375cc58d773084f08722957a3d4197866382b688b4",
+      "swagger.html": "50f5972839e08a90568f75e2a4c89c9eaee82dc79bddd5cecc8b03cd3ad1609f",
+      "swagger-init.js": "b035b02dd34616b6489390332d2d134ce094dd07fa61a30f4ba60af4a6039487",
+      "vendor/swagger-ui.css": "1ac324f7dcd27e4b9386b4bd6421271ec147e922a22c05ba24b11515e9aa6321",
+      "vendor/swagger-ui-bundle.js": "6b3bfcaff3fc82c0e6992ca4b370c4f22970dec35fff60d229302b3ee7688715",
+      "vendor/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "implementation": false,
+    "requestsExecuted": false
+  },
+  "validation": {
+    "date": "2026-10-15",
+    "chat": "MAR-CHAT-007",
+    "contractVersion": "0.3.1",
+    "operations": 23,
+    "schemas": 40,
+    "schemaExamplesAccepted": [
+      "Problem",
+      "VersionInput",
+      "Document",
+      "VersionDocument",
+      "Version",
+      "Version",
+      "VisibleDecision",
+      "Application",
+      "OwnApplication",
+      "Submission",
+      "Receipt",
+      "CommandResult",
+      "UploadRequest",
+      "UploadPermit",
+      "UploadResult",
+      "FinalizeRequest",
+      "SubmitRequest",
+      "AccessRequest",
+      "AccessPermit",
+      "AssignmentRequest",
+      "Assignment",
+      "QueueItem",
+      "Queue",
+      "Review",
+      "DecisionRequest",
+      "Empty",
+      "PrepareVersionRequest",
+      "PrepareVersionRequest",
+      "LinkDocumentRequest",
+      "DecisionSummary",
+      "VersionSummary",
+      "History",
+      "ReviewerCandidate",
+      "ReviewerCandidates",
+      "RetentionItem",
+      "RetentionStatus",
+      "RetentionCommand"
+    ],
+    "responseExamplesAccepted": 19,
+    "invalidExamplesRejected": [
+      "archivo mayor a5.000.000bytes",
+      "archivo vacío",
+      "tipo no permitido",
+      "estado inyectado",
+      "actor inyectado",
+      "desarrollo octavo",
+      "revision cero",
+      "tercer slot",
+      "asignación sin envío",
+      "reasignación sin revisión",
+      "corrección sin campos",
+      "campo correctivo arbitrario",
+      "campos repetidos",
+      "aprobación sin criterio válido",
+      "rechazo con campos de corrección",
+      "nota mayor a2000",
+      "nota interna filtrada",
+      "dato privado en recibo",
+      "página mayor a50",
+      "reconsideración sin motivo",
+      "reconsideración motivo vacío",
+      "reconsideración motivo espacios",
+      "motivo mayor a2000",
+      "corrección con motivo de reconsideración",
+      "origen inicial en preparación",
+      "decisión fuente ausente",
+      "envío fuente ausente",
+      "número suministrado por cliente",
+      "antecedente alterado por PUT",
+      "fecha rejuvenecida por cliente",
+      "tercer enlace reutilizado",
+      "historial con nota interna",
+      "historial con domicilio",
+      "historial mayor a50",
+      "enlace documental sin referencia",
+      "origen inicial con número dos",
+      "versión no inicial sin fuente",
+      "correo en candidato",
+      "etiqueta con nombre",
+      "más50 candidatos",
+      "causa legal filtrada",
+      "borrado sin confirmación",
+      "calendario no calculado con fecha",
+      "bloqueo sin revisión",
+      "liberación sin hold",
+      "base vacía",
+      "finalizar sin decisión",
+      "privados no disponibles con domicilio",
+      "motivo en origen inicial",
+      "borrador con fecha enviada",
+      "privados suprimidos con motivo visible",
+      "final sin fecha",
+      "provisional con fecha final",
+      "aprobación con criterio de rechazo",
+      "borrado pendiente como completo"
+    ],
+    "sequenceStepsAndTables": "passed",
+    "foreignKeyTargetAndTypeReview": {
+      "references": 47,
+      "errors": []
+    },
+    "runtimeTests": "not_run",
+    "sqlApplied": false,
+    "requestsExecuted": false,
+    "limits": [
+      "Esquemas y referencias, no transacciones/autorización real/concurrencia/conservación",
+      "D08-0.1/D09-0.1 propuestos; D08-R/D09-R y transacciones/integración pendientes"
+    ]
+  },
+  "diagrams": [
+    {
+      "id": "MAR-M2-SEQ-001",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "45c8b7c584e1c712386e7a617de0e5796b40c095cf0bf18346cea201e4450bd5"
+    },
+    {
+      "id": "MAR-M2-SEQ-002",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b92139a16447a6fbc97b88bbcbe805b1a0aab0e06e9321bbec72137130cb7034"
+    },
+    {
+      "id": "MAR-M2-SEQ-003",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": true,
+      "sourceSha256": "c8349b2a4e9f2e6fcd1a57c203f7688b423eec3ed6957fe686752349ff1b1804"
+    },
+    {
+      "id": "MAR-M2-SEQ-004",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "0359e47a0a4b142807fd67595c7a95ebb988538cce4e0d677d8134d7b32ea393"
+    },
+    {
+      "id": "MAR-M2-SEQ-005",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "d07f61617fce1620e06b61074b6abbd4975c62dee3b0e9baa45271c3d9fd70c1"
+    },
+    {
+      "id": "MAR-M2-SEQ-006",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "ec6ca6aa3fe5508f5c6314c66015dbd9480550f820bb22a05692f1b97a7bfb58"
+    },
+    {
+      "id": "MAR-M2-SEQ-007",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "8ab682a75b1445e3462af9bf8272c7df1f15b2e8ee1aa31193a3903895027feb"
+    },
+    {
+      "id": "MAR-M2-SEQ-008",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "156fac094ae33e7cda773383ee69eb286952feaa689735fdcf77f75f0597eaa1"
+    },
+    {
+      "id": "MAR-M2-SEQ-009",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b73c98d7cacb652673d7e2e7fb185a5f9a2310c023010f91d69d20d69f8cfbf0"
+    },
+    {
+      "id": "MAR-M2-SEQ-010",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "4807513c02afb83f60a118f8e798aea8d6304b058fed458600360f59c6395997"
+    },
+    {
+      "id": "MAR-M2-SEQ-011",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b06720f13cd1689c10cd7a0c7ee74b0d9a4ad18dba89813271b22a944e529bae"
+    },
+    {
+      "id": "MAR-M8-SEQ-001",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "c10b2f79e8930d88541c8c2b1eecb3704ea93d775829222bc6600d95843c3393"
+    },
+    {
+      "id": "MAR-M8-SEQ-002",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": true,
+      "sourceSha256": "17dc6f776f59f0118313415cf0821931b1790ab6e942cd7d672b22f98904af8c"
+    },
+    {
+      "id": "MAR-M8-SEQ-003",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "f677bd5da005ce44bcd0f065d6578c93d68caadf647fc66ef01904adcfe5bde7"
+    },
+    {
+      "id": "MAR-M8-SEQ-004",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "28c0700648c00501a79be25cd0ffecdb1577339ba589da5132bdc99f1b157fbb"
+    },
+    {
+      "id": "MAR-M8-SEQ-005",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "873a79cc69afb06f491be2da90a7231dc4fc38b80a5aa4b0740bf1e1541a44f9"
+    }
+  ],
+  "traceability": {
+    "screens": 9,
+    "views": 66,
+    "plannedCases": 183,
+    "allPreviousTestIdsPreserved": 128,
+    "operations": 23,
+    "eachOperationAuthAndRecovery": true,
+    "allViewsHaveScenario": true,
+    "allReferencesResolve": true
+  },
+  "prototype": {
+    "layoutAndActionChecks": 264,
+    "widths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "pageErrors": [],
+    "externalRequestsAttempted": [],
+    "newScreenshots": 0,
+    "visualAcceptance": false,
+    "nativePlatformsTested": false
+  },
+  "protected": {
+    "beforeFilesUnchanged": 471,
+    "trackedBaseFilesUnchanged": 410
+  },
+  "limits": [
+    "Verificación de estructuras/ejemplos/referencias/DOM, sin prueba de SQL o transacciones",
+    "D07 integración M1, D08-R validación material/copias/mínimo y D09-R aprovisionamiento pendientes",
+    "No ejecución de pruebas de producto, VoiceOver/TalkBack o rendimiento real",
+    "No auditoría exhaustiva de todos los módulos ni lectura de dependencias/secretos/binarios"
+  ],
+  "productTestsExecuted": 0,
+  "sqlApplied": false,
+  "apiRequestsExecuted": false,
+  "implementation": false,
+  "commitPush": false,
+  "sourcesUploaded": false,
+  "documentIndexHashes": {
+    "proceso/MATRIZ_CASOS_M2.md": "d8eef51b2bb113ef357373e5357942e6602ea7ea72b772fa6c7628dd79609766",
+    "ui-ux/M2/PROPUESTA_PANTALLAS_M2_M8.md": "bfba810dd10efa8e0b144f7fa29f4472cc67e96b43a243eb2b537447b95c5252"
+  },
+  "documentIndexStatus": "D02/D05/D06 actualizados para el corte; otros recorridos/aceptación/ejecución pendientes"
+}
