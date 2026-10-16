@@ -1,1 +1,66 @@
-<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'"><title>Marleva · Propuesta para revisión</title><link rel="stylesheet" href="propuesta.css"><script src="fixtures.js" defer></script><script src="propuesta.js" defer></script></head><body><a class="skip" href="#view">Saltar al contenido</a><aside class="review"><button class="reviewToggle" aria-expanded="false">Revisar propuesta y estados ⌄</button><div class="reviewBody"><span class="eyebrow">MARLEVA / REVISIÓN DE DISEÑO</span><h2>Lo cercano,<br>más claro.</h2><p>Explorar → entender la oferta → acceder → regresar.</p><a href="auditoria.html">Ver auditoría y antes / después ↗</a><label for="scenario">Estado para revisar</label><select id="scenario"><option value="normal">Recorrido normal</option><option value="loading">Carga</option><option value="empty">Catálogo vacío</option><option value="error">Error de conexión</option><option value="more-error">Error al cargar más</option><option value="removed">Oferta retirada</option><option value="expired-code">Código vencido</option><option value="expired-session">Sesión vencida</option></select><p class="small">Propuesta local · datos ficticios.<br>Sin pedidos, reservas ni pagos.<br>Recargar reinicia la simulación.</p><details><summary>Qué revisar</summary><p>¿Se entiende qué ofrece cada vecino? ¿Puedes encontrar precio, modalidad y cobertura? ¿Sabes qué falta después de acceder?</p><p>Las tres pantallas son una propuesta. La conexión catálogo–cuenta todavía no existe en el producto.</p></details></div></aside><div class="shell"><header><a class="brand" href="#explorar" aria-label="Marleva, explorar">marleva<span>●</span></a><span class="demo">Concepto · ficticio</span></header><main id="view" tabindex="-1"></main><nav aria-label="Navegación de la propuesta"><button data-nav="explorar">⌂<span>Explorar</span></button><button data-nav="cuenta">◯<span>Cuenta</span></button><button data-nav="ayuda">?<span>Ayuda</span></button></nav></div><div id="announce" class="sr" role="status" aria-live="polite"></div></body></html>
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Marleva · Propuesta para revisión</title>
+    <link rel="stylesheet" href="propuesta.css" />
+    <script src="fixtures.js" defer></script>
+    <script src="propuesta.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#view">Saltar al contenido</a>
+    <aside class="review">
+      <button class="reviewToggle" aria-expanded="false">Revisar propuesta y estados ⌄</button>
+      <div class="reviewBody">
+        <span class="eyebrow">MARLEVA / REVISIÓN DE DISEÑO</span>
+        <h2>Lo cercano,<br />más claro.</h2>
+        <p>Explorar → entender la oferta → acceder → regresar.</p>
+        <a href="auditoria.html">Ver auditoría y antes / después ↗</a
+        ><label for="scenario">Estado para revisar</label
+        ><select id="scenario">
+          <option value="normal">Recorrido normal</option>
+          <option value="loading">Carga</option>
+          <option value="empty">Catálogo vacío</option>
+          <option value="error">Error de conexión</option>
+          <option value="more-error">Error al cargar más</option>
+          <option value="removed">Oferta retirada</option>
+          <option value="expired-code">Código vencido</option>
+          <option value="expired-session">Sesión vencida</option>
+        </select>
+        <p class="small">
+          Propuesta local · datos ficticios.<br />Sin pedidos, reservas ni pagos.<br />Recargar
+          reinicia la simulación.
+        </p>
+        <details>
+          <summary>Qué revisar</summary>
+          <p>
+            ¿Se entiende qué ofrece cada vecino? ¿Puedes encontrar precio, modalidad y cobertura?
+            ¿Sabes qué falta después de acceder?
+          </p>
+          <p>
+            Las tres pantallas son una propuesta. La conexión catálogo–cuenta todavía no existe en
+            el producto.
+          </p>
+        </details>
+      </div>
+    </aside>
+    <div class="shell">
+      <header>
+        <a class="brand" href="#explorar" aria-label="Marleva, explorar">marleva<span>●</span></a
+        ><span class="demo">Concepto · ficticio</span>
+      </header>
+      <main id="view" tabindex="-1"></main>
+      <nav aria-label="Navegación de la propuesta">
+        <button data-nav="explorar">⌂<span>Explorar</span></button
+        ><button data-nav="cuenta">◯<span>Cuenta</span></button
+        ><button data-nav="ayuda">?<span>Ayuda</span></button>
+      </nav>
+    </div>
+    <div id="announce" class="sr" role="status" aria-live="polite"></div>
+  </body>
+</html>

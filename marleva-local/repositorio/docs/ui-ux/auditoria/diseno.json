@@ -9,11 +9,7 @@
     "acceder por correo",
     "volver al detalle conservado en memoria"
   ],
-  "screens": [
-    "MAR-M3-UI-001 exploración",
-    "MAR-M3-UI-002 detalle",
-    "MAR-M1-UI-001 correo/código"
-  ],
+  "screens": ["MAR-M3-UI-001 exploración", "MAR-M3-UI-002 detalle", "MAR-M1-UI-001 correo/código"],
   "trace": [
     "MAR-M3-UC-001 > SEQ001:S020/S080/S095 > API001 > Offer/OfferVersion",
     "MAR-M3-UC-002 > SEQ002:S040/S080/S095 > API002 > OfferVersion/Photo",
