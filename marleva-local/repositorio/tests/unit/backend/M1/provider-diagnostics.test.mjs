@@ -81,3 +81,12 @@ it('MAR-CI-PROVIDER-005 | distingue causas técnicas y descarta valores y nombre
     ),
   ).toBe('failed fetch user database error cannot acquire pool');
 });
+
+it('MAR-CI-PROVIDER-006 | agotamiento de direcciones se clasifica sin emitir host/usuario', () => {
+  const report = summarizeProviderLog(
+    'ERROR failed connect host=private-host user=private-user database=private-database: dial tcp 172.1.2.3:5432 connect cannot assign requested address',
+  );
+  expect(report.categories).toEqual({ addressExhaustion: 1 });
+  expect(report.unclassified).toBe(0);
+  expect(JSON.stringify(report)).not.toMatch(/private|172|5432/);
+});

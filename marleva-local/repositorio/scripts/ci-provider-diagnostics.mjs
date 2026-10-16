@@ -1,7 +1,9 @@
 import { spawnSync } from 'node:child_process';
+import { appliedAuthPool } from './configure-auth-pool.mjs';
 const categories = {
   connectionLimit: /too many (?:connections|clients)|remaining connection slots/i,
   connectionFailure: /connection refused|connection reset|unexpected eof|database is closed/i,
+  addressExhaustion: /cannot assign requested address/i,
   timeout: /deadline exceeded|context deadline|context canceled|timeout|timed out/i,
   preparedStatement: /prepared statement|cached plan/i,
   permissions: /permission denied|password authentication failed/i,
@@ -65,11 +67,13 @@ export function collectProviderDiagnostics() {
           maxBuffer: 16 * 1024 * 1024,
         },
       );
+      const log = (result.stdout ?? '') + '\n' + (result.stderr ?? '');
       return [
         service,
         {
           available: result.status === 0,
-          ...summarizeProviderLog((result.stdout ?? '') + '\n' + (result.stderr ?? '')),
+          ...summarizeProviderLog(log),
+          pool: service === 'auth' ? appliedAuthPool(log) : undefined,
         },
       ];
     }),
