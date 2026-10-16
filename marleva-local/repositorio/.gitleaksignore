@@ -15,3 +15,6 @@
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80
+
+# SHA256 público comprobado; excepción histórica exacta autorizada16-10-2026. Evidencia: tests/results/ios-test.json.
+fa3719c9e289b6ac0d3fbbfe3e71853c6db7c8df:marleva-local/repositorio/tests/results/ios-test.json:generic-api-key:49

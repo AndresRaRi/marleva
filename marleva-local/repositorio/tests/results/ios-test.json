@@ -56,5 +56,18 @@
     "Android remained off; no deletion, uninstall, device reset, migration or data cleanup.",
     "App session persistence proven across process restart; provider token renewal not independently forced by this trial.",
     "Generated native project/Pods and private logs/backups retained locally; not included wholesale in Git."
-  ]
+  ],
+  "securityReview": {
+    "failedRun": 38960434618,
+    "findings": 1,
+    "classification": "Public source SHA256, not a credential; actual file digest matches record.",
+    "authorized": "User explicitly authorized this exact historical fingerprint on2026-10-16.",
+    "fingerprint": "fa3719c9e289b6ac0d3fbbfe3e71853c6db7c8df:marleva-local/repositorio/tests/results/ios-test.json:generic-api-key:49",
+    "limits": "No directory/value allowlist and no rule disabled; all other detections retained.",
+    "localChecks": {
+      "history": "PASS: all HEAD ancestors scanned, zero unresolved findings",
+      "existingControls": "PASS: exact profile allowed; other path/value rejected",
+      "newCommitSamePath": "PASS: new fictional key rejected despite historical fingerprint exception"
+    }
+  }
 }

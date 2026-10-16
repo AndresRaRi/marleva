@@ -222,3 +222,6 @@ Corrección de conexión iOS,16-10-2026, previa al código: la API HTTPS respond
 
 
 Resultado iOS16-10-2026: Release ARM64 firmado localmente y con origen localhost pasó acceso por OTP, cuenta propia, cierre/reapertura del proceso conservando sesión y salida seguida de otro relanzamiento sin recuperar cuenta. Acta tests/results/ios-test.json y capturas08–10 del instructivo.20pruebas dirigidas y calidad pasan; conservar los tres fallos iniciales como evidencia. No prueba de renovación forzada del proveedor ni cambio de correo/MFA/recuperación/accesibilidad/físico iOS. Android apagado, datos intactos; aceptación integral permanece abierta.
+
+
+CI38960434618 rechazó seguridad por un único generic-api-key en ios-test.json:49. El valor coincide exactamente con SHA256 del archivo público apps/client/src/api.ts, no es credencial. Usuario autorizó expresamente16-10-2026 excluir solo commitfa3719c9e289b6ac0d3fbbfe3e71853c6db7c8df/rutaios-test.json/reglageneric-api-key/línea49. Registrar ese fingerprint histórico exacto en .gitleaksignore; no excepción por carpeta/valor ni regla desactivada. Verificar hash, Gitleaks sobre toda ascendencia y negativos de otra ruta/valor y nueva clave ficticia en la misma ruta. Sin cambio de runtime/datos/contrato ni repetición nativa; revisión/CI del nuevoSHA antes de integrar.
