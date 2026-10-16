@@ -7,12 +7,17 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import {
   recoveryNames,
+  assertRecoveryRepeat,
   assertRecoverySource,
   assertRecoveryCopy,
   assertRecoveryManifest,
 } from '../../../fixtures/recovery-guard.mjs';
 process.chdir(path.resolve(new URL('../../../..', import.meta.url).pathname));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1', 'Requiere ensayo local autorizado');
+const verifyExisting = process.argv[2] === 'verify-existing';
+const restoreBackup = process.argv[2] === 'restore-backup';
+if (restoreBackup) assert.ok(context.isolated, 'Repetición solo aislada');
+if (verifyExisting) assert.ok(context.isolated, 'Solo contexto B12 aislado');
 const repeatWithAttributes = process.env.MARLEVA_RECOVERY_ATTRIBUTES === '1';
 const reportFile = context.isolated
   ? context.report('copy')
@@ -20,13 +25,19 @@ const reportFile = context.isolated
     ? 'tests/results/recovery-copy-with-attributes.json'
     : 'tests/results/recovery-copy.json';
 const run = context.run ?? String(Date.now()),
-  names = recoveryNames(run),
+  names = restoreBackup
+    ? assertRecoveryRepeat(process.env.MARLEVA_RECOVERY_BACKUP_RUN, run)
+    : recoveryNames(run),
   started = Date.now();
 const privateDir = 'artifacts/recovery/' + names.prefix;
 mkdirSync(privateDir, { recursive: true, mode: 0o700 });
 chmodSync(privateDir, 0o700);
 const docker = (args) =>
-  execFileSync('docker', args, { encoding: 'utf8', timeout: 60000, maxBuffer: 20000000 });
+  execFileSync('docker', args, {
+    encoding: 'utf8',
+    timeout: verifyExisting || restoreBackup ? 180000 : 60000,
+    maxBuffer: 20000000,
+  });
 const inspect = (name) => JSON.parse(docker(['inspect', name]))[0];
 const sourceDb = 'supabase_db_' + context.project,
   sourceStorage = 'supabase_storage_' + context.project;
@@ -66,26 +77,29 @@ assert.ok(
 assertRecoverySource(sources[0], sourceDb, sourceDb, '/var/lib/postgresql/data', context.network);
 const storage = sources.find((s) => s.Name === '/' + sourceStorage);
 assertRecoverySource(storage, sourceStorage, sourceStorage, '/mnt', context.network);
-for (const name of Object.values(names)) {
-  for (const kind of ['container', 'volume', 'network']) {
-    const found = execFileSync(
-      'docker',
-      [
-        kind,
-        'ls',
-        ...(kind === 'container' ? ['-a'] : []),
-        '--format',
-        kind === 'container' ? '{{.Names}}' : '{{.Name}}',
-      ],
-      {
-        encoding: 'utf8',
-      },
-    )
-      .trim()
-      .split('\n');
-    assert.ok(!found.includes(name), 'Destino existente: ' + name);
+if (!verifyExisting)
+  for (const name of Object.values(names).filter(
+    (name) => !restoreBackup || ![names.pgBackup, names.storageBackup].includes(name),
+  )) {
+    for (const kind of ['container', 'volume', 'network']) {
+      const found = execFileSync(
+        'docker',
+        [
+          kind,
+          'ls',
+          ...(kind === 'container' ? ['-a'] : []),
+          '--format',
+          kind === 'container' ? '{{.Names}}' : '{{.Name}}',
+        ],
+        {
+          encoding: 'utf8',
+        },
+      )
+        .trim()
+        .split('\n');
+      assert.ok(!found.includes(name), 'Destino existente: ' + name);
+    }
   }
-}
 const sql = (container, text) =>
   docker([
     'exec',
@@ -219,7 +233,7 @@ function copy(from, to) {
   }
 }
 const privateFile = (name, data) => writeFileSync(privateDir + '/' + name, data, { mode: 0o600 });
-const report = {
+let report = {
   date: new Date().toISOString(),
   phase: 'B12 copia física; parcial113-A/G',
   names,
@@ -248,101 +262,189 @@ async function ready(container) {
   }
   throw new Error('PG no quedó listo');
 }
-try {
-  console.log('B12: origen identificado; destino nuevo sin puertos');
-  paused = true;
-  if (!context.isolated)
-    execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'stop', 'api'], {
-      stdio: 'pipe',
-      timeout: 20000,
-    });
-  docker(['stop', '--time', '20', ...services]);
-  before = rows(sourceDb);
-  const availableIds = new Set(
-    sql(sourceDb, 'SELECT id FROM marleva."PrivateFixture" WHERE state=\'available\'').split('\n'),
-  );
-  privateFile('rows-before.json', JSON.stringify(before, null, 2));
-  const pauseStart = Date.now();
-  docker(['stop', '--time', '30', sourceDb]);
-  const stopped = inspect(sourceDb);
-  assert.equal(stopped.State.Running, false);
-  assert.equal(stopped.State.ExitCode, 0, 'PG debe cerrar limpiamente');
-  copy(sourceDb, names.pgBackup);
-  copy(sourceStorage, names.storageBackup);
-  copy(names.pgBackup, names.pgTarget);
-  copy(names.storageBackup, names.storageTarget);
-  const pgManifest = manifest(names.pgBackup),
-    storageManifest = manifest(names.storageBackup);
-  const dataset = JSON.parse(readFileSync(context.fixture, 'utf8'));
-  assert.equal(dataset.files.length, 3, 'Preparar los tres objetos del ensayo');
-  const expectedFiles =
-    repeatWithAttributes && !context.isolated
-      ? dataset.files.filter((file) => availableIds.has(file.id))
-      : dataset.files;
-  assert.ok(expectedFiles.length > 0, 'No acreditar contenido con Storage vacío');
-  for (const file of expectedFiles)
-    assert.ok(storageManifest.includes(file.sha256 + ' '), 'Falta contenido esperado en Storage');
-  report.fixtureBytes = expectedFiles.reduce((sum, file) => sum + file.bytes, 0);
-  report.expectedLiveFixtures = expectedFiles.length;
-  report.cases.storageAttributes = true;
-  privateFile('pg-manifest.txt', pgManifest);
-  privateFile('storage-manifest.txt', storageManifest);
-  report.backup = {
-    pause_ms: Date.now() - pauseStart,
-    pgFiles: pgManifest.trim().split('\n').filter(Boolean).length,
-    storageFiles: storageManifest.trim().split('\n').filter(Boolean).length,
-    pgManifestSha256: createHash('sha256').update(pgManifest).digest('hex'),
-    storageManifestSha256: createHash('sha256').update(storageManifest).digest('hex'),
-  };
-  report.cases.completeVolumeCopy = true;
-  report.sourceProject = context.project;
-  report.fixturePrefix = dataset.prefix;
-  console.log('B12: copias y hashes coinciden; reanudando origen');
-} catch (error) {
-  report.error = error.message;
-  throw error;
-} finally {
-  if (paused) {
-    docker(['start', sourceDb]);
-    await ready(sourceDb);
-    docker(['start', ...services]);
+if (!verifyExisting && !restoreBackup)
+  try {
+    console.log('B12: origen identificado; destino nuevo sin puertos');
+    paused = true;
     if (!context.isolated)
-      execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'start', 'api'], {
+      execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'stop', 'api'], {
         stdio: 'pipe',
         timeout: 20000,
       });
-    report.sourceResumed = true;
+    docker(['stop', '--time', '20', ...services]);
+    before = rows(sourceDb);
+    const availableIds = new Set(
+      sql(sourceDb, 'SELECT id FROM marleva."PrivateFixture" WHERE state=\'available\'').split(
+        '\n',
+      ),
+    );
+    privateFile('rows-before.json', JSON.stringify(before, null, 2));
+    const pauseStart = Date.now();
+    docker(['stop', '--time', '30', sourceDb]);
+    const stopped = inspect(sourceDb);
+    assert.equal(stopped.State.Running, false);
+    assert.equal(stopped.State.ExitCode, 0, 'PG debe cerrar limpiamente');
+    copy(sourceDb, names.pgBackup);
+    copy(sourceStorage, names.storageBackup);
+    copy(names.pgBackup, names.pgTarget);
+    copy(names.storageBackup, names.storageTarget);
+    const pgManifest = manifest(names.pgBackup),
+      storageManifest = manifest(names.storageBackup);
+    const dataset = JSON.parse(readFileSync(context.fixture, 'utf8'));
+    assert.equal(dataset.files.length, 3, 'Preparar los tres objetos del ensayo');
+    const expectedFiles =
+      repeatWithAttributes && !context.isolated
+        ? dataset.files.filter((file) => availableIds.has(file.id))
+        : dataset.files;
+    assert.ok(expectedFiles.length > 0, 'No acreditar contenido con Storage vacío');
+    for (const file of expectedFiles)
+      assert.ok(storageManifest.includes(file.sha256 + ' '), 'Falta contenido esperado en Storage');
+    report.fixtureBytes = expectedFiles.reduce((sum, file) => sum + file.bytes, 0);
+    report.expectedLiveFixtures = expectedFiles.length;
+    report.cases.storageAttributes = true;
+    privateFile('pg-manifest.txt', pgManifest);
+    privateFile('storage-manifest.txt', storageManifest);
+    report.backup = {
+      pause_ms: Date.now() - pauseStart,
+      pgFiles: pgManifest.trim().split('\n').filter(Boolean).length,
+      storageFiles: storageManifest.trim().split('\n').filter(Boolean).length,
+      pgManifestSha256: createHash('sha256').update(pgManifest).digest('hex'),
+      storageManifestSha256: createHash('sha256').update(storageManifest).digest('hex'),
+    };
+    report.cases.completeVolumeCopy = true;
+    report.sourceProject = context.project;
+    report.fixturePrefix = dataset.prefix;
+    console.log('B12: copias y hashes coinciden; reanudando origen');
+  } catch (error) {
+    report.error = error.message;
+    throw error;
+  } finally {
+    if (paused) {
+      docker(['start', sourceDb]);
+      await ready(sourceDb);
+      docker(['start', ...services]);
+      if (!context.isolated)
+        execFileSync('./scripts/tool', ['node', 'scripts/local.mjs', 'start', 'api'], {
+          stdio: 'pipe',
+          timeout: 20000,
+        });
+      report.sourceResumed = true;
+    }
+    privateFile('phase-copy.json', JSON.stringify(report, null, 2));
+    if (report.error)
+      writeFileSync(
+        context.report(verifyExisting ? 'copy-verify-failure' : 'copy-failure'),
+        JSON.stringify(report, null, 2) + '\n',
+      );
   }
-  privateFile('phase-copy.json', JSON.stringify(report, null, 2));
-  if (report.error)
-    writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
+if (verifyExisting) {
+  const previous = JSON.parse(readFileSync(privateDir + '/phase-final.json', 'utf8'));
+  assert.equal(previous.cases.completeVolumeCopy, true);
+  assert.equal(previous.cases.storageAttributes, true);
+  assert.deepEqual(previous.names, names);
+  assert.deepEqual(previous.sourceImages, report.sourceImages);
+  assert.equal(previous.sourceResumed, true);
+  assert.equal(previous.targetStopped, true);
+  const { error: previousError, ...completed } = previous;
+  assert.ok(previousError, 'Reanudación reservada a verificación fallida');
+  report = {
+    ...completed,
+    resumedVerificationAt: new Date().toISOString(),
+    previousFailure: context.report('copy-failure'),
+  };
+  before = JSON.parse(readFileSync(privateDir + '/rows-before.json', 'utf8'));
+}
+if (restoreBackup) {
+  const backupRun = process.env.MARLEVA_RECOVERY_BACKUP_RUN;
+  const backupFolder = 'artifacts/recovery/marleva-b12-' + backupRun;
+  const previous = JSON.parse(
+    readFileSync('tests/results/recovery-integral-' + backupRun + '-copy.json', 'utf8'),
+  );
+  assert.equal(previous.names.prefix, 'marleva-b12-' + backupRun);
+  assert.deepEqual(previous.sourceImages, report.sourceImages);
+  for (const key of [
+    'completeVolumeCopy',
+    'storageAttributes',
+    'allThreeSchemaRows',
+    'storageHashes',
+  ])
+    assert.equal(previous.cases[key], true);
+  for (const volume of [names.pgBackup, names.storageBackup]) {
+    const [info] = JSON.parse(docker(['volume', 'inspect', volume]));
+    assert.equal(info.Labels['marleva.b12.run'], backupRun);
+  }
+  assertRecoveryManifest(
+    readFileSync(backupFolder + '/pg-manifest.txt', 'utf8'),
+    manifest(names.pgBackup),
+  );
+  assertRecoveryManifest(
+    readFileSync(backupFolder + '/storage-manifest.txt', 'utf8'),
+    manifest(names.storageBackup),
+  );
+  copy(names.pgBackup, names.pgTarget);
+  copy(names.storageBackup, names.storageTarget);
+  before = JSON.parse(readFileSync(backupFolder + '/rows-before.json', 'utf8'));
+  privateFile('rows-before.json', JSON.stringify(before, null, 2));
+  report = {
+    ...report,
+    backup: previous.backup,
+    backupProvenance: { run: backupRun, date: previous.date },
+    fixturePrefix: previous.fixturePrefix,
+    fixtureBytes: previous.fixtureBytes,
+    expectedLiveFixtures: previous.expectedLiveFixtures,
+    sourceProject: context.project,
+    cases: { completeVolumeCopy: true, storageAttributes: true },
+    sourceUnchanged: true,
+  };
 }
 try {
-  docker(['network', 'create', '--internal', '--label', 'marleva.b12.run=' + run, names.network]);
-  privateFile('db.env', sources[0].Config.Env.join('\n') + '\n');
-  docker([
-    'run',
-    '-d',
-    '--pull=never',
-    '--name',
-    names.db,
-    '--label',
-    'marleva.b12.run=' + run,
-    '--network',
-    names.network,
-    '--memory=768m',
-    '--cpus=1',
-    '--env-file',
-    privateDir + '/db.env',
-    '--mount',
-    `type=volume,src=${names.pgTarget},dst=/var/lib/postgresql/data`,
-    '--entrypoint',
-    'docker-entrypoint.sh',
-    sources[0].Image,
-    'postgres',
-    '-D',
-    '/etc/postgresql',
-  ]);
+  if (verifyExisting) {
+    const existing = inspect(names.db);
+    assert.equal(existing.State.Running, false);
+    assert.equal(existing.Config.Labels['marleva.b12.run'], run);
+    assert.equal(existing.Image, sources[0].Image);
+    assert.equal(existing.Mounts.length, 1);
+    assert.equal(existing.Mounts[0].Name, names.pgTarget);
+    assert.deepEqual(existing.HostConfig.PortBindings, {});
+    const network = JSON.parse(docker(['network', 'inspect', names.network]))[0];
+    assert.equal(network.Internal, true);
+    assert.equal(network.Labels['marleva.b12.run'], run);
+    assertRecoveryManifest(
+      readFileSync(privateDir + '/pg-manifest.txt', 'utf8'),
+      manifest(names.pgBackup),
+    );
+    assertRecoveryManifest(
+      readFileSync(privateDir + '/storage-manifest.txt', 'utf8'),
+      manifest(names.storageBackup),
+    );
+    docker(['start', names.db]);
+  } else {
+    docker(['network', 'create', '--internal', '--label', 'marleva.b12.run=' + run, names.network]);
+    privateFile('db.env', sources[0].Config.Env.join('\n') + '\n');
+    docker([
+      'run',
+      '-d',
+      '--pull=never',
+      '--name',
+      names.db,
+      '--label',
+      'marleva.b12.run=' + run,
+      '--network',
+      names.network,
+      '--memory=768m',
+      '--cpus=1',
+      '--env-file',
+      privateDir + '/db.env',
+      '--mount',
+      `type=volume,src=${names.pgTarget},dst=/var/lib/postgresql/data`,
+      '--entrypoint',
+      'docker-entrypoint.sh',
+      sources[0].Image,
+      'postgres',
+      '-D',
+      '/etc/postgresql',
+    ]);
+  }
   await ready(names.db);
   const restored = rows(names.db);
   privateFile('rows-restored.json', JSON.stringify(restored, null, 2));
@@ -379,7 +481,10 @@ try {
   console.log('B12: PG restaurado; filas e identidad coinciden y Storage conserva hashes');
 } catch (error) {
   report.error = error.message;
-  writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(
+    context.report(verifyExisting ? 'copy-verify-failure' : 'copy-failure'),
+    JSON.stringify(report, null, 2) + '\n',
+  );
   throw error;
 } finally {
   try {
@@ -388,9 +493,13 @@ try {
   } catch (error) {
     report.targetStopError = error.message;
     report.error ??= 'No se comprobó destino detenido';
-    writeFileSync(context.report('copy-failure'), JSON.stringify(report, null, 2) + '\n');
+    writeFileSync(
+      context.report(verifyExisting ? 'copy-verify-failure' : 'copy-failure'),
+      JSON.stringify(report, null, 2) + '\n',
+    );
   }
-  report.duration_ms = Date.now() - started;
+  if (verifyExisting) report.verification_duration_ms = Date.now() - started;
+  else report.duration_ms = Date.now() - started;
   privateFile('phase-final.json', JSON.stringify(report, null, 2));
   if (!report.error) writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n');
 }

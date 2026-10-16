@@ -3,6 +3,8 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
+// These cases create real Git histories and launch Node; this is orchestration, not an application latency target.
+const cliTestTimeout = 30000;
 const gate = resolve('scripts/coverage-ratchet.mjs');
 function scenario(source, { hit = 0, extra = false, typeOnly = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'marleva-coverage-test-'));
@@ -11,7 +13,8 @@ function scenario(source, { hit = 0, extra = false, typeOnly = false } = {}) {
   const env = Object.fromEntries(
     Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')),
   );
-  const git = (...args) => execFileSync('git', args, { cwd, encoding: 'utf8', env }).trim();
+  const git = (...args) =>
+    execFileSync('git', args, { cwd, encoding: 'utf8', env, timeout: 10000 }).trim();
   try {
     git('init', '--quiet', root);
     git('config', 'user.name', 'Fixture');
@@ -52,25 +55,42 @@ function scenario(source, { hit = 0, extra = false, typeOnly = false } = {}) {
     const result = spawnSync(process.execPath, [gate], {
       cwd,
       encoding: 'utf8',
+      timeout: 10000,
       env: {
         ...env,
         MARLEVA_COVERAGE_BASE: base,
         MARLEVA_COVERAGE_EXTRA: extra ? 'coverage/extra.info' : '',
       },
     });
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBeTypeOf('number');
     return result;
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 }
-it('CI coverage | una línea ejecutable sin hits bloquea, y con hits pasa', () => {
-  expect(scenario('export const calculate = () => 42;\n').status).not.toBe(0);
-  expect(scenario('export const calculate = () => 42;\n', { hit: 1 }).status).toBe(0);
-});
-it('CI coverage | combinar reportes conserva el hit positivo de la misma línea', () => {
-  expect(scenario('export const calculate = () => 42;\n', { extra: true }).status).toBe(0);
-});
-it('CI coverage | tipos puros no ejecutan; lógica nueva sin LCOV sigue bloqueada', () => {
-  expect(scenario('export interface OnlyType { id: string }\n', { typeOnly: true }).status).toBe(0);
-  expect(scenario('export const calculate = () => 42;\n', { typeOnly: true }).status).not.toBe(0);
-});
+it(
+  'CI coverage | una línea ejecutable sin hits bloquea, y con hits pasa',
+  () => {
+    expect(scenario('export const calculate = () => 42;\n').status).not.toBe(0);
+    expect(scenario('export const calculate = () => 42;\n', { hit: 1 }).status).toBe(0);
+  },
+  cliTestTimeout,
+);
+it(
+  'CI coverage | combinar reportes conserva el hit positivo de la misma línea',
+  () => {
+    expect(scenario('export const calculate = () => 42;\n', { extra: true }).status).toBe(0);
+  },
+  cliTestTimeout,
+);
+it(
+  'CI coverage | tipos puros no ejecutan; lógica nueva sin LCOV sigue bloqueada',
+  () => {
+    expect(scenario('export interface OnlyType { id: string }\n', { typeOnly: true }).status).toBe(
+      0,
+    );
+    expect(scenario('export const calculate = () => 42;\n', { typeOnly: true }).status).not.toBe(0);
+  },
+  cliTestTimeout,
+);

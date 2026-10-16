@@ -4,7 +4,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
 const active = JSON.parse(readFileSync('artifacts/recovery/active-run-006.json', 'utf8'));
 Object.assign(process.env, {
-  MARLEVA_RECOVERY_RUN: active.run,
+  MARLEVA_RECOVERY_RUN: process.env.MARLEVA_RECOVERY_RUN ?? active.run,
   MARLEVA_RECOVERY_CHECK: '1',
   MARLEVA_STACK_CONTEXT: 'b12-source-006',
 });
@@ -79,7 +79,17 @@ else if (stage === 'copy') {
   run('tests/fixtures/recovery-keys.mjs');
   run('tests/fixtures/recovery-stack.mjs');
   await sourceApi(() => run('tests/integration/backend/M1/recovery-provider.mjs'));
+} else if (stage === 'ledger') {
+  await sourceApi(() => run('tests/integration/backend/M1/recovery-after-copy.mjs'));
+} else if (stage === 'target') {
+  run('tests/fixtures/recovery-keys.mjs');
+  run('tests/fixtures/recovery-stack.mjs');
+} else if (stage === 'provider') {
+  await sourceApi(() => run('tests/integration/backend/M1/recovery-provider.mjs'));
 } else if (stage === 'outbox') run('tests/integration/backend/M1/recovery-integral-outbox.mjs');
 else if (stage === 'operator') run('tests/integration/backend/M1/recovery-api.mjs');
-else throw new Error('Etapa de ensayo desconocida');
-console.log('B12 integral: etapa ' + stage + ' comprobada en ejecución ' + active.run);
+else if (stage === 'operator-resume') {
+  process.env.MARLEVA_RECOVERY_RESUME_OPERATOR = '1';
+  run('tests/integration/backend/M1/recovery-api.mjs');
+} else throw new Error('Etapa de ensayo desconocida');
+console.log('B12 integral: etapa ' + stage + ' comprobada en ejecución ' + context.run);

@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-16T15:11:28.594Z",
+  "phase": "B12 copia física; parcial113-A/G",
+  "names": {
+    "prefix": "marleva-b12-1792118849918",
+    "network": "marleva-b12-1792118849918-private",
+    "db": "marleva-b12-1792118849918-db",
+    "pgBackup": "marleva-b12-1792118849918-backup-pg",
+    "storageBackup": "marleva-b12-1792118849918-backup-storage",
+    "pgTarget": "marleva-b12-1792118849918-target-pg",
+    "storageTarget": "marleva-b12-1792118849918-target-storage"
+  },
+  "sourceImages": [
+    {
+      "name": "/supabase_db_marleva-b12-source-006",
+      "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108"
+    },
+    {
+      "name": "/supabase_storage_marleva-b12-source-006",
+      "image": "sha256:6a32896ae2d1ae2ea2d05ecaf6ed6c8a6b091739b469a8cf860ee89b2604d28f"
+    },
+    {
+      "name": "/supabase_rest_marleva-b12-source-006",
+      "image": "sha256:d155c6718ed9a9f990d159a2ab7c0a3f16944dbb6d0a0344557421042acfe0df"
+    },
+    {
+      "name": "/supabase_inbucket_marleva-b12-source-006",
+      "image": "sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d"
+    },
+    {
+      "name": "/supabase_auth_marleva-b12-source-006",
+      "image": "sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b"
+    },
+    {
+      "name": "/supabase_kong_marleva-b12-source-006",
+      "image": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d"
+    }
+  ],
+  "cases": {
+    "storageAttributes": true,
+    "completeVolumeCopy": true,
+    "allThreeSchemaRows": true,
+    "accountIdentitySessionLinks": true
+  },
+  "limits": [
+    "Sin API Auth/Storage/permisos/revocación/borrado posterior/MFA/cliente",
+    "Sin RPO/RTO ni capacidad productiva; recursos helper configurados, no CPU/RAM medidas"
+  ],
+  "fixtureBytes": 1050624,
+  "expectedLiveFixtures": 3,
+  "backup": {
+    "pause_ms": 21236,
+    "pgFiles": 1612,
+    "storageFiles": 3,
+    "pgManifestSha256": "eb11725f01616c8abdfbfa118de4d1ef148eeda7c0e48b81b402b6800c502370",
+    "storageManifestSha256": "b6678b70702f0261bf9ecd5a380d78c078d155da396132f91b70b6747d73c498"
+  },
+  "sourceProject": "marleva-b12-source-006",
+  "fixturePrefix": "b12-1792118117954",
+  "sourceResumed": true,
+  "schemas": [
+    {
+      "schema": "marleva",
+      "tables": 14,
+      "rows": 86
+    },
+    {
+      "schema": "auth",
+      "tables": 27,
+      "rows": 140
+    },
+    {
+      "schema": "storage",
+      "tables": 10,
+      "rows": 78
+    }
+  ],
+  "error": "spawnSync docker ETIMEDOUT"
+}

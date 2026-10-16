@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-16T16:25:26.516Z",
+  "copyPrefix": "marleva-b12-1792167720153",
+  "cases": {
+    "originCredentialsStillValid": true,
+    "deletedObjectWasPresentInCopy": true,
+    "storageDownKeepsIntentAndBlocksRead": true,
+    "postCopyDeletionReapplied": true,
+    "providerOldAccessAndRefreshRejected": true,
+    "publicJwksHasNoPrivateMaterial": true,
+    "oldMarlevaSessionsRejected": true,
+    "newOtpPreservesAccountIds": true,
+    "restoredOwnFilesAndOtherPublicDenial": 2,
+    "unexpiredOldCapabilityRejected": true,
+    "deletedObjectCannotReappear": true
+  },
+  "limits": [
+    "Operadores/MFA administrativo, cliente, cola, migración interrumpida y PF113 pendientes",
+    "Worker limitado al borrado del fixture; dueAt adelantado tras caída/reinicio explícitamente"
+  ]
+}

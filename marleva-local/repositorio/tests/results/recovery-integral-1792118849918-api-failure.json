@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-16T15:27:52.214Z",
+  "id": "MAR-M1-IT-BE-114–121-HTTP",
+  "copyPrefix": "marleva-b12-1792118849918",
+  "cases": {
+    "prismaDeployTargetOnly": true,
+    "requestReadApprovalPrivacyIdempotencyAndSessionRevocation": true,
+    "providerDownKeepsDurablePending": true,
+    "restartedWorkerConfirmsLostFactorAbsent": true
+  },
+  "limits": [
+    "Solo backend/API en proveedor aislado; pantallas/Safari/Android/iOS/aceptación visual pendientes",
+    "Personas/roles del ensayo ficticios, no autorización de operadores reales"
+  ],
+  "migrationSha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0",
+  "result": "FAIL",
+  "error": "Fallo de integración; detalle privado",
+  "cleanup": "API del ensayo cerrada; operadores restaurados conservados para pruebas siguientes; consultar sus estados y roles reales antes de continuar; Auth destino activo"
+}

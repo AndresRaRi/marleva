@@ -1,6 +1,6 @@
 # Avance de Marleva por criterios funcionales
 
-Fecha: 15 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
+Fecha: 16 de octubre de 2026, America/Merida. Fuente única de porcentajes. Línea base: 14 criterios de la matriz M1 y sus secuencias 001–014, incluido el soporte de base necesario para M1. No contar pruebas, archivos o commits.
 
 ## Método
 
@@ -17,19 +17,19 @@ Implementación: criterio cuya salida funcional descrita abajo tiene código dis
 | UC005 | Iniciar cambio de correo propio con conflictos controlados | Sí | No | AccountService.emailChange; API/unitarias; recorrido completo UI/nativo pendiente |
 | UC006 | Confirmar ambos buzones, conservar ID, revocar y avisar | Sí | No | confirmEmail/finishEmailChange/reconcile; API/unitarias; caídas/recorridos completos restantes |
 | UC007 | Segundo factor básico del operador y nivel de garantía AAL2 | Sí | No | enroll/verifyFactor/operator; API/unitarias; plataforma/rol/revisión completos pendientes; recuperación en UC014 |
-| UC008 | Avisos durables y navegación paginada propia en cliente | Sí | No | Cursor/outbox y NoticePages/AccountNotices conectados a API009. CI902308e prueba backend, reanudación web y paginación con respuestas controladas; paginación integral PG/Auth/navegador y plataformas pendientes |
-| UC009 | Recuperar acceso y retomar acción interna segura | Sí | No | M1App/SafeReturn/AccountWorkspace enlazan intención en memoria, nueva autenticación y consultas propias API025–027; unitarias de misma/otra identidad y cancelación en CI902308e. Recorridos integrales por acción/plataforma pendientes |
+| UC008 | Avisos durables y navegación paginada propia en cliente | Sí | No | Cursor/outbox y NoticePages/AccountNotices conectados a API009. CI38923822365 comprueba paginación PG/Auth/Chrome real, recarga y retorno a Avisos tras OTP; plataformas y demás ramas pendientes |
+| UC009 | Recuperar acceso y retomar acción interna segura | Sí | No | M1App/SafeReturn/AccountWorkspace enlazan intención en memoria, nueva autenticación y consultas propias API025–027; unitarias de misma/otra identidad y cancelación en CI902308e. Retorno a Avisos con misma/otra identidad comprobado en CI38923822365; demás acciones/plataformas pendientes |
 | UC010 | Salud/configuración/dependencias locales y fallo recuperable | Sí | No | HealthController/config/adaptador; completar caídas/rendimiento/regresión de plataformas |
 | UC011 | Permiso/lectura/borrado de archivo ficticio privado con integridad | Sí | No | B09 código y actas files/recovery; sin pantalla M2 exigida; aceptación/recuperación completa pendiente |
 | UC012 | Simulador aislado: idempotencia, eventos, fallos y reembolso | Sí | No | PaymentSimulator y pruebas; no acredita M6; completar contrato/medición/aceptación aplicables |
-| UC013 | Restauración/repetibilidad sin revivir accesos o borrados | No | No | Fases B12 y cola restaurada probadas en ensayos separados; plataformas/ensayo integral restantes |
-| UC014 | Recuperación administrativa MFA con otro autorizado | Sí | No | Siete operaciones backend integradas y roles persistidos; recovery-api.json y recovery-schema.json. Cliente parcial implementado; recorrido integral de UI, plataformas y aceptación pendientes |
+| UC013 | Restauración/repetibilidad sin revivir accesos o borrados | Sí | No | Herramientas integrales, ensayo1792118849918 y repetición1792167720153 enlazan copia/Auth/Storage/ledger/permisos/revocación/cola/cliente; Prisma real separado por diseño. Plataformas, mediciones restantes y aceptación pendientes |
+| UC014 | Recuperación administrativa MFA con otro autorizado | Sí | No | Siete operaciones backend integradas y roles persistidos; recovery-api.json y recovery-schema.json. Recuperación integral UI Chrome con otro revisor, OTP/TOTP/capacidad y retorno comprobada en1792167720153; plataformas y aceptación pendientes |
 
-Implementación M1 = 13/14 = 92,86%. Barra: █████████░. Aceptación M1 = 0/14 = 0%. El numerador de aceptación cero refleja criterios completos aún no entregados/aceptados; no ausencia de código o pruebas. El encabezado muestra 92,86%, nunca la cobertura como avance funcional.
+Implementación M1 = 14/14 = 100%. Aceptación M1 = 0/14 = 0%. El numerador de aceptación cero refleja criterios completos aún no entregados/aceptados; no ausencia de código o pruebas. El 100% de salidas implementadas no acredita M1 terminado ni su aceptación.
 
 | Módulo | Implementación | Aceptación | Estado |
 |---|---|---|---|
-| M1 Acceso/cuenta | 13/14: 92,86% | 0/14: 0% | Criterios arriba; pendientes reales |
+| M1 Acceso/cuenta | 14/14: 100% | 0/14: 0% | Criterios arriba; pendientes reales |
 | M2 Comunidad/oferentes | 0% | 0% | Diseño; sin implementación del módulo |
 | M3 Catálogo | 3/9: 33,33% | 0/9: 0% | Catálogo público aislado; criterios abajo |
 | M4 Compra directa | 0% | 0% | Diseño; sin implementación |
@@ -85,3 +85,26 @@ Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptació
 15-10-2026, incremento gestión: UC004/005/006/007/009 tienen recorridos completos en composición aislada con identidad ficticia (87 pruebas M3 y nueve comprobaciones de navegador). Se conserva el numerador3/9 por criterio de recorrido autenticado integrado con proveedor real; el avance aislado se describe en evidencia, sin presentarlo como aceptación. Autorización de008 histórica: consolidación009 conserva el trabajo; el usuario autorizó posteriormente merge del conjunto a main, ejecutado mediante PR8/9 tras CI y revisión final, sin borrados ni despliegue.
 
 Conciliación documental009,15-10-2026: la tabla anterior aún descontabaUC008/009 por pruebas pendientes. Cotejo de API009/025–027, M1App, SafeReturn, AccountWorkspace y NoticePages muestra sus salidas funcionales implementadas. Se aplica el mismo método de esta página, sin cambiar criterios/pesos: implementación13/14; aceptación permanece0/14 yUC013 sigue abierto. No es funcionalidad nueva ni acredita las pruebas faltantes, B12 o aceptación. Evidencia de código y CI902308e/38847365871; matriz M1 concilia los límites de cada prueba.
+
+## Panorama funcional vigente —16 de octubre de 2026
+
+Este panorama responde a la solicitud de distinguir código, funcionamiento comprobado y cierre real. El100% corresponde exclusivamente a salidas implementadas de M1; no representa el avance total de Marleva ni una aplicación lista para vecinos. La aceptación integral de M1 permanece pendiente.
+
+| Entrega | Qué funciona con evidencia | Qué impide darla por terminada |
+|---|---|---|
+| Consolidación del trabajo anterior | Historiales integrados en mainef8b104; PR8/9/10/11 fusionados y CI propio38857102789 aprobado | No hay pendiente de volver a integrar esos mismos historiales. Los cambios nuevos de continuación usan PR12 y requieren sus propias pruebas/revisión |
+| M1: acceso y cuenta | Pedir/verificar OTP, consultar cuenta propia y cerrar sesión: API y Chrome reales; recorrido básico Android en emulador. Sesiones/roles/cuotas tienen pruebas adicionales | Combinaciones restantes, renovación/revocación entre dispositivos y plataformas aplicables; no aceptación integral |
+| M1: avisos y retorno | Código de paginación y retorno seguro integrado; backend real y pruebas controladas del cliente aprobados anteriormente | Recorrido PG/Auth/Chrome aprobado en CI38923822365; guardia adicional revisada en3e99253. Retorno de las demás acciones y plataformas pendientes |
+| M1: cambio de correo | API de ambos buzones, conservación de identidad, revocación y avisos con pruebas; cliente implementado | Chrome real CI38930795913 comprueba ambos buzones, error, recarga, identidad y revocación entre sesiones; plataformas restantes pendientes |
+| M1: operador/MFA/recuperación | Segundo factor y siete operaciones de recuperación reales en backend; pantallas parciales existentes | Recorrido completo Chrome con otro revisor, retorno y nuevo factor pasó en1792167720153; plataformas y aceptación pendientes |
+| B09/archivos privados | Lectura propia, denegación a otra cuenta/público, integridad y borrado con trabajador probados | Recuperación integrada con B12; no es un módulo de documentos vecinales M2 terminado |
+| B12/restauración | Ensayos parciales de PG/Auth/Storage, atributos, permisos, revocación y cola existen | Contexto1792118849918: copia/integridad, ledger posterior, permisos/revocación/OTP, cola restaurada y recuperación HTTP del operador pasaron; fallos y reanudaciones conservados. Prisma interrumpido/resuelto/reaplicado pasó en42.334s con cinco migraciones originales intactas. Cliente Chrome pasó en el primario; repetición1792167720153 conserva el mismo backup y pasa copia/proveedor/cola/cliente/MFA UI. Plataformas/mediciones restantes y aceptación pendientes |
+| M3/catálogo público aislado | Búsqueda/filtros/páginas, detalle y perfil de oferente con API/PG/web; elegibilidad ficticia | Identidad real M1, elegibilidad M2 y revisión M8. Gestión/fotos probadas con identidad inyectada no se presentan como integración real |
+| M2/M8 | Diseño documental, contratos/modelos y validaciones documentales | Implementación funcional, aceptación visual y condiciones D07/A8, D08-R y D09-R |
+| M4/M5/M6/M7/M9/M10 | Diseño y componentes de soporte descritos en sus fuentes; simulador de dinero aislado | Módulos funcionales no implementados. El simulador no prueba compras, cobros ni reembolsos reales |
+
+Orden de cierre activo: (1) integrar PR13 con correcciones y evidencia finales tras CI/revisión, (2) plataformas/manual/revisión y ramas restantes de matriz. PR12 ya integrada; correo/revocación y core B12 repetido/MFA UI Chrome comprobados. Resolver fallos concretos sin rehacer controles aprobados. No abrir módulos nuevos ni trabajo paralelo. Si hay dependencia del usuario o equipo físico, identificarla y continuar únicamente lo independiente. Las demás necesidades de producto siguen visibles; no se ocultan bajo el avance de M1.
+
+Usuario confirmó16-10-2026 haber reemplazado Fuentes00/01/02 y configuración. Es confirmación del usuario, sin verificación directa de la carga compartida. Autorizó excepción limitada para retirar el archivo `delete-after-copy` y el factor MFA ficticio del ensayo B12; demás archivos, ramas, datos y copias se conservan.
+
+Actualización16-10-2026 por evidencia: UC013 ahora tiene la salida funcional implementada, por eso14/14 de implementación; no cambia el método/pesos ni acredita aceptación. Correo y revocación entre sesiones reales pasaron en CI38930795913/8b9463e;55avisos/3páginas/3solicitudes y retorno misma/otra cuenta,2785ms excluyendo esperaOTP en ese ensayo. B12 primario+repetición y MFA UI según procedimiento/actas. Nueva corrección funcional de carrera MFA y claves de paneles tiene regresión28/28; CI final propio pendiente al guardar este registro. Maincbc58d2 tiene CI38927150430 aprobado; PR12 integrada. PR13 contiene el siguiente incremento y requiere sus controles finales antes del merge autorizado. No comenzar otro módulo; prioridad restante: integración final y plataformas/manual de M1.

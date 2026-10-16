@@ -458,3 +458,41 @@ it('MAR-M1-IT-FE-110-CONTROLS | controles bloqueados comunican estado y conserva
     expect(button.props.accessibilityState.disabled).toBe(Boolean(button.props.disabled));
   }
 });
+
+it('MAR-M1-IT-FE-107-PERMISSION-RACE | consultar permiso conserva la lectura pendiente del factor', async () => {
+  active = { ...account('a'), operador: true };
+  let finish;
+  const original = mock.api.getMockImplementation();
+  mock.api.mockImplementation((path, ...args) => {
+    if (path === '/v1/auth/mfa/factors')
+      return new Promise((resolve) => {
+        finish = resolve;
+      });
+    if (path === '/v1/operator/access')
+      return Promise.reject(failure(403, 'MFA', 'Verifica segundo factor'));
+    return original(path, ...args);
+  });
+  await mount();
+  await press('Comprobar permiso de operador');
+  await act(async () =>
+    finish({ items: [{ id: 'restored-factor', nombre: 'Restaurado', estado: 'verified' }] }),
+  );
+  factorMode = 'valid';
+  await fill('Código del segundo factor', '123456');
+  await press('Verificar segundo factor');
+  expect(mock.api.mock.calls.filter(([path]) => path === '/v1/auth/mfa/factors')).toHaveLength(1);
+  expect(requests.find((item) => item.path === '/v1/auth/mfa/verifications')?.body.factor_id).toBe(
+    'restored-factor',
+  );
+});
+
+it('MAR-M1-IT-FE-103-KEYS | cuenta y actualización conservan identidades distintas de paneles', async () => {
+  const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+  try {
+    await mount();
+    await press('Actualizar cuenta');
+    expect(errors.mock.calls.some((call) => String(call[0]).includes('same key'))).toBe(false);
+  } finally {
+    errors.mockRestore();
+  }
+});

@@ -157,7 +157,7 @@ try {
     '-v',
     'ON_ERROR_STOP=1',
     '-c',
-    'BEGIN; DELETE FROM auth.refresh_tokens; DELETE FROM auth.sessions; DELETE FROM auth.one_time_tokens; COMMIT;',
+    'BEGIN; UPDATE auth.refresh_tokens SET revoked=true WHERE revoked IS DISTINCT FROM true; COMMIT;',
   ]);
   for (const entry of originTokens) {
     const old = await targetProvider.auth.getUser(entry.t.access_token);
