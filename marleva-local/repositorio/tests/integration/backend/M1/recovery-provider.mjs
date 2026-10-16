@@ -1,12 +1,14 @@
+import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-process.loadEnvFile(new URL('../../../../.env', import.meta.url));
+process.loadEnvFile(context.envFile ?? new URL('../../../../.env', import.meta.url));
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
-const copy = JSON.parse(readFileSync('tests/results/recovery-copy.json', 'utf8'));
-const fixture = JSON.parse(readFileSync('artifacts/recovery/fixtures.private.json', 'utf8'));
-const ledger = JSON.parse(readFileSync('artifacts/recovery/deletions.private.json', 'utf8'))[0];
+const copy = JSON.parse(readFileSync(context.report('copy'), 'utf8'));
+const fixture = JSON.parse(readFileSync(context.fixture, 'utf8'));
+const ledger = JSON.parse(readFileSync(context.ledger, 'utf8'))[0];
 assert.equal(ledger.copyPrefix, copy.names.prefix);
 const folder = 'artifacts/recovery/' + copy.names.prefix + '/provider';
 const stack = JSON.parse(readFileSync(folder + '/stack.private.json', 'utf8'));
@@ -28,7 +30,7 @@ const sourceDb = database(),
   originTokens = [];
 try {
   for (const actor of fixture.actors) {
-    const response = await fetch('http://127.0.0.1:3000/v1/me', {
+    const response = await fetch(context.sourceApi + '/v1/me', {
       headers: { authorization: 'Bearer ' + actor.credential },
     });
     assert.equal(response.status, 200, 'Control positivo en origen');
@@ -288,10 +290,7 @@ try {
   );
 } catch (error) {
   report.error = error.message;
-  writeFileSync(
-    'tests/results/recovery-provider-failure.json',
-    JSON.stringify(report, null, 2) + '\n',
-  );
+  writeFileSync(context.report('provider-failure'), JSON.stringify(report, null, 2) + '\n');
   throw error;
 } finally {
   if (storageStopped) docker(['start', stack.names.storage]);
@@ -302,5 +301,5 @@ try {
   }
   await db.$disconnect();
   if (!report.error)
-    writeFileSync('tests/results/recovery-provider.json', JSON.stringify(report, null, 2) + '\n');
+    writeFileSync(context.report('provider'), JSON.stringify(report, null, 2) + '\n');
 }

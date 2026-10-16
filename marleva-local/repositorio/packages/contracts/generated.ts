@@ -421,6 +421,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/email-changes/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Recuperar el estado del último cambio de correo propio
+         * @description Consulta solo cuenta propia con sesión vigente; comprueba revocación, estado y permiso actual. Renueva token del proveedor bajo lease si procede.
+         */
+        get: operations["MAR_M1_API_025"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa-recoveries/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Consultar recuperación activa propia después de volver a autenticar; no admite identificador de otra cuenta ni devuelve capacidades. */
+        get: operations["MAR_M1_API_026"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/mfa/factors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar factores TOTP propios sin secretos
+         * @description Consulta solo cuenta propia con sesión vigente; comprueba revocación, estado y permiso actual. Renueva token del proveedor bajo lease si procede.
+         */
+        get: operations["MAR_M1_API_027"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -516,6 +573,49 @@ export interface components {
             }[];
             /** @description Frontera exacta del último aviso devuelto si existe otro; null al terminar. */
             next_cursor: string | null;
+        };
+        CurrentEmailChange: {
+            cambio: null | {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                account_id: string;
+                /** Format: email */
+                correo_actual: string;
+                /** Format: email */
+                correo_nuevo: string;
+                actual_confirmado: boolean;
+                nuevo_confirmado: boolean;
+                /** @enum {string} */
+                estado: "enviando" | "verificar_ambos_buzones" | "verificando" | "conciliando" | "completo" | "fallido" | "vencido";
+                /** Format: date-time */
+                vence_en: string;
+            };
+        };
+        EmailChangeProgress: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            account_id: string;
+            /** Format: email */
+            correo_actual: string;
+            /** Format: email */
+            correo_nuevo: string;
+            actual_confirmado: boolean;
+            nuevo_confirmado: boolean;
+            /** @enum {string} */
+            estado: "enviando" | "verificar_ambos_buzones" | "verificando" | "conciliando" | "completo" | "fallido" | "vencido";
+            /** Format: date-time */
+            vence_en: string;
+        };
+        MfaFactors: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                nombre: string;
+                /** @enum {string} */
+                estado: "verified" | "unverified";
+            }[];
         };
     };
     responses: never;
@@ -4646,6 +4746,564 @@ export interface operations {
                         mensaje: string;
                         request_id: string;
                         accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_025: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con Origin se rechaza; no es autorización por CORS. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sin Origin usa native. Cabecera identifica transporte, no concede permiso. */
+                "x-marleva-client"?: "native";
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Operación completada según estado devuelto */
+            200: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        cambio: null | {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            account_id: string;
+                            /** Format: email */
+                            correo_actual: string;
+                            /** Format: email */
+                            correo_nuevo: string;
+                            actual_confirmado: boolean;
+                            nuevo_confirmado: boolean;
+                            /** @enum {string} */
+                            estado: "enviando" | "verificar_ambos_buzones" | "verificando" | "conciliando" | "completo" | "fallido" | "vencido";
+                            /** Format: date-time */
+                            vence_en: string;
+                        };
+                    };
+                };
+            };
+            /** @description Solicitud mal formada */
+            400: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Sesión/código inválido o vencido */
+            401: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Origen, CSRF, rol, MFA o reautenticación requeridos */
+            403: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Ruta/recurso no disponible */
+            404: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Conflicto de estado o cuenta */
+            409: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Espera o límite de abuso */
+            429: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    /** @description Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos reales restantes. */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Dependencia temporal no disponible */
+            503: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_026: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web: origen exacto obligatorio para mutación; Bearer conOrigin denegado. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sinOrigin usa native; no concede privilegios. */
+                "x-marleva-client"?: "native";
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Estado del proceso; aceptación no significa factor recuperado */
+            200: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        recuperacion: null | {
+                            /** Format: uuid */
+                            id: string;
+                            /** @enum {string} */
+                            state: "requested" | "approved" | "executing" | "provider_pending" | "reenrollment" | "completed" | "rejected" | "expired";
+                            version: number;
+                        };
+                    };
+                };
+            };
+            /** @description Formato inválido */
+            400: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Sesión/capacidad vencida */
+            401: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Permiso/origen/CSRF/AAL/actor propio */
+            403: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Recurso no disponible o ajeno */
+            404: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Versión/estado/conflicto */
+            409: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Espera/abuso */
+            429: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    /** @description Segundos restantes reales; no valor fijo */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+            /** @description Dependencia caída, consultar proceso antes de repetir */
+            503: {
+                headers: {
+                    /** @description Nunca cachear secretos/estado privado */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia sin datos sensibles */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id: string;
+                        accion_recuperacion: string;
+                    };
+                };
+            };
+        };
+    };
+    MAR_M1_API_027: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con Origin se rechaza; no es autorización por CORS. */
+                Origin?: "https://localhost:8443";
+                /** @description Móvil sin Origin usa native. Cabecera identifica transporte, no concede permiso. */
+                "x-marleva-client"?: "native";
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Operación completada según estado devuelto */
+            200: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: {
+                            /** Format: uuid */
+                            id: string;
+                            nombre: string;
+                            /** @enum {string} */
+                            estado: "verified" | "unverified";
+                        }[];
+                    };
+                };
+            };
+            /** @description Solicitud mal formada */
+            400: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Sesión/código inválido o vencido */
+            401: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Origen, CSRF, rol, MFA o reautenticación requeridos */
+            403: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Ruta/recurso no disponible */
+            404: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Conflicto de estado o cuenta */
+            409: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Campos inválidos */
+            422: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Espera o límite de abuso */
+            429: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    /** @description Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos reales restantes. */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
+                    };
+                };
+            };
+            /** @description Dependencia temporal no disponible */
+            503: {
+                headers: {
+                    /** @description Datos privados no almacenables */
+                    "Cache-Control"?: "no-store";
+                    /** @description Referencia de soporte sin datos personales; falta en ciertos errores previos al middleware y proxy, por corregir */
+                    "x-request-id"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        codigo: string;
+                        mensaje: string;
+                        request_id?: string;
+                        accion_recuperacion?: string;
                     };
                 };
             };

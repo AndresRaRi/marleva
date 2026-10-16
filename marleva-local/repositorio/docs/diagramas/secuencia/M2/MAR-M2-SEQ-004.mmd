@@ -1,0 +1,42 @@
+%% MAR-M2-SEQ-004: Consulta, corrección y reconsideración
+%% 15-10-2026. Objetivo documental. IDs previos conservados, sin implementación.
+sequenceDiagram
+actor T as Titular
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+T->>A: S010 Consultar expediente propio y resolución visible
+A->>I: S020 Autorizar titular vigente
+A->>D: S030 Leer historial mínimo por cursor y decisiones enlazadas
+A->>D: S035 Leer versión o motivo visible exactos, sin reconstruir privados suprimidos
+A-->>T: S040 Estado y motivo pertinente, sin nota interna
+T->>A: S050 Preparar nueva versión vinculada a decisión y envío previos
+A->>I: S055 Reautorizar titular, nunca recuperar cuenta con evidencia vecinal
+A->>D: S130 Bloquear expediente, casos y documentos en orden compartido, revalidar no borrado
+A->>D: S060 Bloquear expediente y antecedente, CAS y comprobar última decisión compatible
+alt Estado o antecedente cambió, o ya hay borrador
+ A-->>T: S065 409, consultar borrador actual sin duplicar versión
+else Corrección o reconsideración preparable
+ opt Evidencia previa borrada, vencida, bloqueada o no reutilizable
+  A-->>T: S070 Pedir nueva carga mediante UC002, sin recuperar bytes borrados
+ end
+ A->>D: S135 Preparar no impugna ni reinicia C14, no copiar documentos automáticamente
+ A->>D: S080 Crear número siguiente, origen y vínculo exacto, privado editable y recibo juntos
+ A-->>T: S090 Mismo expediente, borrador nuevo y declaración vecinal por confirmar
+ opt Titular elige reutilizar documento anterior todavía admisible
+  T->>A: S092 Vincular documento previo exacto, slot y revisión actual
+  A->>D: S094 Revalidar dueño, fuente, fecha, integridad, privacidad y conservación bajo exclusión
+  alt Reutilización dejó de ser admisible
+   A-->>T: S096 No enlazar, sustituir mediante UC002
+  else Enlace válido
+   A->>D: S098 Reemplazar enlace de borrador y registrar finalidad legítima, sin renovar fecha o plazo por rutina
+  end
+ end
+ T->>A: S100 Reenviar por UC003, motivo si reconsideración y misma clave al reintentar
+ A->>D: S105 Revalidar origen y evidencia actuales, congelar la nueva versión
+ opt Origen reconsideración
+  A->>D: S140 Registrar challenged y evento en commit del envío, conservar resolución y primera fecha
+ end
+ A->>D: S110 Confirmar vínculo a resolución anterior y nuevo envío pendiente, sin sobrescribir historia
+ A-->>T: S120 Pendiente, sin elegibilidad provisional ni plazo de impugnación inventado
+end

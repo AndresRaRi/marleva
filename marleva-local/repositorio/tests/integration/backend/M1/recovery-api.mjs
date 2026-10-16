@@ -1,15 +1,17 @@
+import { recoveryContext } from '../../../fixtures/recovery-context.mjs';
+const context = recoveryContext();
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { generate } from 'otplib';
 import path from 'node:path';
-process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? '.env');
+process.loadEnvFile(process.env.MARLEVA_ENV_FILE ?? context.envFile ?? '.env');
 const ci = process.env.MARLEVA_CI_STACK === '1';
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
 const copy = ci
   ? { names: { prefix: 'ci-no-restoration' } }
-  : JSON.parse(readFileSync('tests/results/recovery-copy.json'));
+  : JSON.parse(readFileSync(context.report('copy')));
 const stack = ci
   ? {
       copyPrefix: copy.names.prefix,
@@ -105,28 +107,44 @@ try {
   admin = identityAdmin();
   const { secret, digest, seal } = await import('../../../../apps/api/dist/security.js');
   const prepare = async (name, grantedBy) => {
-    const email = run + '-' + name + '@example.test';
+    const original = context.isolated
+      ? JSON.parse(readFileSync(context.fixture)).operators.find((actor) => actor.name === name)
+      : null;
+    const existing = original
+      ? await db.account.findUniqueOrThrow({ where: { id: original.accountId } })
+      : null;
+    const email = existing?.email ?? run + '-' + name + '@example.test';
     const link = await admin.auth.admin.generateLink({ type: 'magiclink', email });
     assert.ok(!link.error);
-    prepared.push(link.data.user.id);
+    if (!original) prepared.push(link.data.user.id);
     const verified = await identity().auth.verifyOtp({
       type: link.data.properties.verification_type,
       token_hash: link.data.properties.hashed_token,
     });
     assert.ok(!verified.error && verified.data.session);
-    const account = await db.account.create({ data: { authId: verified.data.user.id, email } });
-    await db.roleAssignment.create({
-      data: { accountId: account.id, role: 'm1_operator', reason: 'Fixture ' + run },
-    });
-    if (grantedBy)
+    const account =
+      existing ?? (await db.account.create({ data: { authId: verified.data.user.id, email } }));
+    assert.equal(account.authId, verified.data.user.id);
+    if (!original) {
       await db.roleAssignment.create({
-        data: {
-          accountId: account.id,
-          role: 'm1_access_admin',
-          grantedBy,
-          reason: 'Fixture de revisión ' + run,
-        },
+        data: { accountId: account.id, role: 'm1_operator', reason: 'Fixture ' + run },
       });
+      if (grantedBy)
+        await db.roleAssignment.create({
+          data: {
+            accountId: account.id,
+            role: 'm1_access_admin',
+            grantedBy,
+            reason: 'Fixture de revisión ' + run,
+          },
+        });
+    } else {
+      assert.ok(
+        await db.roleAssignment.findFirst({
+          where: { accountId: account.id, role: 'm1_operator', revokedAt: null },
+        }),
+      );
+    }
     const token = secret();
     await db.session.create({
       data: {
@@ -136,7 +154,7 @@ try {
         providerTokens: seal(tokens(verified.data.session), process.env.TOKEN_ENCRYPTION_KEY),
       },
     });
-    return { account, token };
+    return { account, token, original };
   };
   const owner = await prepare('owner'),
     reviewer = await prepare('reviewer', owner.account.id);
@@ -147,6 +165,30 @@ try {
     await import('../../../../apps/api/dist/modules/m1/application/use-cases/process-mfa-recoveries.js');
   const processRecovery = app.get(ProcessMfaRecoveries);
   const factor = async (actor) => {
+    if (actor.original) {
+      const listed = await call('/auth/mfa/factors', 'GET', undefined, actor.token);
+      expectStatus(listed, 200, 'Factores conservados desde copia');
+      assert.ok(
+        listed.body.items.some(
+          (item) => item.id === actor.original.factorId && item.estado === 'verified',
+        ),
+      );
+      expectStatus(
+        await call(
+          '/auth/mfa/verifications',
+          'POST',
+          {
+            factor_id: actor.original.factorId,
+            codigo: await generate({ secret: actor.original.factorSecret }),
+          },
+          actor.token,
+        ),
+        201,
+        'TOTP conservado',
+      );
+      return { id: actor.original.factorId };
+    }
+
     const enrolled = await call('/auth/mfa/enrollments', 'POST', {}, actor.token);
     expectStatus(enrolled, 201, 'Enrolamiento básico');
     expectStatus(
@@ -179,6 +221,23 @@ try {
   );
   expectStatus(result, 202, 'Solicitud');
   const recoveryId = result.body.id;
+  const ownCurrent = await call('/auth/mfa-recoveries/current', 'GET', undefined, owner.token);
+  expectStatus(ownCurrent, 200, 'Consulta actual propia');
+  assert.deepEqual(ownCurrent.body, { recuperacion: result.body });
+  const otherCurrent = await call('/auth/mfa-recoveries/current', 'GET', undefined, reviewer.token);
+  expectStatus(otherCurrent, 200, 'Consulta actual de otra cuenta');
+  assert.deepEqual(otherCurrent.body, { recuperacion: null });
+  expectStatus(
+    await call(
+      '/auth/mfa-recoveries/current?accountId=' + owner.account.id,
+      'GET',
+      undefined,
+      reviewer.token,
+    ),
+    422,
+    'No selector de cuenta',
+  );
+
   assert.deepEqual(Object.keys(result.body).sort(), ['id', 'state', 'version']);
   expectStatus(
     await call(
@@ -531,12 +590,13 @@ try {
       }
     }
   await db?.$disconnect();
-  report.cleanup =
-    'API del ensayo cerrada; actores propios suspendidos, roles y sesiones revocados; Auth destino activo';
+  report.cleanup = context.isolated
+    ? 'API del ensayo cerrada; operadores restaurados conservados para pruebas siguientes; consultar sus estados y roles reales antes de continuar; Auth destino activo'
+    : 'API del ensayo cerrada; actores propios suspendidos, roles y sesiones revocados; Auth destino activo';
   writeFileSync(
-    (ci ? 'tests/results/ci-operators' : 'tests/results/recovery-api') +
-      (report.result === 'FAIL' ? '-failure' : '') +
-      '.json',
+    ci
+      ? 'tests/results/ci-operators' + (report.result === 'FAIL' ? '-failure' : '') + '.json'
+      : context.report('api' + (report.result === 'FAIL' ? '-failure' : '')),
     JSON.stringify(report, null, 2) + '\n',
   );
 }

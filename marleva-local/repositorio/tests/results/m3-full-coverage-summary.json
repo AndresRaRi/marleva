@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-15",
+  "scope": "Own M3 source, compiled integration remapped to TS, RN Web DOM render; generated excluded, child worker not instrumented",
+  "total": {
+    "lines": {
+      "total": 599,
+      "covered": 547,
+      "skipped": 0,
+      "pct": 91.31
+    },
+    "statements": {
+      "total": 760,
+      "covered": 685,
+      "skipped": 0,
+      "pct": 90.13
+    },
+    "functions": {
+      "total": 287,
+      "covered": 236,
+      "skipped": 0,
+      "pct": 82.22
+    },
+    "branches": {
+      "total": 742,
+      "covered": 636,
+      "skipped": 0,
+      "pct": 85.71
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "new_lines": {
+    "covered": 547,
+    "total": 617,
+    "percent": 88.65,
+    "minimum": 80
+  }
+}

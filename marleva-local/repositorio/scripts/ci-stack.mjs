@@ -5,11 +5,12 @@ import { randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensureCiTool } from './ci-tool.mjs';
+import { ciStackContext, stackConfiguration } from './ci-stack-context.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 process.chdir(root);
-const folder = path.resolve('artifacts/ci/stack');
+const context = ciStackContext(root, process.env.MARLEVA_STACK_CONTEXT ?? 'ci');
+const { folder, project, network } = context;
 const supabase = await ensureCiTool('supabase');
-const network = 'marleva-ci-loopback';
 function run(binary, args, options = {}) {
   const result = spawnSync(binary, args, { cwd: root, encoding: 'utf8', ...options });
   if (result.status !== 0)
@@ -25,7 +26,10 @@ if (action === 'stop') {
   console.log('Stack de ensayo detenido; datos de origen y copias B12 intactos.');
 } else if (action === 'start') {
   mkdirSync(folder + '/supabase/templates', { recursive: true, mode: 0o700 });
-  copyFileSync('infra/ci/supabase/config.toml', folder + '/supabase/config.toml');
+  writeFileSync(
+    folder + '/supabase/config.toml',
+    stackConfiguration(readFileSync('infra/ci/supabase/config.toml', 'utf8'), context),
+  );
   copyFileSync('infra/local/supabase/templates/otp.html', folder + '/supabase/templates/otp.html');
   if (spawnSync('docker', ['network', 'inspect', network], { stdio: 'ignore' }).status !== 0)
     run('docker', [
@@ -56,7 +60,7 @@ if (action === 'stop') {
     APP_MODE: 'local',
     PAYMENT_MODE: 'simulated',
     APP_ORIGIN: 'https://localhost:8443',
-    SUPABASE_URL: 'http://127.0.0.1:54621',
+    SUPABASE_URL: 'http://127.0.0.1:' + context.api,
     SUPABASE_ANON_KEY: state.ANON_KEY,
     SUPABASE_SERVICE_KEY: state.SERVICE_ROLE_KEY,
     TOKEN_ENCRYPTION_KEY: previous.TOKEN_ENCRYPTION_KEY ?? randomBytes(32).toString('hex'),
@@ -64,9 +68,9 @@ if (action === 'stop') {
     DATABASE_URL: '',
     MIGRATION_DATABASE_URL: '',
     SMTP_HOST: '127.0.0.1',
-    SMTP_PORT: '54625',
-    MAILPIT_URL: 'http://127.0.0.1:54624',
-    MARLEVA_CI_STACK: '1',
+    SMTP_PORT: String(context.smtp),
+    MAILPIT_URL: 'http://127.0.0.1:' + context.mail,
+    MARLEVA_CI_STACK: project === 'marleva-ci' ? '1' : '0',
     MARLEVA_FIXTURE_IDENTITIES: folder + '/fixture-identities.json',
     MARLEVA_CERT_DIR: folder + '/certs',
     MARLEVA_CA_FILE: folder + '/certs/ca.crt',
@@ -86,9 +90,9 @@ if (action === 'stop') {
   const containers = JSON.parse(
     run('docker', [
       'inspect',
-      'supabase_db_marleva-ci',
-      'supabase_kong_marleva-ci',
-      'supabase_inbucket_marleva-ci',
+      'supabase_db_' + project,
+      'supabase_kong_' + project,
+      'supabase_inbucket_' + project,
     ]),
   );
   for (const container of containers)
@@ -108,10 +112,10 @@ if (action === 'stop') {
   run(process.execPath, ['apps/api/bootstrap.mjs'], { env: { ...process.env, ...env } });
   run('sh', ['scripts/create-certificates.sh'], { env: { ...process.env, ...env } });
   writeFileSync(
-    'artifacts/ci/stack-ready.json',
+    folder + '/stack-ready.json',
     JSON.stringify({
       date: new Date().toISOString(),
-      project: 'marleva-ci',
+      project,
       loopbackOnly: true,
       databaseMajor: 17,
     }),

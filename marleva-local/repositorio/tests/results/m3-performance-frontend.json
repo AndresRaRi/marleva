@@ -1,0 +1,283 @@
+{
+  "id": "MAR-M3-PF-FE-001",
+  "date": "2026-10-15T23:21:23.422Z",
+  "browser": "155.0.8059.84",
+  "trace": "UC001/002 → SEQ001:S080/SEQ002:S080 → API001/002 → Offer/OfferVersion → UI001/002",
+  "environment": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "origin": "http://127.0.0.1:8103",
+    "api": "http://127.0.0.1:3103",
+    "warmup": 1,
+    "samples": 10,
+    "concurrency": 1
+  },
+  "thresholds": {
+    "initial_p95_ms": 3000,
+    "search_p95_ms": 1000,
+    "detail_p95_ms": 1000
+  },
+  "limits": "Objetivos locales previos al ensayo, sin throttling. Contexto limpio por muestra. Carga/detalle incluyen primera imagen decodificada. No INP de campo, Safari, Android/iOS, capacidad comercial o presupuesto productivo. Memoria JS no equivale a memoria total del navegador.",
+  "samples": [
+    {
+      "initial_ms": 264.63233299999956,
+      "search_ms": 148.36291600000004,
+      "detail_ms": 62.96995800000059,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 6.5
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 144
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 144
+        }
+      ],
+      "js_heap_bytes": 8475284
+    },
+    {
+      "initial_ms": 266.6413330000005,
+      "search_ms": 150.48516599999948,
+      "detail_ms": 66.59554200000002,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 6.5
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 136
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 136
+        }
+      ],
+      "js_heap_bytes": 8724567
+    },
+    {
+      "initial_ms": 250.13383299999987,
+      "search_ms": 126.3887079999995,
+      "detail_ms": 73.4433340000005,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 9.799999997019768
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 128
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 128
+        }
+      ],
+      "js_heap_bytes": 9861267
+    },
+    {
+      "initial_ms": 264.780667,
+      "search_ms": 138.6832919999997,
+      "detail_ms": 75.86799999999948,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 17.400000005960464
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 148
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 148
+        }
+      ],
+      "js_heap_bytes": 8874283
+    },
+    {
+      "initial_ms": 326.5659579999992,
+      "search_ms": 156.49579099999937,
+      "detail_ms": 66.3504580000008,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 17.400000005960464
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 192
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 192
+        }
+      ],
+      "js_heap_bytes": 8706455
+    },
+    {
+      "initial_ms": 312.96408300000076,
+      "search_ms": 135.36291700000038,
+      "detail_ms": 84.76500000000124,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 29.5
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 184
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 184
+        }
+      ],
+      "js_heap_bytes": 7711764
+    },
+    {
+      "initial_ms": 232.40341600000102,
+      "search_ms": 132.4265830000004,
+      "detail_ms": 82.62062499999956,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 6.5999999940395355
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 128
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 128
+        }
+      ],
+      "js_heap_bytes": 8840342
+    },
+    {
+      "initial_ms": 236.09341700000004,
+      "search_ms": 137.04795899999954,
+      "detail_ms": 76.87833300000057,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 11.799999997019768
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 136
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 136
+        }
+      ],
+      "js_heap_bytes": 8750663
+    },
+    {
+      "initial_ms": 306.3125420000015,
+      "search_ms": 134.0028340000008,
+      "detail_ms": 81.4210409999996,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 18.5
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 144
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 144
+        }
+      ],
+      "js_heap_bytes": 8843751
+    },
+    {
+      "initial_ms": 253.2724159999998,
+      "search_ms": 159.6375420000004,
+      "detail_ms": 152.60983399999895,
+      "scripts": [
+        {
+          "path": "/_expo/static/js/web/index-fb9edca1b4e279a41b63e63557b1286e.js",
+          "transfer_bytes": 445842,
+          "decoded_bytes": 445542,
+          "duration_ms": 10.599999994039536
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "start_ms": 144
+        },
+        {
+          "name": "first-contentful-paint",
+          "start_ms": 144
+        }
+      ],
+      "js_heap_bytes": 8760966
+    }
+  ],
+  "summary": {
+    "initial_ms": {
+      "p50": 264.63233299999956,
+      "p95": 326.5659579999992,
+      "max": 326.5659579999992
+    },
+    "search_ms": {
+      "p50": 137.04795899999954,
+      "p95": 159.6375420000004,
+      "max": 159.6375420000004
+    },
+    "detail_ms": {
+      "p50": 75.86799999999948,
+      "p95": 152.60983399999895,
+      "max": 152.60983399999895
+    }
+  },
+  "passed": true
+}

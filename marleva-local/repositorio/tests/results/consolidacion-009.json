@@ -1,0 +1,229 @@
+{
+  "date": "2026-10-15 America/Merida",
+  "base": "dbec16d52a45c6163a2a246dfb561c2639e82b60",
+  "originalRun": 38843912870,
+  "findings": [
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:470",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:472",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:474",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:126",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:127",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:56",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:57",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:55",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:56",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:118",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:119",
+      "ancestorOfM1": false
+    }
+  ],
+  "gitleaksHead": {
+    "commitsScanned": 58,
+    "findings": 0,
+    "exit": 0
+  },
+  "negativeControls": "Profile exact permitted; other path and other value blocked, exit0",
+  "contracts": "Target generator repeated; generated HTML unchanged against staged version",
+  "limits": [
+    "Initial tool/Swagger correction had no runtime change; later M1/M3 runtime corrections and their tests are recorded separately",
+    "No acceptance or merge",
+    "General reading partial"
+  ],
+  "targetSwaggerSha256": "5cc2928072fe280fd271567b8bd7c6d888672b84ffafec9394d854d302c581dd",
+  "immutableMigrations": [
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1/migration.sql",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables/migration.sql",
+      "sha256": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql",
+      "sha256": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql",
+      "sha256": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql",
+      "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150001_catalog/migration.sql",
+      "sha256": "af75d78b3c43e21189e59ca9150e781bc94b063e7014214bdda1e7d8a3c79bc9"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150002_search_statistics/migration.sql",
+      "sha256": "ef33ba64661571a2dfb387a96bb1bd98e4de9433b8770f1f5322d471972d3f02"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma-m3/migrations/202610150003_photo_derivatives/migration.sql",
+      "sha256": "3b0b68146065a9b25421925d783469086e67e8449c1f637a9121f87d70a910d7"
+    }
+  ],
+  "firstCorrection": {
+    "sha": "e02afdb772791574c2427d2dd96d9b79be21abb1",
+    "run": 38845447384,
+    "passed": [
+      "calidad",
+      "unitarias",
+      "arquitectura-contratos",
+      "seguridad",
+      "codeql",
+      "revision-dependencias",
+      "contrato",
+      "sonar"
+    ],
+    "failed": [
+      "integracion: API027 pending factor omitted",
+      "web: incomplete Account fixture rejected"
+    ],
+    "build": "skipped"
+  },
+  "secondCorrection": {
+    "scope": "API027 all TOTP statuses; complete browser fixtures without weakening validation",
+    "directedUnit": "54/54",
+    "remoteCI": {
+      "sha": "8ef53dbb01debce5f5a64de8365afb08f57c1070",
+      "run": 38846330015,
+      "integration": "success",
+      "web": "failure: API025 fixture missing; corrected in combined tree",
+      "overall": "failure: web API025 fixture missing; fixed in combined tree"
+    }
+  },
+  "m2DocumentaryIntegration": {
+    "source": "d34fb3e1f6a25efa28644fd8d32221350fb4d3e3",
+    "operations": 61,
+    "schemas": 82,
+    "invalidExamplesRejected": 75,
+    "foreignKeys": 114,
+    "sqlApplied": false,
+    "productTests": 0,
+    "acceptance": false,
+    "modelTool": "Use documented MARLEVA_DBML_MODULE package path; default package.json export resolution failed"
+  },
+  "browserFixtureDiagnostic": {
+    "browser": "155.0.8059.84",
+    "origin": "http://127.0.0.1:8189",
+    "resumed": {
+      "fixtureBrowser": true,
+      "initialPending": true,
+      "reloadRestoresNotices": true,
+      "unavailableNotEmpty": true,
+      "retry": true,
+      "expiredHidesNotices": true,
+      "lateResponseDiscarded": true,
+      "requests": 7,
+      "firstLoadMs": 342
+    },
+    "paginated": {
+      "fixtureBrowser": true,
+      "items": 55,
+      "requests": 5,
+      "retryPreservesList": true,
+      "refreshResets": true
+    },
+    "limits": "Controlled HTTP responses, not PG/Auth, no TLS claim; full real CI required"
+  },
+  "m3CorrectionCI": {
+    "sha": "87fdc5c873f67824b9c45f51044ad2d083682f25",
+    "run": 38846202699,
+    "conclusion": "success",
+    "jobs": 13
+  },
+  "combination": {
+    "m1": "8ef53dbb01debce5f5a64de8365afb08f57c1070",
+    "m2": "d34fb3e1f6a25efa28644fd8d32221350fb4d3e3",
+    "m3": "87fdc5c873f67824b9c45f51044ad2d083682f25",
+    "mainUnchanged": "bf948c946bd328aacba09b90d02340c0c29a3816",
+    "conflictsResolved": [
+      "README.md",
+      "entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md",
+      "marleva-local/repositorio/README.md"
+    ],
+    "checks": {
+      "frozenInstall": "passed after offline cache miss; lockfile unchanged",
+      "prismaGenerate": "passed for both modules, no DB connection",
+      "architecture": "passed, no dependency violations or duplication",
+      "mandatoryHooks": "342 tests passed; typecheck/lint/format and coverage passed",
+      "contractsAfterCommit": "passed; generated files unchanged",
+      "originalCheckout": "420 inventoried file hashes unchanged",
+      "ignored": "env, tools/secrets, dependencies and generated M3 client ignored",
+      "deletedTrackedFiles": 0
+    },
+    "combinedCI": {
+      "run": 38847365871,
+      "sha": "902308e8d02362b06689b1d04d03ae23793faa50",
+      "conclusion": "success",
+      "jobs": 13,
+      "url": "https://github.com/AndresRaRi/marleva/actions/runs/38847365871"
+    },
+    "acceptance": false,
+    "sha": "902308e8d02362b06689b1d04d03ae23793faa50"
+  },
+  "delivery": {
+    "sharedSourcesUploaded": false,
+    "configurationAppliedToSharedProject": false,
+    "replace": [
+      "00_GUIA_PRINCIPAL_MARLEVA.md",
+      "01_ESTADO_Y_DECISIONES_MARLEVA.md",
+      "02_MVP1_ALCANCE_Y_DISENO_MARLEVA.md",
+      "INSTRUCCIONES_FINALES_PARA_PEGAR.txt"
+    ],
+    "source03": "existing consolidated version preserved, no edit009",
+    "remaining": [
+      "CON04 M1 matrix branches",
+      "CON05 essential B12 one run and destination",
+      "CON06 real M3 identity and M2/M8 gates",
+      "CON07 platforms and phase3",
+      "CON08 shared replacement"
+    ],
+    "topicClosed": false
+  }
+}

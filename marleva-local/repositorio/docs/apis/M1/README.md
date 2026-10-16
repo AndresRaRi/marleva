@@ -1,6 +1,6 @@
 # M1: documentación API
 
-[OpenAPI YAML canónico](openapi.yaml), [JSON generado único](../../../packages/contracts/openapi.json), [Swagger local](swagger.html). Vista sin Try it out ni credenciales. Son 24 operaciones, incluidos salud y recuperación de operadores. El contrato pasó el ensayo de fase 2; las ramas autenticadas y aceptación completa siguen sujetas a la matriz. Ver ADR002 y actas. Los tipos y la tabla de métodos HTTP se generan desde el YAML. No editar derivados a mano.
+[OpenAPI YAML canónico](openapi.yaml), [JSON generado único](../../../packages/contracts/openapi.json), [Swagger local](swagger.html). Vista sin Try it out ni credenciales. Son 27 operaciones, incluidos salud, recuperación de operadores y consultas propias API025–027. El contrato pasó el ensayo de fase 2; las ramas autenticadas y aceptación completa siguen sujetas a la matriz. Ver ADR002 y actas. Los tipos y la tabla de métodos HTTP se generan desde el YAML. No editar derivados a mano.
 
 Regenerar desde marleva-local/repositorio: `./scripts/tool node scripts/generate-documentation.mjs` y `./scripts/tool pnpm contracts`. DBML se valida al exportar; OpenAPI se valida con Swagger Parser. La validación sintáctica no acredita coherencia con todos los estados, implementación o pruebas.
 

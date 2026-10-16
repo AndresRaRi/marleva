@@ -29,7 +29,7 @@ Caso:UC002. Error y continuación comprobados en Chrome; fallos/consumo/concurre
 
 ## 3. Consultar cuenta y avisos
 
-Usar Actualizar cuenta. Verificar correo y acciones propias. Avisos de cuenta muestra los avisos disponibles. La API ya permite páginas de24/máximo50 con cursor y conserva orden exacto; la interfaz existente todavía muestra la primera página, sin botón de siguiente. Ese cambio visual está pendiente de revisión.
+Usar Actualizar cuenta. Verificar correo y acciones propias. Avisos de cuenta muestra los avisos disponibles. La API permite páginas de24/máximo50 con cursor y conserva orden exacto. Incremento006, PR #8: pulsar Cargar más avisos para anexar la siguiente página; ante error conservar los avisos y reintentar. El control desaparece al terminar; Actualizar cuenta vuelve a primera página. Chrome con API controlada comprobó55 avisos y503/reintento; no acredita Android/iOS ni aceptación visual. Las capturas siguientes son anteriores al control nuevo.
 
 ![Cuenta real con datos ficticios](capturas/04-cuenta.png)
 

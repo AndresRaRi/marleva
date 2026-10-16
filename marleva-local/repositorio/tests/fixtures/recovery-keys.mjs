@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process';
 import { randomBytes, randomUUID, createHmac } from 'node:crypto';
 import { mkdirSync, writeFileSync, chmodSync } from 'node:fs';
 assert.equal(process.env.MARLEVA_RECOVERY_CHECK, '1');
-const folder = 'artifacts/recovery/target-keys';
+import { recoveryContext } from './recovery-context.mjs';
+const folder = recoveryContext().keys;
 mkdirSync(folder, { recursive: true, mode: 0o700 });
 chmodSync(folder, 0o700);
 // Use Supabase's generator for the disposable provider's signing key.

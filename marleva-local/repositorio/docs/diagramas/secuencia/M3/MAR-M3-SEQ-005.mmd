@@ -1,0 +1,15 @@
+%% MAR-M3-SEQ-005; UC-005; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S010 Identidad vigente por puerto y versión exacta
+ U->>A: S020 Autorizar titular vigente
+ A->>D: S040 Validar versión, campos y fotos
+ A->>D: S060 Cambiar borrador a pendiente mediante CAS
+ A-->>U: S080 Guardar evento y recibo antes de responder
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

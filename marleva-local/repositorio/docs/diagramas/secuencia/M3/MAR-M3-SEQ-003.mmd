@@ -1,0 +1,14 @@
+%% MAR-M3-SEQ-003; UC-003; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S020 Validar UUID
+ A->>D: S040 Consultar oferente vigente
+ A->>D: S060 Proyectar nombre público sin expediente
+ A-->>U: S080 UI003 con encabezado principal accesible; Filtrar lista por oferente
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

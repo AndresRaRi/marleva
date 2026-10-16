@@ -1,0 +1,2439 @@
+{
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "contract_version": "0.4.0",
+  "scope": "M2 UC001-011; M8 UC001-005",
+  "cases": [
+    {
+      "uc": "MAR-M2-UC-001",
+      "sequence": "MAR-M2-SEQ-001",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S085",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_001",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/own",
+          "steps": [
+            "S010",
+            "S050"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_002",
+          "method": "post",
+          "route": "/v1/m2/membership-applications",
+          "steps": [
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_003",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/{application_id}",
+          "steps": [
+            "S050",
+            "S130",
+            "S140"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipDecision",
+            "M2MembershipDecisionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_004",
+          "method": "put",
+          "route": "/v1/m2/membership-applications/{application_id}/versions/{version_id}",
+          "steps": [
+            "S080",
+            "S085",
+            "S090",
+            "S100",
+            "S130"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipCommandReceipt"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-001",
+          "states": [
+            "editing",
+            "loading",
+            "validation_error",
+            "save_uncertain",
+            "session_expired"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-004",
+          "states": [
+            "empty",
+            "pending",
+            "correction",
+            "rejected",
+            "approved",
+            "loading",
+            "service_error"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-001",
+        "MAR-M2M8-PLAN-002",
+        "MAR-M2M8-PLAN-003",
+        "MAR-M2M8-PLAN-004",
+        "MAR-M2M8-PLAN-005",
+        "MAR-M2M8-PLAN-019",
+        "MAR-M2M8-PLAN-020",
+        "MAR-M2M8-PLAN-021",
+        "MAR-M2M8-PLAN-022",
+        "MAR-M2M8-PLAN-023",
+        "MAR-M2M8-PLAN-024",
+        "MAR-M2M8-PLAN-025",
+        "MAR-M2M8-PLAN-052",
+        "MAR-M2M8-PLAN-053",
+        "MAR-M2M8-PLAN-054",
+        "MAR-M2M8-PLAN-055",
+        "MAR-M2M8-PLAN-065",
+        "MAR-M2M8-PLAN-066",
+        "MAR-M2M8-AUD-PLAN-010",
+        "MAR-M2M8-AUD-PLAN-011",
+        "MAR-M2M8-AUD-PLAN-012",
+        "MAR-M2M8-AUD-PLAN-013",
+        "MAR-M2M8-AUD-PLAN-014",
+        "MAR-M2M8-AUD-PLAN-015",
+        "MAR-M2M8-AUD-PLAN-016",
+        "MAR-M2M8-AUD-PLAN-017",
+        "MAR-M2M8-AUD-PLAN-046",
+        "MAR-M2M8-AUD-PLAN-047",
+        "MAR-M2M8-AUD-PLAN-048",
+        "MAR-M2M8-AUD-PLAN-049",
+        "MAR-M2M8-INT-PLAN-003",
+        "MAR-M2M8-INT-PLAN-004"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-002",
+      "sequence": "MAR-M2-SEQ-002",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S085",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140",
+        "S145",
+        "S150"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_005",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/uploads",
+          "steps": [
+            "S010",
+            "S030",
+            "S050",
+            "S060"
+          ],
+          "tables": [
+            "M2MembershipDocument",
+            "M2MembershipVersion",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_006",
+          "method": "put",
+          "route": "/v1/m2/membership-documents/{document_id}/content",
+          "steps": [
+            "S070"
+          ],
+          "tables": [
+            "M2MembershipDocument"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_011",
+          "method": "get",
+          "route": "/v1/m2/membership-documents/{document_id}/content",
+          "steps": [
+            "S150"
+          ],
+          "tables": [
+            "M2MembershipDocumentAccess",
+            "M2MembershipVersionDocument"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_007",
+          "method": "post",
+          "route": "/v1/m2/membership-documents/{document_id}/finalizations",
+          "steps": [
+            "S080",
+            "S085",
+            "S090",
+            "S100",
+            "S120",
+            "S140",
+            "S145",
+            "S150"
+          ],
+          "tables": [
+            "M2MembershipDocument",
+            "M2MembershipVersionDocument",
+            "M2MembershipApplication",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_008",
+          "method": "get",
+          "route": "/v1/m2/membership-documents/{document_id}",
+          "steps": [
+            "S100",
+            "S110",
+            "S130",
+            "S150"
+          ],
+          "tables": [
+            "M2MembershipDocument"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_010",
+          "method": "post",
+          "route": "/v1/m2/membership-documents/{document_id}/access-permits",
+          "steps": [
+            "S150"
+          ],
+          "tables": [
+            "M2MembershipDocumentAccess",
+            "M2MembershipVersionDocument"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-002",
+          "states": [
+            "ready",
+            "uploading",
+            "analyzing",
+            "file_rejected",
+            "permit_expired",
+            "reusable",
+            "unavailable",
+            "conflict"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-006",
+        "MAR-M2M8-PLAN-007",
+        "MAR-M2M8-PLAN-008",
+        "MAR-M2M8-PLAN-009",
+        "MAR-M2M8-PLAN-010",
+        "MAR-M2M8-PLAN-011",
+        "MAR-M2M8-PLAN-012",
+        "MAR-M2M8-PLAN-013",
+        "MAR-M2M8-PLAN-056",
+        "MAR-M2M8-PLAN-057",
+        "MAR-M2M8-PLAN-058",
+        "MAR-M2M8-PLAN-059",
+        "MAR-M2M8-PLAN-060",
+        "MAR-M2M8-PLAN-061",
+        "MAR-M2M8-PLAN-062",
+        "MAR-M2M8-AUD-PLAN-020",
+        "MAR-M2M8-AUD-PLAN-021",
+        "MAR-M2M8-AUD-PLAN-022",
+        "MAR-M2M8-AUD-PLAN-023",
+        "MAR-M2M8-AUD-PLAN-024",
+        "MAR-M2M8-AUD-PLAN-025",
+        "MAR-M2M8-AUD-PLAN-026",
+        "MAR-M2M8-AUD-PLAN-027",
+        "MAR-M2M8-AUD-PLAN-028",
+        "MAR-M2M8-AUD-PLAN-029",
+        "MAR-M2M8-AUD-PLAN-032",
+        "MAR-M2M8-AUD-PLAN-033",
+        "MAR-M2M8-AUD-PLAN-050",
+        "MAR-M2M8-AUD-PLAN-051",
+        "MAR-M2M8-INT-PLAN-005"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-003",
+      "sequence": "MAR-M2-SEQ-003",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_009",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/submissions",
+          "steps": [
+            "S010",
+            "S040",
+            "S050",
+            "S060",
+            "S080",
+            "S090",
+            "S110"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionDocument",
+            "M2MembershipSubmission",
+            "M2MembershipEvent",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_012",
+          "method": "get",
+          "route": "/v1/m2/membership-command-receipts/{receipt_id}",
+          "steps": [
+            "S090",
+            "S120"
+          ],
+          "tables": [
+            "M2MembershipCommandReceipt"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-003",
+          "states": [
+            "ready",
+            "sending",
+            "send_uncertain",
+            "validation_error",
+            "conflict",
+            "correction_ready",
+            "reconsideration_ready"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-004",
+          "states": [
+            "empty",
+            "pending",
+            "correction",
+            "rejected",
+            "approved",
+            "loading",
+            "service_error"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-014",
+        "MAR-M2M8-PLAN-015",
+        "MAR-M2M8-PLAN-016",
+        "MAR-M2M8-PLAN-017",
+        "MAR-M2M8-PLAN-018",
+        "MAR-M2M8-PLAN-019",
+        "MAR-M2M8-PLAN-020",
+        "MAR-M2M8-PLAN-021",
+        "MAR-M2M8-PLAN-022",
+        "MAR-M2M8-PLAN-023",
+        "MAR-M2M8-PLAN-024",
+        "MAR-M2M8-PLAN-025",
+        "MAR-M2M8-PLAN-063",
+        "MAR-M2M8-PLAN-064",
+        "MAR-M2M8-PLAN-065",
+        "MAR-M2M8-PLAN-066",
+        "MAR-M2M8-AUD-PLAN-001",
+        "MAR-M2M8-AUD-PLAN-002",
+        "MAR-M2M8-AUD-PLAN-030",
+        "MAR-M2M8-AUD-PLAN-031",
+        "MAR-M2M8-AUD-PLAN-034",
+        "MAR-M2M8-AUD-PLAN-035",
+        "MAR-M2M8-AUD-PLAN-046",
+        "MAR-M2M8-AUD-PLAN-047",
+        "MAR-M2M8-AUD-PLAN-048",
+        "MAR-M2M8-AUD-PLAN-049",
+        "MAR-M2M8-INT-PLAN-003",
+        "MAR-M2M8-INT-PLAN-004",
+        "MAR-M2M8-INT-PLAN-006",
+        "MAR-M2M8-INT-PLAN-007"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-004",
+      "sequence": "MAR-M2-SEQ-004",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S035",
+        "S040",
+        "S050",
+        "S055",
+        "S130",
+        "S060",
+        "S065",
+        "S070",
+        "S135",
+        "S080",
+        "S090",
+        "S092",
+        "S094",
+        "S096",
+        "S098",
+        "S100",
+        "S105",
+        "S140",
+        "S110",
+        "S120"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_015",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/{application_id}/versions/{version_id}",
+          "steps": [
+            "S020",
+            "S035",
+            "S040"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipVersionDocument"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_013",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/versions",
+          "steps": [
+            "S050",
+            "S055",
+            "S060",
+            "S065",
+            "S080",
+            "S090",
+            "S130",
+            "S135"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipSubmission",
+            "M2MembershipDecision",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_014",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/{application_id}/history",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipSubmission",
+            "M2MembershipDecision"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_016",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/{application_id}/decisions/{decision_id}",
+          "steps": [
+            "S020",
+            "S035",
+            "S040"
+          ],
+          "tables": [
+            "M2MembershipDecision",
+            "M2MembershipDecisionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_017",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/versions/{version_id}/document-links",
+          "steps": [
+            "S092",
+            "S094",
+            "S096",
+            "S098"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionDocument",
+            "M2MembershipDocument",
+            "M2MembershipCommandReceipt"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-002",
+          "states": [
+            "ready",
+            "uploading",
+            "analyzing",
+            "file_rejected",
+            "permit_expired",
+            "reusable",
+            "unavailable",
+            "conflict"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-003",
+          "states": [
+            "ready",
+            "sending",
+            "send_uncertain",
+            "validation_error",
+            "conflict",
+            "correction_ready",
+            "reconsideration_ready"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-004",
+          "states": [
+            "empty",
+            "pending",
+            "correction",
+            "rejected",
+            "approved",
+            "loading",
+            "service_error"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-005",
+          "states": [
+            "history",
+            "private_unavailable",
+            "loading",
+            "service_error",
+            "forbidden"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-006",
+          "states": [
+            "correction",
+            "reconsideration",
+            "draft",
+            "validation_error",
+            "prepare_uncertain",
+            "conflict",
+            "private_unavailable"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-006",
+        "MAR-M2M8-PLAN-007",
+        "MAR-M2M8-PLAN-008",
+        "MAR-M2M8-PLAN-009",
+        "MAR-M2M8-PLAN-010",
+        "MAR-M2M8-PLAN-011",
+        "MAR-M2M8-PLAN-012",
+        "MAR-M2M8-PLAN-013",
+        "MAR-M2M8-PLAN-014",
+        "MAR-M2M8-PLAN-015",
+        "MAR-M2M8-PLAN-016",
+        "MAR-M2M8-PLAN-017",
+        "MAR-M2M8-PLAN-018",
+        "MAR-M2M8-PLAN-019",
+        "MAR-M2M8-PLAN-020",
+        "MAR-M2M8-PLAN-021",
+        "MAR-M2M8-PLAN-022",
+        "MAR-M2M8-PLAN-023",
+        "MAR-M2M8-PLAN-024",
+        "MAR-M2M8-PLAN-025",
+        "MAR-M2M8-PLAN-026",
+        "MAR-M2M8-PLAN-027",
+        "MAR-M2M8-PLAN-028",
+        "MAR-M2M8-PLAN-029",
+        "MAR-M2M8-PLAN-030",
+        "MAR-M2M8-PLAN-031",
+        "MAR-M2M8-PLAN-032",
+        "MAR-M2M8-PLAN-033",
+        "MAR-M2M8-PLAN-034",
+        "MAR-M2M8-PLAN-035",
+        "MAR-M2M8-PLAN-036",
+        "MAR-M2M8-PLAN-037",
+        "MAR-M2M8-PLAN-056",
+        "MAR-M2M8-PLAN-057",
+        "MAR-M2M8-PLAN-058",
+        "MAR-M2M8-PLAN-059",
+        "MAR-M2M8-PLAN-060",
+        "MAR-M2M8-PLAN-061",
+        "MAR-M2M8-PLAN-062",
+        "MAR-M2M8-PLAN-063",
+        "MAR-M2M8-PLAN-064",
+        "MAR-M2M8-PLAN-065",
+        "MAR-M2M8-PLAN-066",
+        "MAR-M2M8-PLAN-067",
+        "MAR-M2M8-PLAN-068",
+        "MAR-M2M8-PLAN-073",
+        "MAR-M2M8-PLAN-074",
+        "MAR-M2M8-PLAN-075",
+        "MAR-M2M8-PLAN-076",
+        "MAR-M2M8-PLAN-077",
+        "MAR-M2M8-PLAN-078",
+        "MAR-M2M8-PLAN-079",
+        "MAR-M2M8-PLAN-080",
+        "MAR-M2M8-PLAN-081",
+        "MAR-M2M8-PLAN-082",
+        "MAR-M2M8-PLAN-083",
+        "MAR-M2M8-PLAN-084",
+        "MAR-M2M8-PLAN-085",
+        "MAR-M2M8-PLAN-086",
+        "MAR-M2M8-PLAN-087",
+        "MAR-M2M8-AUD-PLAN-001",
+        "MAR-M2M8-AUD-PLAN-002",
+        "MAR-M2M8-AUD-PLAN-005",
+        "MAR-M2M8-AUD-PLAN-009",
+        "MAR-M2M8-AUD-PLAN-018",
+        "MAR-M2M8-AUD-PLAN-019",
+        "MAR-M2M8-AUD-PLAN-020",
+        "MAR-M2M8-AUD-PLAN-021",
+        "MAR-M2M8-AUD-PLAN-022",
+        "MAR-M2M8-AUD-PLAN-023",
+        "MAR-M2M8-AUD-PLAN-024",
+        "MAR-M2M8-AUD-PLAN-025",
+        "MAR-M2M8-AUD-PLAN-026",
+        "MAR-M2M8-AUD-PLAN-027",
+        "MAR-M2M8-AUD-PLAN-028",
+        "MAR-M2M8-AUD-PLAN-029",
+        "MAR-M2M8-AUD-PLAN-030",
+        "MAR-M2M8-AUD-PLAN-031",
+        "MAR-M2M8-AUD-PLAN-032",
+        "MAR-M2M8-AUD-PLAN-033",
+        "MAR-M2M8-AUD-PLAN-034",
+        "MAR-M2M8-AUD-PLAN-035",
+        "MAR-M2M8-AUD-PLAN-044",
+        "MAR-M2M8-AUD-PLAN-045",
+        "MAR-M2M8-AUD-PLAN-046",
+        "MAR-M2M8-AUD-PLAN-047",
+        "MAR-M2M8-AUD-PLAN-048",
+        "MAR-M2M8-AUD-PLAN-049",
+        "MAR-M2M8-AUD-PLAN-050",
+        "MAR-M2M8-AUD-PLAN-051",
+        "MAR-M2M8-INT-PLAN-003",
+        "MAR-M2M8-INT-PLAN-004",
+        "MAR-M2M8-INT-PLAN-005",
+        "MAR-M2M8-INT-PLAN-006",
+        "MAR-M2M8-INT-PLAN-007"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-005",
+      "sequence": "MAR-M2-SEQ-005",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_020",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/residence-changes",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S060"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-008",
+          "states": [
+            "approved",
+            "confirm_change",
+            "correction",
+            "restricted",
+            "conflict",
+            "uncertain",
+            "service_error"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-401",
+        "MAR-M2-IT-FE-402",
+        "MAR-M2-IT-FE-403",
+        "MAR-M2-IT-FE-404",
+        "MAR-M2-IT-FE-405",
+        "MAR-M2-IT-FE-406",
+        "MAR-M2-IT-FE-407",
+        "MAR-M2-IT-BE-404",
+        "MAR-M2-IT-BE-405",
+        "MAR-M2-IT-BE-406",
+        "MAR-M2-IT-BE-453"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-006",
+      "sequence": "MAR-M2-SEQ-006",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_021",
+          "method": "post",
+          "route": "/v1/m2/membership-applications/{application_id}/reopenings",
+          "steps": [
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M2MembershipArchiveNotice",
+            "M2MembershipCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-009",
+          "states": [
+            "grace",
+            "archived",
+            "reason_required",
+            "private_unavailable",
+            "reopened",
+            "uncertain",
+            "conflict"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-408",
+        "MAR-M2-IT-FE-409",
+        "MAR-M2-IT-FE-410",
+        "MAR-M2-IT-FE-411",
+        "MAR-M2-IT-FE-412",
+        "MAR-M2-IT-FE-413",
+        "MAR-M2-IT-FE-414",
+        "MAR-M2-IT-BE-407",
+        "MAR-M2-IT-BE-408",
+        "MAR-M2-IT-BE-409",
+        "MAR-M2-UT-BE-402",
+        "MAR-M2-IT-BE-454",
+        "MAR-M2-IT-BE-455",
+        "MAR-M2-UT-BE-403"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-007",
+      "sequence": "MAR-M2-SEQ-007",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_023",
+          "method": "post",
+          "route": "/v1/m2/seller-profiles",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_024",
+          "method": "put",
+          "route": "/v1/m2/seller-profiles/{profile_id}/versions/{version_id}",
+          "steps": [
+            "S020",
+            "S030",
+            "S050",
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2SellerCoverage",
+            "M2SellerModality",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_025",
+          "method": "post",
+          "route": "/v1/m2/seller-profiles/{profile_id}/versions",
+          "steps": [
+            "S030",
+            "S050",
+            "S060",
+            "S080"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2SellerDecision",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-010",
+          "states": [
+            "draft",
+            "validation_error",
+            "ineligible",
+            "private_unavailable",
+            "saved",
+            "uncertain",
+            "session_expired"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-012",
+          "states": [
+            "history",
+            "correction",
+            "reconsideration",
+            "material_change",
+            "draft",
+            "private_unavailable",
+            "conflict",
+            "uncertain"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-415",
+        "MAR-M2-IT-FE-416",
+        "MAR-M2-IT-FE-417",
+        "MAR-M2-IT-FE-418",
+        "MAR-M2-IT-FE-419",
+        "MAR-M2-IT-FE-420",
+        "MAR-M2-IT-FE-421",
+        "MAR-M2-IT-FE-432",
+        "MAR-M2-IT-FE-433",
+        "MAR-M2-IT-FE-434",
+        "MAR-M2-IT-FE-435",
+        "MAR-M2-IT-FE-436",
+        "MAR-M2-IT-FE-437",
+        "MAR-M2-IT-FE-438",
+        "MAR-M2-IT-FE-439",
+        "MAR-M2-IT-BE-413",
+        "MAR-M2-IT-BE-414",
+        "MAR-M2-IT-BE-415",
+        "MAR-M2-IT-BE-416",
+        "MAR-M2-IT-BE-417",
+        "MAR-M2-IT-BE-418",
+        "MAR-M2-IT-BE-419",
+        "MAR-M2-IT-BE-420",
+        "MAR-M2-IT-BE-421",
+        "MAR-M2-UT-BE-404",
+        "MAR-M2-IT-BE-457",
+        "MAR-M2-PF-FE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-008",
+      "sequence": "MAR-M2-SEQ-008",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_026",
+          "method": "post",
+          "route": "/v1/m2/seller-profiles/{profile_id}/submissions",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2SellerCoverage",
+            "M2SellerModality",
+            "M2SellerTermsPolicy",
+            "M2SellerTermsAcceptance",
+            "M2SellerSubmission",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_033",
+          "method": "get",
+          "route": "/v1/m2/seller-terms/current",
+          "steps": [
+            "S040"
+          ],
+          "tables": [
+            "M2SellerTermsPolicy"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-011",
+          "states": [
+            "ready",
+            "terms_draft",
+            "terms_changed",
+            "pending",
+            "enabled",
+            "paused",
+            "ineligible",
+            "suspended",
+            "uncertain",
+            "sending"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-422",
+        "MAR-M2-IT-FE-423",
+        "MAR-M2-IT-FE-424",
+        "MAR-M2-IT-FE-425",
+        "MAR-M2-IT-FE-426",
+        "MAR-M2-IT-FE-427",
+        "MAR-M2-IT-FE-428",
+        "MAR-M2-IT-FE-429",
+        "MAR-M2-IT-FE-430",
+        "MAR-M2-IT-FE-431",
+        "MAR-M2-IT-BE-422",
+        "MAR-M2-IT-BE-423",
+        "MAR-M2-IT-BE-424",
+        "MAR-M2-IT-BE-443",
+        "MAR-M2-IT-BE-444",
+        "MAR-M2-IT-BE-445",
+        "MAR-M2-UT-BE-404",
+        "MAR-M2-IT-BE-456",
+        "MAR-M2-PF-FE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-009",
+      "sequence": "MAR-M2-SEQ-009",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_022",
+          "method": "get",
+          "route": "/v1/m2/seller-profiles/own",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2Restriction"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_031",
+          "method": "get",
+          "route": "/v1/m2/seller-profiles/{profile_id}/versions/{version_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2SellerCoverage",
+            "M2SellerModality"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_027",
+          "method": "post",
+          "route": "/v1/m2/seller-profiles/{profile_id}/pauses",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2MembershipApplication",
+            "M2Restriction",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_028",
+          "method": "post",
+          "route": "/v1/m2/seller-profiles/{profile_id}/resumptions",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2MembershipApplication",
+            "M2Restriction",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_029",
+          "method": "get",
+          "route": "/v1/m2/public/seller-profiles/{profile_id}",
+          "steps": [
+            "S070",
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerCoverage",
+            "M2SellerModality",
+            "M2MembershipApplication",
+            "M2Restriction"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_030",
+          "method": "get",
+          "route": "/v1/m2/seller-profiles/{profile_id}/history",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerVersion",
+            "M2SellerSubmission",
+            "M2SellerDecision"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_032",
+          "method": "get",
+          "route": "/v1/m2/seller-profiles/{profile_id}/decisions/{decision_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerDecision",
+            "M2SellerDecisionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_040",
+          "method": "get",
+          "route": "/v1/m2/community-command-receipts/{receipt_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2CommunityCommandReceipt"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-010",
+          "states": [
+            "draft",
+            "validation_error",
+            "ineligible",
+            "private_unavailable",
+            "saved",
+            "uncertain",
+            "session_expired"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-011",
+          "states": [
+            "ready",
+            "terms_draft",
+            "terms_changed",
+            "pending",
+            "enabled",
+            "paused",
+            "ineligible",
+            "suspended",
+            "uncertain",
+            "sending"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-012",
+          "states": [
+            "history",
+            "correction",
+            "reconsideration",
+            "material_change",
+            "draft",
+            "private_unavailable",
+            "conflict",
+            "uncertain"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-013",
+          "states": [
+            "public",
+            "unavailable",
+            "login_required",
+            "contract_private",
+            "contract_unavailable",
+            "rate_limited"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-415",
+        "MAR-M2-IT-FE-416",
+        "MAR-M2-IT-FE-417",
+        "MAR-M2-IT-FE-418",
+        "MAR-M2-IT-FE-419",
+        "MAR-M2-IT-FE-420",
+        "MAR-M2-IT-FE-421",
+        "MAR-M2-IT-FE-422",
+        "MAR-M2-IT-FE-423",
+        "MAR-M2-IT-FE-424",
+        "MAR-M2-IT-FE-425",
+        "MAR-M2-IT-FE-426",
+        "MAR-M2-IT-FE-427",
+        "MAR-M2-IT-FE-428",
+        "MAR-M2-IT-FE-429",
+        "MAR-M2-IT-FE-430",
+        "MAR-M2-IT-FE-431",
+        "MAR-M2-IT-FE-432",
+        "MAR-M2-IT-FE-433",
+        "MAR-M2-IT-FE-434",
+        "MAR-M2-IT-FE-435",
+        "MAR-M2-IT-FE-436",
+        "MAR-M2-IT-FE-437",
+        "MAR-M2-IT-FE-438",
+        "MAR-M2-IT-FE-439",
+        "MAR-M2-IT-FE-440",
+        "MAR-M2-IT-FE-441",
+        "MAR-M2-IT-FE-442",
+        "MAR-M2-IT-FE-443",
+        "MAR-M2-IT-FE-444",
+        "MAR-M2-IT-FE-445",
+        "MAR-M2-IT-BE-410",
+        "MAR-M2-IT-BE-411",
+        "MAR-M2-IT-BE-412",
+        "MAR-M2-IT-BE-425",
+        "MAR-M2-IT-BE-426",
+        "MAR-M2-IT-BE-427",
+        "MAR-M2-IT-BE-428",
+        "MAR-M2-IT-BE-429",
+        "MAR-M2-IT-BE-430",
+        "MAR-M2-IT-BE-431",
+        "MAR-M2-IT-BE-432",
+        "MAR-M2-IT-BE-433",
+        "MAR-M2-IT-BE-434",
+        "MAR-M2-IT-BE-435",
+        "MAR-M2-IT-BE-436",
+        "MAR-M2-IT-BE-437",
+        "MAR-M2-IT-BE-438",
+        "MAR-M2-IT-BE-439",
+        "MAR-M2-IT-BE-440",
+        "MAR-M2-IT-BE-441",
+        "MAR-M2-IT-BE-442",
+        "MAR-M2-IT-BE-446",
+        "MAR-M2-IT-BE-447",
+        "MAR-M2-IT-BE-448",
+        "MAR-M2-UT-BE-401",
+        "MAR-M2-IT-BE-457",
+        "MAR-M2-IT-BE-458",
+        "MAR-M2-IT-FE-446"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-010",
+      "sequence": "MAR-M2-SEQ-010",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140",
+        "S150"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_019",
+          "method": "get",
+          "route": "/v1/m2/eligibility/own",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060"
+          ],
+          "tables": [
+            "M2MembershipApplication",
+            "M2SellerProfile",
+            "M2Restriction"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_041",
+          "method": "get",
+          "route": "/v1/m2/seller-profiles/{profile_id}/contract-summary",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M2MembershipApplication",
+            "M2Restriction"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-008",
+          "states": [
+            "approved",
+            "confirm_change",
+            "correction",
+            "restricted",
+            "conflict",
+            "uncertain",
+            "service_error"
+          ]
+        },
+        {
+          "id": "MAR-M2-UI-013",
+          "states": [
+            "public",
+            "unavailable",
+            "login_required",
+            "contract_private",
+            "contract_unavailable",
+            "rate_limited"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2-IT-FE-401",
+        "MAR-M2-IT-FE-402",
+        "MAR-M2-IT-FE-403",
+        "MAR-M2-IT-FE-404",
+        "MAR-M2-IT-FE-405",
+        "MAR-M2-IT-FE-406",
+        "MAR-M2-IT-FE-407",
+        "MAR-M2-IT-FE-440",
+        "MAR-M2-IT-FE-441",
+        "MAR-M2-IT-FE-442",
+        "MAR-M2-IT-FE-443",
+        "MAR-M2-IT-FE-444",
+        "MAR-M2-IT-FE-445",
+        "MAR-M2-IT-BE-401",
+        "MAR-M2-IT-BE-402",
+        "MAR-M2-IT-BE-403",
+        "MAR-M2-IT-BE-449",
+        "MAR-M2-IT-BE-450",
+        "MAR-M2-IT-BE-451",
+        "MAR-M2-UT-BE-401",
+        "MAR-M2-IT-BE-452",
+        "MAR-M2-IT-FE-446",
+        "MAR-M2-REG-BE-401",
+        "MAR-M2-PF-BE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M2-UC-011",
+      "sequence": "MAR-M2-SEQ-011",
+      "source_steps": [
+        "S001",
+        "S005",
+        "S006",
+        "S007",
+        "S008",
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S055",
+        "S060",
+        "S070",
+        "S075",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S125",
+        "S127",
+        "S130"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_018",
+          "method": "get",
+          "route": "/v1/m2/membership-applications/{application_id}/retention",
+          "steps": [
+            "S120",
+            "S125",
+            "S127",
+            "S130"
+          ],
+          "tables": [
+            "M2MembershipRetentionCase",
+            "M2MembershipDocument",
+            "M2MembershipVersionPrivate",
+            "M2MembershipDecisionPrivate"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-007",
+          "states": [
+            "scheduled",
+            "held",
+            "delete_pending",
+            "deleted",
+            "uncalculated",
+            "service_error",
+            "loading"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-D08-PLAN-001",
+        "MAR-D08-PLAN-002",
+        "MAR-D08-PLAN-003",
+        "MAR-D08-PLAN-004",
+        "MAR-D08-PLAN-005",
+        "MAR-D08-PLAN-006",
+        "MAR-D08-PLAN-007",
+        "MAR-D08-PLAN-008",
+        "MAR-D08-PLAN-009",
+        "MAR-D08-PLAN-010",
+        "MAR-D08-PLAN-011",
+        "MAR-D08-PLAN-012",
+        "MAR-D08-PLAN-013",
+        "MAR-D08-PLAN-014",
+        "MAR-D08-PLAN-015",
+        "MAR-D08-PLAN-016",
+        "MAR-D08-PLAN-017",
+        "MAR-D08-PLAN-018",
+        "MAR-D08-PLAN-019",
+        "MAR-D08-PLAN-020",
+        "MAR-D08-PLAN-021",
+        "MAR-D08-PLAN-022",
+        "MAR-D08-PLAN-023",
+        "MAR-D08-PLAN-024",
+        "MAR-D08-PLAN-025",
+        "MAR-D08-PLAN-026",
+        "MAR-D08-PLAN-027",
+        "MAR-D08-PLAN-028",
+        "MAR-D08-PLAN-029",
+        "MAR-M2M8-AUD-PLAN-006",
+        "MAR-M2M8-AUD-PLAN-007",
+        "MAR-M2M8-AUD-PLAN-054",
+        "MAR-M2M8-AUD-PLAN-055",
+        "MAR-M2M8-INT-PLAN-008"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M8-UC-001",
+      "sequence": "MAR-M8-SEQ-001",
+      "source_steps": [
+        "S001",
+        "S002",
+        "S003",
+        "S004",
+        "S005",
+        "S010",
+        "S020",
+        "S025",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M8_API_001",
+          "method": "get",
+          "route": "/v1/m8/membership-submissions",
+          "steps": [
+            "S070",
+            "S080",
+            "S090",
+            "S100"
+          ],
+          "tables": [
+            "M2MembershipSubmission",
+            "M8MembershipAssignment",
+            "M8MembershipReviewGrant"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_002",
+          "method": "post",
+          "route": "/v1/m8/membership-submissions/{submission_id}/assignments",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060",
+            "S025"
+          ],
+          "tables": [
+            "M8MembershipReviewGrant",
+            "M8MembershipAssignment",
+            "M2MembershipSubmission",
+            "M2MembershipCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_005",
+          "method": "get",
+          "route": "/v1/m8/membership-reviewers",
+          "steps": [
+            "S001",
+            "S002",
+            "S003",
+            "S004",
+            "S005"
+          ],
+          "tables": [
+            "M8MembershipReviewGrant",
+            "M8MembershipReviewerProfile",
+            "M2MembershipSubmission",
+            "M8MembershipAssignment"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M8-UI-001",
+          "states": [
+            "queue",
+            "empty",
+            "loading",
+            "mfa_required",
+            "assignment_unavailable",
+            "conflict",
+            "candidates",
+            "no_candidates",
+            "candidate_stale",
+            "candidates_error"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-038",
+        "MAR-M2M8-PLAN-039",
+        "MAR-M2M8-PLAN-040",
+        "MAR-M2M8-PLAN-041",
+        "MAR-M2M8-PLAN-042",
+        "MAR-M2M8-PLAN-043",
+        "MAR-M2M8-PLAN-069",
+        "MAR-M2M8-PLAN-070",
+        "MAR-D09-PLAN-001",
+        "MAR-D09-PLAN-002",
+        "MAR-D09-PLAN-003",
+        "MAR-D09-PLAN-004",
+        "MAR-D09-PLAN-005",
+        "MAR-D09-PLAN-006",
+        "MAR-D09-PLAN-007",
+        "MAR-D09-PLAN-008",
+        "MAR-D09-PLAN-009",
+        "MAR-D09-PLAN-010",
+        "MAR-D09-PLAN-011",
+        "MAR-D09-PLAN-012",
+        "MAR-M2M8-AUD-PLAN-036",
+        "MAR-M2M8-AUD-PLAN-037",
+        "MAR-M2M8-AUD-PLAN-038",
+        "MAR-M2M8-AUD-PLAN-039",
+        "MAR-M2M8-AUD-PLAN-052",
+        "MAR-M2M8-AUD-PLAN-053"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M8-UC-002",
+      "sequence": "MAR-M8-SEQ-002",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S035",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S075",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140",
+        "S145"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M8_API_003",
+          "method": "get",
+          "route": "/v1/m8/membership-submissions/{submission_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040"
+          ],
+          "tables": [
+            "M2MembershipSubmission",
+            "M2MembershipVersion",
+            "M2MembershipVersionPrivate",
+            "M8MembershipAssignment"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_004",
+          "method": "post",
+          "route": "/v1/m8/membership-submissions/{submission_id}/decisions",
+          "steps": [
+            "S050",
+            "S060",
+            "S070",
+            "S075",
+            "S080",
+            "S100",
+            "S110",
+            "S120",
+            "S130",
+            "S145"
+          ],
+          "tables": [
+            "M2MembershipDecision",
+            "M2MembershipDecisionPrivate",
+            "M8MembershipAssignment",
+            "M2MembershipSubmission",
+            "M2MembershipApplication",
+            "M2MembershipEvent",
+            "M2MembershipCommandReceipt"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M8-UI-002",
+          "states": [
+            "review",
+            "approved",
+            "rejected",
+            "mfa_required",
+            "assignment_lost",
+            "decision_uncertain",
+            "document_unavailable",
+            "loading",
+            "correction_confirmed",
+            "review_reconsideration"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M2M8-PLAN-044",
+        "MAR-M2M8-PLAN-045",
+        "MAR-M2M8-PLAN-046",
+        "MAR-M2M8-PLAN-047",
+        "MAR-M2M8-PLAN-048",
+        "MAR-M2M8-PLAN-049",
+        "MAR-M2M8-PLAN-050",
+        "MAR-M2M8-PLAN-051",
+        "MAR-M2M8-PLAN-071",
+        "MAR-M2M8-PLAN-072",
+        "MAR-M2M8-AUD-PLAN-003",
+        "MAR-M2M8-AUD-PLAN-004",
+        "MAR-M2M8-AUD-PLAN-008",
+        "MAR-M2M8-AUD-PLAN-040",
+        "MAR-M2M8-AUD-PLAN-041",
+        "MAR-M2M8-AUD-PLAN-042",
+        "MAR-M2M8-AUD-PLAN-043",
+        "MAR-M2M8-INT-PLAN-001",
+        "MAR-M2M8-INT-PLAN-002"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M8-UC-003",
+      "sequence": "MAR-M8-SEQ-003",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140",
+        "S150",
+        "S160",
+        "S170",
+        "S180",
+        "S190",
+        "S200"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M2_API_034",
+          "method": "get",
+          "route": "/v1/m2/restrictions/own",
+          "steps": [
+            "S050",
+            "S110",
+            "S120"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_035",
+          "method": "post",
+          "route": "/v1/m2/restrictions/{restriction_id}/appeals",
+          "steps": [
+            "S050",
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionAppeal",
+            "M2RestrictionAppealPrivate",
+            "M2RestrictionEvidenceLink",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_036",
+          "method": "put",
+          "route": "/v1/m2/restriction-appeals/{appeal_id}",
+          "steps": [
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2RestrictionAppeal",
+            "M2RestrictionAppealPrivate",
+            "M2RestrictionEvidenceLink",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_038",
+          "method": "get",
+          "route": "/v1/m2/restriction-appeals/{appeal_id}",
+          "steps": [
+            "S050",
+            "S060",
+            "S070",
+            "S110"
+          ],
+          "tables": [
+            "M2RestrictionAppeal",
+            "M2RestrictionAppealPrivate",
+            "M2RestrictionEvidenceLink"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_037",
+          "method": "post",
+          "route": "/v1/m2/restriction-appeals/{appeal_id}/submissions",
+          "steps": [
+            "S060",
+            "S070"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionAppeal",
+            "M2RestrictionAppealPrivate",
+            "M2RestrictionEvidenceLink",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_039",
+          "method": "post",
+          "route": "/v1/m2/restriction-appeals/{appeal_id}/access-permits",
+          "steps": [
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2MembershipDocumentAccess",
+            "M2RestrictionEvidenceLink",
+            "M8RestrictionAssignment"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_011",
+          "method": "post",
+          "route": "/v1/m8/restrictions",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S050"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionPrivate",
+            "M2MembershipApplication",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_012",
+          "method": "post",
+          "route": "/v1/m8/restriction-appeals/{appeal_id}/assignments",
+          "steps": [
+            "S070",
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M8RestrictionAssignment",
+            "M2RestrictionAppeal",
+            "M8MembershipReviewGrant",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_013",
+          "method": "get",
+          "route": "/v1/m8/restriction-appeals/{appeal_id}",
+          "steps": [
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionPrivate",
+            "M2RestrictionAppeal",
+            "M2RestrictionAppealPrivate",
+            "M8RestrictionAssignment",
+            "M2RestrictionEvidenceLink"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_014",
+          "method": "post",
+          "route": "/v1/m8/restriction-appeals/{appeal_id}/decisions",
+          "steps": [
+            "S080",
+            "S090",
+            "S100",
+            "S110",
+            "S120"
+          ],
+          "tables": [
+            "M2Restriction",
+            "M2RestrictionAppeal",
+            "M2RestrictionDecision",
+            "M2RestrictionDecisionPrivate",
+            "M8RestrictionAssignment",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_015",
+          "method": "get",
+          "route": "/v1/m8/restriction-appeals",
+          "steps": [
+            "S070",
+            "S080"
+          ],
+          "tables": [
+            "M2RestrictionAppeal",
+            "M2Restriction",
+            "M8RestrictionAssignment"
+          ]
+        },
+        {
+          "id": "MAR_M2_API_042",
+          "method": "get",
+          "route": "/v1/m2/restrictions/{restriction_id}/decisions/{decision_id}",
+          "steps": [
+            "S050",
+            "S100",
+            "S110"
+          ],
+          "tables": [
+            "M2RestrictionDecision",
+            "M2RestrictionDecisionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_018",
+          "method": "get",
+          "route": "/v1/m8/restriction-reviewers",
+          "steps": [
+            "S070",
+            "S080"
+          ],
+          "tables": [
+            "M8MembershipReviewerProfile",
+            "M8MembershipReviewGrant",
+            "M2RestrictionAppeal",
+            "M2Restriction"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M2-UI-014",
+          "states": [
+            "active",
+            "draft",
+            "new_evidence",
+            "ready",
+            "pending",
+            "maintained",
+            "lifted_other_cause",
+            "lifted",
+            "evidence_unavailable",
+            "uncertain"
+          ]
+        },
+        {
+          "id": "MAR-M8-UI-005",
+          "states": [
+            "queue",
+            "create",
+            "candidates",
+            "no_candidates",
+            "conflict",
+            "uncertain",
+            "mfa_required"
+          ]
+        },
+        {
+          "id": "MAR-M8-UI-006",
+          "states": [
+            "review",
+            "evidence_available",
+            "evidence_unavailable",
+            "maintained",
+            "lifted",
+            "assignment_lost",
+            "uncertain"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M8-IT-FE-401",
+        "MAR-M8-IT-FE-402",
+        "MAR-M8-IT-FE-403",
+        "MAR-M8-IT-FE-404",
+        "MAR-M8-IT-FE-405",
+        "MAR-M8-IT-FE-406",
+        "MAR-M8-IT-FE-407",
+        "MAR-M8-IT-FE-408",
+        "MAR-M8-IT-FE-409",
+        "MAR-M8-IT-FE-410",
+        "MAR-M8-IT-FE-425",
+        "MAR-M8-IT-FE-426",
+        "MAR-M8-IT-FE-427",
+        "MAR-M8-IT-FE-428",
+        "MAR-M8-IT-FE-429",
+        "MAR-M8-IT-FE-430",
+        "MAR-M8-IT-FE-431",
+        "MAR-M8-IT-FE-432",
+        "MAR-M8-IT-FE-433",
+        "MAR-M8-IT-FE-434",
+        "MAR-M8-IT-FE-435",
+        "MAR-M8-IT-FE-436",
+        "MAR-M8-IT-FE-437",
+        "MAR-M8-IT-FE-438",
+        "MAR-M8-IT-BE-401",
+        "MAR-M8-IT-BE-402",
+        "MAR-M8-IT-BE-403",
+        "MAR-M8-IT-BE-404",
+        "MAR-M8-IT-BE-405",
+        "MAR-M8-IT-BE-406",
+        "MAR-M8-IT-BE-407",
+        "MAR-M8-IT-BE-408",
+        "MAR-M8-IT-BE-409",
+        "MAR-M8-IT-BE-410",
+        "MAR-M8-IT-BE-411",
+        "MAR-M8-IT-BE-412",
+        "MAR-M8-IT-BE-413",
+        "MAR-M8-IT-BE-414",
+        "MAR-M8-IT-BE-415",
+        "MAR-M8-IT-BE-416",
+        "MAR-M8-IT-BE-417",
+        "MAR-M8-IT-BE-418",
+        "MAR-M8-IT-BE-434",
+        "MAR-M8-IT-BE-435",
+        "MAR-M8-IT-BE-436",
+        "MAR-M8-IT-BE-437",
+        "MAR-M8-IT-BE-438",
+        "MAR-M8-IT-BE-439",
+        "MAR-M8-IT-BE-440",
+        "MAR-M8-IT-BE-441",
+        "MAR-M8-IT-BE-442",
+        "MAR-M8-IT-BE-443",
+        "MAR-M8-IT-BE-444",
+        "MAR-M8-IT-BE-445",
+        "MAR-M8-IT-BE-446",
+        "MAR-M8-IT-BE-447",
+        "MAR-M8-IT-BE-448",
+        "MAR-M8-IT-BE-455",
+        "MAR-M8-IT-BE-456",
+        "MAR-M8-IT-BE-457",
+        "MAR-M8-IT-BE-458",
+        "MAR-M8-IT-BE-459",
+        "MAR-M8-IT-BE-460",
+        "MAR-M2-IT-BE-452",
+        "MAR-M8-IT-BE-464",
+        "MAR-M8-IT-BE-465",
+        "MAR-M8-IT-BE-466",
+        "MAR-M2-PF-BE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M8-UC-004",
+      "sequence": "MAR-M8-SEQ-004",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S001",
+        "S002",
+        "S003",
+        "S120",
+        "S130",
+        "S140"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M8_API_006",
+          "method": "get",
+          "route": "/v1/m8/seller-submissions",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerSubmission",
+            "M8SellerAssignment",
+            "M8MembershipReviewGrant"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_007",
+          "method": "get",
+          "route": "/v1/m8/seller-reviewers",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M8MembershipReviewerProfile",
+            "M8MembershipReviewGrant",
+            "M2SellerSubmission"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_008",
+          "method": "post",
+          "route": "/v1/m8/seller-submissions/{submission_id}/assignments",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M8SellerAssignment",
+            "M8MembershipReviewGrant",
+            "M2SellerSubmission",
+            "M2CommunityCommandReceipt"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_009",
+          "method": "get",
+          "route": "/v1/m8/seller-submissions/{submission_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2SellerVersion",
+            "M2SellerVersionPrivate",
+            "M8SellerAssignment",
+            "M2SellerDecision",
+            "M2SellerDecisionPrivate"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_010",
+          "method": "post",
+          "route": "/v1/m8/seller-submissions/{submission_id}/decisions",
+          "steps": [
+            "S040",
+            "S050",
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2SellerProfile",
+            "M2SellerDecision",
+            "M2SellerDecisionPrivate",
+            "M8SellerAssignment",
+            "M2SellerSubmission",
+            "M2CommunityCommandReceipt",
+            "M2CommunityEvent"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M8-UI-003",
+          "states": [
+            "queue",
+            "candidates",
+            "empty",
+            "no_candidates",
+            "candidate_stale",
+            "mfa_required",
+            "service_error"
+          ]
+        },
+        {
+          "id": "MAR-M8-UI-004",
+          "states": [
+            "review",
+            "membership_lost",
+            "correction_confirmed",
+            "enabled",
+            "rejected",
+            "assignment_lost",
+            "uncertain"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M8-IT-FE-411",
+        "MAR-M8-IT-FE-412",
+        "MAR-M8-IT-FE-413",
+        "MAR-M8-IT-FE-414",
+        "MAR-M8-IT-FE-415",
+        "MAR-M8-IT-FE-416",
+        "MAR-M8-IT-FE-417",
+        "MAR-M8-IT-FE-418",
+        "MAR-M8-IT-FE-419",
+        "MAR-M8-IT-FE-420",
+        "MAR-M8-IT-FE-421",
+        "MAR-M8-IT-FE-422",
+        "MAR-M8-IT-FE-423",
+        "MAR-M8-IT-FE-424",
+        "MAR-M8-IT-BE-419",
+        "MAR-M8-IT-BE-420",
+        "MAR-M8-IT-BE-421",
+        "MAR-M8-IT-BE-422",
+        "MAR-M8-IT-BE-423",
+        "MAR-M8-IT-BE-424",
+        "MAR-M8-IT-BE-425",
+        "MAR-M8-IT-BE-426",
+        "MAR-M8-IT-BE-427",
+        "MAR-M8-IT-BE-428",
+        "MAR-M8-IT-BE-429",
+        "MAR-M8-IT-BE-430",
+        "MAR-M8-IT-BE-431",
+        "MAR-M8-IT-BE-432",
+        "MAR-M8-IT-BE-433",
+        "MAR-M2-IT-BE-453",
+        "MAR-M2-REG-BE-401",
+        "MAR-M2-PF-BE-401",
+        "MAR-M2-PF-FE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    },
+    {
+      "uc": "MAR-M8-UC-005",
+      "sequence": "MAR-M8-SEQ-005",
+      "source_steps": [
+        "S010",
+        "S020",
+        "S030",
+        "S040",
+        "S050",
+        "S060",
+        "S070",
+        "S080",
+        "S090",
+        "S100",
+        "S110",
+        "S120",
+        "S130",
+        "S140"
+      ],
+      "operations": [
+        {
+          "id": "MAR_M8_API_016",
+          "method": "post",
+          "route": "/v1/m8/conservation-commands",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ],
+          "tables": [
+            "M2MembershipRetentionCase",
+            "M2MembershipRetentionHold",
+            "M2MembershipRetentionEvent"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_017",
+          "method": "get",
+          "route": "/v1/m8/conservation-cases/{case_id}",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S070",
+            "S080"
+          ],
+          "tables": [
+            "M2MembershipRetentionCase",
+            "M2MembershipRetentionHold"
+          ]
+        },
+        {
+          "id": "MAR_M8_API_019",
+          "method": "get",
+          "route": "/v1/m8/conservation-cases",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ],
+          "tables": [
+            "M2MembershipRetentionCase",
+            "M8MembershipReviewGrant"
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "id": "MAR-M8-UI-007",
+          "states": [
+            "queue",
+            "finalize",
+            "hold",
+            "release",
+            "overdue",
+            "deleted",
+            "uncertain",
+            "forbidden"
+          ]
+        }
+      ],
+      "planned_test_ids": [
+        "MAR-M8-IT-FE-439",
+        "MAR-M8-IT-FE-440",
+        "MAR-M8-IT-FE-441",
+        "MAR-M8-IT-FE-442",
+        "MAR-M8-IT-FE-443",
+        "MAR-M8-IT-FE-444",
+        "MAR-M8-IT-FE-445",
+        "MAR-M8-IT-FE-446",
+        "MAR-M8-IT-BE-449",
+        "MAR-M8-IT-BE-450",
+        "MAR-M8-IT-BE-451",
+        "MAR-M8-IT-BE-452",
+        "MAR-M8-IT-BE-453",
+        "MAR-M8-IT-BE-454",
+        "MAR-M8-IT-BE-461",
+        "MAR-M8-IT-BE-462",
+        "MAR-M8-IT-BE-463",
+        "MAR-M2-IT-BE-458",
+        "MAR-M8-IT-BE-467",
+        "MAR-M8-IT-BE-468",
+        "MAR-M2-PF-BE-401"
+      ],
+      "designed": true,
+      "implemented": false,
+      "runtime_tested": false
+    }
+  ]
+}

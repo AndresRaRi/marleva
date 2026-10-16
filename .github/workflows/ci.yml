@@ -55,6 +55,15 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Comprobar unitarias
         run: pnpm ci:run unitarias
+      - name: Conservar cobertura general
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: coverage-general-${{ github.sha }}
+          path: |
+            marleva-local/repositorio/coverage/lcov.info
+            marleva-local/repositorio/coverage/coverage-summary.json
+          retention-days: 3
+          if-no-files-found: error
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs unitarias '${{ job.status }}'
@@ -71,6 +80,7 @@ jobs:
       - sonar
       - web
       - codeql
+      - cobertura
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -256,13 +266,42 @@ jobs:
         if: always()
         run: node scripts/ci-summary.mjs codeql '${{ job.status }}'
 
+  m3:
+    uses: ./.github/workflows/m3.yml
+  cobertura:
+    needs: [unitarias, m3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Recuperar cobertura del mismo run y SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download "$GITHUB_RUN_ID" --name "coverage-general-$GITHUB_SHA" --dir coverage
+          gh run download "$GITHUB_RUN_ID" --name "m3-$GITHUB_SHA" --dir artifacts/ci/m3-evidence
+      - name: Evaluar línea base y código nuevo con cobertura agregada
+        run: |
+          export MARLEVA_COVERAGE_BASE="$(git merge-base HEAD origin/main)"
+          export MARLEVA_COVERAGE_EXTRA=artifacts/ci/m3-evidence/coverage/m3-full/lcov.info
+          pnpm coverage:check
   sonar:
+    permissions:
+      contents: read
+      actions: read
     concurrency:
       group: sonar-cloud-andresrari-marleva
       cancel-in-progress: false
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    needs: [calidad, arquitectura-contratos, unitarias]
+    needs: [calidad, arquitectura-contratos, unitarias, m3]
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -272,6 +311,12 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Generar LCOV del cambio para Sonar
         run: pnpm test:coverage
+      - name: Incorporar cobertura M3 del mismo run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download "$GITHUB_RUN_ID" --name "m3-$GITHUB_SHA" --dir artifacts/ci/m3-evidence
+          cat artifacts/ci/m3-evidence/coverage/m3-full/lcov.info >> coverage/lcov.info
       - name: Sonar Cloud privado con negativa y corrección reales
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

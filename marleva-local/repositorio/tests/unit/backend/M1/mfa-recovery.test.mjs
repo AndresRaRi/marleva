@@ -4,6 +4,7 @@ vi.mock('../../../../apps/api/src/config.ts', () => ({
 }));
 import { RecoveryContext } from '../../../../apps/api/src/modules/m1/application/use-cases/recovery-context.ts';
 import { RequestMfaRecovery } from '../../../../apps/api/src/modules/m1/application/use-cases/request-mfa-recovery.ts';
+import { ReadCurrentMfaRecovery } from '../../../../apps/api/src/modules/m1/application/use-cases/read-current-mfa-recovery.ts';
 import { ReadMfaRecovery } from '../../../../apps/api/src/modules/m1/application/use-cases/read-mfa-recovery.ts';
 import { ReviewMfaRecovery } from '../../../../apps/api/src/modules/m1/application/use-cases/review-mfa-recovery.ts';
 import { IssueRecoveryCapability } from '../../../../apps/api/src/modules/m1/application/use-cases/issue-recovery-capability.ts';
@@ -446,4 +447,25 @@ it('UT121 validación frontera rechaza campos, clave/capacidad y códigos mal fo
   expect(recoveryKey('key')).toBe('key');
   expect(() => recoveryCapability('invalid')).toThrow();
   expect(recoveryCapability('a'.repeat(43))).toBe('a'.repeat(43));
+});
+
+it('UT126 consulta actual propia: ausencia, proyección mínima, cuenta ajena y sesión revocada', async () => {
+  const currentRead = new ReadCurrentMfaRecovery(context, reads);
+  expect(await currentRead.execute(owner)).toEqual({ recuperacion: null });
+  const row = await requested();
+  expect(await currentRead.execute(owner)).toEqual({
+    recuperacion: { id: row.id, state: 'requested', version: 1 },
+  });
+  expect(await currentRead.execute(reviewer)).toEqual({ recuperacion: null });
+  sessions.delete(owner.sessionId);
+  await expect(currentRead.execute(owner)).rejects.toMatchObject({ status: 401 });
+});
+it('UT126 lectura actual conserva expiración y no acredita permisos por consultar', async () => {
+  const currentRead = new ReadCurrentMfaRecovery(context, reads);
+  await requested();
+  now = new Date(+now + 86400000);
+  expect((await currentRead.execute(owner)).recuperacion.state).toBe('expired');
+  expect(await currentRead.execute(owner)).toEqual({ recuperacion: null });
+  roles.get('owner').clear();
+  await expect(currentRead.execute(owner)).rejects.toMatchObject({ status: 403 });
 });

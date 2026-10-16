@@ -3,7 +3,10 @@ import React from 'react';
 import { create, act } from 'react-test-renderer';
 const mock = vi.hoisted(() => ({ api: vi.fn() }));
 vi.mock('../../../../apps/client/src/api', () => ({ api: mock.api }));
-vi.mock('../../../../apps/client/node_modules/react-native', () => ({ Text: 'Text' }));
+vi.mock('../../../../apps/client/node_modules/react-native', () => ({
+  Text: 'Text',
+  Pressable: 'Pressable',
+}));
 import { AccountNotices } from '../../../../apps/client/src/modules/m1/components/account-notices';
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 const styles = { body: {}, error: {} };
@@ -79,4 +82,22 @@ it('MAR-M1-UT-FE-108-V | desmontaje cancela transporte e ignora 401 tardío', as
     reject(Object.assign(new Error('Sesión anterior'), { status: 401 }));
   });
   expect(expired).not.toHaveBeenCalled();
+});
+
+it('MAR-M1-UT-FE-108-P6 | control real carga siguiente y desaparece al terminar', async () => {
+  mock.api.mockResolvedValueOnce({ items: [own], next_cursor: 'next' }).mockResolvedValueOnce({
+    items: [{ ...own, id: 'second', text: 'Segundo aviso' }],
+    next_cursor: null,
+  });
+  const tree = await mount();
+  const button = tree.root.findByType('Pressable');
+  expect(button.props.disabled).toBe(false);
+  expect(button.props.style.minHeight).toBeGreaterThanOrEqual(48);
+  await act(async () => button.props.onPress());
+  expect(tree.root.findAllByType('Pressable')).toHaveLength(0);
+  expect(tree.root.findAllByType('Text').map((node) => node.props.children)).toEqual([
+    'Aviso propio',
+    'Segundo aviso',
+  ]);
+  await act(async () => tree.unmount());
 });

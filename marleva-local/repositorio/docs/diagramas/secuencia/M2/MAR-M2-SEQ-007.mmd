@@ -1,0 +1,22 @@
+%% MAR-M2-SEQ-007: Crear y editar perfil comercial
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+T->>A: S010 Crear o guardar perfil propio con versión/clave
+A->>I: S020 Verificar identidad de cuenta
+A->>D: S030 Bloquear expediente antes de perfil, comprobar pertenencia approved y restricciones offer/both
+alt No elegible
+ A-->>T: S040 Informar cómo resolver pertenencia, no habilitar perfil
+else Elegible
+ A->>A: S050 Validar campos, modalidades, cobertura y separación de finalidades
+ A->>D: S060 Guardar perfil único por cuenta, versión pública/privado separados, recibo y revisión atómicos
+ A-->>T: S070 Borrador guardado, no publicado ni alta financiera
+end
+Note over T,D: S080 Preparar material_change de enabled bloquea difusión inmediatamente, conserva decisión histórica, correction y reconsideration exigen fuente exacta
+Note over A,D: S090 Cobertura1..7, modalidades sin repetidos, no copiar legalName/domicilio de expediente
+Note over T,D: S100 PUT reemplaza campos completos, admite incompleto solo en draft, reconsideración exige motivo
+Note over A,D: S110 Incrementar eligibilityRevision al cambiar elegibilidad, un perfil y una versión actual
+Note over T,A: S120 Consultar recibo ante resultado incierto, sin crear otra clave para la misma intención

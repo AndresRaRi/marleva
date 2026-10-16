@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-15",
+  "timezone": "America/Merida",
+  "chat": "MAR-CHAT-007",
+  "sourceRun": {
+    "id": 38829683856,
+    "url": "https://github.com/AndresRaRi/marleva/actions/runs/38829683856",
+    "sha": "99aca63802e67857b97617a4213a36fe4b3643d0",
+    "security": "failure",
+    "licenses": "passed",
+    "unresolvedVulnerabilities": "none"
+  },
+  "cause": "15 coincidencias generic-api-key;14 huellas documentales y1 identificador de perfil de calidad",
+  "correction": {
+    "file": "marleva-local/repositorio/.gitleaksignore",
+    "method": "Fingerprints exactos commit:archivo:regla:línea; sin exclusiones de carpetas, expresiones amplias, reescritura o desactivar reglas",
+    "fingerprints": [
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 79,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.yaml",
+        "sha256": "b02d65678c3bf632c63b5686a58d82f01bb99711d57477c1c38028651cb199b6",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 80,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.json",
+        "sha256": "1eb996c97c107a915b60119336c5f210e1e6733047f1fc910289852e4d593c1a",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:470",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 470,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "apis/M2/VALIDACION_OPENAPI.json",
+        "sha256": "819e851e7cc95a36800c730062f745a417708f8ce5b5ed7e6d4bbb770ec70bee",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:472",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 472,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "apis/M2/generar-openapi.mjs",
+        "sha256": "b8d313d4da1690e606caed84a8811ddca0fb10da76620e9c328aaa117319ea1b",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:474",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 474,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "apis/M2/openapi.json",
+        "sha256": "1eb996c97c107a915b60119336c5f210e1e6733047f1fc910289852e4d593c1a",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475",
+        "commit": "99aca63802e67857b97617a4213a36fe4b3643d0",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json",
+        "line": 475,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "apis/M2/openapi.yaml",
+        "sha256": "b02d65678c3bf632c63b5686a58d82f01bb99711d57477c1c38028651cb199b6",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:118",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json",
+        "line": 118,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.yaml",
+        "sha256": "cff47773b5ffb0898c31869e6570111a2cd12d45466faa6e05d68ae2f00544b9",
+        "sameCommitContentRecomputed": false,
+        "context": "Acta histórica de un corte anterior; campo de huella generado por createHash(sha256), no clave de autenticación"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:119",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json",
+        "line": 119,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.json",
+        "sha256": "2e2cbc49380d47b0c55b02375cc58d773084f08722957a3d4197866382b688b4",
+        "sameCommitContentRecomputed": false,
+        "context": "Acta histórica de un corte anterior; campo de huella generado por createHash(sha256), no clave de autenticación"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:126",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json",
+        "line": 126,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.yaml",
+        "sha256": "a6c13294bc29edfc594878614c54176d8e72d6be63425ab2581210f63c792832",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:127",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json",
+        "line": 127,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.json",
+        "sha256": "66b436a34fc3d9c8167c9b96c9872c36aa71cfc93e5a1b6c7aacb3938b73c239",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:56",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json",
+        "line": 56,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.yaml",
+        "sha256": "b4529243df59e8e1f80b24aff8bacc04017db50f6c2be31f93088dd481a3b68e",
+        "sameCommitContentRecomputed": false,
+        "context": "Acta histórica de un corte anterior; campo de huella generado por createHash(sha256), no clave de autenticación"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:57",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json",
+        "line": 57,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.json",
+        "sha256": "299450078506d7a75f71a490985ac296fac1e99f99d694b078b8a400a9705304",
+        "sameCommitContentRecomputed": false,
+        "context": "Acta histórica de un corte anterior; campo de huella generado por createHash(sha256), no clave de autenticación"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:55",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json",
+        "line": 55,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.yaml",
+        "sha256": "a6c13294bc29edfc594878614c54176d8e72d6be63425ab2581210f63c792832",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:56",
+        "commit": "4269f7463fc54aa22ab40ea1554e615ce163f575",
+        "file": "marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json",
+        "line": 56,
+        "rule": "generic-api-key",
+        "classification": "SHA256 documental, no credencial",
+        "field": "openapi.json",
+        "sha256": "66b436a34fc3d9c8167c9b96c9872c36aa71cfc93e5a1b6c7aacb3938b73c239",
+        "sameCommitContentRecomputed": true,
+        "context": "Contenido exacto del archivo del mismo commit"
+      },
+      {
+        "fingerprint": "4af0e279ac2479696f928414d75bfa7135d60475:marleva-local/repositorio/infra/ci/sonar-cloud.json:generic-api-key:9",
+        "commit": "4af0e279ac2479696f928414d75bfa7135d60475",
+        "file": "marleva-local/repositorio/infra/ci/sonar-cloud.json",
+        "line": 9,
+        "rule": "generic-api-key",
+        "classification": "Identificador de perfil de calidad Sonar, no token de autenticación",
+        "field": "profile.key",
+        "profileName": "Sonar way core",
+        "activeRuleCount": 248
+      }
+    ]
+  },
+  "verification": {
+    "tool": "Gitleaks8.30.1",
+    "binarySha256": "ba52fb1bfabbcde42f032afad3d6e0b19dff8ed105229a16e7caa338bbc0e84f",
+    "archiveSha256": "b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5",
+    "localHistoryScan": "passed",
+    "remainingFindings": 0,
+    "syntheticNewCredential": "blocked",
+    "syntheticRule": "generic-api-key",
+    "baseTrackedFilesUnchanged": 410,
+    "ciFinal": "se comprueba por HEAD remoto y ejecución final, no inferido de ensayo local"
+  },
+  "scope": {
+    "m1Changed": false,
+    "sharedContractsChanged": false,
+    "m2m8Implemented": false,
+    "m2SqlApplied": false,
+    "productTestsM2M8Executed": 0,
+    "sourcesUploaded": false
+  },
+  "delivery": {
+    "branch": "codex/docs-m2-m8-007",
+    "documentation": "VALIDACION_INTEGRAL.json",
+    "reviewM2": "../../revision/M2/INSTRUCTIVO_M2.md",
+    "reviewM8": "../../revision/M8/INSTRUCTIVO_M8.md"
+  },
+  "activationConditions": [
+    "Aceptación visual humana",
+    "D07/A8 integración efectiva de identidad/MFA/avisos/Storage y restauración",
+    "D08-R validación material de política/calendarios/mínimo y borrado real",
+    "D09-R designación y aprovisionamiento real de revisores"
+  ]
+}

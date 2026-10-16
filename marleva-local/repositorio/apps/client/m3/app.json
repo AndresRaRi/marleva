@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Marleva Catálogo ficticio",
+    "slug": "marleva-m3-local",
+    "version": "0.1.0",
+    "scheme": "marleva-m3-fixture",
+    "web": { "bundler": "metro", "output": "single" },
+    "android": { "package": "mx.marleva.catalogo.fixture" },
+    "ios": { "bundleIdentifier": "mx.marleva.catalogo.fixture" }
+  }
+}

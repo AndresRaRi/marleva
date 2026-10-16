@@ -1,59 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { Text, type StyleProp, type TextStyle } from 'react-native';
-import { api } from '../../../api';
-import { noticesResponse } from '../notices-response';
-import type { ApiResponse } from '../../../api-response';
+import React, { useEffect, useRef, useState } from 'react';
+import { Pressable, Text, type StyleProp, type TextStyle } from 'react-native';
+import { NoticePages, type NoticePageState } from '../notice-pages';
 type Props = {
   accountId: string;
   onSessionExpired: (account: null) => void;
   styles: { body: StyleProp<TextStyle>; error: StyleProp<TextStyle> };
 };
 function useAccountNotices(accountId: string, onSessionExpired: (account: null) => void) {
-  const [items, setItems] = useState<ApiResponse<'MAR_M1_API_009'>['items'] | null>(null);
-  const [error, setError] = useState('');
+  const [state, setState] = useState<NoticePageState>({
+    items: null,
+    cursor: null,
+    loading: true,
+    error: '',
+  });
+  const pages = useRef<NoticePages | null>(null);
   useEffect(() => {
-    let current = true;
-    const controller = new AbortController();
-    api('/v1/notifications', 'GET', undefined, controller.signal)
-      .then((value) => {
-        const response = noticesResponse(value, accountId);
-        if (current) setItems(response.items);
-      })
-      .catch((cause: unknown) => {
-        if (!current) return;
-        if (cause instanceof Error && 'status' in cause && cause.status === 401)
-          onSessionExpired(null);
-        else setError(cause instanceof Error ? cause.message : 'No pudimos consultar tus avisos');
-      });
-    return () => {
-      current = false;
-      controller.abort();
-    };
+    const current = new NoticePages(accountId, setState, onSessionExpired);
+    pages.current = current;
+    void current.load();
+    return () => current.dispose();
   }, [accountId, onSessionExpired]);
-  return { items, error };
+  return {
+    ...state,
+    loadMore: () => {
+      void pages.current?.load();
+    },
+  };
 }
 export function AccountNotices({ accountId, onSessionExpired, styles }: Props) {
-  const { items, error } = useAccountNotices(accountId, onSessionExpired);
-  if (error)
-    return (
-      <Text accessibilityRole="alert" style={styles.error}>
-        {error}
-      </Text>
-    );
+  const { items, error, cursor, loading, loadMore } = useAccountNotices(
+    accountId,
+    onSessionExpired,
+  );
   if (items === null)
     return (
-      <Text accessibilityLiveRegion="polite" style={styles.body}>
-        Consultando avisos…
+      <Text
+        accessibilityRole={error ? 'alert' : undefined}
+        accessibilityLiveRegion="polite"
+        style={error ? styles.error : styles.body}
+      >
+        {error || 'Consultando avisos…'}
       </Text>
     );
   if (!items.length) return <Text style={styles.body}>Todavía no hay avisos.</Text>;
   return (
     <>
+      {error ? (
+        <Text accessibilityRole="alert" style={styles.error}>
+          {error}
+        </Text>
+      ) : null}
       {items.map((item) => (
         <Text key={item.id} style={styles.body}>
           {item.text}
         </Text>
       ))}
+      {cursor !== null ? (
+        <MoreNotices loading={loading} load={loadMore} style={styles.body} />
+      ) : null}
     </>
+  );
+}
+
+function MoreNotices({
+  loading,
+  load,
+  style,
+}: {
+  loading: boolean;
+  load: () => void;
+  style: StyleProp<TextStyle>;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled: loading, busy: loading }}
+      style={{ minHeight: 48, justifyContent: 'center' }}
+      disabled={loading}
+      onPress={load}
+    >
+      <Text style={style}>{loading ? 'Consultando más avisos…' : 'Cargar más avisos'}</Text>
+    </Pressable>
   );
 }

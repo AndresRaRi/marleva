@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-15",
+  "chat": "MAR-CHAT-007",
+  "generation": {
+    "dbmlPackage": "10.3.1",
+    "externalDefinitionsExcluded": [
+      "Account",
+      "Session",
+      "Development"
+    ],
+    "newTables": [
+      "M2MembershipApplication",
+      "M2MembershipVersion",
+      "M2MembershipVersionPrivate",
+      "M2MembershipDocument",
+      "M2MembershipVersionDocument",
+      "M2MembershipSubmission",
+      "M8MembershipReviewGrant",
+      "M8MembershipAssignment",
+      "M2MembershipDecision",
+      "M2MembershipDecisionPrivate",
+      "M2MembershipDocumentAccess",
+      "M2MembershipEvent",
+      "M2MembershipCommandReceipt",
+      "M2MembershipRetentionCase",
+      "M2MembershipRetentionHold",
+      "M2MembershipDeletionTask",
+      "M2MembershipRetentionEvent",
+      "M2MembershipReplica",
+      "M8MembershipReviewerProfile"
+    ],
+    "foreignKeys": 47,
+    "checks": 83,
+    "partialIndexes": 4,
+    "sourceSha256": "5228fce8e2fffddbf37cef6c2cf616a054cac8219f779e58fd0c853c08388b93",
+    "complementSha256": "ac549d67c738b121ae262de0bde7320403bc2aea3e18dadcefcfa27055ed2d21",
+    "ddlSha256": "52b2b932a26ab741e2cefbd8c93136183ef3f28f5e223bc1126b1205015dbc22",
+    "dbmlParse": "passed",
+    "sqlDocumentaryRoundtrip": "passed",
+    "postgresParse": "not_run",
+    "sqlApplied": false,
+    "roundtripContext": "referencias externas minimas solo en memoria"
+  },
+  "deterministicSecondGeneration": true,
+  "foreignKeyTargetAndTypeReview": {
+    "references": 47,
+    "errors": []
+  },
+  "diagramStepsPreserved": [
+    {
+      "id": "MAR-M2-SEQ-001",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "45c8b7c584e1c712386e7a617de0e5796b40c095cf0bf18346cea201e4450bd5"
+    },
+    {
+      "id": "MAR-M2-SEQ-002",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b92139a16447a6fbc97b88bbcbe805b1a0aab0e06e9321bbec72137130cb7034"
+    },
+    {
+      "id": "MAR-M2-SEQ-003",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": true,
+      "sourceSha256": "c8349b2a4e9f2e6fcd1a57c203f7688b423eec3ed6957fe686752349ff1b1804"
+    },
+    {
+      "id": "MAR-M2-SEQ-004",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "0359e47a0a4b142807fd67595c7a95ebb988538cce4e0d677d8134d7b32ea393"
+    },
+    {
+      "id": "MAR-M2-SEQ-005",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "d07f61617fce1620e06b61074b6abbd4975c62dee3b0e9baa45271c3d9fd70c1"
+    },
+    {
+      "id": "MAR-M2-SEQ-006",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "ec6ca6aa3fe5508f5c6314c66015dbd9480550f820bb22a05692f1b97a7bfb58"
+    },
+    {
+      "id": "MAR-M2-SEQ-007",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "8ab682a75b1445e3462af9bf8272c7df1f15b2e8ee1aa31193a3903895027feb"
+    },
+    {
+      "id": "MAR-M2-SEQ-008",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "156fac094ae33e7cda773383ee69eb286952feaa689735fdcf77f75f0597eaa1"
+    },
+    {
+      "id": "MAR-M2-SEQ-009",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b73c98d7cacb652673d7e2e7fb185a5f9a2310c023010f91d69d20d69f8cfbf0"
+    },
+    {
+      "id": "MAR-M2-SEQ-010",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "4807513c02afb83f60a118f8e798aea8d6304b058fed458600360f59c6395997"
+    },
+    {
+      "id": "MAR-M2-SEQ-011",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "b06720f13cd1689c10cd7a0c7ee74b0d9a4ad18dba89813271b22a944e529bae"
+    },
+    {
+      "id": "MAR-M8-SEQ-001",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "c10b2f79e8930d88541c8c2b1eecb3704ea93d775829222bc6600d95843c3393"
+    },
+    {
+      "id": "MAR-M8-SEQ-002",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": true,
+      "sourceSha256": "17dc6f776f59f0118313415cf0821931b1790ab6e942cd7d672b22f98904af8c"
+    },
+    {
+      "id": "MAR-M8-SEQ-003",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "f677bd5da005ce44bcd0f065d6578c93d68caadf647fc66ef01904adcfe5bde7"
+    },
+    {
+      "id": "MAR-M8-SEQ-004",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "28c0700648c00501a79be25cd0ffecdb1577339ba589da5132bdc99f1b157fbb"
+    },
+    {
+      "id": "MAR-M8-SEQ-005",
+      "stepsPreserved": true,
+      "parse": "passed",
+      "render": "passed",
+      "sourceChanged": false,
+      "sourceSha256": "873a79cc69afb06f491be2da90a7231dc4fc38b80a5aa4b0740bf1e1541a44f9"
+    }
+  ],
+  "sqlApplied": false,
+  "runtimeTests": "not_run",
+  "acta": "../../apis/M2/VALIDACION_AUDITORIA.json",
+  "deliveryActa": "../../apis/M2/VALIDACION_ENTREGA.json"
+}

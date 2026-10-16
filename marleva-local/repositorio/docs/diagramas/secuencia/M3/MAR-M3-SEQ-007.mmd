@@ -1,0 +1,15 @@
+%% MAR-M3-SEQ-007; UC-007; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S010 Identidad vigente por puerto; dueño actual
+ U->>A: S020 Autorizar titular vigente
+ A->>D: S040 Bloquear oferta y comprobar expected_version
+ A->>D: S060 Pausar público sin borrar versiones
+ A-->>U: S080 Guardar evento y recibo; siguiente lectura oculta
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

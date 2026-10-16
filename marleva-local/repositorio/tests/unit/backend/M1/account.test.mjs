@@ -118,7 +118,7 @@ beforeEach(() => {
     .mockResolvedValue({ data: { session: tokens }, error: null });
   fixture.auth.updateUser = vi.fn().mockResolvedValue({ error: null });
   fixture.auth.mfa = {
-    listFactors: vi.fn().mockResolvedValue({ data: { totp: [] }, error: null }),
+    listFactors: vi.fn().mockResolvedValue({ data: { all: [], totp: [] }, error: null }),
     enroll: vi.fn().mockResolvedValue({ data: { id, totp: { uri: 'fixture-only' } }, error: null }),
     challengeAndVerify: vi.fn().mockResolvedValue({ data: tokens, error: null }),
     getAuthenticatorAssuranceLevel: vi
@@ -501,4 +501,69 @@ it('UT-BE-103-G | renovación ajena que no termina conserva error recuperable', 
   await vi.advanceTimersByTimeAsync(3000);
   await work;
   expect(fixture.auth.getUser).not.toHaveBeenCalled();
+});
+
+it('MAR-M1-UT-BE-109-RECONCILE | cambio incierto bloquea otro aun tras vencer plazo', async () => {
+  database.emailChange.findFirst.mockResolvedValue({
+    ...change,
+    state: 'reconcile',
+    expiresAt: new Date(Date.now() - 1),
+  });
+  await expect(service.emailChange(principal, 'c@example.test')).rejects.toMatchObject({
+    response: { codigo: 'CAMBIO_EN_CURSO' },
+  });
+  expect(database.emailChange.findFirst.mock.calls[0][0].where.OR).toEqual([
+    { state: { in: ['open', 'sending', 'verifying'] }, expiresAt: { gt: new Date() } },
+    { state: 'reconcile' },
+  ]);
+  expect(database.emailChange.create).not.toHaveBeenCalled();
+});
+
+it('MAR-M1-UT-BE-107-FACTORS | lista propia requiere rol y no devuelve secretos', async () => {
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'PERMISO' },
+  });
+  account.operator = true;
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: {
+      totp: [],
+      all: [
+        {
+          id,
+          friendly_name: 'Mi autenticador',
+          status: 'unverified',
+          factor_type: 'totp',
+          secret: 'never-exposed',
+          uri: 'never-exposed',
+        },
+      ],
+    },
+    error: null,
+  });
+  expect(await service.factors(principal)).toEqual({
+    items: [{ id, nombre: 'Mi autenticador', estado: 'unverified' }],
+  });
+});
+
+it('MAR-M1-UT-BE-107-FACTORS-BOUNDARY | ignora otro tipo y falla cerrado por exceso o proveedor', async () => {
+  account.operator = true;
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: { totp: [], all: [{ id, factor_type: 'phone', status: 'verified', secret: 'private' }] },
+    error: null,
+  });
+  expect(await service.factors(principal)).toEqual({ items: [] });
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: { all: Array(51).fill({}), totp: [] },
+    error: null,
+  });
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'DEPENDENCIA' },
+  });
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: null,
+    error: Error('provider unavailable'),
+  });
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'DEPENDENCIA' },
+  });
 });

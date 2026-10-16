@@ -54,13 +54,13 @@ Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.jso
 
 Recuperación B12: copia con atributos, borrado posterior, revocación, cola restaurada y recuperación de operador probados en ensayos separados. Falta el ensayo integral y la aceptación de plataformas. [Procedimiento](docs/proceso/RECUPERACION_B12_M1.md). No mezclar destinos ni dar por restaurado todo por pasar una fase.
 
-Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Pantallas y aceptación pendientes.
+Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Cliente parcial implementado; recorrido integral de pantallas/plataformas y aceptación pendientes.
 
 ## Leer el CI
 
 [![CI](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml)
 
-Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español, corregir la causa y repetir el mismo comando local.
+Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español y corregir la causa según00§13; CI es validación principal y los diagnósticos locales se limitan a lo necesario.
 
 | Etapa | Ejecutar desde esta carpeta |
 |---|---|
@@ -82,3 +82,13 @@ El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriore
 El stack CI usa puertos 54621/54622/54624/54625 y credenciales propias ignoradas. Integración y web requieren libres los puertos API 3000 y HTTPS 8443; no detener procesos ajenos. En este Mac se puede usar el proxy TLS existente mediante MARLEVA_CI_EXISTING_PROXY=1, deteniendo y restaurando únicamente la API con scripts/local.mjs. Los jobs de GitHub tienen entorno propio; NSS confía en su CA temporal, sin ignorar TLS. No ejecutar suites que detienen Auth/Storage/correo en paralelo. Migraciones aplicadas intactas; pruebas de operadores usan una base nueva independiente, no reinician cuotas de otras suites.
 
 Requisito de GitHub: la revisión de dependencias necesita Dependency graph habilitado en Settings → Security → Advanced Security, en [ajustes de seguridad](https://github.com/AndresRaRi/marleva/settings/security_analysis). Se habilitó por solicitud del usuario y el control ya pasó. OSV analiza los lockfiles completos; su informe original se conserva y solo se reconoce una corrección local cuando coinciden sus hashes y pasan las regresiones en la misma ejecución. Cualquier aviso sin corrección comprobada bloquea. [PR #2 integrado](https://github.com/AndresRaRi/marleva/pull/2); cierre documental en [PR #3](https://github.com/AndresRaRi/marleva/pull/3), integrado por el usuario.
+
+## Continuación UC008, 15-10-2026
+
+PR #7 integrado en main db2ec7d. Incremento siguiente en codex/feat-m1-paginacion-avisos: cargar más avisos conserva lista y cursor ante error, impide petición duplicada y termina al agotar cursor. Actualizar cuenta vuelve a primera página. Pruebas: notice-pages/account-notices y recorrido paginated-notices incorporado al ensayo web de CI. API009, modelo y migraciones conservados. SonarCloud conservado; CI del código consolidado902308e aprobado en38847365871. Consultar HEAD documental vigente enPR8; aceptaciónM1 pendiente.
+
+## M3 aislado
+
+Composición aislada autorizada en008, ahora reunida en009: [revisión y comandos](docs/revision/M3/INSTRUCTIVO_M3.md). No usar los scripts de arranque/parada M1 para M3. API3103, web8103 yPG55432 propios; solo datos ficticios. Catálogo público y gestión privada inyectable: borrador/edición, fotos, envío, revisión y pausa, probados con identidad ficticia. Integración real M1/M2/M8, plataformas y aceptación pendientes; M3 no completo.
+
+Consolidación009: la API M3 requiere M3_DATABASE_URL explícita y los ensayos/admin M3_ADMIN_DATABASE_URL; destino127.0.0.1:55432/marleva_m3_008 y rolesm3_api/postgres respectivamente. Configuración exclusivamente ficticia del entorno local existente: `export M3_DATABASE_URL=postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008` y `export M3_ADMIN_DATABASE_URL=postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008`. No usar en producción. CI las proporciona explícitamente; no hay contraseña predeterminada en runtime.

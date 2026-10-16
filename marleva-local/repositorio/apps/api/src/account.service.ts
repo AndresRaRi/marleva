@@ -305,8 +305,10 @@ export class AccountService {
       const active = await tx.emailChange.findFirst({
         where: {
           accountId: p.account.id,
-          state: { in: ['open', 'sending', 'verifying'] },
-          expiresAt: { gt: new Date() },
+          OR: [
+            { state: { in: ['open', 'sending', 'verifying'] }, expiresAt: { gt: new Date() } },
+            { state: 'reconcile' },
+          ],
         },
       });
       if (active) fail(409, 'CAMBIO_EN_CURSO', 'Ya hay un cambio de correo en curso');
@@ -440,6 +442,22 @@ export class AccountService {
     });
     if (active || (latest && latest.state !== 'completed'))
       fail(409, 'RECUPERACION_ACTIVA', 'Continúa el proceso de recuperación');
+  }
+  async factors(p: Principal) {
+    if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso de operador');
+    const { client } = await authenticatedIdentity(p.tokens);
+    const { data, error } = await client.auth.mfa.listFactors();
+    if (error || !data || data.all.length > 50)
+      fail(503, 'DEPENDENCIA', 'No pudimos consultar tus factores');
+    return {
+      items: data.all
+        .filter((factor) => factor.factor_type === 'totp')
+        .map((factor) => ({
+          id: factor.id,
+          nombre: factor.friendly_name ?? 'Autenticador',
+          estado: factor.status,
+        })),
+    };
   }
   async enroll(p: Principal) {
     if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso de operador');

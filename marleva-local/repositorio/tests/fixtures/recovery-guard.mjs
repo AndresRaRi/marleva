@@ -16,7 +16,13 @@ export function recoveryNames(run) {
     storageTarget: prefix + '-target-storage',
   };
 }
-export function assertRecoverySource(container, name, volume, destination) {
+export function assertRecoverySource(
+  container,
+  name,
+  volume,
+  destination,
+  network = 'marleva-private',
+) {
   assert.equal(container.Name, '/' + name);
   assert.match(container.Image, /^sha256:[a-f0-9]{64}$/);
   assert.equal(container.Mounts.length, 1, 'Montajes adicionales requieren revisión');
@@ -24,19 +30,19 @@ export function assertRecoverySource(container, name, volume, destination) {
   assert.equal(mount.Type, 'volume');
   assert.equal(mount.Name, volume);
   assert.equal(mount.Destination, destination);
-  assert.ok(Object.hasOwn(container.NetworkSettings.Networks, 'marleva-private'));
+  assert.ok(Object.hasOwn(container.NetworkSettings.Networks, network));
 }
-export function assertRecoveryCopy(source, target, names) {
-  const knownSources = [...Object.values(sourceVolumes), names.pgBackup, names.storageBackup];
+export function assertRecoveryCopy(source, target, names, volumes = sourceVolumes) {
+  const knownSources = [...Object.values(volumes), names.pgBackup, names.storageBackup];
   const targets = [names.pgBackup, names.storageBackup, names.pgTarget, names.storageTarget];
   assert.ok(knownSources.includes(source), 'Origen no identificado');
   assert.ok(targets.includes(target), 'Destino no identificado');
   assert.notEqual(source, target);
-  assert.ok(!Object.values(sourceVolumes).includes(target), 'No escribir en origen');
+  assert.ok(!Object.values(volumes).includes(target), 'No escribir en origen');
   assert.ok(
     [
-      [sourceVolumes.supabase_db_marleva_m1, names.pgBackup],
-      [sourceVolumes.supabase_storage_marleva_m1, names.storageBackup],
+      [volumes.supabase_db_marleva_m1, names.pgBackup],
+      [volumes.supabase_storage_marleva_m1, names.storageBackup],
       [names.pgBackup, names.pgTarget],
       [names.storageBackup, names.storageTarget],
     ].some(([from, to]) => source === from && target === to),

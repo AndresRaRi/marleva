@@ -1,0 +1,15 @@
+%% MAR-M3-SEQ-004; UC-004; diseño previo, no prueba de ejecución
+sequenceDiagram
+ actor U as Actor
+ participant A as Caso M3
+ participant D as Datos/puerto M3
+ U->>A: S010 Identidad vigente por puerto; dueño, sin rol del cuerpo
+ U->>A: S020 Autorizar titular elegible
+ A->>D: S040 Validar datos y clave/version
+ A->>D: S060 Bloquear oferta y revisar recibo idempotente
+ A-->>U: S080 Insertar borrador nuevo, evento y recibo atómicos
+ alt Entrada/permiso/estado inválido
+ A-->>U: S090 Error estable sin efectos parciales
+ else Dependencia caída
+ A-->>U: S095 503, conservar paso y reintentar
+ end

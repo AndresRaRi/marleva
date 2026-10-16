@@ -1,0 +1,28 @@
+%% MAR-M8-SEQ-003: Restricción y reconsideración vecinal/comercial
+%% 15-10-2026. Objetivo documental. Sin API o implementación acreditadas.
+sequenceDiagram
+actor T as Titular
+actor R as Revisor M8
+participant A as API objetivo M2 y M8
+participant I as M1 identidad y sesión existente
+participant D as Persistencia objetivo por módulos
+R->>A: S010 Restringir por causa, alcance y versión
+A->>I: S020 Comprobar permiso, MFA y autenticación reciente
+A->>D: S030 Sin conflicto y recurso actual
+A->>D: S040 Guardar restricción, efectos nuevos e historial/evento
+A-->>T: S050 Motivo visible y vía de reconsideración
+T->>A: S060 Preparar/guardar motivo y enlaces explícitos a versión enviada propia, hasta2 documentos
+A->>D: S070 Guardar borrador propio o presentar congelado pending, nunca levantar restricción al preparar/enviar
+R->>A: S080 Consultar candidatos por apelación, asignar o abrir revisión asignada sin conflicto
+A->>I: S090 Revalidar gestor/revisor restrict de ámbito, MFA, perfil operativo y asignación exacta
+A->>D: S100 Lift/maintain de una causa, decisión única, cerrar apelación/asignación, eligibilityRevision, recibo/evento juntos
+Note over A,D: S110 Elegibilidad exige todas las causas levantadas y pertenencia/perfil vigentes
+Note over T,D: S120 Obligaciones anteriores se conservan
+Note over A,D: S130 Restricción independiente de estado base, seller solo scope offer, membership buy/offer/both
+Note over T,D: S140 Nueva evidencia vecinal usa UC005 evidence_update y flujo normal, no endpoint de cargas paralelo
+Note over A,D: S150 Una apelación abierta por restricción, envío congela enlaces, mantener permite nueva solicitud posterior
+R->>A: S160 Solicitar permiso de documento explícitamente enlazado a esta apelación
+A->>D: S170 Comprobar asignación y evidencia exacta, token300s, revalidar también al servir bytes
+A-->>R: S180 Solo documento pertinente, sin notas históricas, contrato privado ni directorio
+Note over T,A: S190 Leer apelación con latest_decision_id y decisión visible propia, no exponer revisor
+Note over A,D: S200 Reautorización precede lookup de recibo y replay, grants nunca derivados de rol M1

@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-16T00:40:21.914Z",
+  "browser": "155.0.8059.84",
+  "source": "Expo M3 + dos composiciones Nest + PostgreSQL + procesador real; identidad ficticia inyectada",
+  "cases": [
+    {
+      "id": "MAR-M3-IT-FE-004-LOST-RESPONSE-IDEMPOTENT",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-009-PRIVATE-UPLOAD-PREVIEW",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-005-SUBMIT",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-006-APPROVE-OTHER-ACTOR",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-002-PUBLISHED-INTEGRATED",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-004-IMMUTABLE-VERSION-STOCK",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-006-CORRECTION",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-007-PAUSE-WITHDRAWAL",
+      "passed": true
+    },
+    {
+      "id": "MAR-M3-IT-FE-004-RESPONSIVE",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "docs/revision/M3/capturas/04-mis-ofertas.png",
+    "docs/revision/M3/capturas/05-borrador-con-foto.png",
+    "docs/revision/M3/capturas/06-revision-con-foto.png"
+  ],
+  "limits": "No acredita proveedor M1/M2/M8 real, MFA de personas, Safari, iOS/Android o WCAG completo.",
+  "axe": {
+    "form": [],
+    "review": []
+  },
+  "passed": true
+}

@@ -2498,6 +2498,388 @@ paths:
     $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1verifications
   /v1/auth/mfa-recoveries/{id}/rejections:
     $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1{id}~1rejections
+  /v1/auth/email-changes/current:
+    get:
+      operationId: MAR_M1_API_025
+      responses:
+        "200":
+          description: Operación completada según estado devuelto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentEmailChange"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "400":
+          description: Solicitud mal formada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "401":
+          description: Sesión/código inválido o vencido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "403":
+          description: Origen, CSRF, rol, MFA o reautenticación requeridos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "404":
+          description: Ruta/recurso no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "409":
+          description: Conflicto de estado o cuenta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "422":
+          description: Campos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "429":
+          description: Espera o límite de abuso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+            Retry-After:
+              description: "Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos
+                reales restantes."
+              schema:
+                type: integer
+                minimum: 1
+        "503":
+          description: Dependencia temporal no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+      security:
+        - cookieSession: []
+        - mobileSession: []
+      tags:
+        - M1
+      x-use-case-id: MAR-M1-UC-003
+      x-sequence-id: MAR-M1-SEQ-003
+      description: Consulta solo cuenta propia con sesión vigente; comprueba revocación, estado y
+        permiso actual. Renueva token del proveedor bajo lease si procede.
+      x-implementation-status: partial
+      parameters:
+        - name: Origin
+          in: header
+          required: false
+          description: Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con
+            Origin se rechaza; no es autorización por CORS.
+          schema:
+            type: string
+            const: https://localhost:8443
+        - name: x-marleva-client
+          in: header
+          required: false
+          description: Móvil sin Origin usa native. Cabecera identifica transporte, no concede permiso.
+          schema:
+            type: string
+            const: native
+      summary: Recuperar el estado del último cambio de correo propio
+  /v1/auth/mfa-recoveries/current:
+    $ref: ./openapi-objetivo-recuperacion.yaml#/paths/~1v1~1auth~1mfa-recoveries~1current
+  /v1/auth/mfa/factors:
+    get:
+      operationId: MAR_M1_API_027
+      responses:
+        "200":
+          description: Operación completada según estado devuelto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MfaFactors"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "400":
+          description: Solicitud mal formada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "401":
+          description: Sesión/código inválido o vencido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "403":
+          description: Origen, CSRF, rol, MFA o reautenticación requeridos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "404":
+          description: Ruta/recurso no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "409":
+          description: Conflicto de estado o cuenta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "422":
+          description: Campos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+        "429":
+          description: Espera o límite de abuso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+            Retry-After:
+              description: "Código actual usa60 aunque pausa pueda ser900: brechaBUG007; objetivo segundos
+                reales restantes."
+              schema:
+                type: integer
+                minimum: 1
+        "503":
+          description: Dependencia temporal no disponible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Cache-Control:
+              description: Datos privados no almacenables
+              schema:
+                type: string
+                const: no-store
+            x-request-id:
+              description: Referencia de soporte sin datos personales; falta en ciertos errores previos al
+                middleware y proxy, por corregir
+              schema:
+                type: string
+      security:
+        - cookieSession: []
+        - mobileSession: []
+      tags:
+        - M1
+      x-use-case-id: MAR-M1-UC-003
+      x-sequence-id: MAR-M1-SEQ-003
+      description: Consulta solo cuenta propia con sesión vigente; comprueba revocación, estado y
+        permiso actual. Renueva token del proveedor bajo lease si procede.
+      x-implementation-status: partial
+      parameters:
+        - name: Origin
+          in: header
+          required: false
+          description: Web exige origen exacto https://localhost:8443 en mutaciones. Bearer junto con
+            Origin se rechaza; no es autorización por CORS.
+          schema:
+            type: string
+            const: https://localhost:8443
+        - name: x-marleva-client
+          in: header
+          required: false
+          description: Móvil sin Origin usa native. Cabecera identifica transporte, no concede permiso.
+          schema:
+            type: string
+            const: native
+      summary: Consultar factores TOTP propios sin secretos
 components:
   schemas:
     Account:
@@ -2726,6 +3108,85 @@ components:
         - items
         - next_cursor
       additionalProperties: false
+    CurrentEmailChange:
+      type: object
+      additionalProperties: false
+      required:
+        - cambio
+      properties:
+        cambio:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/EmailChangeProgress"
+    EmailChangeProgress:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - account_id
+        - correo_actual
+        - correo_nuevo
+        - actual_confirmado
+        - nuevo_confirmado
+        - estado
+        - vence_en
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: string
+          format: uuid
+        correo_actual:
+          type: string
+          format: email
+        correo_nuevo:
+          type: string
+          format: email
+        actual_confirmado:
+          type: boolean
+        nuevo_confirmado:
+          type: boolean
+        estado:
+          type: string
+          enum:
+            - enviando
+            - verificar_ambos_buzones
+            - verificando
+            - conciliando
+            - completo
+            - fallido
+            - vencido
+        vence_en:
+          type: string
+          format: date-time
+    MfaFactors:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - id
+              - nombre
+              - estado
+            properties:
+              id:
+                type: string
+                format: uuid
+              nombre:
+                type: string
+              estado:
+                type: string
+                enum:
+                  - verified
+                  - unverified
   securitySchemes:
     cookieSession:
       type: apiKey

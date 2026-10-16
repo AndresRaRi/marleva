@@ -5,6 +5,7 @@ sequenceDiagram
  participant API as API M1
  participant DB as PostgreSQL privado
  participant AUTH as Proveedor Auth
+ T->>API: S005 consultar recuperación propia API026 tras autenticar; nunca conservar capacidad de sesión anterior
  T->>API: S010 solicitar recuperación con sesión OTP reciente
  API->>DB: S020 verificar cuenta y reservar única recuperación
  O->>API: S030 aprobar con AAL2 y autenticación reciente

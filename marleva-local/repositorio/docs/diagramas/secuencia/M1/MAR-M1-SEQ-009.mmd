@@ -8,9 +8,12 @@ sequenceDiagram
     participant MAIL as Capturador local
     Note over UI,API: MAR-M1-SEQ-009 - Recuperar acceso o pérdida de buzón
     U->>UI: S010 sesión vencida o buzón perdido
+    UI->>UI: S015 guardar solo destino interno y accountId en memoria; limpiar códigos/capacidades y cancelar consultas
     alt Buzón controlado
      UI->>API: S020 volver a proceso de código SEQ001 y SEQ002
      API-->>UI: S030 sesión nueva y acción interna permitida
+     UI->>UI: S032 comprobar identidad nueva; otra cuenta descarta retorno y datos anteriores
+     UI->>API: S035 consultar estado actual propio API003/API025 antes de retomar; nunca repetir escritura automáticamente
     else Buzón definitivamente perdido
      UI-->>U: S040 recuperar buzón con su proveedor
      Note over U,API: S050 comprobante vecinal no transfiere cuenta ni expone historial

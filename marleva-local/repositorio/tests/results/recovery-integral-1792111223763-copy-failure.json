@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-16T02:39:17.026Z",
+  "phase": "B12 copia física; parcial113-A/G",
+  "names": {
+    "prefix": "marleva-b12-1792111223763",
+    "network": "marleva-b12-1792111223763-private",
+    "db": "marleva-b12-1792111223763-db",
+    "pgBackup": "marleva-b12-1792111223763-backup-pg",
+    "storageBackup": "marleva-b12-1792111223763-backup-storage",
+    "pgTarget": "marleva-b12-1792111223763-target-pg",
+    "storageTarget": "marleva-b12-1792111223763-target-storage"
+  },
+  "sourceImages": [
+    {
+      "name": "/supabase_db_marleva-b12-source-006",
+      "image": "sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108"
+    },
+    {
+      "name": "/supabase_storage_marleva-b12-source-006",
+      "image": "sha256:6a32896ae2d1ae2ea2d05ecaf6ed6c8a6b091739b469a8cf860ee89b2604d28f"
+    },
+    {
+      "name": "/supabase_rest_marleva-b12-source-006",
+      "image": "sha256:d155c6718ed9a9f990d159a2ab7c0a3f16944dbb6d0a0344557421042acfe0df"
+    },
+    {
+      "name": "/supabase_inbucket_marleva-b12-source-006",
+      "image": "sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d"
+    },
+    {
+      "name": "/supabase_auth_marleva-b12-source-006",
+      "image": "sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b"
+    },
+    {
+      "name": "/supabase_kong_marleva-b12-source-006",
+      "image": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d"
+    }
+  ],
+  "cases": {},
+  "limits": [
+    "Sin API Auth/Storage/permisos/revocación/borrado posterior/MFA/cliente",
+    "Sin RPO/RTO ni capacidad productiva; recursos helper configurados, no CPU/RAM medidas"
+  ],
+  "error": "Command failed: docker run --rm --pull=never --network=none --read-only --memory=256m --cpus=1 --cap-drop=ALL --cap-add=DAC_OVERRIDE --cap-add=CHOWN --cap-add=FOWNER --entrypoint=node --mount type=volume,src=supabase_storage_marleva-b12-source-006,dst=/source,readonly --mount type=volume,src=marleva-b12-1792111223763-backup-storage,dst=/destination --mount type=bind,src=/private/tmp/marleva-pr8-integracion/marleva-local/repositorio/tests/fixtures/recovery-xattrs.mjs,dst=/helper.mjs,readonly sha256:6a32896ae2d1ae2ea2d05ecaf6ed6c8a6b091739b469a8cf860ee89b2604d28f /helper.mjs copy /source /destination\ndocker: Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /private/tmp/marleva-pr8-integracion/marleva-local/repositorio/tests/fixtures/recovery-xattrs.mjs\n\nRun 'docker run --help' for more information\n",
+  "sourceResumed": true
+}

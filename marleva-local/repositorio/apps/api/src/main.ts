@@ -1,3 +1,7 @@
+import { ReadCurrentMfaRecovery } from './modules/m1/application/use-cases/read-current-mfa-recovery.js';
+import { EmailChangeController } from './modules/m1/presentation/controllers/email-change.controller.js';
+import { ReadEmailChange } from './modules/m1/application/use-cases/read-email-change.js';
+import { PrismaEmailChangeReader } from './modules/m1/infrastructure/repositories/prisma-email-change-reader.js';
 import 'reflect-metadata';
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -43,12 +47,21 @@ const storage = new LocalPrivateStorage();
 @Module({
   controllers: [
     AccountController,
+    EmailChangeController,
     HealthController,
     NotificationsController,
     PrivateFilesController,
     MfaRecoveryController,
   ],
   providers: [
+    {
+      provide: ReadCurrentMfaRecovery,
+      useFactory: () => new ReadCurrentMfaRecovery(recovery, new ReadMfaRecovery(recovery)),
+    },
+    {
+      provide: ReadEmailChange,
+      useFactory: () => new ReadEmailChange(new PrismaEmailChangeReader(db)),
+    },
     { provide: RequestMfaRecovery, useFactory: () => new RequestMfaRecovery(recovery) },
     { provide: ReadMfaRecovery, useFactory: () => new ReadMfaRecovery(recovery) },
     { provide: ReviewMfaRecovery, useFactory: () => new ReviewMfaRecovery(recovery) },

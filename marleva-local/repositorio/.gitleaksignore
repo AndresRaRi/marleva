@@ -1,0 +1,17 @@
+# Falsos positivos comprobados; solo fingerprints históricos exactos.
+# Evidencia: docs/apis/M2/CIERRE_SEGURIDAD_Y_ENTREGA.json
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:118
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:119
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:56
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:57
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:55
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:56
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:126
+4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:127
+4af0e279ac2479696f928414d75bfa7135d60475:marleva-local/repositorio/infra/ci/sonar-cloud.json:generic-api-key:9
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:470
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:472
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:474
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79
+99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80

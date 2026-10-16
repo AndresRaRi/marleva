@@ -1,3 +1,5 @@
+import { ReadCurrentMfaRecovery } from '../../application/use-cases/read-current-mfa-recovery.js';
+import { fail } from '../../../../security.js';
 import { Controller, Get, Post, Body, Param, Req, HttpCode } from '@nestjs/common';
 import type { Request } from 'express';
 import { AccountService } from '../../../../account.service.js';
@@ -15,6 +17,7 @@ export class MfaRecoveryController {
     private readonly accounts: AccountService,
     private readonly requests: RequestMfaRecovery,
     private readonly reads: ReadMfaRecovery,
+    private readonly currentReads: ReadCurrentMfaRecovery,
     private readonly reviews: ReviewMfaRecovery,
     private readonly capabilities: IssueRecoveryCapability,
     private readonly enrollments: EnrollRecoveryFactor,
@@ -37,6 +40,11 @@ export class MfaRecoveryController {
       input.reason!,
       recoveryKey(r.headers['idempotency-key']),
     );
+  }
+  @Get('current') async current(@Req() r: Request) {
+    const actor = await this.actor(r, false);
+    if (Object.keys(r.query).length) fail(422, 'CAMPOS', 'La consulta no admite parámetros');
+    return this.currentReads.execute(actor);
   }
   @Get(':id') read(@Req() r: Request, @Param('id') id: string) {
     return this.actor(r, false).then((actor) => this.reads.execute(actor, uuid(id)));

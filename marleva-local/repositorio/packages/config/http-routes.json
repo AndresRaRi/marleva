@@ -142,5 +142,23 @@
     "methods": [
       "POST"
     ]
+  },
+  {
+    "route": "/v1/auth/email-changes/current",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa-recoveries/current",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "route": "/v1/auth/mfa/factors",
+    "methods": [
+      "GET"
+    ]
   }
 ]
