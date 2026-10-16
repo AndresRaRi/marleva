@@ -1,3 +1,4 @@
+import { verifyLiveEmailChange } from './live-email-change.mjs';
 import { verifyLiveAccountContinuity } from './live-account-continuity.mjs';
 import { verifyPaginatedNotices } from './paginated-notices.mjs';
 import path from 'node:path';
@@ -124,6 +125,13 @@ try {
     path: captures + '/06-sesion-cerrada.png',
     fullPage: true,
   });
+  const liveEmailChange = await verifyLiveEmailChange(
+    browser,
+    page,
+    process.env.APP_ORIGIN ?? 'https://localhost:8443',
+    audit,
+  );
+  assert.equal(errors.length, 0);
   const resumedNotices = await verifyResumedNotices(
     browser,
     process.env.APP_ORIGIN ?? 'https://localhost:8443',
@@ -149,6 +157,7 @@ try {
           logout: true,
           realSessionReloadNotices: true,
           liveAccountContinuity,
+          liveEmailChange,
           resumedNotices,
           paginatedNotices,
         },
