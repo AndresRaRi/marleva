@@ -86,7 +86,7 @@ Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptació
 
 Conciliación documental009,15-10-2026: la tabla anterior aún descontabaUC008/009 por pruebas pendientes. Cotejo de API009/025–027, M1App, SafeReturn, AccountWorkspace y NoticePages muestra sus salidas funcionales implementadas. Se aplica el mismo método de esta página, sin cambiar criterios/pesos: implementación13/14; aceptación permanece0/14 yUC013 sigue abierto. No es funcionalidad nueva ni acredita las pruebas faltantes, B12 o aceptación. Evidencia de código y CI902308e/38847365871; matriz M1 concilia los límites de cada prueba.
 
-## Panorama funcional vigente —16 de octubre de 2026
+## Panorama funcional Chrome — fotografía anterior del 16 de octubre de 2026
 
 Alcance de entrega para revisión: Chrome. Usuario aplaza y apaga Android/iOS, y descarta Safari para este cierre. PR14 completa comprobaciones de sesiones, accesibilidad por teclado/zoom y rendimiento remoto; consultar su CI real antes de integrar. No aumenta aceptación por suponer resultados de plataformas ni por preparar un manual.
 
@@ -118,3 +118,8 @@ Verificación Chrome009,16-10-2026: [CI38946169443](https://github.com/AndresRaR
 
 
 Incremento iOS009,16-10-2026: UC001/002/003/004 tienen prueba nativa acotada en iPhone18Pro/iOS27.0 Release ARM64. OTP real local, misma cuenta tras terminar/reabrir proceso, salida confirmada y acceso sin sesión tras segundo relanzamiento pasan; acta ios-test.json y capturas08–10. Correcciones canónicas de UIScene oficial, firma local y origen por plataforma; sin actualizar SDK ni migraciones. No cambia14/14implementado ni0/14aceptado: demás ramas/plataformas/accesibilidad/físico y aceptación integral pendientes. Android apagado.
+
+
+## Conciliación vigente iOS —16 de octubre de 2026
+
+Main2156078/PR19 tiene CI propio38972892582 aprobado. La [matriz vigente](proceso/MATRIZ_CASOS_M1.md#estado-vigente-conciliado--16-de-octubre-de-2026) enumera pruebas y faltantes concretos; sustituye pendientes genéricos de las fotografías anteriores sin borrar su evidencia. iOS Release comprobó ambos buzones/error/progreso tras relanzar/ID/revocación, aviso y retorno a Cuenta, MFA básico y recuperación híbrida. Esta última usa solicitud y revisor por API real, con continuación del titular y acceso final OTP/TOTP desde iOS. Acta ios-test.json y manual único. No cuenta como prueba nativa íntegra de solicitud/revisión ni B12 restaurado nuevamente. Implementación14/14 y aceptación0/14 se conservan: faltan combinaciones/plataformas/accesibilidad y aceptación integral. Android actual pausado, físico pendiente; no se afirma causa resuelta del fallo intermitente Auth. Incremento documental aún requiere sus propios CI/revisión/merge; no hereda el verde de main.

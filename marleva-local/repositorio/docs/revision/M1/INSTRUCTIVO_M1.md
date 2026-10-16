@@ -1,6 +1,6 @@
 # M1: prueba de aceptación en Chrome
 
-Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome comprobado en [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443), código0d3b7ba; comprobar la integración y CI finales de PR14 antes de aceptar. La aceptación corresponde al usuario. Android permanece aplazado y apagado; el usuario reanudó iOS y su prueba acotada figura al final. Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
+Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Versión integrada de referencia: main 2156078, [CI propio completo aprobado](https://github.com/AndresRaRi/marleva/actions/runs/38972892582). Los resultados actuales y sus límites se consultan en la tabla vigente de la matriz M1. La aceptación corresponde al usuario. Android permanece aplazado y apagado; el usuario reanudó iOS y su prueba acotada figura al final. Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
 
 ## Abrir y preparar la prueba
 
@@ -96,7 +96,7 @@ APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk
 ![Cuenta Android](capturas/android/04-cuenta.png)
 ![Salida Android](capturas/android/05-sesion-cerrada.png)
 
-Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS siguen pendientes. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.
+Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS quedaban pendientes en ese ensayo histórico. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.
 
 
 ## Revisar acceso y sesión en iOS Simulator
@@ -114,4 +114,39 @@ Los cuatro pasos pasaron. La captura de cuenta se tomó después del primer rela
 ![iOS: salida confirmada](capturas/09-ios-sesion-cerrada.png)
 ![iOS: no restaura la sesión cerrada al reabrir](capturas/10-ios-salida-tras-relanzar.png)
 
-Esto acredita acceso y conservación/salida de sesión en el simulador. Cambio de correo completo, MFA/recuperación, accesibilidad y dispositivo físico iOS siguen pendientes; no equivale a aceptación integral de M1.
+Esto acredita acceso y conservación/salida de sesión en el simulador. El cambio de correo completo se comprobó después y figura en el siguiente apartado. MFA/recuperación, accesibilidad y dispositivo físico iOS permanecen separados; no equivale a aceptación integral de M1.
+
+
+## iOS: cambio de correo, aviso y retorno comprobados
+
+Continuación del 16-10-2026 sobre la misma compilación Release. Se utilizó la cuenta ficticia del ensayo anterior y se cambió únicamente su correo mediante la app. No se modificó la base para completar el cambio.
+
+1. En Cuenta, iniciar cambio a otro buzón ficticio. Código inválido: conserva el proceso y permite corregir.
+2. Confirmar el buzón actual; terminar y reabrir Marleva. El segundo buzón debe seguir pendiente y el código debe estar vacío.
+3. Confirmar el segundo buzón. La app debe volver al acceso; el ID de cuenta se conserva y sus sesiones anteriores quedan revocadas.
+4. Entrar con el correo nuevo y abrir Avisos. Debe aparecer el aviso propio de cambio y cierre de sesiones.
+5. Desde una segunda sesión ficticia de la misma cuenta, cerrar todas. Al consultar desde iOS debe pedir código y ocultar datos privados. Entrar por OTP de la misma identidad: retoma Cuenta y permite consultar otra vez el aviso propio.
+
+Los cinco pasos pasaron. El retorno observado fue a Cuenta; no se acredita aquí retorno a todos los destinos ni otra identidad. Paginación nativa, segundo factor/recuperación y accesibilidad se registran por separado; no se deducen de este flujo. [Acta extendida](../../../tests/results/ios-test.json).
+
+![Primer buzón confirmado, segundo pendiente](capturas/11-ios-primer-buzon.png)
+![Cambio completado y acceso requerido](capturas/12-ios-correo-completado.png)
+![Aviso propio después de recuperar acceso](capturas/13-ios-avisos-tras-retorno.png)
+
+
+### iOS: segundo factor comprobado — 16 de octubre de 2026
+
+Con el operador ficticio local, consultar permiso antes de verificar el factor fue rechazado. Preparar y verificar el factor desde la interfaz nativa permitió después comprobar el permiso. La captura [14-ios-permiso-mfa.png](capturas/14-ios-permiso-mfa.png) muestra los controles con los campos privados vacíos. La recuperación posterior se describe abajo; el ensayo básico y el reemplazo no se confunden. La captura muestra controles sin claves; la aprobación del permiso se observó en el árbol accesible.
+
+
+### iOS: recuperación MFA híbrida comprobada — 16 de octubre de 2026
+
+El usuario autorizó el rol local de revisor para operator2@example.test y retirar exclusivamente el factor ficticio nuevo de operator1. Solicitud, OTP/MFA del revisor y aprobación se ejecutaron por API real; la autorrevisión fue rechazada. No se atribuyen esos pasos a la interfaz nativa.
+
+1. Desde Ayuda en iOS, consultar la solicitud. La sesión anterior se rechaza y vuelve al acceso.
+2. Entrar por OTP con la misma cuenta: regresa a Ayuda y muestra que se puede configurar el nuevo factor. Una sesión sin acceso reciente exige ingresar de nuevo; no se omite este control.
+3. Solicitar autorización temporal y preparar nuevo factor desde iOS. Mantener la clave privada fuera de capturas y registros.
+4. Verificar el código del factor nuevo y completar. Resultado: [recuperación completada y nueva entrada requerida](capturas/15-ios-recuperacion-completada.png).
+5. Volver a entrar por OTP. Consultar permiso todavía exige segundo factor; verificar el nuevo código y consultar permiso permite operar. [Cuenta después de recuperar el acceso](capturas/16-ios-acceso-recuperado.png); confirmación del permiso observada en el árbol accesible.
+
+La lectura final del proveedor confirma que desapareció únicamente el factor autorizado y existe un reemplazo verificado; la recuperación está completed y su capacidad consumida. Se conservaron cuentas, roles restantes, datos, archivos y migraciones. Solicitud/revisión por interfaz nativa, lector de pantalla, iPhone físico y combinaciones restantes siguen pendientes en la matriz; este ensayo no acredita aceptación integral.

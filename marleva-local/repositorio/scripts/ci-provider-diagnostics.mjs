@@ -7,8 +7,26 @@ const categories = {
   permissions: /permission denied|password authentication failed/i,
   missingRelation: /relation .* does not exist/i,
 };
+const diagnosticWords = new Set(
+  'error failed finding loading user session database querying schema sql scan column index cannot null string into storing driver value type unsupported connection already closed busy timeout context canceled unexpected eof prepared statement does not exist duplicate key violates unique constraint permission denied invalid input syntax uuid integer timestamp time zone bad conn broken pipe transaction rollback committed aborted found refused too many clients cached plan must change result'.split(
+    ' ',
+  ),
+);
+export function providerErrorShape(line) {
+  let message = line;
+  try {
+    const entry = JSON.parse(line);
+    message = typeof entry.error === 'string' ? entry.error : '';
+  } catch {
+    // PostgreSQL also emits plain text; only the same closed vocabulary can leave memory.
+  }
+  return (message.toLowerCase().match(/[a-z][a-z0-9_@.-]*/g) ?? [])
+    .filter((word) => diagnosticWords.has(word))
+    .slice(0, 40)
+    .join(' ');
+}
 export function summarizeProviderLog(log) {
-  const result = { errorLines: 0, sqlStates: {}, categories: {}, unclassified: 0 };
+  const result = { errorLines: 0, sqlStates: {}, categories: {}, unclassified: 0, shapes: {} };
   for (const line of log.split('\n')) {
     if (!/error|fatal|panic|SQLSTATE/i.test(line)) continue;
     result.errorLines++;
@@ -22,7 +40,15 @@ export function summarizeProviderLog(log) {
       result.categories[name] = (result.categories[name] ?? 0) + 1;
       classified = true;
     }
-    if (!classified) result.unclassified++;
+    if (!classified) {
+      result.unclassified++;
+      const shape = providerErrorShape(line);
+      const key =
+        shape && (shape in result.shapes || Object.keys(result.shapes).length < 32)
+          ? shape
+          : 'other';
+      result.shapes[key] = (result.shapes[key] ?? 0) + 1;
+    }
   }
   return result;
 }
