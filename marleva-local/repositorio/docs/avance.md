@@ -74,11 +74,13 @@ Autorización explícita15-10-2026, independiente de base/M1. Nueve criterios de
 | UC001 | Búsqueda/filtros/cursor y paginación con carga/vacío/error | Sí | No | Código M3 separado; PG/Nest ycliente universal/web; actas m3-*. Plataformas/aceptación pendientes |
 | UC002 | Detalle público elegible o retirada404 | Sí | No | API/cliente integrados; fotos procesadas en backend; visualización web probada; caso009 completo separado |
 | UC003 | Perfil público y ofertas por oferente | Sí | No | Campos públicos explícitos; elegibilidad ficticia, integraciónM2 pendiente |
-| UC004 | Crear/editar ofertas propias autenticadas | No | No | Casos internos yPG probados; ruta privada/UI de gestión pendientes |
-| UC005 | Enviar versión propia revisable | No | No | Caso interno; identidad real/cliente pendientes |
-| UC006 | Revisión autorizada conMFA sin conflicto | No | No | Caso interno yconcurrenciaPG; M1/M8 reales no integrados |
-| UC007 | Pausar/disponibilidad por titular | No | No | Caso interno; recorrido autenticado pendiente |
+| UC004 | Crear/editar ofertas propias autenticadas | No | No | Ruta privada/UI de gestión probadas con identidad ficticia; proveedor M1 real pendiente |
+| UC005 | Enviar versión propia revisable | No | No | Envío integrado API/cliente probado con fixture; identidad real pendiente |
+| UC006 | Revisión autorizada conMFA sin conflicto | No | No | Revisión API/cliente con otro actor ficticio probada; M1/M8 reales no integrados |
+| UC007 | Pausar/disponibilidad por titular | No | No | Pausa API/cliente probada con sesión ficticia; proveedor real pendiente |
 | UC008 | Elegibilidad vigente integrada conM2 | No | No | Proyección ficticia con ocultación comprobada; noM2 real |
-| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Procesamiento y entrega pública de derivados probados; carga autenticada pendiente; visualización web de fotos implementada y probada |
+| UC009 | Fotos seguras: carga/análisis/derivados | No | No | Carga privada con identidad inyectada/derivados públicos y web probados; proveedor real/selector nativo pendientes |
 
 Implementación M3=3/9=33,33%. Barra: ███░░░░░░░. Aceptación=0/9=0%. M1 conserva su cálculo anterior; Proyecto sigue Por calcular. Las pruebas/archivos/commits no suman criterios. No integración a main ni operación real.
+
+15-10-2026, incremento gestión: UC004/005/006/007/009 tienen recorridos completos en composición aislada con identidad ficticia (87 pruebas M3 y nueve comprobaciones de navegador). Se conserva el numerador3/9 por criterio de recorrido autenticado integrado con proveedor real; el avance aislado se describe en evidencia, sin presentarlo como aceptación. Usuario autoriza ahora integración a main tras revisión/CI, sustituyendo límite anterior; no despliegue.

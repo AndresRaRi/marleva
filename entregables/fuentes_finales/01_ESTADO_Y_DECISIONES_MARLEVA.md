@@ -146,50 +146,30 @@ no afirmar subida compartida ni aceptación M1. Mantener 006 abierto hasta cierr
 
 ## M3 paralelo — MAR-CHAT-008
 
-15-10-2026 America/Merida. Autorizado: desarrollo local aislado de M3 y propuesta visual de catálogo, detalle y perfil aprobada por el usuario. M1 continúa en MAR-CHAT-006; M2/M8 se diseña en MAR-CHAT-007. No se declara ningún módulo aceptado.
+15-10-2026 America/Merida. Catálogo público y gestión privada inyectable desarrollados en rama codex/feat-m3-catalogo-008. Usuario autoriza commits/push y ahora integración a main para cerrar, después de revisión y CI. Sustituye la restricción anterior de no merge; sin gasto, despliegue, contactos o datos reales.
 
-Copia: `/Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a`. Rama `codex/feat-m3-catalogo-008`, base `6fed44f`. PostgreSQL propio en 55432, API en 3103 y web en 8103. No se modifican M1, contratos compartidos ni migraciones aplicadas. Commit y push de la rama aislada autorizados. Sin integración a main, publicación, gasto, contactos o datos reales.
+Copia ejecutora temporal independiente: /private/tmp/marleva-m3-008/repo. Copia managed anterior conservada: /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a. No asumir sincronización de esa copia hasta comprobarla. Recursos propios: PG55432, API3103, web8103, composición privada de pruebas3104. No reiniciar servicios M1 ni modificar sus migraciones/contratos.
 
-Incremento: catálogo público Nest/Expo/PostgreSQL con búsqueda, filtros, cursor, detalle y perfil. Casos internos de versiones, revisión y pausa usan actores ficticios; no sustituyen identidad, elegibilidad o revisión reales. Procesamiento interno y entrega pública de derivados de fotos implementados; visualización web probada; carga autenticada, gestión e integración autorizada M1/M2/M8, plataformas nativas y aceptación siguen pendientes. M3 permanece abierto.
+Implementado y probado en aislamiento: búsqueda/filtros/cursor, detalle/perfil, gestión de borrador/edición, fotos privadas y derivados públicos, envío, revisión por otro actor, corrección y pausa. Proveedor de identidad inyectable obligatorio; pruebas usan sesiones ficticias y proyección de elegibilidad, no identidad/MFA real ni módulos M1/M2/M8 integrados. Selección de fotos nativa, plataformas/accesibilidad y aceptación pendientes. M3 no se declara aceptado ni productivamente completo.
 
-Documentación, resultados y límites: [instructivo](../../marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md), [matriz](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M3.md) y [avance](../../marleva-local/repositorio/docs/avance.md). Se conservan fallos y correcciones. Diseñado, implementado, probado y aceptado son estados distintos.
+Pruebas locales:87 M3 aprobadas; cobertura de líneas92,67%, ramas86,47%. Navegador:17 comprobaciones públicas y nueve de gestión, sin infracciones axe detectadas en ámbitos comprobados. Resultado remoto anterior:00be2d5 aprobado completo en run38825788866. El incremento nuevo requiere su propio CI; no hereda aprobación. [Instructivo](../../marleva-local/repositorio/docs/revision/M3/INSTRUCTIVO_M3.md), [matriz](../../marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M3.md) y [avance](../../marleva-local/repositorio/docs/avance.md) contienen evidencia/límites y brechas por criterio.
 
-Lectura completa de 00–03, AGENTS, protocolo técnico y matriz M1; lectura general de código y anexos parcial. Inventario propio con metadatos y estado de lectura en docs/proceso/inventario-m3.json. Hashes no acreditan lectura. Dependencias, cachés, secretos y binarios no se presentan como leídos.
+Revisión independiente estática detectó lista privada/cursor conservados al cambiar actor o revocar permiso; corregidos y dos regresiones añadidas. Fallo real de subida de foto por orden de campos alimentarios corregido; recorrido completo posterior aprobado. Sin nueva migración de gestión;001/002/003 M3 inmutables. Revisión final y SHA remoto pendientes de registrar tras ejecución.
 
-Fuentes: únicamente esta copia de 01 registra el avance. El guardado o commit local no actualiza Fuentes compartidas. Conciliar este añadido con la continuidad de 006/007 antes de reemplazar 01; no sustituir su estado con una fotografía de otra rama. 00/02/03 y configuración no requieren cambios por este incremento.
+Fuentes sincronizadas no editadas ni subidas. Solo esta sección editable de01 se actualiza; conciliar con avances de otros chats al integrar, sin sustituirlos por estado de rama antigua.00/02/03 y configuración no cambian por M3. Inventario/lectura en docs/proceso/inventario-m3.json; dependencias/cachés/secretos no se declaran leídos.
 
-Prompt revisado de continuación:
+Continuidad revisada:
 
 ```text
-PROYECTO Marleva. MAR-CHAT-008, CONTINUACIÓN: M3 Catálogo aislado.
-Trabajar en /Users/andresramos/.codex/worktrees/m3-catalogo-aislado/g-p-6ac952169b2081918f82b73968bd9d1a,
-rama codex/feat-m3-catalogo-008. Registrar fecha real America/Merida.
-Leer instrucciones, AGENTS, 00–03, protocolo, matrices M1/M3; inventariar y leer cambios.
-Respetar C01–C26, límites C25, autorización local y revisión visual ya aprobada.
-No tocar M1, M2/M8, contratos compartidos, migraciones aplicadas, main o cambios ajenos.
-Usar recursos propios M3: PG55432, API3103, web8103; herramientas existentes en lectura.
-Consultar instructivo, matriz, actas y avance para estado real. M3 sigue incompleto.
-Próximo: cerrar brechas por matriz; procesamiento/entrega de fotos ya implementados.
-Completar carga autenticada cuando correspondan revisión e integración autorizada.
-Integrar identidad/elegibilidad/revisión solo cuando esté disponible y autorizada esa integración.
-No acreditar Auth/MFA reales con fixtures. Mantener pruebas propias y hooks obligatorios.
-Conservar migraciones aplicadas; corregir mediante nuevas migraciones. Releer finales.
-Commit y push ordinarios autorizados. Sin merge, gasto, publicación, contactos o datos reales.
-Actualizar solo fuentes necesarias de esta copia; conciliar 01 con 006/007 antes de reemplazar Fuentes.
-Continuar sin confirmaciones rutinarias; aprobación técnica del entorno sigue siendo obligatoria.
-Mantener MAR-CHAT-008 abierto y no declarar aceptación ni cierre completo.
+PROYECTO Marleva. MAR-CHAT-008, CONTINUACIÓN: cierre de incremento M3.
+Comprobar copia/rama/SHA y acceso real al remoto antes de operar.
+Leer instrucciones, AGENTS,00–03, protocolo y matrices M1/M3; inventariar cambios.
+Conservar C01–C26/C25, datos ficticios y recursos aislados. No tocar servicios M1.
+Catálogo y gestión privada inyectable implementados; consultar instructivo/matriz/avance.
+Autorizado commit, push y merge mediante PR/revisión/CI; sin gasto ni despliegue.
+Cerrar validación del SHA final, resolver integración con main conservando avances ajenos.
+No acreditar proveedor M1/M2/M8 real, plataformas nativas o aceptación con fixtures.
+Releer finales y comprobar ignorados, manual, pruebas y evidencias reales.
+Actualizar solo fuentes afectadas y señalar subida efectiva; no prometer persistencia temporal.
+Continuar sin confirmaciones rutinarias; permisos obligatorios del entorno conservados.
 ```
-
-## Autorización vigente de sincronización — 15-10-2026
-
-El usuario autoriza expresamente commits, push y acciones ordinarias del desarrollo sin confirmaciones rutinarias. Esta autorización posterior permite sincronizar la rama aislada M3 y sustituye la restricción anterior de no push. No autoriza gasto, despliegue, integración a main o cambios ajenos. Las demás operaciones externas conservan sus límites. Aplicar los permisos obligatorios del entorno sin omitir controles.
-
-Continuación comprobada 15-10-2026: rama M3 sincronizada, sin integración a main. Se amplían a 13 las comprobaciones web y se mide rendimiento del cliente con diez muestras. Preparación M3 sin conexión añadida al preparador de CI; integración propia separada del patrón general para no exigir su base en M1. Arquitectura: cero violaciones y cero duplicados en código propio; derivados en carpetas generated. Siete integraciones M3 pasaron. Resultados locales, no CI remoto. Pendientes funcionales y aceptación permanecen según matriz; no se solicita nueva confirmación rutinaria.
-
-Fotos UC009, 15-10-2026: cuarentena privada, decodificación y dos JPEG sin metadatos, integridad/versionado/permisos, API pública de derivados y migración003 propias. Visualización web probada; sin ruta de carga autenticada; no acredita M1/M2/M8. Conservar pruebas y fallos de rendimiento con diagnóstico en matriz. Sharp 0.35.5/libvips bundle1.3.4 fijados; fuentes compartidas no se han actualizado.
-
-
-M3, fotos 15-10-2026: visualización web y derivados probados; 44 unitarias, 16 integraciones, 17 comprobaciones web. Carga autenticada y plataformas pendientes; 3/9 implementados, 0/9 aceptados. Evidencias y límites vigentes en INSTRUCTIVO_M3.md. No se actualizó Fuentes compartidas.
-
-
-M3 CI15-10-2026: d2a53ce subido a codex/feat-m3-catalogo-008; job remoto M3 aprobado en38825249579 con65 pruebas y navegador/recuperación propios. CI general pendiente de cierre; corrección limitada de licencias de herramientas de prueba en curso. M3 no completo; el usuario exige cierre integral de los recorridos inicialmente previstos, conservando aislamiento y sin integrar a main. Estado diseñado/implementado/probado se mantiene separado; no se sustituyó Fuentes.

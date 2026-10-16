@@ -3,6 +3,7 @@ sequenceDiagram
  actor U as Actor
  participant A as Caso M3
  participant D as Datos/puerto M3
+ U->>A: S010 Identidad vigente y autorización/MFA actual por puerto
  U->>A: S020 Autorizar revisor MFA sin conflicto
  A->>D: S040 Bloquear y comprobar versión exacta pendiente
  A->>D: S060 Aprobar o devolver corrección/rechazo con motivo

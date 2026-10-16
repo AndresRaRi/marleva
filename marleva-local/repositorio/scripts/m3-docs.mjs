@@ -35,12 +35,12 @@ execFileSync(
 );
 await writeFile(
   'docs/apis/M3/swagger.html',
-  `<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M3 — contrato local</title><link rel="stylesheet" href="../M1/vendor/swagger-ui.css"><body><p>M3 aislado. Rutas privadas objetivo sin montar; sin envío de solicitudes.</p><div id="swagger-ui"></div><script src="../M1/vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:${JSON.stringify(spec).replaceAll('<', '\\u003c')},dom_id:'#swagger-ui',supportedSubmitMethods:[],persistAuthorization:false})</script></body></html>`,
+  `<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M3 — contrato local</title><link rel="stylesheet" href="../M1/vendor/swagger-ui.css"><body><p>M3 aislado. Gestión privada en composición separada inyectable; sin envío de solicitudes.</p><div id="swagger-ui"></div><script src="../M1/vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:${JSON.stringify(spec).replaceAll('<', '\\u003c')},dom_id:'#swagger-ui',supportedSubmitMethods:[],persistAuthorization:false})</script></body></html>`,
 );
 const target = await SwaggerParser.bundle('docs/apis/M3/openapi-target.yaml');
 await SwaggerParser.validate(structuredClone(target));
 await writeFile(
   'docs/apis/M3/swagger-target.html',
-  `<!doctype html><html lang="es"><meta charset="utf-8"><title>M3 — objetivo privado</title><link rel="stylesheet" href="../M1/vendor/swagger-ui.css"><p>OBJETIVO. Rutas no montadas. Sin solicitudes ni credenciales.</p><div id="swagger-ui"></div><script src="../M1/vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:${JSON.stringify(target).replaceAll('<', '\\u003c')},dom_id:'#swagger-ui',supportedSubmitMethods:[],persistAuthorization:false})</script></html>`,
+  `<!doctype html><html lang="es"><meta charset="utf-8"><title>M3 — gestión privada</title><link rel="stylesheet" href="../M1/vendor/swagger-ui.css"><p>Composición privada inyectable; bootstrap público sin rutas privadas. Proveedor real M1 pendiente. Sin solicitudes ni credenciales.</p><div id="swagger-ui"></div><script src="../M1/vendor/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({spec:${JSON.stringify(target).replaceAll('<', '\\u003c')},dom_id:'#swagger-ui',supportedSubmitMethods:[],persistAuthorization:false})</script></html>`,
 );
 console.log('DBML/DDL y OpenAPI/Swagger M3 válidos; no se aplica SQL.');

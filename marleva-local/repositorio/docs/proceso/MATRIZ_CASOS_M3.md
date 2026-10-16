@@ -149,3 +149,39 @@ Incidencia de ensayo del gate: la primera prueba bajo hook heredó variables GIT
 
 
 Gate remoto d2a53ce: falló antes de evaluar cobertura porque gh rechazó sobrescribir el reporte m3-full-coverage.json ya versionado al extraer todo el artefacto sobre el checkout. Corrección previa: descargar artefacto M3 a artifacts/ci/m3-evidence y leer allí su LCOV, sin sobrescribir fuentes/reportes del checkout. El mismo run/SHA y dependencias obligatorias se conservan.
+
+
+## Cierre integral de M3 en aislamiento — plan vigente
+
+El usuario solicita terminar el alcance inicial, no cerrar por incrementos técnicos. Completar UC004–009 por recorridos unidos: dueño consulta su lista, crea/edita borrador, añade fotos, envía; revisor autorizado consulta pendientes y derivados privados, decide con motivo; versión aprobada aparece en catálogo; dueño pausa y deja de aparecer; restricción de elegibilidad oculta inmediatamente. UC001–003 conservan lo aprobado. No sumar aceptación por fixtures.
+
+Implementar una composición Nest privada separada e inyectable, sin importar M1 y sin montarla en el bootstrap público actual. El puerto CurrentIdentity resuelve credencial opaca/cookie a actor vigente en cada solicitud; actor/rol/MFA nunca proceden del cuerpo. Ausente/revocado401, rol/MFA insuficiente403, dependencia503. Web mutante requiere origen explícito y CSRF verificado por el puerto; Bearer móvil no usa cookie. Pruebas del puerto con proveedor ficticio no acreditan proveedor M1 real. No crear login/OTP ni duplicar M1. La proyección SellerEligibility seguirá siendo fixture M2; persistencia la comprueba dentro de la transacción. M8 se consume como autorización del revisor; no se construye administración de M8.
+
+API004–008 conservan forma, idempotencia, revisión exacta y errores existentes. Añadir API010 GET /v1/offers (propias o pendientes según rol, límite/cursor ligados al actor/ámbito), API011 GET /v1/offers/{id} (versiones/fotos privadas de propio recurso o revisor vigente/MFA), API012 PUT /v1/offers/{id}/versions/{version}/photos/{photo}?position=1 (bytes JPEG/PNG ≤5MB, identificadores cerrados), API013 GET /v1/offers/{id}/photos/{photo}/{size} (derivado privado íntegro, sin original). No copiar expedientes M2 ni aceptar URL/nombre de archivo del cliente. Sin migración de datos adicional: usar tablas M3 existentes y migraciones inmutables.
+
+Trazabilidad: UC004→SEQ004:S010/S020/S040/S060/S080→API004/005/010/011→Offer/Version/Receipt/Event→UI004→UT/IT-BE/FE004; UC005→SEQ005:S010–S090→API006→mismas→UI004→IT005; UC006→SEQ006:S010–S110→API007/010/011/013→Version/Photo/Event/Receipt→UI005→IT006; UC007→SEQ007→API008/011→Offer→UI004→IT007; UC009→SEQ009:S010/S020/S025–S095→API012/013→Photo/Version→UI004/005→IT009. Revisar secuencias antes del código.
+
+UI004: Mis ofertas y formulario por pasos (tipo/datos; precio/disponibilidad/cobertura; fotos/resumen/envío), máximo tres acciones principales, errores junto al campo/paso conservado y refrescar tras409. UI005: pendientes, versión exacta y fotos; aprobar/corrección/rechazo con motivo, sin autorrevisión. Misma paleta y componentes de propuesta aprobada; propuesta ampliada presentada antes de TSX. No simular éxito si falta sesión/servicio. Cliente recibe transporte/sesión por contrato, sin manejar login de M1 ni guardar credenciales en localStorage.
+
+Pruebas necesarias: transporte privado Nest+PostgreSQL real con puerto de identidad controlado;401/revocación/CSRF/origen/rol/MFA/autorrevisión/ajeno/versionado/clave/6fotos/errores/reintento/caída. Recorrido frontend completo con servicios M3 propios y actores ficticios; no equivale a integración real M1/M2/M8. Rendimiento proporcional de mutaciones/fotos y regresión pública; CI del mismo SHA. Native builds y aceptación humana conservan sus límites explícitos. No declarar módulo completo hasta que cada criterio original tenga su salida; dependencias reales ausentes se registran como integración pendiente, sin aprobarlas por simulación.
+
+Copia ejecutora temporal independiente en /private/tmp/marleva-m3-008/repo; conserva rama, historial y remoto GitHub. Dependencias clonadas localmente sin instalación nueva; herramientas existentes en lectura. La copia managed previa se conserva y se actualizará solo mediante fast-forward seguro al final si sigue limpia. Ninguna operación nueva usa el Git compartido de M1.
+
+
+Detalle de composición antes de cliente: API014 GET /v1/offers/context devuelve actor mínimo, permisos de interfaz, oferentes propios elegibles y CSRF ligado a la sesión suministrado por CurrentIdentity. No emite sesiones, valida OTP ni reemplaza M1. Cookie de sesión sigue HttpOnly; cliente conserva CSRF en memoria y usa credentials:include/origen explícito. Puerto para nativo puede aportar Bearer desde el almacenamiento del host; M3 no guarda credenciales. CORS de ensayo admite la web M3 propia8103/8104. El contrato de identidad puede devolver csrfToken para contexto cookie; ausencia no inventa un nonce válido. Sin proveedor instalado, gestión falla cerrado con mensaje recuperable. Los fixtures solo se instalarán en composición de pruebas protegida por MARLEVA_M3_CHECK, no en bootstrap público ni en código productivo de identidad.
+
+## Cierre del incremento de gestión — 15-10-2026
+
+Composición privada Nest implementada y separada del bootstrap público. Proveedor de identidad requerido por inyección; el servidor de pruebas usa sesiones opacas ficticias con guardia, fuera del runtime público. API004–008/010–014, formulario por pasos, cola de revisión y lectura privada de fotos implementados. No se añadió migración ni se modificaron contratos/migraciones M1.
+
+Navegador real: nueve comprobaciones de gestión aprobadas en m3-management-web.json, además de 17 de regresión pública en m3-web.json. Dos contextos ficticios separados: respuesta perdida después de commit y reintento con misma clave, foto privada realmente decodificada, envío, revisión por otro actor, publicación con foto, edición inmutable de stock, corrección/nueva versión y pausa/retirada. Axe sin infracciones detectadas en formulario/revisión; anchos320/1280 sin desbordamiento. No acredita WCAG completo ni plataformas nativas.
+
+Fallo encontrado y corregido: UC009→SEQ009:S020→API012→UI004. Comparar JSON de campos alimentarios con orden distinto tras PostgreSQL producía «Guarda los cambios antes de añadir fotos» sin cambios reales. Proyección normaliza los tres campos, y la regresión de render devuelve campos reordenados. El recorrido completo posterior pasó.
+
+Revisión independiente estática previa a integración: detectó conservación de lista/cursor privados al cambiar de actor y ante403 por revocación. Corrección: invalidar datos/cursor, cargar primera página del nuevo actor y borrar proyección ante401/403 de sesión/elegibilidad/revisión. Dos regresiones de render cubren fallo tras cambio de actor y revocación entre contexto/lista. No se relajaron reglas ni umbrales.
+
+Autorización más reciente: el usuario solicita commit, push e integración a main para cerrar. Sustituye el límite anterior de no merge; no autoriza despliegue, gasto ni datos reales. Main remoto tiene avances de otros chats: conservarlos al resolver integración. CI00be2d5 completo aprobado en38825788866; ese resultado no acredita los cambios posteriores de gestión.
+
+Plan proporcional PF-BE004 antes de medir: HTTP Nest/PostgreSQL propios, identidad ficticia inyectada, tres calentamientos y20 muestras a concurrencia1 por creación de borrador y lista propia24; p95≤500ms y cero errores inesperados como objetivo local, no compromiso productivo. Sin carga paralela a otras pruebas M3; conservar fixtures sin borrar datos. Fotos y catálogo conservan sus mediciones separadas.
+
+PF-BE004 local:20 muestras por escenario tras tres calentamientos, concurrencia1; p95 creación66,613ms y lista94,231ms, cero errores, objetivo local500ms cumplido. Acta m3-management-performance.json; no capacidad productiva.

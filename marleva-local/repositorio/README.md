@@ -84,4 +84,4 @@ Requisito de GitHub: la revisión de dependencias necesita Dependency graph habi
 
 ## M3 aislado
 
-Composición paralela autorizada en008: [revisión y comandos](docs/revision/M3/INSTRUCTIVO_M3.md). No usar los scripts de arranque/parada M1 para M3. API3103, web8103 yPG55432 propios; solo datos ficticios. Fotos: procesamiento interno y entrega de derivados disponibles. Rutas privadas, carga autenticada y plataformas pendientes; visualización web probada; M3 no completo.
+Composición paralela autorizada en008: [revisión y comandos](docs/revision/M3/INSTRUCTIVO_M3.md). No usar los scripts de arranque/parada M1 para M3. API3103, web8103 yPG55432 propios; solo datos ficticios. Catálogo público y gestión privada inyectable: borrador/edición, fotos, envío, revisión y pausa, probados con identidad ficticia. Integración real M1/M2/M8, plataformas y aceptación pendientes; M3 no completo.

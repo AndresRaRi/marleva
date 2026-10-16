@@ -1,3 +1,5 @@
+import { ManagementApp } from '../src/modules/m3/management-app';
+import { ManagementClient } from '../src/modules/m3/management-client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import { CatalogClient, type CatalogOffer } from '../src/modules/m3/catalog-client';
@@ -5,7 +7,11 @@ import { CatalogStore } from '../src/modules/m3/catalog-store';
 import { CatalogScreen } from '../src/modules/m3/catalog-screen';
 import { DetailScreen } from '../src/modules/m3/detail-screen';
 import { Action, Message, styles } from '../src/modules/m3/components';
-type Route = { kind: 'catalog' } | { kind: 'offer'; id: string } | { kind: 'seller'; id: string };
+type Route =
+  | { kind: 'manage' }
+  | { kind: 'catalog' }
+  | { kind: 'offer'; id: string }
+  | { kind: 'seller'; id: string };
 function SellerScreen({
   id,
   back,
@@ -59,11 +65,17 @@ function SellerScreen({
 export default function App() {
   const [route, setRoute] = useState<Route>({ kind: 'catalog' });
   const store = useMemo(() => new CatalogStore(), []);
+  const management = useMemo(() => new ManagementClient(), []);
   const back = () => setRoute({ kind: 'catalog' });
   const open = (offer: CatalogOffer) => setRoute({ kind: 'offer', id: offer.id });
   return (
     <SafeAreaView role="main" style={styles.root}>
-      {route.kind === 'offer' ? (
+      {route.kind === 'manage' && (
+        <Text style={styles.small}>Datos ficticios. Gestión local de ofertas.</Text>
+      )}
+      {route.kind === 'manage' ? (
+        <ManagementApp client={management} back={back} />
+      ) : route.kind === 'offer' ? (
         <DetailScreen
           key={route.id}
           id={route.id}
@@ -73,7 +85,12 @@ export default function App() {
       ) : route.kind === 'seller' ? (
         <SellerScreen key={route.id} id={route.id} back={back} open={open} />
       ) : (
-        <CatalogScreen store={store} open={open} />
+        <>
+          <View style={styles.content}>
+            <Action label="Mis ofertas" secondary onPress={() => setRoute({ kind: 'manage' })} />
+          </View>
+          <CatalogScreen store={store} open={open} />
+        </>
       )}
     </SafeAreaView>
   );

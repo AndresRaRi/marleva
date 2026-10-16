@@ -4,6 +4,6 @@
     "outDir": "dist-m3",
     "sourceMap": true
   },
-  "include": ["src/m3-main.ts", "src/modules/m3/**/*.ts"],
+  "include": ["src/m3-main.ts", "src/modules/m3/**/*.ts", "src/m3-management.ts"],
   "exclude": []
 }

@@ -3,6 +3,7 @@ sequenceDiagram
  actor U as Actor
  participant A as Caso M3
  participant D as Datos/puerto M3
+ U->>A: S010 Identidad vigente por puerto; dueño, sin rol del cuerpo
  U->>A: S020 Autorizar titular elegible
  A->>D: S040 Validar datos y clave/version
  A->>D: S060 Bloquear oferta y revisar recibo idempotente

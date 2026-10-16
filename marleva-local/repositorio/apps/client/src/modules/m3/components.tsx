@@ -69,7 +69,7 @@ export function Action({
     </Pressable>
   );
 }
-export function Price({ offer }: { offer: CatalogOffer }) {
+export function Price({ offer }: { offer: Pick<CatalogOffer, 'kind' | 'price_cents' | 'unit'> }) {
   const label =
     offer.kind === 'service'
       ? 'Requiere cotización'

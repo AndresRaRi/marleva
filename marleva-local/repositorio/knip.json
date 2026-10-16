@@ -10,6 +10,7 @@
         "bootstrap.mjs",
         "seed.mjs",
         "src/m3-main.ts",
+        "src/m3-management.ts",
         "src/modules/m3/infrastructure/adapters/sharp-photo-worker.ts"
       ],
       "project": ["src/**/*.ts", "*.mjs", "prisma/**/*.prisma"],

@@ -67,6 +67,16 @@ jobs:
           exit 1
       - name: Navegador, fotos, errores y accesibilidad automatizada
         run: node tests/integration/frontend/M3/web.mjs
+      - name: Gestión privada con identidad ficticia inyectada
+        run: |
+          node tests/fixtures/m3-management-server.mjs >artifacts/m3/ci/private.log 2>&1 &
+          for i in {1..30}; do
+            if curl --silent http://127.0.0.1:3104/v1/offers/context >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/integration/frontend/M3/management-web.mjs
+      - name: Rendimiento proporcional de gestión
+        run: node tests/performance/backend/M3/management.mjs
       - name: Caída y recuperación exclusivas M3
         run: node tests/integration/backend/M3/restart.mjs
       - name: Evidencia M3 del SHA ejecutado
@@ -78,6 +88,8 @@ jobs:
             marleva-local/repositorio/tests/results/m3-full-coverage.json
             marleva-local/repositorio/tests/results/m3-integration.json
             marleva-local/repositorio/tests/results/m3-web.json
+            marleva-local/repositorio/tests/results/m3-management-web.json
+            marleva-local/repositorio/tests/results/m3-management-performance.json
             marleva-local/repositorio/tests/results/m3-restart.json
             marleva-local/repositorio/docs/revision/M3/capturas/
             marleva-local/repositorio/coverage/m3-full/

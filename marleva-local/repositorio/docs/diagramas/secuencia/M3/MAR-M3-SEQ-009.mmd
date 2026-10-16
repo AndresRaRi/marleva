@@ -5,6 +5,7 @@ sequenceDiagram
  participant R as Repositorio M3
  participant F as Almacén privado M3
  participant P as Decodificador en proceso hijo
+ U->>A: S010 Identidad vigente y CSRF/origen antes de procesar bytes
  U->>A: S020 Version borrador, posicion, UUID foto y bytes
  A->>R: S025 Comprobar dueño/elegibilidad/estado y repetición
  A->>F: S040 Guardar original privado sin nombre del usuario
