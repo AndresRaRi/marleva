@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-16T16:31:20.018Z",
+  "copyPrefix": "marleva-b12-1792167720153",
+  "attempt": 1792168085087,
+  "status": "FAIL",
+  "failedStep": "UC007: lectura inicial de factores cancelada por consulta de permiso",
+  "evidence": "Timeout esperando POST MFA; regresión diferida reprodujo control deshabilitado antes de corregir",
+  "limits": [
+    "No se creó recuperación MFA ni retiró factor en este intento; logs y captura previa conservados"
+  ]
+}

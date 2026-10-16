@@ -1,3 +1,5 @@
+import { proxyTarget } from './proxy-target.mjs';
+const { port, apiPort } = proxyTarget(process.env.MARLEVA_PROXY_CONTEXT);
 import { createServer as httpsServer } from 'node:https';
 import { request } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -25,10 +27,10 @@ const server = httpsServer(
       const upstream = request(
         {
           hostname: '127.0.0.1',
-          port: 3000,
+          port: apiPort,
           path: req.url,
           method: req.method,
-          headers: { ...req.headers, host: '127.0.0.1:3000' },
+          headers: { ...req.headers, host: `127.0.0.1:${apiPort}` },
         },
         (r) => {
           res.writeHead(r.statusCode ?? 503, r.headers);
@@ -73,4 +75,6 @@ const server = httpsServer(
     }
   },
 );
-server.listen(8443, '127.0.0.1', () => console.log('Marleva HTTPS local: https://localhost:8443'));
+server.listen(port, '127.0.0.1', () =>
+  console.log(`Marleva HTTPS local: https://localhost:${port}`),
+);

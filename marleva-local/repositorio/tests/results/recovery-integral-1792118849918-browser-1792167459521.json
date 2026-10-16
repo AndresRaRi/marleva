@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-16T16:17:41.762Z",
+  "copyPrefix": "marleva-b12-1792118849918",
+  "attempt": 1792167459521,
+  "cases": {
+    "sourceSessionValid": true,
+    "sameRestoredSessionRevoked": true,
+    "oldSessionRejected": true,
+    "realOtpSameAccount": true,
+    "noticesDestinationPreserved": true,
+    "noticeIdsPreserved": true,
+    "freshCookie": true,
+    "axeViolations": 0,
+    "pageErrors": 0
+  },
+  "limits": [
+    "Chrome; cookie inicial de fixture, nuevo OTP real; sin acreditar Safari/nativo ni RTO"
+  ],
+  "status": "PASS",
+  "duration_ms": 72397
+}

@@ -51,7 +51,7 @@ export function AccountWorkspace(props: Props) {
     });
   const notices = (
     <AccountNotices
-      key={`${props.account.id}:${revision}`}
+      key={`notices:${props.account.id}:${revision}`}
       accountId={props.account.id}
       onSessionExpired={expired}
       styles={styles}
@@ -120,7 +120,7 @@ export function AccountWorkspace(props: Props) {
             secondary
           />
           <EmailChangePanel
-            key={`${props.account.id}:${revision}`}
+            key={`email:${props.account.id}:${revision}`}
             accountId={props.account.id}
             actions={actions}
             onExpired={expired}

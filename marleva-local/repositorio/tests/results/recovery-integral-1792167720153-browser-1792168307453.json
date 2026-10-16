@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-16T16:31:47.882Z",
+  "copyPrefix": "marleva-b12-1792167720153",
+  "attempt": 1792168307453,
+  "cases": {
+    "sourceSessionValid": true,
+    "sameRestoredSessionRevoked": true,
+    "oldSessionRejected": true,
+    "realOtpSameAccount": true,
+    "noticesDestinationPreserved": true,
+    "noticeIdsPreserved": true,
+    "freshCookie": true,
+    "axeViolations": 0,
+    "pageErrors": 0,
+    "operatorUi": {
+      "realOtpTwoOperators": true,
+      "restoredFactorVerifiedInUi": true,
+      "aal1Denied": true,
+      "selfApprovalDenied": true,
+      "otherReviewerApproved": true,
+      "oldSessionRevoked": true,
+      "safeHelpReturn": true,
+      "limitedCapabilityAndNewTotp": true,
+      "newLoginAndTotpRequired": true,
+      "axeViolations": 0,
+      "pageErrors": 0
+    }
+  },
+  "limits": [
+    "Chrome; cookie inicial de fixture, nuevo OTP real; sin acreditar Safari/nativo ni RTO"
+  ],
+  "status": "PASS",
+  "duration_ms": 195869
+}

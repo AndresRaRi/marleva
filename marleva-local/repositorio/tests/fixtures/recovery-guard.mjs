@@ -52,3 +52,10 @@ export function assertRecoveryCopy(source, target, names, volumes = sourceVolume
 export function assertRecoveryManifest(expected, restored) {
   assert.deepEqual(restored, expected, 'Copia incompleta o contenido distinto: destino bloqueado');
 }
+
+export function assertRecoveryRepeat(previousRun, nextRun) {
+  const previous = recoveryNames(previousRun);
+  const next = recoveryNames(nextRun);
+  assert.notEqual(previousRun, nextRun, 'Repetición exige destino nuevo');
+  return { ...next, pgBackup: previous.pgBackup, storageBackup: previous.storageBackup };
+}

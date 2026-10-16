@@ -47,7 +47,6 @@ export function OperatorPanel({
     });
   const check = () =>
     void actions.run(async (request) => {
-      initial.cancel();
       await request('/v1/operator/access');
       actions.notify('Permiso y segundo factor comprobados');
     });
