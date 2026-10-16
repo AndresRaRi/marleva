@@ -289,5 +289,24 @@
     "mandatoryHooks": "348/348 unit and coverage PASS; typecheck/lint/format/unused PASS",
     "independentReview": "9409367 reviewed; no concrete blockers; no tracked deletion or negative fixture in final tree",
     "closureEvidence": "PR10 merge state and final main CI must be read by exact current SHA in GitHub; this is a pre-merge evidence snapshot, not a claim about a future SHA"
+  },
+  "postMergeInventoryCorrection": {
+    "id": "CI-SONAR-INV-003",
+    "mergedPR": 10,
+    "mainSha": "ab8d8730890810d9f348cf8abe702cbdee244065",
+    "failedMainRun": 38854398110,
+    "negativeGate": "ERROR",
+    "negativeExit": 3,
+    "nativeViolations": 2,
+    "returnedIssues": 1,
+    "correctedGate": "OK",
+    "negativeIssue": "AaFDJEmYj1Za8Vf6OPM6",
+    "restAndChangelog": "New S1764 OPEN, then CLOSED/FIXED by corrected analysis; no evidence of another status or analysis failure",
+    "internalPublicationOrCacheCause": "not established",
+    "change": "Require native measure and paginated issues to agree; bounded reads with task revision guards and encrypted attempt evidence; persistent discrepancy fails",
+    "nativeContextValidation": "workflow_dispatch on candidate branch required before merge, plus PR CI and post-merge main CI",
+    "applicationOrMigrationChange": false,
+    "gatesOrRulesChanged": false,
+    "directedUnit": "45/45 PASS, including 12 new cases"
   }
 }

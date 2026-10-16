@@ -3,6 +3,7 @@ import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { cloudMcp } from './sonar-cloud-mcp.mjs';
 import { encryptCloudEvidence } from './sonar-cloud-evidence.mjs';
+import { consistentCloudInventory } from './sonar-cloud-inventory.mjs';
 import { command, save } from './sonar-runtime.mjs';
 import { fingerprint, assertNoNew, introduced } from './sonar-policy.mjs';
 import {
@@ -83,13 +84,20 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     (metadata) => save(path.join(output, label + '-task.json'), metadata),
   );
   await verifyCloudRevision(token, manifest.project, pullRequest, task.id);
-  const inventory = await cloudInventory(
-    mcp,
-    manifest.project,
+  const inventory = await consistentCloudInventory(
+    () =>
+      cloudInventory(
+        mcp,
+        manifest.project,
+        pullRequest,
+        task,
+        folder,
+        path.join(output, label + '-result'),
+      ),
+    () => verifyCloudRevision(token, manifest.project, pullRequest, task.id),
+    (attempt, data) =>
+      save(path.join(output, label + '-result', 'inventory-attempt-' + attempt + '.json'), data),
     pullRequest,
-    task,
-    folder,
-    path.join(output, label + '-result'),
   );
   const measuredFiles = inventory.measures.measures.find(
     (measure) => measure.metric === 'files',
@@ -109,6 +117,7 @@ async function analyze(label, sha, context, pullRequest, negative = false) {
     analysisWarnings: task.analysisWarnings,
     integrationWarnings: task.integrationWarnings,
     issues: inventory.issues.length,
+    inventoryAttempts: inventory.inventoryAttempts,
     hotspots: inventory.hotspots.length,
   };
   save(path.join(output, 'summary.json'), summary);

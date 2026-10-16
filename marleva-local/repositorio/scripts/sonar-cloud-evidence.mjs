@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { randomBytes, scryptSync, createCipheriv } from 'node:crypto';
 export function encryptCloudEvidence(folder, token) {
@@ -10,6 +10,12 @@ export function encryptCloudEvidence(folder, token) {
       label + '-profile.json',
       label + '-result/inventory.json',
     );
+  for (const label of ['base', 'head', 'negative', 'corrected']) {
+    const result = path.join(folder, label + '-result');
+    if (existsSync(result))
+      for (const file of readdirSync(result))
+        if (/^inventory-attempt-\d+\.json$/.test(file)) files.push(label + '-result/' + file);
+  }
   const contents = Object.fromEntries(
     files
       .filter((file) => existsSync(path.join(folder, file)))
