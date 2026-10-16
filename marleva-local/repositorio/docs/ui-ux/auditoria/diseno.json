@@ -1,0 +1,66 @@
+{
+  "id": "MAR-UX-AUD-010",
+  "date": "2026-10-16",
+  "status": "propuesta pendiente de revisión visual; no producto integrado",
+  "scope": "Auditoría M1/M3 existentes y concepto local sin backend",
+  "journey": [
+    "explorar oferta pública",
+    "entender precio, cobertura y modalidad",
+    "acceder por correo",
+    "volver al detalle conservado en memoria"
+  ],
+  "screens": [
+    "MAR-M3-UI-001 exploración",
+    "MAR-M3-UI-002 detalle",
+    "MAR-M1-UI-001 correo/código"
+  ],
+  "trace": [
+    "MAR-M3-UC-001 > SEQ001:S020/S080/S095 > API001 > Offer/OfferVersion",
+    "MAR-M3-UC-002 > SEQ002:S040/S080/S095 > API002 > OfferVersion/Photo",
+    "MAR-M1-UC-001/002 > SEQ001:S020/S100; SEQ002:S040/S070/S110 > API001/002 > Challenge/Account/Session",
+    "Retorno M3 tras M1: hipótesis de composición, no destino permitido actual de SafeReturn; requiere diseño y revisión posterior"
+  ],
+  "preserved": [
+    "C01–C26",
+    "correo sin contraseña",
+    "exploración pública",
+    "cuenta no acredita residencia",
+    "siete desarrollos",
+    "domicilio privado",
+    "M1 Cuenta/Avisos/Ayuda vigente sin modificar"
+  ],
+  "states": [
+    "carga",
+    "vacío",
+    "sin resultados",
+    "error con reintento conservando filtros",
+    "oferta retirada",
+    "agotado",
+    "código incorrecto",
+    "código vencido",
+    "espera 60s",
+    "sesión vencida",
+    "éxito simulado",
+    "error al cargar más conservando lista"
+  ],
+  "fixturePolicy": "Solo memoria; ejemplo@example.test y código fijo 123456 exclusivamente ficticios. Sin fetch, almacenamiento persistente, pedido, reserva o pago.",
+  "tokens": {
+    "ink": "#183B32",
+    "muted": "#52635C",
+    "action": "#176B52",
+    "paper": "#F7F6F1",
+    "surface": "#FFFFFF",
+    "accent": "#D6A45D",
+    "error": "#A52A28",
+    "focus": "#A64625",
+    "font": "system-ui",
+    "base": 16,
+    "touchMin": 48
+  },
+  "componentStrategy": "Conservar React Native/Expo y extender componentes existentes M1Button/M1Field, Action/OfferCard. Propuesta de librería interna compartida sobre View/Text/Pressable/TextInput/Modal; sin instalar biblioteca externa. Compatibilidad final nativa pendiente.",
+  "approvalGate": "Aprobar jerarquía, tres pantallas, navegación propuesta y tokens antes de aplicar cambios visuales materiales al cliente. No merge automático.",
+  "reference": {
+    "web": "eventos-merida main23b572c/prototipo/index.html, CSS v2 línea6",
+    "reactNative": "origin/integration/catalogo-ios3868de6/apps/mobile: CatalogApp, ExploreScreen, DetailScreen, ui/theme; lectura estática, no ejecución"
+  }
+}
