@@ -1,0 +1,945 @@
+[
+  {
+    "id": "MAR_M2_API_019",
+    "method": "get",
+    "route": "/v1/m2/eligibility/own",
+    "summary": "Consultar elegibilidad propia",
+    "uc": "MAR-M2-UC-010",
+    "seq": "MAR-M2-SEQ-010",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S050",
+      "S060"
+    ],
+    "tables": [
+      "M2MembershipApplication",
+      "M2SellerProfile",
+      "M2Restriction"
+    ],
+    "response": "Eligibility",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Consulta actual por identidad de sesión; no permite account_id arbitrario ni reserva permiso. Comprar exige pertenencia aprobada y ninguna restricción buy/both; ofrecer exige además perfil enabled, versión actual aprobada y no pausado. Leer eligibilityRevision actual; falla503 sin permitir por caché. Consumidor interno usa puerto propio transaccional, no esta ruta pública para decidir en otro módulo.",
+    "ui": "MAR-M2-UI-008"
+  },
+  {
+    "id": "MAR_M2_API_020",
+    "method": "post",
+    "route": "/v1/m2/membership-applications/{application_id}/residence-changes",
+    "summary": "Declarar cambio vecinal",
+    "uc": "MAR-M2-UC-005",
+    "seq": "MAR-M2-SEQ-005",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S040",
+      "S060"
+    ],
+    "tables": [
+      "M2MembershipApplication",
+      "M2MembershipVersion",
+      "M2MembershipVersionPrivate",
+      "M2MembershipCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommandResult",
+    "request": "ChangeResidenceRequest",
+    "actor": "titular autenticado",
+    "rules": "Solo estado base approved, sin envío pendiente ni borrador. Conservar approvedVersionId histórico; crear origin residence_change enlazado a decisión aprobada y versión previa. Pasar a correction, desactivar elegibilidad inmediatamente e incrementar eligibilityRevision, recibo y evento juntos. No copiar documentos; declaración false. No tocar pedidos/avisos M1.",
+    "ui": "MAR-M2-UI-008"
+  },
+  {
+    "id": "MAR_M2_API_021",
+    "method": "post",
+    "route": "/v1/m2/membership-applications/{application_id}/reopenings",
+    "summary": "Reabrir borrador archivado",
+    "uc": "MAR-M2-UC-006",
+    "seq": "MAR-M2-SEQ-006",
+    "steps": [
+      "S060",
+      "S070",
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2MembershipApplication",
+      "M2MembershipVersion",
+      "M2MembershipVersionPrivate",
+      "M2MembershipArchiveNotice",
+      "M2MembershipCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommandResult",
+    "request": "ReopenRequest",
+    "actor": "titular autenticado",
+    "rules": "Solo versión corriente archived y sin envío pendiente. Nueva versión origin reopen, previousVersionId y resumeOrigin según origen efectivo archivado; inicial reabre draft, otros correction salvo reconsideración que conserva rejected. Conservar decisión fuente si existe, nunca inventarla. Si resumeOrigin reconsideration exigir motivo privado nuevo; otros null. No recuperar datos purgados ni enlaces; declaración false.",
+    "ui": "MAR-M2-UI-009"
+  },
+  {
+    "id": "MAR_M2_API_022",
+    "method": "get",
+    "route": "/v1/m2/seller-profiles/own",
+    "summary": "Consultar perfil propio",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2Restriction"
+    ],
+    "response": "OwnSeller",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "200 profile null si no existe. Privado propio y estado efectivo, sin notas internas/revisor; siempre consultable con sesión válida aunque pierda elegibilidad. Nunca inferir habilitación financiera.",
+    "ui": "MAR-M2-UI-010"
+  },
+  {
+    "id": "MAR_M2_API_023",
+    "method": "post",
+    "route": "/v1/m2/seller-profiles",
+    "summary": "Crear perfil comercial",
+    "uc": "MAR-M2-UC-007",
+    "seq": "MAR-M2-SEQ-007",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "Empty",
+    "actor": "titular autenticado",
+    "rules": "Una cuenta/un perfil; pertenencia actual approved y sin restricciones offer/both. Crear versión inicial y privado incompleto con recibo atómico. Carrera devuelve perfil propio existente sin sobrescribirlo. No banco, tarifa, oferta ni pagos.",
+    "ui": "MAR-M2-UI-010"
+  },
+  {
+    "id": "MAR_M2_API_024",
+    "method": "put",
+    "route": "/v1/m2/seller-profiles/{profile_id}/versions/{version_id}",
+    "summary": "Guardar versión comercial",
+    "uc": "MAR-M2-UC-007",
+    "seq": "MAR-M2-SEQ-007",
+    "steps": [
+      "S020",
+      "S030",
+      "S050",
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2SellerCoverage",
+      "M2SellerModality",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerInput",
+    "actor": "titular autenticado",
+    "rules": "Solo borrador actual y revisión de perfil esperada. PUT reemplaza todos los campos; null/listas vacías permiten incompleto, nunca envío. Catálogo siete, arrays sin duplicados. Datos contractuales y punto privados aportados expresamente, no copiados del expediente. Cambio requiere pertenencia eligible actual. Reconsideración mantiene motivo obligatorio; otros orígenes null.",
+    "ui": "MAR-M2-UI-010"
+  },
+  {
+    "id": "MAR_M2_API_025",
+    "method": "post",
+    "route": "/v1/m2/seller-profiles/{profile_id}/versions",
+    "summary": "Preparar versión comercial",
+    "uc": "MAR-M2-UC-007",
+    "seq": "MAR-M2-SEQ-007",
+    "steps": [
+      "S030",
+      "S050",
+      "S060",
+      "S080"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2SellerDecision",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerPrepareRequest",
+    "actor": "titular autenticado",
+    "rules": "Solo última decisión compatible: correction/correction, rejected/reconsideration con motivo, enabled/material_change. Nueva versión creciente/antecedente mismo dueño; no editar enviada. Edición material pasa base correction y bloquea exposición/operaciones nuevas desde commit, incluso si queda approvedVersionId histórico. Preparar no envía; no copiar aceptación de condiciones. Correction conserva base correction; reconsideration conserva rejected; material_change pasa correction. Datos comerciales aún disponibles pueden precargarse al borrador propio, sin copiar aceptación ni reconstruir privados purgados.",
+    "ui": "MAR-M2-UI-012"
+  },
+  {
+    "id": "MAR_M2_API_026",
+    "method": "post",
+    "route": "/v1/m2/seller-profiles/{profile_id}/submissions",
+    "summary": "Enviar alta comercial",
+    "uc": "MAR-M2-UC-008",
+    "seq": "MAR-M2-SEQ-008",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S040",
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2SellerCoverage",
+      "M2SellerModality",
+      "M2SellerTermsPolicy",
+      "M2SellerTermsAcceptance",
+      "M2SellerSubmission",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerSubmitRequest",
+    "actor": "titular autenticado",
+    "rules": "Revalidar pertenencia/restricciones, campos completos, una a cuatro modalidades y uno a siete desarrollos. Pickup exige attention_mode private_location y dirección privada; remote exige modalidad remote declarada; on_site exige cobertura. Política de condiciones activa exacta y aceptación expresa nueva por versión, no tarifa inventada. Congelar, pending, aceptación, evento y recibo juntos. Sin política activa409; no habilitación automática.",
+    "ui": "MAR-M2-UI-011"
+  },
+  {
+    "id": "MAR_M2_API_027",
+    "method": "post",
+    "route": "/v1/m2/seller-profiles/{profile_id}/pauses",
+    "summary": "Pausar perfil",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S040"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2MembershipApplication",
+      "M2Restriction",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerActionRequest",
+    "actor": "titular autenticado",
+    "rules": "Pausa propia sin borrar historial ni obligaciones; isPaused true, revisar versión exacta e incrementar elegibilidad, evento/recibo juntos. Puede mantener pendiente de revisión sin transformarlo en enabled.",
+    "ui": "MAR-M2-UI-011"
+  },
+  {
+    "id": "MAR_M2_API_028",
+    "method": "post",
+    "route": "/v1/m2/seller-profiles/{profile_id}/resumptions",
+    "summary": "Reanudar perfil",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S050"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2MembershipApplication",
+      "M2Restriction",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerActionRequest",
+    "actor": "titular autenticado",
+    "rules": "Solo misma versión actual aprobada, base enabled, pertenencia approved y ninguna restricción offer/both; isPaused false. No levantar restricciones ni reutilizar versión material sin revisar.",
+    "ui": "MAR-M2-UI-011"
+  },
+  {
+    "id": "MAR_M2_API_029",
+    "method": "get",
+    "route": "/v1/m2/public/seller-profiles/{profile_id}",
+    "summary": "Consultar proyección pública",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S070",
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerCoverage",
+      "M2SellerModality",
+      "M2MembershipApplication",
+      "M2Restriction"
+    ],
+    "response": "SellerPublic",
+    "request": null,
+    "actor": "público limitado",
+    "rules": "Solo actual enabled, vigente, no pausado y elegibilidad actual. Otros404, sin revelar borradores. Nunca legalName/domicilio/teléfono, cuenta del dueño, residencia o notas. No lista de vecinos, fotos/maps/reseñas ni oferta M3. No caché permisiva al perder elegibilidad.",
+    "ui": "MAR-M2-UI-013"
+  },
+  {
+    "id": "MAR_M2_API_030",
+    "method": "get",
+    "route": "/v1/m2/seller-profiles/{profile_id}/history",
+    "summary": "Historial comercial mínimo",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerVersion",
+      "M2SellerSubmission",
+      "M2SellerDecision"
+    ],
+    "response": "SellerHistory",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Páginas24/máximo50, orden number DESC,id DESC, cursor ligado a actor/perfil; sin datos privados, revisor o notas. Leer detalle por separado; no reconstructores de purgados.",
+    "ui": "MAR-M2-UI-012"
+  },
+  {
+    "id": "MAR_M2_API_031",
+    "method": "get",
+    "route": "/v1/m2/seller-profiles/{profile_id}/versions/{version_id}",
+    "summary": "Leer versión comercial exacta propia",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2SellerCoverage",
+      "M2SellerModality"
+    ],
+    "response": "SellerVersion",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Solo versión del mismo perfil/cuenta; disponible privada por indicador purgedAt, null no prueba por sí mismo borrado. Sin notas del revisor ni datos financieros.",
+    "ui": "MAR-M2-UI-012"
+  },
+  {
+    "id": "MAR_M2_API_032",
+    "method": "get",
+    "route": "/v1/m2/seller-profiles/{profile_id}/decisions/{decision_id}",
+    "summary": "Leer resolución comercial visible",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerDecision",
+      "M2SellerDecisionPrivate"
+    ],
+    "response": "SellerVisibleDecision",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Resuelve exacta del mismo perfil; indicador privado independiente, sin internal_note ni revisor. Resultado mínimo permanece conforme calendario, no conservación perpetua.",
+    "ui": "MAR-M2-UI-012"
+  },
+  {
+    "id": "MAR_M2_API_033",
+    "method": "get",
+    "route": "/v1/m2/seller-terms/current",
+    "summary": "Consultar condiciones propuestas o activas",
+    "uc": "MAR-M2-UC-008",
+    "seq": "MAR-M2-SEQ-008",
+    "steps": [
+      "S040"
+    ],
+    "tables": [
+      "M2SellerTermsPolicy"
+    ],
+    "response": "TermsPolicy",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Una política activa máxima. Sin activa puede devolverse borrador expresamente draft para revisión; envío requiere active y hash/version exactos. Si no hay ninguna404; dependencia caída503. No inventar aceptación ni tarifas.",
+    "ui": "MAR-M2-UI-011"
+  },
+  {
+    "id": "MAR_M2_API_034",
+    "method": "get",
+    "route": "/v1/m2/restrictions/own",
+    "summary": "Consultar restricciones propias",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S050",
+      "S110",
+      "S120"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionPrivate"
+    ],
+    "response": "Restrictions",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Página24/max50 por createdAt DESC,id DESC, cursor propio. Mostrar alcance y motivo visible, nunca nota interna/revisor. Estado base de pertenencia/perfil separado de restricciones; obligaciones anteriores conservadas.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M2_API_035",
+    "method": "post",
+    "route": "/v1/m2/restrictions/{restriction_id}/appeals",
+    "summary": "Preparar reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S050",
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionAppeal",
+      "M2RestrictionAppealPrivate",
+      "M2RestrictionEvidenceLink",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "AppealInput",
+    "actor": "titular autenticado",
+    "rules": "Restricción propia active, una apelación abierta máxima; reason obligatorio. Solo versión enviada propia y documentos explícitos de esa versión disponibles admisibles; si no evidencia, null y[] admitidos. Preparar no presenta ni levanta. Evidencia nueva vecinal se obtiene por UC005 evidence_update y UC002/003, no copiar bytes ni alterar fecha.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M2_API_036",
+    "method": "put",
+    "route": "/v1/m2/restriction-appeals/{appeal_id}",
+    "summary": "Guardar reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2RestrictionAppeal",
+      "M2RestrictionAppealPrivate",
+      "M2RestrictionEvidenceLink",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "AppealInput",
+    "actor": "titular autenticado",
+    "rules": "Solo borrador actual propio y revisión esperada. Sustituir enlaces explícitos no enviados, dos máximo. Fuente exacta propia y todavía disponible; no revive borrados ni permite otras finalidades.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M2_API_037",
+    "method": "post",
+    "route": "/v1/m2/restriction-appeals/{appeal_id}/submissions",
+    "summary": "Presentar reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S060",
+      "S070"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionAppeal",
+      "M2RestrictionAppealPrivate",
+      "M2RestrictionEvidenceLink",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "AppealSubmitRequest",
+    "actor": "titular autenticado",
+    "rules": "Revalidar motivo/evidencia, congelar appeal y enlaces, pending con evento/recibo. La restricción sigue active; no plazo de caducidad o número máximo inventado. No enviar otra abierta; respuesta perdida conserva clave/cuerpo.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M2_API_038",
+    "method": "get",
+    "route": "/v1/m2/restriction-appeals/{appeal_id}",
+    "summary": "Consultar reconsideración propia",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S050",
+      "S060",
+      "S070",
+      "S110"
+    ],
+    "tables": [
+      "M2RestrictionAppeal",
+      "M2RestrictionAppealPrivate",
+      "M2RestrictionEvidenceLink"
+    ],
+    "response": "Appeal",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Solo titular; privado según indicador; estado sin asignación/revisor/notas internas. Decisión visible se consulta por su referencia en historial del caso.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M2_API_039",
+    "method": "post",
+    "route": "/v1/m2/restriction-appeals/{appeal_id}/access-permits",
+    "summary": "Acceso a evidencia de reconsideración",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2MembershipDocumentAccess",
+      "M2RestrictionEvidenceLink",
+      "M8RestrictionAssignment"
+    ],
+    "response": "AccessPermit",
+    "request": "RestrictionAccessRequest",
+    "actor": "titular o revisor de reconsideración asignada",
+    "rules": "Titular solo evidencia propia enlazada; revisor exige grant restrict de ámbito, MFA y assignment exacto vigente. TTL≤300s, secreto por cabecera y bytes por M2API011; ruta de autorización alternativa tipada en Access. Restricción no concede acceso a otros documentos históricos o perfiles privados. Revalidar antes de responder bytes.",
+    "ui": "MAR-M8-UI-006"
+  },
+  {
+    "id": "MAR_M2_API_040",
+    "method": "get",
+    "route": "/v1/m2/community-command-receipts/{receipt_id}",
+    "summary": "Consultar recibo comunitario propio",
+    "uc": "MAR-M2-UC-009",
+    "seq": "MAR-M2-SEQ-009",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityReceipt",
+    "request": null,
+    "actor": "actor original autorizado",
+    "rules": "Solo actor original y recurso permitido; reautorizar antes del lookup. Huellas/llave no se exponen; resultado mínimo, sin respuesta privada vieja. Expirar no duplica operación.",
+    "ui": "MAR-M2-UI-011"
+  },
+  {
+    "id": "MAR_M2_API_041",
+    "method": "get",
+    "route": "/v1/m2/seller-profiles/{profile_id}/contract-summary",
+    "summary": "Consultar datos privados previos a contratar",
+    "uc": "MAR-M2-UC-010",
+    "seq": "MAR-M2-SEQ-010",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S050",
+      "S060"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M2MembershipApplication",
+      "M2Restriction"
+    ],
+    "response": "SellerContractSummary",
+    "request": null,
+    "actor": "comprador autenticado con pertenencia y capacidad buy vigentes",
+    "rules": "Comprador eligible y perfil enabled vigente; finalidad precontractual explícita, no exposición pública. Devolver versión actual y datos aportados para contratación, jamás expediente. Límite propuesto10/min por cuenta,429 Retry-After real; no descarga masiva. No conserva compra ni crea pedido; M4 deberá copiar condiciones en su contrato al contratar. Sin contrato privado disponible409, no rellenar desde residencia.",
+    "ui": "MAR-M2-UI-013"
+  },
+  {
+    "id": "MAR_M8_API_006",
+    "method": "get",
+    "route": "/v1/m8/seller-submissions",
+    "summary": "Cola de revisión comercial",
+    "uc": "MAR-M8-UC-004",
+    "seq": "MAR-M8-SEQ-004",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerSubmission",
+      "M8SellerAssignment",
+      "M8MembershipReviewGrant"
+    ],
+    "response": "Queue",
+    "request": null,
+    "actor": "gestor de ámbito con MFA reciente o revisor seller_review",
+    "rules": "assigned para revisor/pending para gestor seller_assign, páginas24/50 orden submittedAt ASC,id ASC; sin datos privados. Cada página reautoriza. Sin elegibles200vacío, caída503.",
+    "ui": "MAR-M8-UI-003"
+  },
+  {
+    "id": "MAR_M8_API_007",
+    "method": "get",
+    "route": "/v1/m8/seller-reviewers",
+    "summary": "Candidatos comerciales por envío",
+    "uc": "MAR-M8-UC-004",
+    "seq": "MAR-M8-SEQ-004",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M8MembershipReviewerProfile",
+      "M8MembershipReviewGrant",
+      "M2SellerSubmission"
+    ],
+    "response": "ReviewerCandidates",
+    "request": null,
+    "actor": "gestor de ámbito con MFA reciente",
+    "rules": "Requiere submission_id comercial pendiente no propio, perfil operativo enabled+grant seller_review actual; no directorio general. Excluir conflictos registrados y revalidar al asignar; igual paginación/privacidad que M8API005.",
+    "ui": "MAR-M8-UI-003"
+  },
+  {
+    "id": "MAR_M8_API_008",
+    "method": "post",
+    "route": "/v1/m8/seller-submissions/{submission_id}/assignments",
+    "summary": "Asignar revisión comercial",
+    "uc": "MAR-M8-UC-004",
+    "seq": "MAR-M8-SEQ-004",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M8SellerAssignment",
+      "M8MembershipReviewGrant",
+      "M2SellerSubmission",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "AssignmentRequest",
+    "actor": "gestor de ámbito con MFA reciente",
+    "rules": "Gestor seller_assign vigente asigna reviewer seller_review, ambos distintos de titular; perfil revisor enabled. Una activa, CAS perfil/envío/anterior; cerrar asignación vieja y recibo juntos. Sin heredar asignaciones vecinales.",
+    "ui": "MAR-M8-UI-003"
+  },
+  {
+    "id": "MAR_M8_API_009",
+    "method": "get",
+    "route": "/v1/m8/seller-submissions/{submission_id}",
+    "summary": "Revisar versión comercial asignada",
+    "uc": "MAR-M8-UC-004",
+    "seq": "MAR-M8-SEQ-004",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2SellerVersion",
+      "M2SellerVersionPrivate",
+      "M8SellerAssignment",
+      "M2SellerDecision",
+      "M2SellerDecisionPrivate"
+    ],
+    "response": "SellerReview",
+    "request": null,
+    "actor": "revisor asignado con capacidad específica, MFA y autenticación reciente",
+    "rules": "Solo versión enviada actual asignada, campos privados comerciales pertinentes y antecedente visible; no documentos de residencia ni notas históricas. Pérdida de concesión/asignación404/403, ocultar contenido.",
+    "ui": "MAR-M8-UI-004"
+  },
+  {
+    "id": "MAR_M8_API_010",
+    "method": "post",
+    "route": "/v1/m8/seller-submissions/{submission_id}/decisions",
+    "summary": "Resolver alta comercial",
+    "uc": "MAR-M8-UC-004",
+    "seq": "MAR-M8-SEQ-004",
+    "steps": [
+      "S040",
+      "S050",
+      "S060",
+      "S070",
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2SellerProfile",
+      "M2SellerDecision",
+      "M2SellerDecisionPrivate",
+      "M8SellerAssignment",
+      "M2SellerSubmission",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "SellerDecisionRequest",
+    "actor": "revisor asignado con capacidad específica, MFA y autenticación reciente",
+    "rules": "Revalidar seller_review/MFA/asignación y pertenencia. Solo enabled requiere elegibilidad offer vecinal sin restricción; correction/rejected pueden resolver deficiencias sin conceder elegibilidad. expected_revision es perfil; CAS envío/asignación, decisión única, aviso/recibo juntos. Habilitar no publica oferta ni activa pagos.",
+    "ui": "MAR-M8-UI-004"
+  },
+  {
+    "id": "MAR_M8_API_011",
+    "method": "post",
+    "route": "/v1/m8/restrictions",
+    "summary": "Registrar restricción motivada",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S040",
+      "S050"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionPrivate",
+      "M2MembershipApplication",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "RestrictionCreateRequest",
+    "actor": "revisor asignado con capacidad específica, MFA y autenticación reciente",
+    "rules": "Requiere membership_restrict o seller_restrict según objetivo, actor distinto del titular y MFA reciente. Restricción independiente del estado base/historial; scope buy/offer/both según objetivo. Actualizar eligibilityRevision y evento atómicos, no borrar obligaciones ni cambiar cuenta M1. Motivo visible y nota interna separados. expected_revision es expediente, expected_profile_revision es perfil si target_kind seller, expected_eligibility_revision es el agregado M2; validar los tres bajo el mismo bloqueo.",
+    "ui": "MAR-M8-UI-005"
+  },
+  {
+    "id": "MAR_M8_API_012",
+    "method": "post",
+    "route": "/v1/m8/restriction-appeals/{appeal_id}/assignments",
+    "summary": "Asignar reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S070",
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M8RestrictionAssignment",
+      "M2RestrictionAppeal",
+      "M8MembershipReviewGrant",
+      "M2CommunityCommandReceipt"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "RestrictionAssignmentRequest",
+    "actor": "gestor de ámbito con MFA reciente",
+    "rules": "Gestor de ámbito membership_assign/seller_assign, reviewer restrict correspondiente, perfil operativo habilitado y ninguno titular. Apelación pending y restricción active; una asignación vigente. No inferir autorización por rol M1 ni heredar otra asignación.",
+    "ui": "MAR-M8-UI-005"
+  },
+  {
+    "id": "MAR_M8_API_013",
+    "method": "get",
+    "route": "/v1/m8/restriction-appeals/{appeal_id}",
+    "summary": "Revisar reconsideración asignada",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionPrivate",
+      "M2RestrictionAppeal",
+      "M2RestrictionAppealPrivate",
+      "M8RestrictionAssignment",
+      "M2RestrictionEvidenceLink"
+    ],
+    "response": "RestrictionReview",
+    "request": null,
+    "actor": "revisor asignado con capacidad específica, MFA y autenticación reciente",
+    "rules": "Solo caso actual asignado y motivo/evidencia explícitos, antecedente visible y perfil comercial público si pertinente. No notas internas históricas ni contratos privados por concesión vecinal. Documentos solo por permiso propio API039 y bytes API011.",
+    "ui": "MAR-M8-UI-006"
+  },
+  {
+    "id": "MAR_M8_API_014",
+    "method": "post",
+    "route": "/v1/m8/restriction-appeals/{appeal_id}/decisions",
+    "summary": "Resolver reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S080",
+      "S090",
+      "S100",
+      "S110",
+      "S120"
+    ],
+    "tables": [
+      "M2Restriction",
+      "M2RestrictionAppeal",
+      "M2RestrictionDecision",
+      "M2RestrictionDecisionPrivate",
+      "M8RestrictionAssignment",
+      "M2CommunityCommandReceipt",
+      "M2CommunityEvent"
+    ],
+    "response": "CommunityCommandResult",
+    "request": "RestrictionDecisionRequest",
+    "actor": "revisor asignado con capacidad específica, MFA y autenticación reciente",
+    "rules": "Una decisión por apelación y fuente exacta, sin conflicto, restrict/MFA/asignación actuales. expected_revision corresponde a restricción; revisar apelación pending y assignment revision. lift solo levanta esa causa, no aprueba residencia/perfil ni levanta otras; maintain permite nueva reconsideración posterior sin borrar historia. Commit decisión/cierre/revisión/elegibilidad/evento/recibo juntos.",
+    "ui": "MAR-M8-UI-006"
+  },
+  {
+    "id": "MAR_M8_API_015",
+    "method": "get",
+    "route": "/v1/m8/restriction-appeals",
+    "summary": "Cola mínima de reconsideraciones",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S070",
+      "S080"
+    ],
+    "tables": [
+      "M2RestrictionAppeal",
+      "M2Restriction",
+      "M8RestrictionAssignment"
+    ],
+    "response": "RestrictionQueue",
+    "request": null,
+    "actor": "gestor de ámbito con MFA reciente o revisor restrict",
+    "rules": "Gestor ve casos pending de ámbito; revisor solo asignados. Proyección mínima sin motivo privado/nota/documentos, cursor actor/ámbito24/50 por submittedAt ASC,id ASC. No usa respuesta Restrictions privada del titular: esquema mínimo especializado definido abajo.",
+    "ui": "MAR-M8-UI-005"
+  },
+  {
+    "id": "MAR_M8_API_016",
+    "method": "post",
+    "route": "/v1/m8/conservation-commands",
+    "summary": "Registrar finalización, bloqueo o levantamiento",
+    "uc": "MAR-M8-UC-005",
+    "seq": "MAR-M8-SEQ-005",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S050",
+      "S060",
+      "S070",
+      "S080",
+      "S090"
+    ],
+    "tables": [
+      "M2MembershipRetentionCase",
+      "M2MembershipRetentionHold",
+      "M2MembershipRetentionEvent"
+    ],
+    "response": "ConservationResult",
+    "request": "RetentionCommand",
+    "actor": "conservador de ámbito con MFA reciente",
+    "rules": "Adaptador documental del puerto RetentionCommand. Actor distinto del titular y membership_conserve/seller_conserve según caso. command_id UUID estable se usa como clave propia además del header; mismo ID/cuerpo mismo evento, distinto409. Finalizar comprueba política activa y decisión ancla de ámbito exacto; no borrar desde HTTP. Hold/release exige base/referencia/revisión según D08; bloqueo no resucita bytes. Sin activación de política por esta ruta. En este adaptador Idempotency-Key debe ser UUID e igual a command_id; divergencia400. No registrar contenidos privados en recibos.",
+    "ui": "MAR-M8-UI-007"
+  },
+  {
+    "id": "MAR_M8_API_017",
+    "method": "get",
+    "route": "/v1/m8/conservation-cases/{case_id}",
+    "summary": "Consultar caso de conservación autorizado",
+    "uc": "MAR-M8-UC-005",
+    "seq": "MAR-M8-SEQ-005",
+    "steps": [
+      "S010",
+      "S020",
+      "S030",
+      "S070",
+      "S080"
+    ],
+    "tables": [
+      "M2MembershipRetentionCase",
+      "M2MembershipRetentionHold"
+    ],
+    "response": "ConservationCase",
+    "request": null,
+    "actor": "conservador de ámbito con MFA reciente",
+    "rules": "Solo caso y finalidad del ámbito, sin acceso al contenido de documentos ni contrato privado. Referencias opacas de causa; no revisión ordinaria de bytes por conservarlos. Actor no titular.",
+    "ui": "MAR-M8-UI-007"
+  },
+  {
+    "id": "MAR_M2_API_042",
+    "method": "get",
+    "route": "/v1/m2/restrictions/{restriction_id}/decisions/{decision_id}",
+    "summary": "Consultar resolución visible de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S050",
+      "S100",
+      "S110"
+    ],
+    "tables": [
+      "M2RestrictionDecision",
+      "M2RestrictionDecisionPrivate"
+    ],
+    "response": "RestrictionVisibleDecision",
+    "request": null,
+    "actor": "titular autenticado",
+    "rules": "Mismo dueño/restricción y decisión exacta. No nota interna ni revisor; indicador de disponibilidad de su motivo.",
+    "ui": "MAR-M2-UI-014"
+  },
+  {
+    "id": "MAR_M8_API_018",
+    "method": "get",
+    "route": "/v1/m8/restriction-reviewers",
+    "summary": "Candidatos para reconsideración de restricción",
+    "uc": "MAR-M8-UC-003",
+    "seq": "MAR-M8-SEQ-003",
+    "steps": [
+      "S070",
+      "S080"
+    ],
+    "tables": [
+      "M8MembershipReviewerProfile",
+      "M8MembershipReviewGrant",
+      "M2RestrictionAppeal",
+      "M2Restriction"
+    ],
+    "response": "ReviewerCandidates",
+    "request": null,
+    "actor": "gestor o conservador de ámbito con MFA reciente",
+    "rules": "Gestor membership_assign/seller_assign según target; perfil enabled y grant membership_restrict/seller_restrict actual, ninguno titular. Candidatos ligados a apelación pending propia del ámbito; no directorio general. Páginas24/50 con cursor actor/caso, caída503 distinta de200vacío. Revalidar al asignar.",
+    "ui": "MAR-M8-UI-005"
+  },
+  {
+    "id": "MAR_M8_API_019",
+    "method": "get",
+    "route": "/v1/m8/conservation-cases",
+    "summary": "Cola mínima de conservación autorizada",
+    "uc": "MAR-M8-UC-005",
+    "seq": "MAR-M8-SEQ-005",
+    "steps": [
+      "S010",
+      "S020",
+      "S030"
+    ],
+    "tables": [
+      "M2MembershipRetentionCase",
+      "M8MembershipReviewGrant"
+    ],
+    "response": "ConservationQueue",
+    "request": null,
+    "actor": "gestor o conservador de ámbito con MFA reciente",
+    "rules": "Conservador membership_conserve/seller_conserve según finalidad. Excluir casos propios y otros ámbitos. Páginas24/max50, dueAt ASC NULLS LAST,id ASC, cursor ligado a actor/ámbito; vencidos primero, estado consultable. No motivo privado ni bytes o llaves de proveedor. Caída503 no equivale cola vacía.",
+    "ui": "MAR-M8-UI-007"
+  }
+]

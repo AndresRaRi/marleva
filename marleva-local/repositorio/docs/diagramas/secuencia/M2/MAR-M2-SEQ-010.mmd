@@ -16,3 +16,13 @@ else Estado disponible
 end
 Note over A,C: S070 Una consulta previa no reserva permiso, consumidor revalida en operación nueva
 Note over A,I: S080 Sin cambiar GET /me o contratos de M1
+C->>A: S090 Iniciar operación nueva mediante puerto EligibilityGuard y unidad de trabajo autorizada
+A->>D: S100 Bloquear agregado M2, revisar identity vigente, buy/offer y eligibilityRevision
+alt Elegibilidad y versión siguen válidas
+ A-->>C: S110 Mantener bloqueo hasta commit de operación consumidora, sin acceso directo a tablas M2
+else Revocación o revisión cambió
+ A-->>C: S120 Denegar operación nueva y refrescar, conservar obligaciones anteriores
+end
+C->>A: S130 Comprador elegible solicita resumen contractual privado por finalidad
+A->>D: S140 Revalidar comprador y oferente vigente, no leer residencia, limitar10/min/cuenta
+A-->>C: S150 Resumen versión exacta o409 si privado no disponible, consumidor M4 conserva snapshot al contratar

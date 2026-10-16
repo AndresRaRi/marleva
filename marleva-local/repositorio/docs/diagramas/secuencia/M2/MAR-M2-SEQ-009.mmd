@@ -10,12 +10,17 @@ T->>A: S010 Consultar/pausar/reanudar perfil propio
 A->>I: S020 Validar sesión y titular
 A->>D: S030 Leer versión habilitada, pertenencia y restricciones
 alt Pausa propia válida
- A->>D: S040 Pausar con versión, historial y evento
+ A->>D: S040 isPaused true con versión exacta, historial, eligibilityRevision, evento y recibo
 else Reanudar misma versión sin restricción y pertenencia aprobada
- A->>D: S050 Reanudar con comparación atómica
+ A->>D: S050 isPaused false solo enabled, versión corriente aprobada y elegibilidad vigente bajo bloqueo
 else Suspendido o nueva versión sin revisar
  A-->>T: S060 No reanudar, explicar corrección/reconsideración
 end
 C->>A: S070 Consultar proyección pública futura
 A->>D: S080 Comprobar habilitado y elegibilidad actuales
 A-->>C: S090 Proyección mínima o no disponible, sin datos contractuales privados
+T->>A: S100 Consultar historial mínimo24/50 o detalle exacto propio
+A->>D: S110 Autorizar perfil, versión o decisión, privado según disponibilidad, sin notas internas
+A-->>T: S120 Página mínima o detalle propio, privado ausente no demuestra borrado
+Note over A,D: S130 Estado efectivo suspended/ineligible/paused derivado, nunca reescribir decisión base
+Note over T,A: S140 Recibo Community actor original, result_revision es revisión del recurso cambiado

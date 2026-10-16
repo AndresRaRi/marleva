@@ -12,7 +12,7 @@ Validar identidad fuera de locks de base; comprobar concesión/asignación y rev
 
 ## 2. Avisos durables
 
-Puerto consumidor `MembershipEventSink`: event_id, event_type, recipient_account_id, application_id, submission_id y decision_id nullable. Solo membership_submitted/membership_decided; sin domicilio, archivos, motivos libres, notas, tokens o correo. El ID de cuenta es dato privado vinculado, no anonimizado. Evento y transición M2 se confirman juntos; el consumidor recibe después del commit y deduplica por event_id.
+Puerto consumidor `MembershipEventSink`: event_id, event_type, recipient_account_id, application_id, submission_id y decision_id nullable. La familia vecinal usa membership_submitted/membership_decided; la familia Community añade cambios vecinales/archivo/reapertura, envío/decisión/pausa/reanudación comercial y creación/apelación/decisión de restricción. Ambas son eventos mínimos propios; sin domicilio, archivos, motivos libres, notas, tokens o correo. El ID de cuenta es dato privado vinculado, no anonimizado. Evento y transición M2 se confirman juntos; el consumidor recibe después del commit y deduplica por event_id.
 
 Acuse significa recepción durable y referencia del consumidor, nunca lectura del titular ni entrega del correo. Registrar deliveredAt solo tras ese acuse. Timeout conserva pendiente y reintenta el mismo event_id; no reejecuta la decisión. Propuesta de reintento1/5/30min y escalamiento24h; una caída no elimina el evento. La lectura de avisos de M1 no es una API de publicación: no escribir Notice/Outbox actuales ni convertir GET /notifications en emisor. El adaptador y el consumidor M1/M9 se acordarán antes de conectar; sus pruebas son D07-E.
 
@@ -20,7 +20,7 @@ Acuse significa recepción durable y referencia del consumidor, nunca lectura de
 
 Puerto consumidor `PrivateEvidenceStore`: reservar referencia opaca, escritura condicional e inmutable, inspección de bytes/tipo/hash y análisis, lectura mediada, borrado y confirmación de ausencia de todas las copias. No devuelve service_role ni URLs públicas. Su error distingue unavailable, rejected, conflict y absent confirmado; un timeout nunca equivale a absent.
 
-C14 y D08-0.1 fijan las condiciones de disposición. B09 de M1 demuestra otro recorrido de archivos ficticios y no acredita este adaptador de5.000.000 bytes, análisis PDF/JPEG/PNG, reutilización ni copias depurables. No instalar otro proveedor ni modificar B09 para aparentar integración. D07-S exige ensayos propios de inmutabilidad, tamaño real, análisis, exclusión enlace/hold/borrado y restauración con ledger externo; no se ejecutan por esta entrega.
+C14 y D08-0.2 fijan las condiciones de disposición. B09 de M1 demuestra otro recorrido de archivos ficticios y no acredita este adaptador de5.000.000 bytes, análisis PDF/JPEG/PNG, reutilización ni copias depurables. No instalar otro proveedor ni modificar B09 para aparentar integración. D07-S exige ensayos propios de inmutabilidad, tamaño real, análisis, exclusión enlace/hold/borrado y restauración con ledger externo; no se ejecutan por esta entrega.
 
 ## 4. Huellas y rotación de claves
 
@@ -48,7 +48,7 @@ Matriz de separación: otorgante habilita a otra persona; gestor asigna envío a
 | D07-E | Evento mínimo, deduplicación y semántica del acuse | Consumidor durable y caída/reinicio/duplicado probados |
 | D07-S | Operaciones privadas y diferencias respecto B09 | Storage/análisis/copias/ausencia/restauración propios probados |
 | D07-K | Canonicalización, anillo y metadata de llave | Biblioteca/llaves/rotación/fallo/replay probados |
-| D08-R | Calendario y procedimiento D08-0.1 concretos | Validación material del fundamento/aviso/prescripciones y capacidad real de depurar copias/mínimos |
+| D08-R | Calendario y procedimiento D08-0.2 concretos | Validación material del fundamento/aviso/prescripciones y capacidad real de depurar copias/mínimos |
 | D09-R | Catálogo y procedimiento D09-P preparados | Personas designadas, habilitación y prueba real |
 | UI-R | Propuesta navegable con acciones por estado | Aceptación visual humana; ninguna aprobación inferida de la navegación |
 
@@ -58,6 +58,18 @@ El asistente prepara y comprueba documentación; el dueño de cada módulo acuer
 
 Rama propia codex/docs-m2-m8-007, base6fed44f. Commit/push autorizados expresamente por el usuario en este turno. Revisar únicamente archivos propios M2/M8, licencias y ausencia de secretos; conservar base versionada, cinco migraciones y contratos compartidos. Ejecutar hooks sin desactivarlos; preparar herramientas/dependencias/derivados ignorados aislados solo para esa verificación. No inicia servicios, implementa M2 ni aplica SQL. El remoto se comprueba por SHA después del push, sin force ni merge.
 
-La fuente01 compartida sigue con trabajo concurrente006; no sobrescribirla con la fotografía de esta rama. Texto preparado para conciliación: «MAR-CHAT-007 abierto: diseño documental aislado M2/M8 revisado, contrato0.3.1, modelo objetivo19 tablas,183 casos más pruebas de integración de fronteras; pendientes reales D07-I/E/S/K, D08-R, D09-R y aceptación visual. Sin implementación ni datos reales. Evidencia/entrega en docs/apis/M2». Conciliar enlaces al commit definitivo conservando el estado más reciente de006. No reemplazar00/02/03 ni configuración por costumbre.
+La fuente01 compartida sigue con trabajo concurrente006; no sobrescribirla con la fotografía de esta rama. La matrizM2 contiene el texto vigente para conciliación de007: diseño integral0.4.0/41tablas/61operaciones y16casos, sin implementación/pruebasM2. Conservar estado más reciente de006 y enlazar SHA remoto real del cierre. No reemplazar00/02/03 ni configuración por costumbre.
 
-Fuentes ChatGPT no se actualiza al guardar o hacer push. No hay vía de carga de archivos de ese proyecto comprobada en este encargo; no atribuir subida ni convertir una edición de Pages en sustitución de Fuentes. El commit remoto proporciona acceso verificable al diseño; carga compartida permanece separada. El chat007 sigue abierto.
+Fuentes ChatGPT no se actualiza al guardar o hacer push. No hay vía de carga de ese proyecto comprobada en este encargo; no atribuir subida ni convertir una edición de Pages en sustitución de Fuentes. Git proporciona acceso verificable al diseño, sin merge o despliegue.
+
+## 8. Elegibilidad, archivo y eventos del alcance completo
+
+`EligibilityGuard`: consumidor interno autorizado pide buy/offer para identidad estable ya comprobada y unidad de trabajo opaca acordada. M2 toma su bloqueo de agregado y revisa estado base, current/approvedVersionId, pausa y todas las causas, devuelve eligibilityRevision/razón mínima. Mantener exclusión hasta commit de operación nueva del consumidor; el consumidor no lee/escribe tablasM2 directamente. Si no se puede compartir esa frontera transaccional, no activar integración mediante dos llamadas HTTP con ventana de carrera: diseñar coordinación equivalente y probarla primero. Autorización externaM1 tiene su propio límite de revocación; no prometer transacción distribuida con Auth. GET eligibility no reserva permiso. Cambios de restricciones/pertenencia/perfil/pausa que afectan autorización incrementan eligibilityRevision bajo mismo bloqueo.
+
+`CommunityEventSink` recibe event_id/type, recipient_account_id, application_id y profile_id/restriction_id nullable según tipo; sin PII/texto. Deduplicaevent_id y confirma durablemente antes de acceptedAt. Para archivo, noticedAt significa aviso disponible en cuenta, no leído ni correo entregado. `ArchiveTask` observa versión/revisión/lastActivityAt: warn tras30d, archive tras7d de aviso disponible; revalidación bajo bloqueo cancela tarea vieja ante edición/envío. Los comandos internos no son endpoints operativos inventados. No activar cron por este diseño.
+
+Orden de bloqueo común ampliado en matrizM2; recibo Membership usa revisión de expediente. Community usa revisión de perfil para acciones comerciales, restricción para crear/resolver causa, apelación para preparar/guardar/enviar/asignar apelación. El contrato de asignación restrict compara revisión de apelación; decidir compara restricción y asignación además de pending/versión de apelación leída bajo bloqueo. Rutas de candidatos no reservan capacidad.
+
+Resumen contractual privado requiere comprador eligible y oferente vigente, datos aportados para contratación, límitepropuesto10/min/cuenta y logs mínimos; no catálogo público de teléfonos. M4 futuro guardará snapshot/versiones al contratar y validará calendario contractual material. Ningún pedido o cobro se crea desde este paquete.
+
+D07-G/E/A amplían el checklist: guardia contra carrera, entrega de eventos de todas las familias y archivo con aviso realmente disponible. Ejecutar los escenarios de la matriz en implementación antes de afirmar integración. D08-R/D09-R/UI-R siguen siendo condiciones materiales, no archivos faltantes.

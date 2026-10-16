@@ -53,7 +53,7 @@ if (/\b(?:INSERT|UPDATE|DELETE|TRUNCATE|DROP|GRANT|REVOKE)\b/.test(extra.replace
   throw new Error('Complemento fuera del alcance declarativo');
 }
 const newTables = [...sql.matchAll(/CREATE TABLE "marleva"\."([^"]+)"/g)].map((m) => m[1]);
-if (newTables.length !== 19 || newTables.some((name) => !/^(M2|M8)Membership/.test(name))) {
+if (newTables.length < 19 || newTables.some((name) => !/^(M2|M8)(Membership|Seller|Community|Restriction)/.test(name))) {
   throw new Error('Lista de tablas nuevas inesperada');
 }
 const header = `-- MAR-M2-DATA-001: OBJETIVO DOCUMENTAL NO APLICADO.\n` +

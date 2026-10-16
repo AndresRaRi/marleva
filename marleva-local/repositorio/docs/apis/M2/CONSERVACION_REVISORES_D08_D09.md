@@ -1,10 +1,10 @@
 # D08/D09 · Conservación documental y revisores autorizados
 
-15-10-2026 · America/Merida · MAR-CHAT-007, CONTINUACIÓN. Versión de propuesta D08-0.1/D09-0.1, contrato propio0.3.1. Encargo: concretar diseño documental; no implementar ni alterar M1. C14 está confirmado; las precisiones siguientes son propuestas revisables, no activación con datos reales ni dictamen jurídico. No se eligieron personas ni se concedieron permisos.
+15-10-2026 · America/Merida · MAR-CHAT-007, CONTINUACIÓN. Versión de propuesta D08-0.2/D09-0.2, contrato propio0.4.0. Encargo: concretar diseño documental; no implementar ni alterar M1. C14 está confirmado; las precisiones siguientes son propuestas revisables, no activación con datos reales ni dictamen jurídico. No se eligieron personas ni se concedieron permisos.
 
 ## 1. Decisión documental y alcance
 
-D08 queda concretado para adjuntos y partes privadas del recorrido inicial/corrección/reconsideración. D09 queda concretado como consulta propia M8, limitada a un envío. Su diseño deja de depender de un directorio general de M1. La integración pública de identidad/MFA, aprovisionamiento autorizado y pruebas reales siguen pendientes. No se declara cerrado M2/M8 ni la conservación jurídica global.
+D08 cubre adjuntos y privados vecinales/comerciales/restricciones. D09 usa consultas propias M8 ligadas a envío o apelación y ámbito. Su diseño deja de depender de un directorio general de M1. La integración pública de identidad/MFA, aprovisionamiento autorizado y pruebas reales siguen pendientes. No se declara cerrado M2/M8 ni la conservación jurídica global.
 
 La política es versionada y fija el cálculo aplicable a cada recurso. No puede activarse una versión solo porque está escrita. Una modificación futura no alarga automáticamente plazos existentes. Antes de datos reales deben validarse el fundamento, las prescripciones concretas, aviso/canal de derechos, responsables, encargados y capacidad de depurar todas las copias. No se solicita esa aprobación para completar este diseño.
 
@@ -40,7 +40,23 @@ Los plazos de esta tabla salvo C14 son elecciones de diseño para revisión; no 
 
 Una FK o enlace histórico no es necesidad legítima de conservar bytes. Para documento reutilizado, calcular obligaciones por todas las versiones que realmente lo usan: durante una revisión activa no es eliminable; al terminar, tomar el vencimiento necesario más tardío, con evento y fundamento. Nunca renovar automáticamente por cada lectura ni por la mera existencia de otra versión. La proyección `Document.retention*` registra el ancla C14; `RetentionCase.dueAt` es el vencimiento efectivo para todas las finalidades, incluidos huérfanos. No calcular con columnas antiguas aisladas.
 
-Cargas rechazadas y huérfanas no tienen decisión final: su caso usa basisCode propio y no fuerza una falsa retentionDecisionId. Los procesos de archivo/reapertura y depuración del mínimo no están implementados; esta tabla define condiciones y pruebas, sin ampliar las pantallas del recorrido a todo M2.
+Cargas rechazadas y huérfanas no tienen decisión final: su caso usa basisCode propio y no fuerza una falsa retentionDecisionId. Los procesos de archivo/reapertura y depuración del mínimo no están implementados; esta tabla define condiciones y pruebas, con pantallas documentales de archivo/reapertura y conservación en la propuesta integral.
+
+### Extensión D08-0.2 a oferentes y restricciones
+
+C14 no se extiende a contratos. `seller_version_private` conserva información mientras habilitación/contratación propia tenga finalidad activa; propuesta30d tras cierre final sin otra finalidad. `seller_decision_private`30d desde cierre final sin controversia. `restriction_private` mientras la causa active deba comunicarse y30d tras levantamiento/finalización sin controversia. `restriction_appeal_private` y `restriction_decision_private`30d tras finalización no impugnada y fin de finalidad activa. Todos estos plazos son propuestas operativas para validaciónD08-R, no plazos legales acreditados. Contratos/snapshotsM4 tienen calendario separado por definir antes de transacciones; no se borran desde M2 ni se reconstruyen desde residencia.
+
+Objetivo tipado único por caso; ancla vecinal/comercial/restricción según finalidad y máximo una. Membership/seller/restrictionDecision conservan finalityState/primerafinalizedAt y eventos de refinalización, sin modificar outcome. Las causas activas no se finalizan para borrar el motivo requerido. Un detalle privado purgado se proyecta como no disponible; no basta un null para afirmar borrado. El mínimo estructural y las FKs deben depurarse según D08-R, sin promesa de historial perpetuo.
+
+### Extensión D09-0.2 por ámbito
+
+| Consulta | Contexto obligatorio | Gestor / candidato |
+|---|---|---|
+| M8API005 membership-reviewers | submission_id vecinalpending | membership_assign / membership_review |
+| M8API007 seller-reviewers | submission_id comercialpending | seller_assign / seller_review |
+| M8API018 restriction-reviewers | appeal_idpending de causa actual | membership_assign / membership_restrict o seller_assign / seller_restrict según target |
+
+Siempre perfil operativo enabled+grant vigente; no titular y conflicto declarado atendido. Páginas24/max50, etiqueta operativa sin identidad/contacto; cursor ligado a actor/contexto. No candidato200vacío, caída503. Revalidar al asignar y al decidir; asignaciones separadas por ámbito, sin herencia. Conservación usa membership_conserve/seller_conserve, no un grant review. D09-P del documento de integración precisa arranque, revocación y doble intervención sin crear superusuario público.
 
 ## 4. Bloqueo, borrado y carreras
 
@@ -74,7 +90,7 @@ Aprovisionamiento: antes del piloto, dos personas designadas mediante proceso au
 
 ## 7. Contratos internos y públicos
 
-[OpenAPI propio](openapi.yaml)0.3.1:23 operaciones HTTP,40 esquemas. Nuevas: M8API005 candidatos y M2API018 estado de conservación del titular. `RetentionCommand` es un contrato de puerto interno finalize/hold/release; no ruta HTTP ni worker implementado. Su resultado mínimo es referencia de evento, revisión y estado consultable; errores forbidden, conflict, policy_not_active, ledger_unavailable o dependency_unavailable, sin texto legal privado. Autenticar tarea técnica por identidad de servicio acotada, sin permisos de decisión/pertenencia.
+[OpenAPI propio](openapi.yaml)0.4.0:61 operaciones HTTP,82 esquemas. `RetentionCommand` conserva su puerto interno finalize/hold/release y tiene adaptador HTTP propio propuestoM8API016; no existe ruta implementada ni worker. M8API017/019 permiten detalle/cola de casos mínimos autorizados. Su resultado mínimo es referencia de evento, revisión y estado consultable; errores forbidden, conflict, policy_not_active, ledger_unavailable o dependency_unavailable, sin texto legal privado. Autenticar tarea técnica por identidad de servicio acotada, sin permisos de decisión/pertenencia.
 
 Estado del titular: casos paginados con resource_type/resource_id, state, fecha prevista, completed_at y estado de cálculo. Sin referencia legal, revisor, causa del bloqueo, ubicación de copia o fundamento. Fecha prevista no es promesa de éxito: held=blocked, error=delayed; mostrar “Borrado pendiente” si no hay confirmación. Ausencia del recurso no autoriza afirmar que fue borrado; solo completed con evidencia suficiente. Este recurso no tramita solicitudes ARCO ni promete sus plazos.
 

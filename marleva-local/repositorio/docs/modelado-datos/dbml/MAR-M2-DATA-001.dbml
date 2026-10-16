@@ -1,6 +1,6 @@
 Project Marleva_M2_Expediente_Objetivo {
  database_type: 'PostgreSQL'
- Note: 'MAR-CHAT-007, 15-10-2026. OBJETIVO DOCUMENTAL NO APLICADO. Recorrido M2 UC001-004 y M8 UC001-002; correccion/reconsideracion sobre mismo expediente, no todo M2/M8. Account, Session y Development son referencias externas mínimas para visualizar relaciones, no definiciones canónicas M1. El generador excluye sus CREATE/índices/comentarios y el bootstrap de esquema. Sin migraciones ni grants ejecutables. Checks locales en DBML; índices parciales en complemento trazado. Permisos vigentes, inmutabilidad y transiciones requieren coordinación/transacciones futuras, no quedan garantizados por este archivo.'
+ Note: 'MAR-CHAT-007, 15-10-2026. OBJETIVO DOCUMENTAL NO APLICADO. Alcance integral M2 UC001-011 y soporte M8 UC001-005; mismo expediente/perfil e historial. Account, Session y Development son referencias externas mínimas para visualizar relaciones, no definiciones canónicas M1. El generador excluye sus CREATE/índices/comentarios y el bootstrap de esquema. Sin migraciones ni grants ejecutables. Checks locales en DBML; índices parciales en complemento trazado. Permisos vigentes, inmutabilidad y transiciones requieren coordinación/transacciones futuras, no quedan garantizados por este archivo.'
 }
 
 // REFERENCIAS EXTERNAS M1. No exportar su definición física.
@@ -23,7 +23,11 @@ Table marleva.M2MembershipApplication {
  id uuid [pk, not null, default: `gen_random_uuid()`]
  accountId uuid [not null, unique]
  state text [not null, default: 'draft']
+ eligibilityRevision integer [not null, default: 1]
  revision integer [not null, default: 1]
+ approvedVersionId uuid
+ lastActivityAt timestamptz [not null, default: `now()`]
+ archivePreviousState text
  currentVersionId uuid [note: 'Nulo solo durante creación atómica, antes de guardar primera versión.']
  createdAt timestamptz [not null, default: `now()`]
  updatedAt timestamptz [not null, default: `now()`]
@@ -32,12 +36,14 @@ Table marleva.M2MembershipApplication {
   (state, updatedAt, id) [name: 'm2_application_queue_idx']
  }
  checks {
+  `"lastActivityAt" >= "createdAt" AND ("archivePreviousState" IS NULL OR "archivePreviousState" IN ('draft','correction','rejected'))` [name: 'm2_application_activity']
+  `"eligibilityRevision" > 0` [name: 'm2_eligibility_revision_positive']
   `revision > 0` [name: 'm2_application_revision']
-  `state IN ('draft','pending','correction','rejected','approved','suspended','archived_inactivity')` [name: 'm2_application_state']
+  `state IN ('draft','pending','correction','rejected','approved','archived_inactivity')` [name: 'm2_application_state']
   `"updatedAt" >= "createdAt"` [name: 'm2_application_dates']
   `state = 'draft' OR "currentVersionId" IS NOT NULL` [name: 'm2_application_current_required']
  }
- Note: 'M2 UC001/003. Un expediente por cuenta; revision es CAS, no número de evidencia. Cambios de residencia/restricciones fuera de este recorrido aún no tienen modelo completo.'
+ Note: 'M2 UC001/003. Un expediente por cuenta; revision es CAS, no número de evidencia. eligibilityRevision serializa cambios de permisos propios. Restricciones independientes del estado base.'
 }
 
 Table marleva.M2MembershipVersion {
@@ -46,6 +52,8 @@ Table marleva.M2MembershipVersion {
  accountId uuid [not null]
  number integer [not null]
  origin text [not null, default: 'initial']
+ previousVersionId uuid
+ resumeOrigin text
  sourceDecisionId uuid
  sourceSubmissionId uuid
  lifecycle text [not null, default: 'draft']
@@ -60,11 +68,11 @@ Table marleva.M2MembershipVersion {
  checks {
   `number > 0` [name: 'm2_version_number']
   `(number = 1) = (origin = 'initial')` [name: 'm2_version_initial_number']
-  `origin IN ('initial','correction','reconsideration')` [name: 'm2_version_origin']
-  `(origin = 'initial' AND "sourceDecisionId" IS NULL AND "sourceSubmissionId" IS NULL) OR (origin <> 'initial' AND "sourceDecisionId" IS NOT NULL AND "sourceSubmissionId" IS NOT NULL)` [name: 'm2_version_source_fields']
-  `lifecycle IN ('draft','submitted')` [name: 'm2_version_lifecycle']
+  `origin IN ('initial','correction','reconsideration','residence_change','reopen')` [name: 'm2_version_origin']
+  `(origin = 'initial' AND "previousVersionId" IS NULL AND "resumeOrigin" IS NULL AND "sourceDecisionId" IS NULL AND "sourceSubmissionId" IS NULL) OR (origin IN ('correction','reconsideration','residence_change') AND "previousVersionId" IS NOT NULL AND "resumeOrigin" IS NULL AND "sourceDecisionId" IS NOT NULL AND "sourceSubmissionId" IS NOT NULL) OR (origin = 'reopen' AND "previousVersionId" IS NOT NULL AND "resumeOrigin" IS NOT NULL AND "resumeOrigin" IN ('initial','correction','reconsideration','residence_change') AND (("resumeOrigin" = 'initial' AND "sourceDecisionId" IS NULL AND "sourceSubmissionId" IS NULL) OR ("resumeOrigin" <> 'initial' AND "sourceDecisionId" IS NOT NULL AND "sourceSubmissionId" IS NOT NULL)))` [name: 'm2_version_source_fields']
+  `lifecycle IN ('draft','submitted','archived')` [name: 'm2_version_lifecycle']
   `"evidenceRelationship" IN ('unspecified','own_name','cohabitation')` [name: 'm2_version_relationship']
-  `(lifecycle = 'draft' AND "submittedAt" IS NULL) OR (lifecycle = 'submitted' AND "submittedAt" IS NOT NULL AND "submittedAt" >= "createdAt" AND "developmentId" IS NOT NULL AND "evidenceRelationship" <> 'unspecified')` [name: 'm2_version_submission_fields']
+  `(lifecycle IN ('draft','archived') AND "submittedAt" IS NULL) OR (lifecycle = 'submitted' AND "submittedAt" IS NOT NULL AND "submittedAt" >= "createdAt" AND "developmentId" IS NOT NULL AND "evidenceRelationship" <> 'unspecified')` [name: 'm2_version_submission_fields']
  }
  Note: 'Envío congela esta versión y sus enlaces. Solo borrador editable. Nuevo envío exige nueva versión. Un índice parcial complementario limita a un borrador por expediente. origin y sourceDecisionId/sourceSubmissionId conservan el antecedente exacto del mismo titular. No editar la version/decision enviada anterior. Estado/origen, decision mas reciente y numero siguiente requieren transaccion T12.'
 }
@@ -84,7 +92,7 @@ Table marleva.M2MembershipVersionPrivate {
   `"reconsiderationReason" IS NULL OR (char_length("reconsiderationReason") BETWEEN 1 AND 2000 AND btrim("reconsiderationReason") <> '')` [name: 'm2_private_reconsideration_reason']
   `"purgedAt" IS NULL OR ("reviewName" IS NULL AND "privateAddress" IS NULL AND "reconsiderationReason" IS NULL AND "declaredResidenceCurrent" = false)` [name: 'm2_private_purge']
  }
- Note: 'Datos privados fuera del registro mínimo. Nullable admite borrador incompleto y futura supresión con motivo autorizado. No guardar copia privada en JSON de evento/recibo/decisión. Motivo privado de reconsideracion separado del historial minimo; obligatorio solo para origin reconsideration por transaccion. Calendario propuesto D08 v0.1 por finalidad, no activado; ver CONSERVACION_REVISORES_D08_D09.md.'
+ Note: 'Datos privados fuera del registro mínimo. Nullable admite borrador incompleto y futura supresión con motivo autorizado. No guardar copia privada en JSON de evento/recibo/decisión. Motivo privado de reconsideracion separado del historial minimo; obligatorio solo para origin reconsideration por transaccion. Calendario propuesto D08 v0.2 por finalidad, no activado; ver CONSERVACION_REVISORES_D08_D09.md.'
 }
 
 Table marleva.M2MembershipDocument {
@@ -189,7 +197,7 @@ Table marleva.M8MembershipReviewGrant {
   (id, accountId, capability) [unique, name: 'm8_membership_grant_identity_key']
  }
  checks {
-  `capability IN ('membership_review','membership_assign','membership_conserve')` [name: 'm8_membership_grant_capability']
+  `capability IN ('membership_review','membership_assign','membership_conserve','membership_restrict','seller_review','seller_assign','seller_restrict','seller_conserve')` [name: 'm8_membership_grant_capability']
   `"grantedBy" <> "accountId" AND revision > 0 AND char_length("reasonCode") BETWEEN 1 AND 80` [name: 'm8_membership_grant_no_self']
   `("revokedBy" IS NULL AND "revokedAt" IS NULL) OR ("revokedBy" IS NOT NULL AND "revokedAt" IS NOT NULL AND "revokedAt" >= "grantedAt")` [name: 'm8_membership_grant_revocation']
  }
@@ -265,7 +273,7 @@ Table marleva.M2MembershipDecisionPrivate {
   `jsonb_typeof("correctionFields") = 'array'` [name: 'm2_decision_fields_array']
   `"purgedAt" IS NULL OR ("visibleReason" IS NULL AND "internalNote" IS NULL AND "correctionFields" = '[]'::jsonb)` [name: 'm2_decision_private_purge']
  }
- Note: 'Texto sensible fuera del mínimo de decisión, con supresión controlada posterior. Proyección del titular excluye internalNote. Calendario propuesto D08 v0.1, no activado; textos privados separados del mínimo.'
+ Note: 'Texto sensible fuera del mínimo de decisión, con supresión controlada posterior. Proyección del titular excluye internalNote. Calendario propuesto D08 v0.2, no activado; textos privados separados del mínimo.'
 }
 
 Table marleva.M2MembershipDocumentAccess {
@@ -278,13 +286,15 @@ Table marleva.M2MembershipDocumentAccess {
  sessionId uuid [not null]
  submissionId uuid
  assignmentId uuid
+ restrictionAssignmentId uuid
+ restrictionAppealId uuid
  tokenHash text [not null, unique]
  createdAt timestamptz [not null, default: `now()`]
  expiresAt timestamptz [not null]
  revokedAt timestamptz
  indexes { (documentId, expiresAt) [name: 'm2_document_access_expiry_idx'] }
  checks {
-  `("accessorId" = "accountId" AND "assignmentId" IS NULL AND "submissionId" IS NULL) OR ("accessorId" <> "accountId" AND "assignmentId" IS NOT NULL AND "submissionId" IS NOT NULL)` [name: 'm2_access_actor_path']
+  `("accessorId" = "accountId" AND "assignmentId" IS NULL AND "submissionId" IS NULL AND "restrictionAssignmentId" IS NULL AND "restrictionAppealId" IS NULL) OR ("accessorId" <> "accountId" AND "assignmentId" IS NOT NULL AND "submissionId" IS NOT NULL AND "restrictionAssignmentId" IS NULL AND "restrictionAppealId" IS NULL) OR ("accessorId" <> "accountId" AND "assignmentId" IS NULL AND "submissionId" IS NULL AND "restrictionAssignmentId" IS NOT NULL AND "restrictionAppealId" IS NOT NULL)` [name: 'm2_access_actor_path']
   `"expiresAt" > "createdAt" AND "expiresAt" <= "createdAt" + interval '5 minutes'` [name: 'm2_access_ttl']
   `"revokedAt" IS NULL OR "revokedAt" >= "createdAt"` [name: 'm2_access_revoked_date']
   `"tokenHash" ~ '^[a-f0-9]{64}$'` [name: 'm2_access_hash']
@@ -335,10 +345,10 @@ Table marleva.M2MembershipCommandReceipt {
  checks {
   `char_length("hashKeyId") BETWEEN 1 AND 80 AND btrim("hashKeyId") <> ''` [name: 'm2_receipt_key_id']
   `operation IN ('assign_review','decide_membership') OR "actorId" = "accountId"` [name: 'm2_receipt_owner_operations']
-  `operation IN ('create_application','create_version','save_version','request_upload','finalize_upload','link_document','submit_version','assign_review','decide_membership')` [name: 'm2_receipt_operation']
+  `operation IN ('create_application','create_version','save_version','declare_change','reopen_application','request_upload','finalize_upload','link_document','submit_version','assign_review','decide_membership')` [name: 'm2_receipt_operation']
   `"keyHash" ~ '^[a-f0-9]{64}$' AND "requestHash" ~ '^[a-f0-9]{64}$' AND "resultRevision" > 0` [name: 'm2_receipt_hash_revision']
   `("documentId" IS NULL) = ("documentPurpose" IS NULL)` [name: 'm2_receipt_document_pair']
-  `"versionId" IS NOT NULL AND ((operation IN ('create_application','create_version','save_version') AND "documentId" IS NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation IN ('request_upload','finalize_upload','link_document') AND "documentId" IS NOT NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'submit_version' AND "submissionId" IS NOT NULL AND "documentId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'assign_review' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "documentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'decide_membership' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "decisionId" IS NOT NULL AND "documentId" IS NULL))` [name: 'm2_receipt_result_shape']
+  `"versionId" IS NOT NULL AND ((operation IN ('create_application','create_version','save_version','declare_change','reopen_application') AND "documentId" IS NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation IN ('request_upload','finalize_upload','link_document') AND "documentId" IS NOT NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'submit_version' AND "submissionId" IS NOT NULL AND "documentId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'assign_review' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "documentId" IS NULL AND "decisionId" IS NULL) OR (operation = 'decide_membership' AND "submissionId" IS NOT NULL AND "assignmentId" IS NOT NULL AND "decisionId" IS NOT NULL AND "documentId" IS NULL))` [name: 'm2_receipt_result_shape']
   `"expiresAt" >= "createdAt" + interval '72 hours'` [name: 'm2_receipt_expiry']
  }
  Note: 'Recibo mínimo con referencias tipadas, sin copia de datos privados. Replay reautoriza actor/recurso y devuelve recibo original; recurso actual se consulta por separado. Misma clave/cuerpo no repite transición; distinto cuerpo es 409. Unicidad de expediente/envío/decisión sobrevive a purgar recibos. Escenarios de expiración/doble guardado deben cerrarse en contrato.'
@@ -412,12 +422,19 @@ Table marleva.M2MembershipRetentionCase {
  applicationId uuid [not null]
  accountId uuid [not null]
  resourceType text [not null]
+ anchorSellerDecisionId uuid
+ anchorRestrictionDecisionId uuid
  anchorDecisionId uuid
  documentId uuid
  documentPurpose text
  versionId uuid
  decisionId uuid
- policyVersion text [not null, default: 'D08-0.1']
+ sellerVersionId uuid
+ sellerDecisionId uuid
+ restrictionId uuid
+ restrictionAppealId uuid
+ restrictionDecisionId uuid
+ policyVersion text [not null, default: 'D08-0.2']
  state text [not null, default: 'uncalculated']
  basisCode text [not null]
  startedAt timestamptz
@@ -429,10 +446,17 @@ Table marleva.M2MembershipRetentionCase {
   (documentId) [unique, name: 'm2_retention_document_key']
   (versionId) [unique, name: 'm2_retention_version_key']
   (decisionId) [unique, name: 'm2_retention_decision_key']
+  (sellerVersionId) [unique, name: 'm2_case_sellerversionid_key']
+  (sellerDecisionId) [unique, name: 'm2_case_sellerdecisionid_key']
+  (restrictionId) [unique, name: 'm2_case_restrictionid_key']
+  (restrictionAppealId) [unique, name: 'm2_case_restrictionappealid_key']
+  (restrictionDecisionId) [unique, name: 'm2_case_restrictiondecisionid_key']
   (state, dueAt, id) [name: 'm2_retention_due_idx']
  }
  checks {
-  `("resourceType" = 'document' AND "documentId" IS NOT NULL AND "documentPurpose" IS NOT NULL AND "versionId" IS NULL AND "decisionId" IS NULL) OR ("resourceType" = 'version_private' AND "versionId" IS NOT NULL AND "documentId" IS NULL AND "documentPurpose" IS NULL AND "decisionId" IS NULL) OR ("resourceType" = 'decision_private' AND "decisionId" IS NOT NULL AND "documentId" IS NULL AND "documentPurpose" IS NULL AND "versionId" IS NULL)` [name: 'm2_retention_typed_target']
+  `num_nonnulls("anchorDecisionId","anchorSellerDecisionId","anchorRestrictionDecisionId") <= 1` [name: 'm2_retention_single_anchor']
+  `("anchorDecisionId" IS NULL OR "resourceType" IN ('document','version_private','decision_private')) AND ("anchorSellerDecisionId" IS NULL OR "resourceType" IN ('seller_version_private','seller_decision_private')) AND ("anchorRestrictionDecisionId" IS NULL OR "resourceType" IN ('restriction_private','restriction_appeal_private','restriction_decision_private'))` [name: 'm2_retention_anchor_kind']
+  `("resourceType" = 'document' AND "documentId" IS NOT NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NOT NULL) OR ("resourceType" = 'version_private' AND "documentId" IS NULL AND "versionId" IS NOT NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'decision_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NOT NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'seller_version_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NOT NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'seller_decision_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NOT NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'restriction_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NOT NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'restriction_appeal_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NOT NULL AND "restrictionDecisionId" IS NULL AND "documentPurpose" IS NULL) OR ("resourceType" = 'restriction_decision_private' AND "documentId" IS NULL AND "versionId" IS NULL AND "decisionId" IS NULL AND "sellerVersionId" IS NULL AND "sellerDecisionId" IS NULL AND "restrictionId" IS NULL AND "restrictionAppealId" IS NULL AND "restrictionDecisionId" IS NOT NULL AND "documentPurpose" IS NULL)` [name: 'm2_retention_typed_target']
   `state NOT IN ('scheduled','delete_pending','deleted','error') OR ("startedAt" IS NOT NULL AND "dueAt" IS NOT NULL)` [name: 'm2_retention_schedule_required']
   `"completedAt" IS NULL OR ("dueAt" IS NOT NULL AND "completedAt" >= "dueAt")` [name: 'm2_retention_completion_date']
   `state IN ('uncalculated','scheduled','held','delete_pending','deleted','error') AND revision > 0` [name: 'm2_retention_state']
@@ -548,3 +572,543 @@ TableGroup Conservacion_M2 {
  marleva.M2MembershipRetentionEvent
  marleva.M2MembershipReplica
 }
+
+Table marleva.M2SellerProfile {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ state text [not null, default: 'draft']
+ revision integer [not null, default: 1]
+ currentVersionId uuid
+ approvedVersionId uuid
+ isPaused boolean [not null, default: false]
+ createdAt timestamptz [not null]
+ updatedAt timestamptz [not null]
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2sellerprofile_owner']
+  (accountId) [unique, name: 'm2_one_seller_per_account']
+ }
+ checks {
+  `state IN ('draft','pending','correction','enabled','rejected') AND revision > 0` [name: 'm2_seller_state']
+  `"updatedAt" >= "createdAt"` [name: 'm2_seller_dates']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerVersion {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid [not null]
+ number integer [not null]
+ origin text [not null]
+ sourceDecisionId uuid
+ previousVersionId uuid
+ lifecycle text [not null, default: 'draft']
+ displayName text
+ description text
+ attentionMode text
+ responseMinutes integer
+ serviceWindow text
+ createdAt timestamptz [not null]
+ submittedAt timestamptz
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2sellerversion_owner']
+  (id,profileId,applicationId,accountId) [unique, name: 'm2_seller_version_profile_key']
+  (profileId,number) [unique, name: 'm2_seller_number']
+ }
+ checks {
+  `number > 0 AND origin IN ('initial','correction','reconsideration','material_change') AND lifecycle IN ('draft','submitted')` [name: 'm2_seller_version_cycle']
+  `(number = 1) = (origin = 'initial') AND ((origin = 'initial' AND "previousVersionId" IS NULL AND "sourceDecisionId" IS NULL) OR (origin <> 'initial' AND "previousVersionId" IS NOT NULL AND "sourceDecisionId" IS NOT NULL))` [name: 'm2_seller_initial']
+  `"displayName" IS NULL OR (char_length("displayName") BETWEEN 1 AND 100 AND btrim("displayName") <> '')` [name: 'm2_seller_display']
+  `description IS NULL OR char_length(description) BETWEEN 1 AND 1000` [name: 'm2_seller_description']
+  `"attentionMode" IS NULL OR "attentionMode" IN ('private_location','customer_location','remote')` [name: 'm2_seller_attention']
+  `"responseMinutes" IS NULL OR "responseMinutes" BETWEEN 1 AND 1440` [name: 'm2_seller_response']
+  `"serviceWindow" IS NULL OR char_length("serviceWindow") BETWEEN 1 AND 500` [name: 'm2_seller_window']
+  `(lifecycle = 'draft' AND "submittedAt" IS NULL) OR (lifecycle = 'submitted' AND "submittedAt" >= "createdAt" AND "submittedAt" IS NOT NULL AND "displayName" IS NOT NULL AND description IS NOT NULL AND "attentionMode" IS NOT NULL AND "responseMinutes" IS NOT NULL AND "serviceWindow" IS NOT NULL)` [name: 'm2_seller_submitted']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerVersionPrivate {
+ versionId uuid [pk, not null]
+ profileId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ legalName text
+ contractAddress text
+ phone text
+ supportHours text
+ attentionAddress text
+ reconsiderationReason text
+ purgedAt timestamptz
+ checks {
+  `("legalName" IS NULL OR char_length("legalName") BETWEEN 1 AND 200) AND ("contractAddress" IS NULL OR char_length("contractAddress") BETWEEN 1 AND 1000) AND ("supportHours" IS NULL OR char_length("supportHours") BETWEEN 1 AND 500) AND ("attentionAddress" IS NULL OR char_length("attentionAddress") BETWEEN 1 AND 1000) AND ("reconsiderationReason" IS NULL OR (char_length("reconsiderationReason") BETWEEN 1 AND 2000 AND btrim("reconsiderationReason") <> ''))` [name: 'm2_seller_private_lengths']
+  `phone IS NULL OR phone ~ '^\+[1-9][0-9]{7,14}$'` [name: 'm2_seller_phone']
+  `"purgedAt" IS NULL OR ("legalName" IS NULL AND "contractAddress" IS NULL AND phone IS NULL AND "supportHours" IS NULL AND "attentionAddress" IS NULL AND "reconsiderationReason" IS NULL)` [name: 'm2_seller_private_purge']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerCoverage {
+ versionId uuid [not null]
+ profileId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ developmentId integer [not null]
+ indexes {
+  (versionId,developmentId) [unique, name: 'm2sellercoverage_key']
+ }
+ checks {
+  `"developmentId" BETWEEN 1 AND 7` [name: 'm2sellercoverage_value']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerModality {
+ versionId uuid [not null]
+ profileId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ modality text [not null]
+ indexes {
+  (versionId,modality) [unique, name: 'm2sellermodality_key']
+ }
+ checks {
+  `modality IN ('delivery','pickup','on_site','remote')` [name: 'm2sellermodality_value']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerTermsPolicy {
+ id text [pk, not null]
+ purpose text [not null, default: 'seller_onboarding']
+ state text [not null, default: 'draft']
+ content text [not null]
+ contentSha256 text [not null]
+ effectiveAt timestamptz
+ retiredAt timestamptz
+ indexes {
+  (id,contentSha256) [unique, name: 'm2_terms_version_hash']
+ }
+ checks {
+  `char_length(content) BETWEEN 1 AND 12000 AND btrim(content) <> ''` [name: 'm2_terms_content']
+  `purpose = 'seller_onboarding' AND state IN ('draft','active','retired') AND "contentSha256" ~ '^[a-f0-9]{64}$'` [name: 'm2_seller_terms_state']
+  `state <> 'active' OR "effectiveAt" IS NOT NULL` [name: 'm2_seller_terms_active']
+  `"retiredAt" IS NULL OR ("effectiveAt" IS NOT NULL AND "retiredAt" >= "effectiveAt")` [name: 'm2_seller_terms_retired']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerTermsAcceptance {
+ versionId uuid [pk, not null]
+ profileId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ policyId text [not null]
+ policyContentSha256 text [not null]
+ acceptedAt timestamptz [not null]
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerSubmission {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid [not null]
+ versionId uuid [not null, unique]
+ status text [not null, default: 'pending']
+ submittedAt timestamptz [not null]
+ decidedAt timestamptz
+ revision integer [not null, default: 1]
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2sellersubmission_owner']
+  (id,profileId,applicationId,accountId) [unique, name: 'm2_seller_submission_profile']
+ }
+ checks {
+  `status IN ('pending','decided') AND revision > 0 AND ((status = 'pending' AND "decidedAt" IS NULL) OR (status = 'decided' AND "decidedAt" IS NOT NULL AND "decidedAt" >= "submittedAt"))` [name: 'm2_seller_submission_state']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M8SellerAssignment {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid [not null]
+ submissionId uuid [not null]
+ reviewerId uuid [not null]
+ reviewerGrantId uuid [not null]
+ reviewerCapability text [not null, default: 'seller_review']
+ assignedBy uuid [not null]
+ managerGrantId uuid [not null]
+ managerCapability text [not null, default: 'seller_assign']
+ assignedAt timestamptz [not null]
+ endedAt timestamptz
+ endReason text
+ revision integer [not null, default: 1]
+ indexes {
+  (id,submissionId,profileId,applicationId,accountId) [unique, name: 'm8_seller_assignment_receipt']
+  (id,applicationId,accountId) [unique, name: 'm8sellerassignment_owner']
+  (id,submissionId,profileId,applicationId,accountId,reviewerId) [unique, name: 'm8_seller_assignment_decision']
+ }
+ checks {
+  `"reviewerId" <> "accountId" AND "assignedBy" <> "accountId" AND revision > 0` [name: 'm8_seller_assignment_actor']
+  `"reviewerCapability" = 'seller_review' AND "managerCapability" = 'seller_assign'` [name: 'm8_seller_assignment_caps']
+  `("endedAt" IS NULL AND "endReason" IS NULL) OR ("endedAt" IS NOT NULL AND "endedAt" >= "assignedAt" AND "endReason" IN ('reassigned','conflict','decided','revoked'))` [name: 'm8_seller_assignment_end']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerDecision {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid [not null]
+ submissionId uuid [not null, unique]
+ assignmentId uuid [not null]
+ reviewerId uuid [not null]
+ outcome text [not null]
+ reasonCode text [not null]
+ decidedAt timestamptz [not null]
+ finalityState text [not null, default: 'provisional']
+ finalizedAt timestamptz
+ indexes {
+  (id,submissionId,assignmentId,profileId,applicationId,accountId) [unique, name: 'm2_seller_decision_receipt']
+  (id,applicationId,accountId) [unique, name: 'm2sellerdecision_owner']
+  (id,profileId,applicationId,accountId) [unique, name: 'm2_seller_decision_profile']
+ }
+ checks {
+  `(outcome = 'enabled' AND "reasonCode" = 'approved_seller') OR (outcome <> 'enabled' AND "reasonCode" IN ('incomplete_contract','invalid_coverage','invalid_modality','membership_not_eligible','terms_not_active','inconsistent_data','other_noncompliant'))` [name: 'm2_seller_decision_criterion']
+  `outcome IN ('enabled','correction','rejected') AND "reviewerId" <> "accountId" AND char_length("reasonCode") BETWEEN 1 AND 80` [name: 'm2_seller_decision_outcome']
+  `"finalityState" IN ('provisional','final','challenged') AND (("finalityState" = 'provisional' AND "finalizedAt" IS NULL) OR ("finalityState" = 'final' AND "finalizedAt" IS NOT NULL AND "finalizedAt" >= "decidedAt") OR ("finalityState" = 'challenged' AND ("finalizedAt" IS NULL OR "finalizedAt" >= "decidedAt")))` [name: 'm2_seller_decision_finality']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2SellerDecisionPrivate {
+ decisionId uuid [pk, not null]
+ profileId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ visibleReason text
+ correctionFields jsonb [not null, default: `'[]'::jsonb`]
+ internalNote text
+ purgedAt timestamptz
+ checks {
+  `"purgedAt" IS NOT NULL OR ("visibleReason" IS NOT NULL AND btrim("visibleReason") <> '')` [name: 'm2sellerdecisionprivate_required']
+  `("visibleReason" IS NULL OR char_length("visibleReason") BETWEEN 1 AND 1000) AND ("internalNote" IS NULL OR char_length("internalNote") BETWEEN 1 AND 2000) AND jsonb_typeof("correctionFields") = 'array'` [name: 'm2_seller_decision_text']
+  `"purgedAt" IS NULL OR ("visibleReason" IS NULL AND "internalNote" IS NULL AND "correctionFields" = '[]'::jsonb)` [name: 'm2_seller_decision_purge']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2Restriction {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid
+ targetKind text [not null]
+ scope text [not null]
+ state text [not null, default: 'active']
+ reasonCode text [not null]
+ createdBy uuid [not null]
+ createdAt timestamptz [not null]
+ liftedAt timestamptz
+ revision integer [not null, default: 1]
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2restriction_owner']
+ }
+ checks {
+  `("targetKind" = 'membership' AND "profileId" IS NULL AND scope IN ('buy','offer','both')) OR ("targetKind" = 'seller' AND "profileId" IS NOT NULL AND scope = 'offer')` [name: 'm2_restriction_target']
+  `"createdBy" <> "accountId" AND revision > 0 AND ((state = 'active' AND "liftedAt" IS NULL) OR (state = 'lifted' AND "liftedAt" IS NOT NULL AND "liftedAt" >= "createdAt"))` [name: 'm2_restriction_state']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionPrivate {
+ restrictionId uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ visibleReason text
+ internalNote text
+ purgedAt timestamptz
+ checks {
+  `"purgedAt" IS NOT NULL OR ("visibleReason" IS NOT NULL AND btrim("visibleReason") <> '')` [name: 'm2restrictionprivate_required']
+  `("visibleReason" IS NULL OR char_length("visibleReason") BETWEEN 1 AND 1000) AND ("internalNote" IS NULL OR char_length("internalNote") BETWEEN 1 AND 2000)` [name: 'm2_restriction_private_bounds']
+  `"purgedAt" IS NULL OR ("visibleReason" IS NULL AND "internalNote" IS NULL)` [name: 'm2_restriction_private_purge']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionAppeal {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ restrictionId uuid [not null]
+ evidenceVersionId uuid
+ state text [not null, default: 'draft']
+ revision integer [not null, default: 1]
+ createdAt timestamptz [not null]
+ submittedAt timestamptz
+ decidedAt timestamptz
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2restrictionappeal_owner']
+  (id,restrictionId,applicationId,accountId) [unique, name: 'm2_restriction_appeal_target']
+ }
+ checks {
+  `state IN ('draft','pending','decided') AND revision > 0 AND ((state = 'draft' AND "submittedAt" IS NULL AND "decidedAt" IS NULL) OR (state = 'pending' AND "submittedAt" IS NOT NULL AND "decidedAt" IS NULL) OR (state = 'decided' AND "submittedAt" IS NOT NULL AND "decidedAt" >= "submittedAt" AND "decidedAt" IS NOT NULL))` [name: 'm2_restriction_appeal_state']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionAppealPrivate {
+ appealId uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ reason text
+ purgedAt timestamptz
+ checks {
+  `"purgedAt" IS NOT NULL OR reason IS NOT NULL` [name: 'm2_restriction_appeal_required']
+  `reason IS NULL OR (char_length(reason) BETWEEN 1 AND 2000 AND btrim(reason) <> '')` [name: 'm2_restriction_appeal_reason']
+  `"purgedAt" IS NULL OR reason IS NULL` [name: 'm2_restriction_appeal_purge']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M8RestrictionAssignment {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ restrictionId uuid [not null]
+ appealId uuid [not null]
+ reviewerId uuid [not null]
+ reviewerGrantId uuid [not null]
+ reviewerCapability text [not null]
+ assignedBy uuid [not null]
+ managerGrantId uuid [not null]
+ managerCapability text [not null]
+ assignedAt timestamptz [not null]
+ endedAt timestamptz
+ endReason text
+ revision integer [not null, default: 1]
+ indexes {
+  (id,appealId,applicationId,accountId) [unique, name: 'm8_restriction_assignment_receipt']
+  (id,applicationId,accountId) [unique, name: 'm8restrictionassignment_owner']
+  (id,appealId,restrictionId,applicationId,accountId,reviewerId) [unique, name: 'm8_restriction_assignment_decision']
+  (id,appealId,applicationId,accountId,reviewerId) [unique, name: 'm8_restriction_assignment_access']
+ }
+ checks {
+  `"reviewerId" <> "accountId" AND "assignedBy" <> "accountId" AND revision > 0` [name: 'm8_restriction_assignment_no_self']
+  `("reviewerCapability" = 'membership_restrict' AND "managerCapability" = 'membership_assign') OR ("reviewerCapability" = 'seller_restrict' AND "managerCapability" = 'seller_assign')` [name: 'm8_restriction_assignment_scope']
+  `("endedAt" IS NULL AND "endReason" IS NULL) OR ("endedAt" IS NOT NULL AND "endedAt" >= "assignedAt" AND "endReason" IN ('reassigned','conflict','decided','revoked'))` [name: 'm8_restriction_assignment_end']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionDecision {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ restrictionId uuid [not null]
+ appealId uuid [not null, unique]
+ assignmentId uuid [not null]
+ reviewerId uuid [not null]
+ outcome text [not null]
+ reasonCode text [not null]
+ decidedAt timestamptz [not null]
+ finalityState text [not null, default: 'provisional']
+ finalizedAt timestamptz
+ indexes {
+  (id,appealId,restrictionId,applicationId,accountId) [unique, name: 'm2_restr_decision_receipt']
+  (id,applicationId,accountId) [unique, name: 'm2restrictiondecision_owner']
+ }
+ checks {
+  `"finalityState" IN ('provisional','final','challenged') AND (("finalityState" = 'provisional' AND "finalizedAt" IS NULL) OR ("finalityState" = 'final' AND "finalizedAt" IS NOT NULL AND "finalizedAt" >= "decidedAt") OR ("finalityState" = 'challenged' AND ("finalizedAt" IS NULL OR "finalizedAt" >= "decidedAt")))` [name: 'm2_restriction_decision_finality']
+  `outcome IN ('lift','maintain') AND "reviewerId" <> "accountId" AND char_length("reasonCode") BETWEEN 1 AND 80` [name: 'm2_restriction_decision']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionDecisionPrivate {
+ decisionId uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ visibleReason text
+ internalNote text
+ purgedAt timestamptz
+ checks {
+  `"purgedAt" IS NOT NULL OR ("visibleReason" IS NOT NULL AND btrim("visibleReason") <> '')` [name: 'm2restrictiondecisionprivate_required']
+  `("visibleReason" IS NULL OR char_length("visibleReason") BETWEEN 1 AND 1000) AND ("internalNote" IS NULL OR char_length("internalNote") BETWEEN 1 AND 2000)` [name: 'm2_restriction_decision_private_bounds']
+  `"purgedAt" IS NULL OR ("visibleReason" IS NULL AND "internalNote" IS NULL)` [name: 'm2_restriction_decision_private_purge']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2RestrictionEvidenceLink {
+ appealId uuid [not null]
+ versionId uuid [not null]
+ documentId uuid [not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ indexes {
+  (appealId,versionId,documentId,applicationId,accountId) [unique, name: 'm2_restriction_evidence_key']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2MembershipArchiveNotice {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ versionId uuid [not null]
+ observedRevision integer [not null]
+ observedActivityAt timestamptz [not null]
+ createdAt timestamptz [not null]
+ noticedAt timestamptz
+ archiveAt timestamptz
+ processedAt timestamptz
+ state text [not null, default: 'pending_notice']
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2membershiparchivenotice_owner']
+  (applicationId,observedRevision) [unique, name: 'm2_archive_notice_once']
+ }
+ checks {
+  `("noticedAt" IS NULL OR "noticedAt" >= "createdAt") AND (state NOT IN ('grace','archived') OR "noticedAt" IS NOT NULL) AND ((state IN ('archived','cancelled') AND "processedAt" IS NOT NULL AND "processedAt" >= "createdAt") OR (state IN ('pending_notice','grace') AND "processedAt" IS NULL))` [name: 'm2_archive_notice_dates']
+  `state IN ('pending_notice','grace','archived','cancelled') AND "observedRevision" > 0` [name: 'm2_archive_notice_state']
+  `("noticedAt" IS NULL AND "archiveAt" IS NULL) OR ("noticedAt" IS NOT NULL AND "archiveAt" = "noticedAt" + interval '7 days')` [name: 'm2_archive_notice_grace']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2CommunityEvent {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ profileId uuid
+ restrictionId uuid
+ eventType text [not null]
+ recipientId uuid [not null]
+ createdAt timestamptz [not null]
+ acceptedAt timestamptz
+ consumerReference text
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2communityevent_owner']
+ }
+ checks {
+  `("eventType" NOT IN ('seller_submitted','seller_decided','seller_paused','seller_resumed') OR "profileId" IS NOT NULL) AND ("eventType" NOT IN ('restriction_created','restriction_appealed','restriction_decided') OR "restrictionId" IS NOT NULL)` [name: 'm2_community_event_typed']
+  `"recipientId" = "accountId"` [name: 'm2_community_event_recipient_owner']
+  `"eventType" IN ('residence_changed','archive_warning','membership_archived','membership_reopened','seller_submitted','seller_decided','seller_paused','seller_resumed','restriction_created','restriction_appealed','restriction_decided')` [name: 'm2_community_event_type']
+  `("acceptedAt" IS NULL AND "consumerReference" IS NULL) OR ("acceptedAt" IS NOT NULL AND "acceptedAt" >= "createdAt" AND "consumerReference" IS NOT NULL)` [name: 'm2_community_event_ack']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Table marleva.M2CommunityCommandReceipt {
+ id uuid [pk, not null]
+ applicationId uuid [not null]
+ accountId uuid [not null]
+ actorId uuid [not null]
+ profileId uuid
+ restrictionId uuid
+ appealId uuid
+ versionId uuid
+ submissionId uuid
+ assignmentId uuid
+ decisionId uuid
+ restrictionAssignmentId uuid
+ restrictionDecisionId uuid
+ operation text [not null]
+ keyHash text [not null]
+ requestHash text [not null]
+ hashKeyId text [not null]
+ resultRevision integer [not null]
+ createdAt timestamptz [not null]
+ expiresAt timestamptz [not null]
+ indexes {
+  (id,applicationId,accountId) [unique, name: 'm2communitycommandreceipt_owner']
+  (actorId,operation,keyHash) [unique, name: 'm2_community_receipt_once']
+ }
+ checks {
+  `("operation" NOT IN ('create_seller','save_seller','prepare_seller','submit_seller','pause_seller','resume_seller') OR "versionId" IS NOT NULL) AND ("operation" NOT IN ('submit_seller','assign_seller','decide_seller') OR "submissionId" IS NOT NULL) AND ("operation" NOT IN ('assign_seller','decide_seller') OR "assignmentId" IS NOT NULL) AND ("operation" <> 'decide_seller' OR "decisionId" IS NOT NULL) AND ("operation" NOT IN ('create_appeal','save_appeal','submit_appeal','assign_restriction','decide_restriction') OR "appealId" IS NOT NULL) AND ("operation" NOT IN ('assign_restriction','decide_restriction') OR "restrictionAssignmentId" IS NOT NULL) AND ("operation" <> 'decide_restriction' OR "restrictionDecisionId" IS NOT NULL)` [name: 'm2_community_receipt_result_shape']
+  `(operation IN ('create_seller','save_seller','prepare_seller','submit_seller','pause_seller','resume_seller','assign_seller','decide_seller') AND "profileId" IS NOT NULL AND "restrictionId" IS NULL AND "appealId" IS NULL AND "restrictionAssignmentId" IS NULL AND "restrictionDecisionId" IS NULL) OR (operation IN ('create_restriction','create_appeal','save_appeal','submit_appeal','assign_restriction','decide_restriction') AND "restrictionId" IS NOT NULL AND "versionId" IS NULL AND "submissionId" IS NULL AND "assignmentId" IS NULL AND "decisionId" IS NULL)` [name: 'm2_community_receipt_target']
+  `operation IN ('create_seller','save_seller','prepare_seller','submit_seller','pause_seller','resume_seller','assign_seller','decide_seller','create_restriction','create_appeal','save_appeal','submit_appeal','assign_restriction','decide_restriction')` [name: 'm2_community_receipt_operation']
+  `"keyHash" ~ '^[a-f0-9]{64}$' AND "requestHash" ~ '^[a-f0-9]{64}$' AND char_length("hashKeyId") BETWEEN 1 AND 80 AND "resultRevision" > 0 AND "expiresAt" >= "createdAt" + interval '72 hours'` [name: 'm2_community_receipt_hash']
+ }
+ Note: 'Objetivo documental, no aplicado. Invariantes entre filas/autorización por transacción futura.'
+}
+
+Ref m2_approved_version: marleva.M2MembershipApplication.(approvedVersionId,id,accountId) > marleva.M2MembershipVersion.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_previous_version: marleva.M2MembershipVersion.(previousVersionId,applicationId,accountId) > marleva.M2MembershipVersion.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2sellerprofile_app: marleva.M2SellerProfile.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2sellerversion_app: marleva.M2SellerVersion.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_seller_version_profile: marleva.M2SellerVersion.(profileId,applicationId,accountId) > marleva.M2SellerProfile.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_previous: marleva.M2SellerVersion.(previousVersionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_currentVersionId: marleva.M2SellerProfile.(currentVersionId,id,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_approvedVersionId: marleva.M2SellerProfile.(approvedVersionId,id,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_private_version: marleva.M2SellerVersionPrivate.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2sellercoverage_version: marleva.M2SellerCoverage.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_coverage_catalog: marleva.M2SellerCoverage.developmentId > marleva.Development.id [delete: no action, update: no action]
+Ref m2sellermodality_version: marleva.M2SellerModality.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_terms_version: marleva.M2SellerTermsAcceptance.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_terms_policy: marleva.M2SellerTermsAcceptance.(policyId,policyContentSha256) > marleva.M2SellerTermsPolicy.(id,contentSha256) [delete: no action, update: no action]
+Ref m2sellersubmission_app: marleva.M2SellerSubmission.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_seller_submission_version: marleva.M2SellerSubmission.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m8sellerassignment_app: marleva.M8SellerAssignment.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m8_seller_assignment_submission: marleva.M8SellerAssignment.(submissionId,profileId,applicationId,accountId) > marleva.M2SellerSubmission.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m8_seller_reviewer_grant: marleva.M8SellerAssignment.(reviewerGrantId,reviewerId,reviewerCapability) > marleva.M8MembershipReviewGrant.(id,accountId,capability) [delete: no action, update: no action]
+Ref m8_seller_manager_grant: marleva.M8SellerAssignment.(managerGrantId,assignedBy,managerCapability) > marleva.M8MembershipReviewGrant.(id,accountId,capability) [delete: no action, update: no action]
+Ref m2sellerdecision_app: marleva.M2SellerDecision.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_seller_decision_assignment: marleva.M2SellerDecision.(assignmentId,submissionId,profileId,applicationId,accountId,reviewerId) > marleva.M8SellerAssignment.(id,submissionId,profileId,applicationId,accountId,reviewerId) [delete: no action, update: no action]
+Ref m2_seller_version_source_decision: marleva.M2SellerVersion.(sourceDecisionId,profileId,applicationId,accountId) > marleva.M2SellerDecision.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_seller_decision_private: marleva.M2SellerDecisionPrivate.(decisionId,profileId,applicationId,accountId) > marleva.M2SellerDecision.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2restriction_app: marleva.M2Restriction.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_restriction_profile: marleva.M2Restriction.(profileId,applicationId,accountId) > marleva.M2SellerProfile.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_restriction_actor: marleva.M2Restriction.createdBy > marleva.Account.id [delete: no action, update: no action]
+Ref m2_restriction_private: marleva.M2RestrictionPrivate.(restrictionId,applicationId,accountId) > marleva.M2Restriction.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2restrictionappeal_app: marleva.M2RestrictionAppeal.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_restriction_appeal_restriction: marleva.M2RestrictionAppeal.(restrictionId,applicationId,accountId) > marleva.M2Restriction.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_restriction_appeal_evidence: marleva.M2RestrictionAppeal.(evidenceVersionId,applicationId,accountId) > marleva.M2MembershipVersion.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_restriction_appeal_private: marleva.M2RestrictionAppealPrivate.(appealId,applicationId,accountId) > marleva.M2RestrictionAppeal.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m8restrictionassignment_app: marleva.M8RestrictionAssignment.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m8_restriction_assignment_appeal: marleva.M8RestrictionAssignment.(appealId,restrictionId,applicationId,accountId) > marleva.M2RestrictionAppeal.(id,restrictionId,applicationId,accountId) [delete: no action, update: no action]
+Ref m8_restriction_reviewer_grant: marleva.M8RestrictionAssignment.(reviewerGrantId,reviewerId,reviewerCapability) > marleva.M8MembershipReviewGrant.(id,accountId,capability) [delete: no action, update: no action]
+Ref m8_restriction_manager_grant: marleva.M8RestrictionAssignment.(managerGrantId,assignedBy,managerCapability) > marleva.M8MembershipReviewGrant.(id,accountId,capability) [delete: no action, update: no action]
+Ref m2restrictiondecision_app: marleva.M2RestrictionDecision.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_restriction_decision_assignment: marleva.M2RestrictionDecision.(assignmentId,appealId,restrictionId,applicationId,accountId,reviewerId) > marleva.M8RestrictionAssignment.(id,appealId,restrictionId,applicationId,accountId,reviewerId) [delete: no action, update: no action]
+Ref m2_restriction_decision_private: marleva.M2RestrictionDecisionPrivate.(decisionId,applicationId,accountId) > marleva.M2RestrictionDecision.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_restriction_evidence_appeal: marleva.M2RestrictionEvidenceLink.(appealId,applicationId,accountId) > marleva.M2RestrictionAppeal.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_restriction_evidence_document: marleva.M2RestrictionEvidenceLink.(versionId,documentId,applicationId,accountId) > marleva.M2MembershipVersionDocument.(versionId,documentId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_access_restriction_assignment: marleva.M2MembershipDocumentAccess.(restrictionAssignmentId,restrictionAppealId,applicationId,accountId,accessorId) > marleva.M8RestrictionAssignment.(id,appealId,applicationId,accountId,reviewerId) [delete: no action, update: no action]
+Ref m2_access_restriction_evidence: marleva.M2MembershipDocumentAccess.(restrictionAppealId,versionId,documentId,applicationId,accountId) > marleva.M2RestrictionEvidenceLink.(appealId,versionId,documentId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2membershiparchivenotice_app: marleva.M2MembershipArchiveNotice.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2communityevent_app: marleva.M2CommunityEvent.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_community_event_profile: marleva.M2CommunityEvent.(profileId,applicationId,accountId) > marleva.M2SellerProfile.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_event_restriction: marleva.M2CommunityEvent.(restrictionId,applicationId,accountId) > marleva.M2Restriction.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_event_recipient: marleva.M2CommunityEvent.recipientId > marleva.Account.id [delete: no action, update: no action]
+Ref m2communitycommandreceipt_app: marleva.M2CommunityCommandReceipt.(applicationId,accountId) > marleva.M2MembershipApplication.(id,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_actor: marleva.M2CommunityCommandReceipt.actorId > marleva.Account.id [delete: no action, update: no action]
+Ref m2_community_receipt_profile: marleva.M2CommunityCommandReceipt.(profileId,applicationId,accountId) > marleva.M2SellerProfile.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_restriction: marleva.M2CommunityCommandReceipt.(restrictionId,applicationId,accountId) > marleva.M2Restriction.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_appeal: marleva.M2CommunityCommandReceipt.(appealId,restrictionId,applicationId,accountId) > marleva.M2RestrictionAppeal.(id,restrictionId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_version: marleva.M2CommunityCommandReceipt.(versionId,profileId,applicationId,accountId) > marleva.M2SellerVersion.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_submission: marleva.M2CommunityCommandReceipt.(submissionId,profileId,applicationId,accountId) > marleva.M2SellerSubmission.(id,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_decision: marleva.M2CommunityCommandReceipt.(decisionId,submissionId,assignmentId,profileId,applicationId,accountId) > marleva.M2SellerDecision.(id,submissionId,assignmentId,profileId,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_retention_seller_version_private: marleva.M2MembershipRetentionCase.(sellerVersionId,applicationId,accountId) > marleva.M2SellerVersion.(id,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_retention_seller_decision_private: marleva.M2MembershipRetentionCase.(sellerDecisionId,applicationId,accountId) > marleva.M2SellerDecision.(id,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_retention_restriction_private: marleva.M2MembershipRetentionCase.(restrictionId,applicationId,accountId) > marleva.M2Restriction.(id,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_retention_restriction_appeal_private: marleva.M2MembershipRetentionCase.(restrictionAppealId,applicationId,accountId) > marleva.M2RestrictionAppeal.(id,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_retention_restriction_decision_private: marleva.M2MembershipRetentionCase.(restrictionDecisionId,applicationId,accountId) > marleva.M2RestrictionDecision.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_retention_seller_anchor: marleva.M2MembershipRetentionCase.(anchorSellerDecisionId,applicationId,accountId) > marleva.M2SellerDecision.(id,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_retention_restriction_anchor: marleva.M2MembershipRetentionCase.(anchorRestrictionDecisionId,applicationId,accountId) > marleva.M2RestrictionDecision.(id,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_community_receipt_assignment: marleva.M2CommunityCommandReceipt.(assignmentId,submissionId,profileId,applicationId,accountId) > marleva.M8SellerAssignment.(id,submissionId,profileId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_restr_assignment: marleva.M2CommunityCommandReceipt.(restrictionAssignmentId,appealId,applicationId,accountId) > marleva.M8RestrictionAssignment.(id,appealId,applicationId,accountId) [delete: no action, update: no action]
+Ref m2_community_receipt_restr_decision: marleva.M2CommunityCommandReceipt.(restrictionDecisionId,appealId,restrictionId,applicationId,accountId) > marleva.M2RestrictionDecision.(id,appealId,restrictionId,applicationId,accountId) [delete: no action, update: no action]
+
+Ref m2_archive_notice_version: marleva.M2MembershipArchiveNotice.(versionId,applicationId,accountId) > marleva.M2MembershipVersion.(id,applicationId,accountId) [delete: no action, update: no action]

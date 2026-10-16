@@ -3,7 +3,7 @@
   "chat": "MAR-CHAT-007",
   "status": "propuesta_no_aprobada",
   "implementation": "not_started",
-  "contract_version": "0.3.1",
+  "contract_version": "0.4.0",
   "screens": [
     {
       "id": "MAR-M2-UI-001",
@@ -72,9 +72,7 @@
         },
         "session_expired": {
           "primary": "Recuperar acceso con M1",
-          "secondary": [
-            "Guardar borrador"
-          ]
+          "secondary": []
         }
       }
     },
@@ -353,10 +351,8 @@
       "contract": "Motivo visible sin notas internas ni revisor. Sin promesa de tiempo de decisión. Aprobación vecinal no habilita por sí sola perfil comercial/pagos.",
       "state_actions": {
         "empty": {
-          "primary": "Iniciar solicitud",
-          "secondary": [
-            "Actualizar estado"
-          ]
+          "primary": "Actualizar cola",
+          "secondary": []
         },
         "pending": {
           "primary": "Ver historial",
@@ -639,11 +635,8 @@
           ]
         },
         "empty": {
-          "primary": "Abrir revisión asignada",
-          "secondary": [
-            "Actualizar cola",
-            "Ver más solicitudes"
-          ]
+          "primary": "Actualizar cola",
+          "secondary": []
         },
         "loading": {
           "primary": "Espera un momento",
@@ -651,10 +644,7 @@
         },
         "mfa_required": {
           "primary": "Confirmar acceso seguro con M1",
-          "secondary": [
-            "Actualizar cola",
-            "Ver más solicitudes"
-          ]
+          "secondary": []
         },
         "assignment_unavailable": {
           "primary": "Intentar de nuevo",
@@ -679,10 +669,7 @@
         },
         "no_candidates": {
           "primary": "Actualizar revisores",
-          "secondary": [
-            "Actualizar cola",
-            "Ver más solicitudes"
-          ]
+          "secondary": []
         },
         "candidate_stale": {
           "primary": "Actualizar estado",
@@ -775,9 +762,7 @@
         },
         "mfa_required": {
           "primary": "Confirmar acceso seguro con M1",
-          "secondary": [
-            "Volver a la cola"
-          ]
+          "secondary": []
         },
         "assignment_lost": {
           "primary": "Volver",
@@ -890,8 +875,1028 @@
           "secondary": []
         }
       }
+    },
+    {
+      "id": "MAR-M2-UI-008",
+      "title": "Cambio vecinal y elegibilidad",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-010",
+        "MAR-M2-UC-005"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-010",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-005",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S060"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_019",
+        "MAR_M2_API_020"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2SellerProfile",
+        "M2Restriction",
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipCommandReceipt",
+        "M2CommunityEvent"
+      ],
+      "primary": "Cambiar mi información vecinal",
+      "secondary": [],
+      "states": [
+        "approved",
+        "confirm_change",
+        "correction",
+        "restricted",
+        "conflict",
+        "uncertain",
+        "service_error"
+      ],
+      "contract": "Cambiar prepara una nueva revisión y bloquea nuevas operaciones. Las obligaciones anteriores continúan.",
+      "state_actions": {
+        "approved": {
+          "primary": "Cambiar mi información vecinal",
+          "secondary": []
+        },
+        "confirm_change": {
+          "primary": "Confirmar cambio",
+          "secondary": []
+        },
+        "correction": {
+          "primary": "Completar datos y documentos",
+          "secondary": []
+        },
+        "restricted": {
+          "primary": "Ver mis restricciones",
+          "secondary": []
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "service_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-009",
+      "title": "Archivo y reapertura",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-006"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-006",
+          "steps": [
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_021"
+      ],
+      "tables": [
+        "M2MembershipApplication",
+        "M2MembershipVersion",
+        "M2MembershipVersionPrivate",
+        "M2MembershipArchiveNotice",
+        "M2MembershipCommandReceipt",
+        "M2CommunityEvent"
+      ],
+      "primary": "Continuar mi solicitud",
+      "secondary": [],
+      "states": [
+        "grace",
+        "archived",
+        "reason_required",
+        "private_unavailable",
+        "reopened",
+        "uncertain",
+        "conflict"
+      ],
+      "contract": "El archivo no elimina resoluciones anteriores. Reabrir crea una versión nueva y no recupera datos borrados.",
+      "state_actions": {
+        "grace": {
+          "primary": "Continuar borrador",
+          "secondary": []
+        },
+        "archived": {
+          "primary": "Reabrir solicitud",
+          "secondary": []
+        },
+        "reason_required": {
+          "primary": "Preparar nueva versión",
+          "secondary": []
+        },
+        "private_unavailable": {
+          "primary": "Completar información nueva",
+          "secondary": []
+        },
+        "reopened": {
+          "primary": "Completar datos y documentos",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-010",
+      "title": "Mi perfil de oferente",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-009",
+        "MAR-M2-UC-007"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-009",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-007",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S060",
+            "S070",
+            "S050"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_022",
+        "MAR_M2_API_023",
+        "MAR_M2_API_024"
+      ],
+      "tables": [
+        "M2SellerProfile",
+        "M2SellerVersion",
+        "M2SellerVersionPrivate",
+        "M2Restriction",
+        "M2CommunityCommandReceipt",
+        "M2SellerCoverage",
+        "M2SellerModality"
+      ],
+      "primary": "Guardar perfil",
+      "secondary": [],
+      "states": [
+        "draft",
+        "validation_error",
+        "ineligible",
+        "private_unavailable",
+        "saved",
+        "uncertain",
+        "session_expired"
+      ],
+      "contract": "Lo público y lo privado tienen finalidades distintas. Guardar no envía ni habilita el perfil.",
+      "state_actions": {
+        "draft": {
+          "primary": "Guardar borrador",
+          "secondary": []
+        },
+        "validation_error": {
+          "primary": "Corregir campos",
+          "secondary": []
+        },
+        "ineligible": {
+          "primary": "Ver mi pertenencia",
+          "secondary": []
+        },
+        "private_unavailable": {
+          "primary": "Completar datos privados",
+          "secondary": []
+        },
+        "saved": {
+          "primary": "Revisar y enviar",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "session_expired": {
+          "primary": "Recuperar acceso con M1",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-011",
+      "title": "Estado y envío del perfil",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-008",
+        "MAR-M2-UC-009"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-008",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S060",
+            "S070"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-009",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S050"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_026",
+        "MAR_M2_API_027",
+        "MAR_M2_API_028",
+        "MAR_M2_API_033",
+        "MAR_M2_API_040"
+      ],
+      "tables": [
+        "M2SellerProfile",
+        "M2SellerVersion",
+        "M2SellerVersionPrivate",
+        "M2SellerCoverage",
+        "M2SellerModality",
+        "M2SellerTermsPolicy",
+        "M2SellerTermsAcceptance",
+        "M2SellerSubmission",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent",
+        "M2MembershipApplication",
+        "M2Restriction"
+      ],
+      "primary": "Enviar perfil",
+      "secondary": [],
+      "states": [
+        "ready",
+        "terms_draft",
+        "terms_changed",
+        "pending",
+        "enabled",
+        "paused",
+        "ineligible",
+        "suspended",
+        "uncertain",
+        "sending"
+      ],
+      "contract": "El alta comercial se revisa por separado. Pausar o presentar reconsideración no borra obligaciones ni levanta restricciones.",
+      "state_actions": {
+        "ready": {
+          "primary": "Enviar perfil",
+          "secondary": []
+        },
+        "terms_draft": {
+          "primary": "Volver al borrador",
+          "secondary": []
+        },
+        "terms_changed": {
+          "primary": "Revisar condiciones",
+          "secondary": []
+        },
+        "pending": {
+          "primary": "Ver historial",
+          "secondary": []
+        },
+        "enabled": {
+          "primary": "Pausar perfil",
+          "secondary": []
+        },
+        "paused": {
+          "primary": "Revisar y reanudar",
+          "secondary": []
+        },
+        "ineligible": {
+          "primary": "Ver causa",
+          "secondary": []
+        },
+        "suspended": {
+          "primary": "Solicitar revisión de restricción",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "sending": {
+          "primary": "Espera un momento",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-012",
+      "title": "Historial y nueva versión comercial",
+      "actor": "titular",
+      "cases": [
+        "MAR-M2-UC-007",
+        "MAR-M2-UC-009"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-007",
+          "steps": [
+            "S030",
+            "S050",
+            "S060",
+            "S080"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-009",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_025",
+        "MAR_M2_API_030",
+        "MAR_M2_API_031",
+        "MAR_M2_API_032"
+      ],
+      "tables": [
+        "M2SellerProfile",
+        "M2SellerVersion",
+        "M2SellerVersionPrivate",
+        "M2SellerDecision",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent",
+        "M2SellerSubmission",
+        "M2SellerCoverage",
+        "M2SellerModality",
+        "M2SellerDecisionPrivate"
+      ],
+      "primary": "Ver versión",
+      "secondary": [],
+      "states": [
+        "history",
+        "correction",
+        "reconsideration",
+        "material_change",
+        "draft",
+        "private_unavailable",
+        "conflict",
+        "uncertain"
+      ],
+      "contract": "Se conserva el mismo perfil y la resolución anterior. Preparar una versión no equivale a enviarla.",
+      "state_actions": {
+        "history": {
+          "primary": "Ver detalle de versión",
+          "secondary": []
+        },
+        "correction": {
+          "primary": "Preparar corrección",
+          "secondary": []
+        },
+        "reconsideration": {
+          "primary": "Preparar reconsideración",
+          "secondary": []
+        },
+        "material_change": {
+          "primary": "Preparar nueva versión",
+          "secondary": []
+        },
+        "draft": {
+          "primary": "Continuar con el borrador",
+          "secondary": []
+        },
+        "private_unavailable": {
+          "primary": "Completar información nueva",
+          "secondary": []
+        },
+        "conflict": {
+          "primary": "Actualizar historial",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-013",
+      "title": "Perfil público y datos para contratar",
+      "actor": "público o comprador elegible",
+      "cases": [
+        "MAR-M2-UC-009",
+        "MAR-M2-UC-010"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M2-SEQ-009",
+          "steps": [
+            "S070",
+            "S080",
+            "S090"
+          ]
+        },
+        {
+          "id": "MAR-M2-SEQ-010",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_029",
+        "MAR_M2_API_041"
+      ],
+      "tables": [
+        "M2SellerProfile",
+        "M2SellerVersion",
+        "M2SellerCoverage",
+        "M2SellerModality",
+        "M2MembershipApplication",
+        "M2Restriction",
+        "M2SellerVersionPrivate"
+      ],
+      "primary": "Ver perfil",
+      "secondary": [],
+      "states": [
+        "public",
+        "unavailable",
+        "login_required",
+        "contract_private",
+        "contract_unavailable",
+        "rate_limited"
+      ],
+      "contract": "La vista pública nunca incluye domicilio, teléfono, nombre legal, documentos vecinales o notas de revisión.",
+      "state_actions": {
+        "public": {
+          "primary": "Consultar datos para contratar",
+          "secondary": []
+        },
+        "unavailable": {
+          "primary": "Volver",
+          "secondary": []
+        },
+        "login_required": {
+          "primary": "Recuperar acceso con M1",
+          "secondary": []
+        },
+        "contract_private": {
+          "primary": "Volver al perfil",
+          "secondary": []
+        },
+        "contract_unavailable": {
+          "primary": "Volver al perfil",
+          "secondary": []
+        },
+        "rate_limited": {
+          "primary": "Esperar",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M2-UI-014",
+      "title": "Restricciones y reconsideración",
+      "actor": "titular",
+      "cases": [
+        "MAR-M8-UC-003"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-003",
+          "steps": [
+            "S050",
+            "S110",
+            "S120",
+            "S060",
+            "S070",
+            "S100"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_034",
+        "MAR_M2_API_035",
+        "MAR_M2_API_036",
+        "MAR_M2_API_037",
+        "MAR_M2_API_038",
+        "MAR_M2_API_042"
+      ],
+      "tables": [
+        "M2Restriction",
+        "M2RestrictionPrivate",
+        "M2RestrictionAppeal",
+        "M2RestrictionAppealPrivate",
+        "M2RestrictionEvidenceLink",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent",
+        "M2RestrictionDecision",
+        "M2RestrictionDecisionPrivate"
+      ],
+      "primary": "Ver mi restricción",
+      "secondary": [],
+      "states": [
+        "active",
+        "draft",
+        "new_evidence",
+        "ready",
+        "pending",
+        "maintained",
+        "lifted_other_cause",
+        "lifted",
+        "evidence_unavailable",
+        "uncertain"
+      ],
+      "contract": "Pedir revisión no levanta la causa. Puedes aportar motivo sin documento; si agregas evidencia, debe ser tuya y de una versión vecinal enviada.",
+      "state_actions": {
+        "active": {
+          "primary": "Preparar reconsideración",
+          "secondary": []
+        },
+        "draft": {
+          "primary": "Guardar borrador",
+          "secondary": []
+        },
+        "new_evidence": {
+          "primary": "Actualizar información vecinal",
+          "secondary": []
+        },
+        "ready": {
+          "primary": "Presentar reconsideración",
+          "secondary": []
+        },
+        "pending": {
+          "primary": "Consultar estado",
+          "secondary": []
+        },
+        "maintained": {
+          "primary": "Ver resolución",
+          "secondary": []
+        },
+        "lifted_other_cause": {
+          "primary": "Ver elegibilidad",
+          "secondary": []
+        },
+        "lifted": {
+          "primary": "Ver elegibilidad",
+          "secondary": []
+        },
+        "evidence_unavailable": {
+          "primary": "Revisar evidencia",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-003",
+      "title": "Cola y asignación comercial",
+      "actor": "gestor o revisor comercial",
+      "cases": [
+        "MAR-M8-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-004",
+          "steps": [
+            "S010",
+            "S020",
+            "S030"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_006",
+        "MAR_M8_API_007",
+        "MAR_M8_API_008"
+      ],
+      "tables": [
+        "M2SellerSubmission",
+        "M8SellerAssignment",
+        "M8MembershipReviewGrant",
+        "M8MembershipReviewerProfile",
+        "M2CommunityCommandReceipt"
+      ],
+      "primary": "Abrir revisión asignada",
+      "secondary": [],
+      "states": [
+        "queue",
+        "candidates",
+        "empty",
+        "no_candidates",
+        "candidate_stale",
+        "mfa_required",
+        "service_error"
+      ],
+      "contract": "Fuente propia M8 con capacidad comercial vigente. No hereda permisos vecinales ni un rol general de M1.",
+      "state_actions": {
+        "queue": {
+          "primary": "Abrir revisión asignada",
+          "secondary": []
+        },
+        "candidates": {
+          "primary": "Asignar revisor",
+          "secondary": []
+        },
+        "empty": {
+          "primary": "Actualizar cola",
+          "secondary": []
+        },
+        "no_candidates": {
+          "primary": "Actualizar revisores",
+          "secondary": []
+        },
+        "candidate_stale": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        },
+        "mfa_required": {
+          "primary": "Confirmar acceso seguro con M1",
+          "secondary": []
+        },
+        "service_error": {
+          "primary": "Intentar de nuevo",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-004",
+      "title": "Revisión comercial",
+      "actor": "revisor comercial asignado",
+      "cases": [
+        "MAR-M8-UC-004"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-004",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S050",
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_009",
+        "MAR_M8_API_010"
+      ],
+      "tables": [
+        "M2SellerVersion",
+        "M2SellerVersionPrivate",
+        "M8SellerAssignment",
+        "M2SellerDecision",
+        "M2SellerDecisionPrivate",
+        "M2SellerProfile",
+        "M2SellerSubmission",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent"
+      ],
+      "primary": "Confirmar decisión",
+      "secondary": [],
+      "states": [
+        "review",
+        "membership_lost",
+        "correction_confirmed",
+        "enabled",
+        "rejected",
+        "assignment_lost",
+        "uncertain"
+      ],
+      "contract": "Solo versión enviada asignada y antecedente visible pertinente; sin documentos vecinales, pagos o notas internas históricas.",
+      "state_actions": {
+        "review": {
+          "primary": "Confirmar decisión",
+          "secondary": []
+        },
+        "membership_lost": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        },
+        "correction_confirmed": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "enabled": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "rejected": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "assignment_lost": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-005",
+      "title": "Restricciones y asignaciones",
+      "actor": "gestor o revisor del ámbito",
+      "cases": [
+        "MAR-M8-UC-003"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-003",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S040",
+            "S050",
+            "S070",
+            "S080",
+            "S090"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_011",
+        "MAR_M8_API_012",
+        "MAR_M8_API_015",
+        "MAR_M8_API_018"
+      ],
+      "tables": [
+        "M2Restriction",
+        "M2RestrictionPrivate",
+        "M2MembershipApplication",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent",
+        "M8RestrictionAssignment",
+        "M2RestrictionAppeal",
+        "M8MembershipReviewGrant",
+        "M8MembershipReviewerProfile"
+      ],
+      "primary": "Abrir caso",
+      "secondary": [],
+      "states": [
+        "queue",
+        "create",
+        "candidates",
+        "no_candidates",
+        "conflict",
+        "uncertain",
+        "mfa_required"
+      ],
+      "contract": "Registrar una causa es independiente de la resolución base. La asignación de reconsideración se hace por ámbito y sin conflicto.",
+      "state_actions": {
+        "queue": {
+          "primary": "Abrir caso",
+          "secondary": []
+        },
+        "create": {
+          "primary": "Confirmar restricción",
+          "secondary": []
+        },
+        "candidates": {
+          "primary": "Asignar revisión",
+          "secondary": []
+        },
+        "no_candidates": {
+          "primary": "Actualizar revisores",
+          "secondary": []
+        },
+        "conflict": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        },
+        "mfa_required": {
+          "primary": "Confirmar acceso seguro con M1",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-006",
+      "title": "Revisar reconsideración de restricción",
+      "actor": "revisor restrict asignado",
+      "cases": [
+        "MAR-M8-UC-003"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-003",
+          "steps": [
+            "S080",
+            "S090",
+            "S100",
+            "S110",
+            "S120"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M2_API_039",
+        "MAR_M8_API_013",
+        "MAR_M8_API_014"
+      ],
+      "tables": [
+        "M2MembershipDocumentAccess",
+        "M2RestrictionEvidenceLink",
+        "M8RestrictionAssignment",
+        "M2Restriction",
+        "M2RestrictionPrivate",
+        "M2RestrictionAppeal",
+        "M2RestrictionAppealPrivate",
+        "M2RestrictionDecision",
+        "M2RestrictionDecisionPrivate",
+        "M2CommunityCommandReceipt",
+        "M2CommunityEvent"
+      ],
+      "primary": "Confirmar resolución",
+      "secondary": [],
+      "states": [
+        "review",
+        "evidence_available",
+        "evidence_unavailable",
+        "maintained",
+        "lifted",
+        "assignment_lost",
+        "uncertain"
+      ],
+      "contract": "Solo causa actual, motivo y evidencia explícita de esta apelación. Levantar una causa no levanta otras.",
+      "state_actions": {
+        "review": {
+          "primary": "Confirmar resolución",
+          "secondary": []
+        },
+        "evidence_available": {
+          "primary": "Abrir evidencia",
+          "secondary": []
+        },
+        "evidence_unavailable": {
+          "primary": "Volver a la revisión",
+          "secondary": []
+        },
+        "maintained": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "lifted": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "assignment_lost": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar resultado",
+          "secondary": []
+        }
+      }
+    },
+    {
+      "id": "MAR-M8-UI-007",
+      "title": "Conservación documental",
+      "actor": "conservador de ámbito",
+      "cases": [
+        "MAR-M8-UC-005"
+      ],
+      "sequences": [
+        {
+          "id": "MAR-M8-SEQ-005",
+          "steps": [
+            "S010",
+            "S020",
+            "S030",
+            "S050",
+            "S060",
+            "S070",
+            "S080",
+            "S090"
+          ]
+        }
+      ],
+      "apis": [
+        "MAR_M8_API_016",
+        "MAR_M8_API_017",
+        "MAR_M8_API_019"
+      ],
+      "tables": [
+        "M2MembershipRetentionCase",
+        "M2MembershipRetentionHold",
+        "M2MembershipRetentionEvent",
+        "M8MembershipReviewGrant"
+      ],
+      "primary": "Abrir caso de conservación",
+      "secondary": [],
+      "states": [
+        "queue",
+        "finalize",
+        "hold",
+        "release",
+        "overdue",
+        "deleted",
+        "uncertain",
+        "forbidden"
+      ],
+      "contract": "Conservar no concede lectura de documentos. Los comandos registran calendario o bloqueo; no ejecutan borrado desde esta pantalla.",
+      "state_actions": {
+        "queue": {
+          "primary": "Abrir caso",
+          "secondary": []
+        },
+        "finalize": {
+          "primary": "Registrar finalización",
+          "secondary": []
+        },
+        "hold": {
+          "primary": "Registrar bloqueo",
+          "secondary": []
+        },
+        "release": {
+          "primary": "Registrar levantamiento",
+          "secondary": []
+        },
+        "overdue": {
+          "primary": "Actualizar estado",
+          "secondary": []
+        },
+        "deleted": {
+          "primary": "Volver a la cola",
+          "secondary": []
+        },
+        "uncertain": {
+          "primary": "Consultar caso",
+          "secondary": []
+        },
+        "forbidden": {
+          "primary": "Volver",
+          "secondary": []
+        }
+      }
     }
   ],
   "policy_version": "D08-0.1",
-  "revision": "revisión integral del recorrido"
+  "revision": "revisión integral del recorrido",
+  "scope": "M2 UC001-011 y soporte M8 UC001-005"
 }

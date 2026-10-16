@@ -12,11 +12,17 @@ A->>D: S030 Comprobar asignación y conflicto, leer campos pertinentes
 R->>A: S040 Habilitar/corrección/rechazo con motivo y versión
 A->>I: S050 Revalidar rol, MFA y autenticación reciente
 A->>D: S060 Comparar versión/asignación y pertenencia actual
-alt Residencia no aprobada o restricción vigente
+alt Se intenta enabled sin residencia aprobada o con restricción vigente
  A-->>R: S070 No habilitar, actualizar estado antes de resolver
 else Condiciones válidas
- A->>D: S080 Guardar decisión, transición y aviso atómicos
+ A->>D: S080 Guardar decisión única, versión aprobada si enabled, cierre de envío/asignación, revisiones, recibo y aviso atómicos
  A-->>R: S090 Recibo idempotente sobre versión exacta
  A->>W: S100 Aviso sin datos contractuales privados
 end
 Note over R,D: S110 Habilitar perfil no publica oferta ni activa pagos
+Note over R,A: S001 Gestor abre cola comercial y candidatos por envío,24/50, sin privado
+Note over A,D: S002 Perfil operativo enabled y grants seller_assign/seller_review actuales, ninguno titular
+Note over A,D: S003 Asignar/reasignar con CAS de perfil y asignación, cerrar anterior, no heredar vecinal
+Note over A,D: S120 Corrección requiere campos concretos y motivo, rechazo motivo, enabled criterio aprobado_seller
+Note over R,D: S130 Solo versión enviada pertinente y antecedente visible, jamás notas internas anteriores
+Note over T,A: S140 Titular prepara correction/reconsideration en mismo perfil, sourceDecision exacta y motivo si reconsideración

@@ -1,10 +1,10 @@
-# Fuente canónica propia M2/M8. Objetivo documental no activado.
 openapi: 3.1.1
 info:
   title: Marleva M2 y soporte M8 — expediente y revisión
-  version: 0.3.1
-  description: "MAR-CHAT-007. Diseño propio del recorrido y D08/D09: conservación propuesta no
-    activada, fuente autorizada de revisores por envío. Sin implementación ni cambios M1."
+  version: 0.4.0
+  description: Diseño documental integral de M2, UC001-011, y soporte M8 UC001-005. Pertenencia,
+    oferentes, restricciones, conservación y elegibilidad. Sin implementación, migraciones aplicadas
+    ni contratos compartidos modificados.
 servers:
   - url: https://marleva-documentacion.invalid
     description: Dominio reservado no operativo. No configurar un servidor real en este corte.
@@ -59,6 +59,14 @@ x-global-rules:
     comando separado. Retention delete_pending se presenta delayed, nunca complete."
   - "Huellas: HMAC-SHA256 + JCS RFC8785, separación de dominios y hashKeyId servidor; acuerdo
     consumidor en INTEGRACION_Y_ENTREGA_M2_M8.md. No se cambia interfaz M1."
+  - Alcance integral M2 UC001-011 y M8 UC001-005. Estados base de residencia/perfil separados de
+    restricciones/isPaused; elegibilidad actual se calcula con eligibilityRevision monotónica.
+  - Recibo Membership usa result_revision del expediente; recibo Community usa revisión del
+    perfil/restricción/apelación que modifica la operación, declarada en su contrato. Ambas familias
+    serializan actor+operación con anillo HMAC.
+  - Datos contractuales del oferente no se copian de residencia ni se muestran públicamente; resumen
+    privado solo comprador elegible por finalidad precontractual. No se habilitan pagos, ofertas M3
+    ni tarifas.
 paths:
   /v1/m2/membership-applications/own:
     get:
@@ -275,7 +283,9 @@ paths:
         reconsideration; null para initial/correction. Unicode NFC y trim, campos vacíos se
         rechazan. No recibe estado, identidad, origen o antecedente modificables. Declaración
         vecinal actual debe confirmarse de nuevo. Motivo se puede ajustar en borrador, se congela al
-        enviar."
+        enviar. También versiones residence_change/reopen actuales editables; origen efectivo
+        resume_origin controla motivo si corresponde. Archivo no permite guardar o enviar hasta
+        reapertura válida."
       x-use-case-id: MAR-M2-UC-001
       x-sequence-id: MAR-M2-SEQ-001
       x-sequence-steps:
@@ -630,12 +640,14 @@ paths:
       tags:
         - M2
       summary: Leer documento con permiso vigente
-      description: Reautorizar sesión/actor y permiso exacto; si revisor, capacidad/asignación/MFA
+      description: "Reautorizar sesión/actor y permiso exacto; si revisor, capacidad/asignación/MFA
         recientes. Revalidar privacidad/estado y autorización antes de responder tras verificar
         MIME, tamaño y hash fuera de bloqueos. Sin redirección ni URL firmada pública, no
         Range/caché/descarga masiva. Servir máximo 5.000.000 bytes con no-store, nosniff y
         attachment filename=documento sin datos personales. Permiso no reemplaza sesión. Bytes ya
-        entregados no se revocan.
+        entregados no se revocan. La autorización admite también la ruta tipada
+        restrictionAssignmentId/restrictionAppealId: exigir enlace exacto, concesión restrict
+        actual, asignación vigente y MFA; nunca basta conocer el token. Revalidar al servir bytes."
       x-use-case-id: MAR-M2-UC-002
       x-sequence-id: MAR-M2-SEQ-002
       x-sequence-steps:
@@ -895,7 +907,10 @@ paths:
         actualizar expediente, evento y recibo juntos. La reconsideración se presenta en este
         commit, no al crear el borrador; su vínculo fuente es evidencia de presentación sin
         reescribir outcome/motivo/actor de la decisión anterior. No cambia finality ni fechas C14
-        automáticamente, sin elegibilidad provisional. Correo tras commit por puente pendiente."
+        automáticamente, sin elegibilidad provisional. Correo tras commit por puente pendiente.
+        También versiones residence_change/reopen actuales editables; origen efectivo resume_origin
+        controla motivo si corresponde. Archivo no permite guardar o enviar hasta reapertura
+        válida."
       x-use-case-id: MAR-M2-UC-003
       x-sequence-id: MAR-M2-SEQ-003
       x-sequence-steps:
@@ -1911,7 +1926,7 @@ paths:
         - name: submission_id
           in: query
           required: true
-          schema: &a1
+          schema:
             type: string
             format: uuid
         - name: limit
@@ -2040,6 +2055,2794 @@ paths:
           $ref: "#/components/responses/429"
         "503":
           $ref: "#/components/responses/503"
+  /v1/m2/eligibility/own:
+    get:
+      operationId: MAR_M2_API_019
+      tags:
+        - M2
+      summary: Consultar elegibilidad propia
+      description: Consulta actual por identidad de sesión; no permite account_id arbitrario ni reserva
+        permiso. Comprar exige pertenencia aprobada y ninguna restricción buy/both; ofrecer exige
+        además perfil enabled, versión actual aprobada y no pausado. Leer eligibilityRevision
+        actual; falla503 sin permitir por caché. Consumidor interno usa puerto propio transaccional,
+        no esta ruta pública para decidir en otro módulo.
+      x-use-case-id: MAR-M2-UC-010
+      x-sequence-id: MAR-M2-SEQ-010
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S050
+        - S060
+      x-data-tables:
+        - M2MembershipApplication
+        - M2SellerProfile
+        - M2Restriction
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Eligibility"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/membership-applications/{application_id}/residence-changes:
+    post:
+      operationId: MAR_M2_API_020
+      tags:
+        - M2
+      summary: Declarar cambio vecinal
+      description: Solo estado base approved, sin envío pendiente ni borrador. Conservar approvedVersionId
+        histórico; crear origin residence_change enlazado a decisión aprobada y versión previa.
+        Pasar a correction, desactivar elegibilidad inmediatamente e incrementar
+        eligibilityRevision, recibo y evento juntos. No copiar documentos; declaración false. No
+        tocar pedidos/avisos M1.
+      x-use-case-id: MAR-M2-UC-005
+      x-sequence-id: MAR-M2-SEQ-005
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S040
+        - S060
+      x-data-tables:
+        - M2MembershipApplication
+        - M2MembershipVersion
+        - M2MembershipVersionPrivate
+        - M2MembershipCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: application_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeResidenceRequest"
+  /v1/m2/membership-applications/{application_id}/reopenings:
+    post:
+      operationId: MAR_M2_API_021
+      tags:
+        - M2
+      summary: Reabrir borrador archivado
+      description: Solo versión corriente archived y sin envío pendiente. Nueva versión origin reopen,
+        previousVersionId y resumeOrigin según origen efectivo archivado; inicial reabre draft,
+        otros correction salvo reconsideración que conserva rejected. Conservar decisión fuente si
+        existe, nunca inventarla. Si resumeOrigin reconsideration exigir motivo privado nuevo; otros
+        null. No recuperar datos purgados ni enlaces; declaración false.
+      x-use-case-id: MAR-M2-UC-006
+      x-sequence-id: MAR-M2-SEQ-006
+      x-sequence-steps:
+        - S060
+        - S070
+        - S080
+        - S090
+      x-data-tables:
+        - M2MembershipApplication
+        - M2MembershipVersion
+        - M2MembershipVersionPrivate
+        - M2MembershipArchiveNotice
+        - M2MembershipCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: application_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReopenRequest"
+  /v1/m2/seller-profiles/own:
+    get:
+      operationId: MAR_M2_API_022
+      tags:
+        - M2
+      summary: Consultar perfil propio
+      description: 200 profile null si no existe. Privado propio y estado efectivo, sin notas
+        internas/revisor; siempre consultable con sesión válida aunque pierda elegibilidad. Nunca
+        inferir habilitación financiera.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2Restriction
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnSeller"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/seller-profiles:
+    post:
+      operationId: MAR_M2_API_023
+      tags:
+        - M2
+      summary: Crear perfil comercial
+      description: Una cuenta/un perfil; pertenencia actual approved y sin restricciones offer/both. Crear
+        versión inicial y privado incompleto con recibo atómico. Carrera devuelve perfil propio
+        existente sin sobrescribirlo. No banco, tarifa, oferta ni pagos.
+      x-use-case-id: MAR-M2-UC-007
+      x-sequence-id: MAR-M2-SEQ-007
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S060
+        - S070
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2CommunityCommandReceipt
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Empty"
+  /v1/m2/seller-profiles/{profile_id}/versions/{version_id}:
+    put:
+      operationId: MAR_M2_API_024
+      tags:
+        - M2
+      summary: Guardar versión comercial
+      description: Solo borrador actual y revisión de perfil esperada. PUT reemplaza todos los campos;
+        null/listas vacías permiten incompleto, nunca envío. Catálogo siete, arrays sin duplicados.
+        Datos contractuales y punto privados aportados expresamente, no copiados del expediente.
+        Cambio requiere pertenencia eligible actual. Reconsideración mantiene motivo obligatorio;
+        otros orígenes null.
+      x-use-case-id: MAR-M2-UC-007
+      x-sequence-id: MAR-M2-SEQ-007
+      x-sequence-steps:
+        - S020
+        - S030
+        - S050
+        - S060
+        - S070
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2SellerCoverage
+        - M2SellerModality
+        - M2CommunityCommandReceipt
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerInput"
+    get:
+      operationId: MAR_M2_API_031
+      tags:
+        - M2
+      summary: Leer versión comercial exacta propia
+      description: Solo versión del mismo perfil/cuenta; disponible privada por indicador purgedAt, null
+        no prueba por sí mismo borrado. Sin notas del revisor ni datos financieros.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2SellerCoverage
+        - M2SellerModality
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerVersion"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/seller-profiles/{profile_id}/versions:
+    post:
+      operationId: MAR_M2_API_025
+      tags:
+        - M2
+      summary: Preparar versión comercial
+      description: "Solo última decisión compatible: correction/correction, rejected/reconsideration con
+        motivo, enabled/material_change. Nueva versión creciente/antecedente mismo dueño; no editar
+        enviada. Edición material pasa base correction y bloquea exposición/operaciones nuevas desde
+        commit, incluso si queda approvedVersionId histórico. Preparar no envía; no copiar
+        aceptación de condiciones. Correction conserva base correction; reconsideration conserva
+        rejected; material_change pasa correction. Datos comerciales aún disponibles pueden
+        precargarse al borrador propio, sin copiar aceptación ni reconstruir privados purgados."
+      x-use-case-id: MAR-M2-UC-007
+      x-sequence-id: MAR-M2-SEQ-007
+      x-sequence-steps:
+        - S030
+        - S050
+        - S060
+        - S080
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2SellerDecision
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerPrepareRequest"
+  /v1/m2/seller-profiles/{profile_id}/submissions:
+    post:
+      operationId: MAR_M2_API_026
+      tags:
+        - M2
+      summary: Enviar alta comercial
+      description: Revalidar pertenencia/restricciones, campos completos, una a cuatro modalidades y uno a
+        siete desarrollos. Pickup exige attention_mode private_location y dirección privada; remote
+        exige modalidad remote declarada; on_site exige cobertura. Política de condiciones activa
+        exacta y aceptación expresa nueva por versión, no tarifa inventada. Congelar, pending,
+        aceptación, evento y recibo juntos. Sin política activa409; no habilitación automática.
+      x-use-case-id: MAR-M2-UC-008
+      x-sequence-id: MAR-M2-SEQ-008
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S040
+        - S060
+        - S070
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2SellerCoverage
+        - M2SellerModality
+        - M2SellerTermsPolicy
+        - M2SellerTermsAcceptance
+        - M2SellerSubmission
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerSubmitRequest"
+  /v1/m2/seller-profiles/{profile_id}/pauses:
+    post:
+      operationId: MAR_M2_API_027
+      tags:
+        - M2
+      summary: Pausar perfil
+      description: Pausa propia sin borrar historial ni obligaciones; isPaused true, revisar versión
+        exacta e incrementar elegibilidad, evento/recibo juntos. Puede mantener pendiente de
+        revisión sin transformarlo en enabled.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S040
+      x-data-tables:
+        - M2SellerProfile
+        - M2MembershipApplication
+        - M2Restriction
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerActionRequest"
+  /v1/m2/seller-profiles/{profile_id}/resumptions:
+    post:
+      operationId: MAR_M2_API_028
+      tags:
+        - M2
+      summary: Reanudar perfil
+      description: Solo misma versión actual aprobada, base enabled, pertenencia approved y ninguna
+        restricción offer/both; isPaused false. No levantar restricciones ni reutilizar versión
+        material sin revisar.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S050
+      x-data-tables:
+        - M2SellerProfile
+        - M2MembershipApplication
+        - M2Restriction
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerActionRequest"
+  /v1/m2/public/seller-profiles/{profile_id}:
+    get:
+      operationId: MAR_M2_API_029
+      tags:
+        - M2
+      summary: Consultar proyección pública
+      description: Solo actual enabled, vigente, no pausado y elegibilidad actual. Otros404, sin revelar
+        borradores. Nunca legalName/domicilio/teléfono, cuenta del dueño, residencia o notas. No
+        lista de vecinos, fotos/maps/reseñas ni oferta M3. No caché permisiva al perder
+        elegibilidad.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S070
+        - S080
+        - S090
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerCoverage
+        - M2SellerModality
+        - M2MembershipApplication
+        - M2Restriction
+      x-actor: público limitado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerPublic"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      security: []
+  /v1/m2/seller-profiles/{profile_id}/history:
+    get:
+      operationId: MAR_M2_API_030
+      tags:
+        - M2
+      summary: Historial comercial mínimo
+      description: Páginas24/máximo50, orden number DESC,id DESC, cursor ligado a actor/perfil; sin datos
+        privados, revisor o notas. Leer detalle por separado; no reconstructores de purgados.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerVersion
+        - M2SellerSubmission
+        - M2SellerDecision
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerHistory"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/seller-profiles/{profile_id}/decisions/{decision_id}:
+    get:
+      operationId: MAR_M2_API_032
+      tags:
+        - M2
+      summary: Leer resolución comercial visible
+      description: Resuelve exacta del mismo perfil; indicador privado independiente, sin internal_note ni
+        revisor. Resultado mínimo permanece conforme calendario, no conservación perpetua.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerDecision
+        - M2SellerDecisionPrivate
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: decision_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerVisibleDecision"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/seller-terms/current:
+    get:
+      operationId: MAR_M2_API_033
+      tags:
+        - M2
+      summary: Consultar condiciones propuestas o activas
+      description: Una política activa máxima. Sin activa puede devolverse borrador expresamente draft
+        para revisión; envío requiere active y hash/version exactos. Si no hay ninguna404;
+        dependencia caída503. No inventar aceptación ni tarifas.
+      x-use-case-id: MAR-M2-UC-008
+      x-sequence-id: MAR-M2-SEQ-008
+      x-sequence-steps:
+        - S040
+      x-data-tables:
+        - M2SellerTermsPolicy
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TermsPolicy"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/restrictions/own:
+    get:
+      operationId: MAR_M2_API_034
+      tags:
+        - M2
+      summary: Consultar restricciones propias
+      description: Página24/max50 por createdAt DESC,id DESC, cursor propio. Mostrar alcance y motivo
+        visible, nunca nota interna/revisor. Estado base de pertenencia/perfil separado de
+        restricciones; obligaciones anteriores conservadas.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S050
+        - S110
+        - S120
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionPrivate
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Restrictions"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/restrictions/{restriction_id}/appeals:
+    post:
+      operationId: MAR_M2_API_035
+      tags:
+        - M2
+      summary: Preparar reconsideración de restricción
+      description: Restricción propia active, una apelación abierta máxima; reason obligatorio. Solo
+        versión enviada propia y documentos explícitos de esa versión disponibles admisibles; si no
+        evidencia, null y[] admitidos. Preparar no presenta ni levanta. Evidencia nueva vecinal se
+        obtiene por UC005 evidence_update y UC002/003, no copiar bytes ni alterar fecha.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S050
+        - S060
+        - S070
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionAppeal
+        - M2RestrictionAppealPrivate
+        - M2RestrictionEvidenceLink
+        - M2CommunityCommandReceipt
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: restriction_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppealInput"
+  /v1/m2/restriction-appeals/{appeal_id}:
+    put:
+      operationId: MAR_M2_API_036
+      tags:
+        - M2
+      summary: Guardar reconsideración de restricción
+      description: Solo borrador actual propio y revisión esperada. Sustituir enlaces explícitos no
+        enviados, dos máximo. Fuente exacta propia y todavía disponible; no revive borrados ni
+        permite otras finalidades.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S060
+        - S070
+      x-data-tables:
+        - M2RestrictionAppeal
+        - M2RestrictionAppealPrivate
+        - M2RestrictionEvidenceLink
+        - M2CommunityCommandReceipt
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppealInput"
+    get:
+      operationId: MAR_M2_API_038
+      tags:
+        - M2
+      summary: Consultar reconsideración propia
+      description: Solo titular; privado según indicador; estado sin asignación/revisor/notas internas.
+        Decisión visible se consulta por su referencia en historial del caso.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S050
+        - S060
+        - S070
+        - S110
+      x-data-tables:
+        - M2RestrictionAppeal
+        - M2RestrictionAppealPrivate
+        - M2RestrictionEvidenceLink
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appeal"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/restriction-appeals/{appeal_id}/submissions:
+    post:
+      operationId: MAR_M2_API_037
+      tags:
+        - M2
+      summary: Presentar reconsideración de restricción
+      description: Revalidar motivo/evidencia, congelar appeal y enlaces, pending con evento/recibo. La
+        restricción sigue active; no plazo de caducidad o número máximo inventado. No enviar otra
+        abierta; respuesta perdida conserva clave/cuerpo.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S060
+        - S070
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionAppeal
+        - M2RestrictionAppealPrivate
+        - M2RestrictionEvidenceLink
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppealSubmitRequest"
+  /v1/m2/restriction-appeals/{appeal_id}/access-permits:
+    post:
+      operationId: MAR_M2_API_039
+      tags:
+        - M2
+      summary: Acceso a evidencia de reconsideración
+      description: Titular solo evidencia propia enlazada; revisor exige grant restrict de ámbito, MFA y
+        assignment exacto vigente. TTL≤300s, secreto por cabecera y bytes por M2API011; ruta de
+        autorización alternativa tipada en Access. Restricción no concede acceso a otros documentos
+        históricos o perfiles privados. Revalidar antes de responder bytes.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S080
+        - S090
+      x-data-tables:
+        - M2MembershipDocumentAccess
+        - M2RestrictionEvidenceLink
+        - M8RestrictionAssignment
+      x-actor: titular o revisor de reconsideración asignada
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessPermit"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RestrictionAccessRequest"
+  /v1/m2/community-command-receipts/{receipt_id}:
+    get:
+      operationId: MAR_M2_API_040
+      tags:
+        - M2
+      summary: Consultar recibo comunitario propio
+      description: Solo actor original y recurso permitido; reautorizar antes del lookup. Huellas/llave no
+        se exponen; resultado mínimo, sin respuesta privada vieja. Expirar no duplica operación.
+      x-use-case-id: MAR-M2-UC-009
+      x-sequence-id: MAR-M2-SEQ-009
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2CommunityCommandReceipt
+      x-actor: actor original autorizado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: receipt_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityReceipt"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/seller-profiles/{profile_id}/contract-summary:
+    get:
+      operationId: MAR_M2_API_041
+      tags:
+        - M2
+      summary: Consultar datos privados previos a contratar
+      description: Comprador eligible y perfil enabled vigente; finalidad precontractual explícita, no
+        exposición pública. Devolver versión actual y datos aportados para contratación, jamás
+        expediente. Límite propuesto10/min por cuenta,429 Retry-After real; no descarga masiva. No
+        conserva compra ni crea pedido; M4 deberá copiar condiciones en su contrato al contratar.
+        Sin contrato privado disponible409, no rellenar desde residencia.
+      x-use-case-id: MAR-M2-UC-010
+      x-sequence-id: MAR-M2-SEQ-010
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S050
+        - S060
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M2MembershipApplication
+        - M2Restriction
+      x-actor: comprador autenticado con pertenencia y capacidad buy vigentes
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerContractSummary"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/seller-submissions:
+    get:
+      operationId: MAR_M8_API_006
+      tags:
+        - M8
+      summary: Cola de revisión comercial
+      description: assigned para revisor/pending para gestor seller_assign, páginas24/50 orden submittedAt
+        ASC,id ASC; sin datos privados. Cada página reautoriza. Sin elegibles200vacío, caída503.
+      x-use-case-id: MAR-M8-UC-004
+      x-sequence-id: MAR-M8-SEQ-004
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerSubmission
+        - M8SellerAssignment
+        - M8MembershipReviewGrant
+      x-actor: gestor de ámbito con MFA reciente o revisor seller_review
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+        - name: view
+          in: query
+          schema:
+            type: string
+            enum:
+              - assigned
+              - pending
+            default: assigned
+          description: assigned para revisor; pending solo gestor de ámbito. Reautorizar cada página.
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Queue"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/seller-reviewers:
+    get:
+      operationId: MAR_M8_API_007
+      tags:
+        - M8
+      summary: Candidatos comerciales por envío
+      description: Requiere submission_id comercial pendiente no propio, perfil operativo enabled+grant
+        seller_review actual; no directorio general. Excluir conflictos registrados y revalidar al
+        asignar; igual paginación/privacidad que M8API005.
+      x-use-case-id: MAR-M8-UC-004
+      x-sequence-id: MAR-M8-SEQ-004
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M8MembershipReviewerProfile
+        - M8MembershipReviewGrant
+        - M2SellerSubmission
+      x-actor: gestor de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+        - name: submission_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewerCandidates"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/seller-submissions/{submission_id}/assignments:
+    post:
+      operationId: MAR_M8_API_008
+      tags:
+        - M8
+      summary: Asignar revisión comercial
+      description: Gestor seller_assign vigente asigna reviewer seller_review, ambos distintos de titular;
+        perfil revisor enabled. Una activa, CAS perfil/envío/anterior; cerrar asignación vieja y
+        recibo juntos. Sin heredar asignaciones vecinales.
+      x-use-case-id: MAR-M8-UC-004
+      x-sequence-id: MAR-M8-SEQ-004
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M8SellerAssignment
+        - M8MembershipReviewGrant
+        - M2SellerSubmission
+        - M2CommunityCommandReceipt
+      x-actor: gestor de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: submission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssignmentRequest"
+  /v1/m8/seller-submissions/{submission_id}:
+    get:
+      operationId: MAR_M8_API_009
+      tags:
+        - M8
+      summary: Revisar versión comercial asignada
+      description: Solo versión enviada actual asignada, campos privados comerciales pertinentes y
+        antecedente visible; no documentos de residencia ni notas históricas. Pérdida de
+        concesión/asignación404/403, ocultar contenido.
+      x-use-case-id: MAR-M8-UC-004
+      x-sequence-id: MAR-M8-SEQ-004
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2SellerVersion
+        - M2SellerVersionPrivate
+        - M8SellerAssignment
+        - M2SellerDecision
+        - M2SellerDecisionPrivate
+      x-actor: revisor asignado con capacidad específica, MFA y autenticación reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: submission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellerReview"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/seller-submissions/{submission_id}/decisions:
+    post:
+      operationId: MAR_M8_API_010
+      tags:
+        - M8
+      summary: Resolver alta comercial
+      description: Revalidar seller_review/MFA/asignación y pertenencia. Solo enabled requiere
+        elegibilidad offer vecinal sin restricción; correction/rejected pueden resolver deficiencias
+        sin conceder elegibilidad. expected_revision es perfil; CAS envío/asignación, decisión
+        única, aviso/recibo juntos. Habilitar no publica oferta ni activa pagos.
+      x-use-case-id: MAR-M8-UC-004
+      x-sequence-id: MAR-M8-SEQ-004
+      x-sequence-steps:
+        - S040
+        - S050
+        - S060
+        - S070
+        - S080
+        - S090
+      x-data-tables:
+        - M2SellerProfile
+        - M2SellerDecision
+        - M2SellerDecisionPrivate
+        - M8SellerAssignment
+        - M2SellerSubmission
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: revisor asignado con capacidad específica, MFA y autenticación reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: submission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerDecisionRequest"
+  /v1/m8/restrictions:
+    post:
+      operationId: MAR_M8_API_011
+      tags:
+        - M8
+      summary: Registrar restricción motivada
+      description: Requiere membership_restrict o seller_restrict según objetivo, actor distinto del
+        titular y MFA reciente. Restricción independiente del estado base/historial; scope
+        buy/offer/both según objetivo. Actualizar eligibilityRevision y evento atómicos, no borrar
+        obligaciones ni cambiar cuenta M1. Motivo visible y nota interna separados.
+        expected_revision es expediente, expected_profile_revision es perfil si target_kind seller,
+        expected_eligibility_revision es el agregado M2; validar los tres bajo el mismo bloqueo.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S040
+        - S050
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionPrivate
+        - M2MembershipApplication
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: revisor asignado con capacidad específica, MFA y autenticación reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RestrictionCreateRequest"
+  /v1/m8/restriction-appeals/{appeal_id}/assignments:
+    post:
+      operationId: MAR_M8_API_012
+      tags:
+        - M8
+      summary: Asignar reconsideración de restricción
+      description: Gestor de ámbito membership_assign/seller_assign, reviewer restrict correspondiente,
+        perfil operativo habilitado y ninguno titular. Apelación pending y restricción active; una
+        asignación vigente. No inferir autorización por rol M1 ni heredar otra asignación.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S070
+        - S080
+        - S090
+      x-data-tables:
+        - M8RestrictionAssignment
+        - M2RestrictionAppeal
+        - M8MembershipReviewGrant
+        - M2CommunityCommandReceipt
+      x-actor: gestor de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RestrictionAssignmentRequest"
+  /v1/m8/restriction-appeals/{appeal_id}:
+    get:
+      operationId: MAR_M8_API_013
+      tags:
+        - M8
+      summary: Revisar reconsideración asignada
+      description: Solo caso actual asignado y motivo/evidencia explícitos, antecedente visible y perfil
+        comercial público si pertinente. No notas internas históricas ni contratos privados por
+        concesión vecinal. Documentos solo por permiso propio API039 y bytes API011.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S080
+        - S090
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionPrivate
+        - M2RestrictionAppeal
+        - M2RestrictionAppealPrivate
+        - M8RestrictionAssignment
+        - M2RestrictionEvidenceLink
+      x-actor: revisor asignado con capacidad específica, MFA y autenticación reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestrictionReview"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/restriction-appeals/{appeal_id}/decisions:
+    post:
+      operationId: MAR_M8_API_014
+      tags:
+        - M8
+      summary: Resolver reconsideración de restricción
+      description: Una decisión por apelación y fuente exacta, sin conflicto, restrict/MFA/asignación
+        actuales. expected_revision corresponde a restricción; revisar apelación pending y
+        assignment revision. lift solo levanta esa causa, no aprueba residencia/perfil ni levanta
+        otras; maintain permite nueva reconsideración posterior sin borrar historia. Commit
+        decisión/cierre/revisión/elegibilidad/evento/recibo juntos.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S080
+        - S090
+        - S100
+        - S110
+        - S120
+      x-data-tables:
+        - M2Restriction
+        - M2RestrictionAppeal
+        - M2RestrictionDecision
+        - M2RestrictionDecisionPrivate
+        - M8RestrictionAssignment
+        - M2CommunityCommandReceipt
+        - M2CommunityEvent
+      x-actor: revisor asignado con capacidad específica, MFA y autenticación reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: appeal_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityCommandResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RestrictionDecisionRequest"
+  /v1/m8/restriction-appeals:
+    get:
+      operationId: MAR_M8_API_015
+      tags:
+        - M8
+      summary: Cola mínima de reconsideraciones
+      description: "Gestor ve casos pending de ámbito; revisor solo asignados. Proyección mínima sin
+        motivo privado/nota/documentos, cursor actor/ámbito24/50 por submittedAt ASC,id ASC. No usa
+        respuesta Restrictions privada del titular: esquema mínimo especializado definido abajo."
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S070
+        - S080
+      x-data-tables:
+        - M2RestrictionAppeal
+        - M2Restriction
+        - M8RestrictionAssignment
+      x-actor: gestor de ámbito con MFA reciente o revisor restrict
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+        - name: view
+          in: query
+          schema:
+            type: string
+            enum:
+              - assigned
+              - pending
+            default: assigned
+          description: assigned para revisor; pending solo gestor de ámbito. Reautorizar cada página.
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestrictionQueue"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/conservation-commands:
+    post:
+      operationId: MAR_M8_API_016
+      tags:
+        - M8
+      summary: Registrar finalización, bloqueo o levantamiento
+      description: Adaptador documental del puerto RetentionCommand. Actor distinto del titular y
+        membership_conserve/seller_conserve según caso. command_id UUID estable se usa como clave
+        propia además del header; mismo ID/cuerpo mismo evento, distinto409. Finalizar comprueba
+        política activa y decisión ancla de ámbito exacto; no borrar desde HTTP. Hold/release exige
+        base/referencia/revisión según D08; bloqueo no resucita bytes. Sin activación de política
+        por esta ruta. En este adaptador Idempotency-Key debe ser UUID e igual a command_id;
+        divergencia400. No registrar contenidos privados en recibos.
+      x-use-case-id: MAR-M8-UC-005
+      x-sequence-id: MAR-M8-SEQ-005
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S050
+        - S060
+        - S070
+        - S080
+        - S090
+      x-data-tables:
+        - M2MembershipRetentionCase
+        - M2MembershipRetentionHold
+        - M2MembershipRetentionEvent
+      x-actor: conservador de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - $ref: "#/components/parameters/Csrf"
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID igual a command_id; divergencia400.
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConservationResult"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "415":
+          $ref: "#/components/responses/415"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+      x-command-operation: create_application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetentionCommand"
+  /v1/m8/conservation-cases/{case_id}:
+    get:
+      operationId: MAR_M8_API_017
+      tags:
+        - M8
+      summary: Consultar caso de conservación autorizado
+      description: Solo caso y finalidad del ámbito, sin acceso al contenido de documentos ni contrato
+        privado. Referencias opacas de causa; no revisión ordinaria de bytes por conservarlos. Actor
+        no titular.
+      x-use-case-id: MAR-M8-UC-005
+      x-sequence-id: MAR-M8-SEQ-005
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+        - S070
+        - S080
+      x-data-tables:
+        - M2MembershipRetentionCase
+        - M2MembershipRetentionHold
+      x-actor: conservador de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: case_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConservationCase"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m2/restrictions/{restriction_id}/decisions/{decision_id}:
+    get:
+      operationId: MAR_M2_API_042
+      tags:
+        - M2
+      summary: Consultar resolución visible de restricción
+      description: Mismo dueño/restricción y decisión exacta. No nota interna ni revisor; indicador de
+        disponibilidad de su motivo.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S050
+        - S100
+        - S110
+      x-data-tables:
+        - M2RestrictionDecision
+        - M2RestrictionDecisionPrivate
+      x-actor: titular autenticado
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: restriction_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: decision_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestrictionVisibleDecision"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/restriction-reviewers:
+    get:
+      operationId: MAR_M8_API_018
+      tags:
+        - M8
+      summary: Candidatos para reconsideración de restricción
+      description: Gestor membership_assign/seller_assign según target; perfil enabled y grant
+        membership_restrict/seller_restrict actual, ninguno titular. Candidatos ligados a apelación
+        pending propia del ámbito; no directorio general. Páginas24/50 con cursor actor/caso,
+        caída503 distinta de200vacío. Revalidar al asignar.
+      x-use-case-id: MAR-M8-UC-003
+      x-sequence-id: MAR-M8-SEQ-003
+      x-sequence-steps:
+        - S070
+        - S080
+      x-data-tables:
+        - M8MembershipReviewerProfile
+        - M8MembershipReviewGrant
+        - M2RestrictionAppeal
+        - M2Restriction
+      x-actor: gestor de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+        - name: appeal_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewerCandidates"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
+  /v1/m8/conservation-cases:
+    get:
+      operationId: MAR_M8_API_019
+      tags:
+        - M8
+      summary: Cola mínima de conservación autorizada
+      description: Conservador membership_conserve/seller_conserve según finalidad. Excluir casos propios
+        y otros ámbitos. Páginas24/max50, dueAt ASC NULLS LAST,id ASC, cursor ligado a actor/ámbito;
+        vencidos primero, estado consultable. No motivo privado ni bytes o llaves de proveedor.
+        Caída503 no equivale cola vacía.
+      x-use-case-id: MAR-M8-UC-005
+      x-sequence-id: MAR-M8-SEQ-005
+      x-sequence-steps:
+        - S010
+        - S020
+        - S030
+      x-data-tables:
+        - M2MembershipRetentionCase
+        - M8MembershipReviewGrant
+      x-actor: gestor de ámbito con MFA reciente
+      x-implementation-status: designed_only
+      parameters:
+        - $ref: "#/components/parameters/Origin"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 24
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 2048
+      responses:
+        "200":
+          description: Resultado documental propuesto; sin endpoint implementado.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+              description: Todas las respuestas, también errores y bytes.
+            x-request-id:
+              schema:
+                type: string
+                format: uuid
+              description: Referencia técnica sin datos personales.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConservationQueue"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "503":
+          $ref: "#/components/responses/503"
 components:
   schemas:
     ApplicationState:
@@ -2050,7 +4853,6 @@ components:
         - correction
         - rejected
         - approved
-        - suspended
         - archived_inactivity
     Purpose:
       type: string
@@ -2368,6 +5170,7 @@ components:
           enum:
             - draft
             - submitted
+            - archived
         development_id:
           anyOf:
             - type: integer
@@ -2422,6 +5225,8 @@ components:
             - initial
             - correction
             - reconsideration
+            - residence_change
+            - reopen
         source_decision_id:
           anyOf:
             - type: string
@@ -2431,6 +5236,20 @@ components:
           anyOf:
             - type: string
               format: uuid
+            - type: "null"
+        previous_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        resume_origin:
+          anyOf:
+            - type: string
+              enum:
+                - initial
+                - correction
+                - reconsideration
+                - residence_change
             - type: "null"
       required:
         - id
@@ -2449,6 +5268,8 @@ components:
         - origin
         - source_decision_id
         - source_submission_id
+        - previous_version_id
+        - resume_origin
       examples:
         - id: 00000000-0000-4000-8000-000000000002
           number: 1
@@ -2480,6 +5301,8 @@ components:
           origin: initial
           source_decision_id: null
           source_submission_id: null
+          previous_version_id: null
+          resume_origin: null
         - id: 00000000-0000-4000-8000-000000000009
           number: 2
           lifecycle: draft
@@ -2496,6 +5319,8 @@ components:
           origin: reconsideration
           source_decision_id: 00000000-0000-4000-8000-000000000007
           source_submission_id: 00000000-0000-4000-8000-000000000003
+          previous_version_id: 00000000-0000-4000-8000-000000000002
+          resume_origin: null
       allOf:
         - if:
             properties:
@@ -2503,18 +5328,49 @@ components:
                 const: initial
           then:
             properties:
+              previous_version_id:
+                type: "null"
+              resume_origin:
+                type: "null"
               source_decision_id:
                 type: "null"
               source_submission_id:
                 type: "null"
           else:
             properties:
+              previous_version_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              origin:
+                enum:
+                  - correction
+                  - reconsideration
+                  - residence_change
+          then:
+            properties:
+              resume_origin:
+                type: "null"
               source_decision_id:
                 type: string
                 format: uuid
               source_submission_id:
                 type: string
                 format: uuid
+        - if:
+            properties:
+              origin:
+                const: reopen
+          then:
+            properties:
+              resume_origin:
+                type: string
+                enum:
+                  - initial
+                  - correction
+                  - reconsideration
+                  - residence_change
         - if:
             properties:
               number:
@@ -2528,6 +5384,21 @@ components:
               origin:
                 not:
                   const: initial
+        - if:
+            properties:
+              lifecycle:
+                enum:
+                  - draft
+                  - archived
+          then:
+            properties:
+              submitted_at:
+                type: "null"
+          else:
+            properties:
+              submitted_at:
+                type: string
+                format: date-time
         - if:
             properties:
               private_data_available:
@@ -2546,7 +5417,9 @@ components:
             properties:
               origin:
                 not:
-                  const: reconsideration
+                  enum:
+                    - reconsideration
+                    - reopen
           then:
             properties:
               reconsideration_reason:
@@ -2566,17 +5439,48 @@ components:
                 pattern: \S
         - if:
             properties:
-              lifecycle:
-                const: draft
+              origin:
+                const: reopen
+              resume_origin:
+                const: reconsideration
+              private_data_available:
+                const: true
           then:
             properties:
-              submitted_at:
-                type: "null"
-          else:
-            properties:
-              submitted_at:
+              reconsideration_reason:
                 type: string
-                format: date-time
+                minLength: 1
+                maxLength: 2000
+                pattern: \S
+        - if:
+            properties:
+              origin:
+                const: reopen
+              resume_origin:
+                const: initial
+          then:
+            properties:
+              source_decision_id:
+                type: "null"
+              source_submission_id:
+                type: "null"
+        - if:
+            properties:
+              origin:
+                const: reopen
+              resume_origin:
+                enum:
+                  - correction
+                  - reconsideration
+                  - residence_change
+          then:
+            properties:
+              source_decision_id:
+                type: string
+                format: uuid
+              source_submission_id:
+                type: string
+                format: uuid
     VisibleDecision:
       type: object
       additionalProperties: false
@@ -2732,8 +5636,26 @@ components:
               - prepare_reconsideration
               - view_history
               - reuse_document
-          maxItems: 8
+              - declare_change
+              - reopen
+          maxItems: 10
           uniqueItems: true
+        eligibility_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        approved_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        last_activity_at:
+          type: string
+          format: date-time
+        archive_notice:
+          anyOf:
+            - $ref: "#/components/schemas/ArchiveNoticeSummary"
+            - type: "null"
       required:
         - id
         - state
@@ -2744,6 +5666,10 @@ components:
         - latest_submission
         - latest_decision
         - acciones_permitidas
+        - eligibility_revision
+        - approved_version_id
+        - last_activity_at
+        - archive_notice
       examples:
         - id: 00000000-0000-4000-8000-000000000001
           state: pending
@@ -2781,6 +5707,8 @@ components:
             source_decision_id: null
             source_submission_id: null
             reconsideration_reason: null
+            previous_version_id: null
+            resume_origin: null
           latest_submission:
             id: 00000000-0000-4000-8000-000000000003
             version_id: 00000000-0000-4000-8000-000000000002
@@ -2791,6 +5719,10 @@ components:
           latest_decision: null
           acciones_permitidas:
             - view_result
+          eligibility_revision: 1
+          approved_version_id: null
+          last_activity_at: 2026-10-15T22:00:00Z
+          archive_notice: null
     OwnApplication:
       type: object
       additionalProperties: false
@@ -2863,6 +5795,8 @@ components:
             - decide_membership
             - create_version
             - link_document
+            - declare_change
+            - reopen_application
         application_id:
           type: string
           format: uuid
@@ -3529,6 +6463,8 @@ components:
             source_decision_id: null
             source_submission_id: null
             reconsideration_reason: null
+            previous_version_id: null
+            resume_origin: null
           source_decision: null
     DecisionRequest:
       type: object
@@ -3785,6 +6721,8 @@ components:
             - initial
             - correction
             - reconsideration
+            - residence_change
+            - reopen
         source_decision_id:
           anyOf:
             - type: string
@@ -3800,6 +6738,7 @@ components:
           enum:
             - draft
             - submitted
+            - archived
         created_at:
           type: string
           format: date-time
@@ -3816,6 +6755,20 @@ components:
           anyOf:
             - $ref: "#/components/schemas/DecisionSummary"
             - type: "null"
+        previous_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        resume_origin:
+          anyOf:
+            - type: string
+              enum:
+                - initial
+                - correction
+                - reconsideration
+                - residence_change
+            - type: "null"
       required:
         - id
         - number
@@ -3827,6 +6780,8 @@ components:
         - submitted_at
         - submission
         - decision
+        - previous_version_id
+        - resume_origin
       examples:
         - id: 00000000-0000-4000-8000-000000000002
           number: 1
@@ -3849,6 +6804,8 @@ components:
             outcome: rejected
             reason_code: mismatch
             decided_at: 2026-10-15T22:00:00Z
+          previous_version_id: null
+          resume_origin: null
       allOf:
         - if:
             properties:
@@ -3856,18 +6813,49 @@ components:
                 const: initial
           then:
             properties:
+              previous_version_id:
+                type: "null"
+              resume_origin:
+                type: "null"
               source_decision_id:
                 type: "null"
               source_submission_id:
                 type: "null"
           else:
             properties:
+              previous_version_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              origin:
+                enum:
+                  - correction
+                  - reconsideration
+                  - residence_change
+          then:
+            properties:
+              resume_origin:
+                type: "null"
               source_decision_id:
                 type: string
                 format: uuid
               source_submission_id:
                 type: string
                 format: uuid
+        - if:
+            properties:
+              origin:
+                const: reopen
+          then:
+            properties:
+              resume_origin:
+                type: string
+                enum:
+                  - initial
+                  - correction
+                  - reconsideration
+                  - residence_change
         - if:
             properties:
               number:
@@ -3884,7 +6872,9 @@ components:
         - if:
             properties:
               lifecycle:
-                const: draft
+                enum:
+                  - draft
+                  - archived
           then:
             properties:
               submitted_at:
@@ -3897,7 +6887,9 @@ components:
         - if:
             properties:
               lifecycle:
-                const: draft
+                enum:
+                  - draft
+                  - archived
           then:
             properties:
               submission:
@@ -3908,6 +6900,35 @@ components:
             properties:
               submission:
                 $ref: "#/components/schemas/Submission"
+        - if:
+            properties:
+              origin:
+                const: reopen
+              resume_origin:
+                const: initial
+          then:
+            properties:
+              source_decision_id:
+                type: "null"
+              source_submission_id:
+                type: "null"
+        - if:
+            properties:
+              origin:
+                const: reopen
+              resume_origin:
+                enum:
+                  - correction
+                  - reconsideration
+                  - residence_change
+          then:
+            properties:
+              source_decision_id:
+                type: string
+                format: uuid
+              source_submission_id:
+                type: string
+                format: uuid
     History:
       type: object
       additionalProperties: false
@@ -3949,6 +6970,8 @@ components:
                 outcome: rejected
                 reason_code: mismatch
                 decided_at: 2026-10-15T22:00:00Z
+              previous_version_id: null
+              resume_origin: null
           next_cursor: null
     ReviewerCandidate:
       type: object
@@ -3960,8 +6983,12 @@ components:
         - profile_revision
         - operational_label
       properties:
-        reviewer_id: *a1
-        reviewer_grant_id: *a1
+        reviewer_id:
+          type: string
+          format: uuid
+        reviewer_grant_id:
+          type: string
+          format: uuid
         reviewer_grant_revision:
           type: integer
           minimum: 1
@@ -3971,7 +6998,7 @@ components:
         operational_label:
           type: string
           pattern: ^REV-[A-Z0-9]{6,12}$
-      examples: &a2
+      examples:
         - reviewer_id: 00000000-0000-4000-8000-000000000001
           reviewer_grant_id: 00000000-0000-4000-8000-000000000001
           reviewer_grant_revision: 1
@@ -3995,7 +7022,12 @@ components:
             - "null"
           maxLength: 2048
       examples:
-        - items: *a2
+        - items:
+            - reviewer_id: 00000000-0000-4000-8000-000000000001
+              reviewer_grant_id: 00000000-0000-4000-8000-000000000001
+              reviewer_grant_revision: 1
+              profile_revision: 1
+              operational_label: REV-DEMO01
           next_cursor: null
     RetentionItem:
       type: object
@@ -4010,14 +7042,23 @@ components:
         - policy_version
         - schedule_status
       properties:
-        case_id: *a1
+        case_id:
+          type: string
+          format: uuid
         resource_type:
           type: string
           enum:
             - document
             - version_private
             - decision_private
-        resource_id: *a1
+            - seller_version_private
+            - seller_decision_private
+            - restriction_private
+            - restriction_appeal_private
+            - restriction_decision_private
+        resource_id:
+          type: string
+          format: uuid
         state:
           type: string
           enum:
@@ -4027,15 +7068,19 @@ components:
             - delete_pending
             - deleted
             - error
-        planned_deletion_at: &a3
+        planned_deletion_at:
           type:
             - string
             - "null"
           format: date-time
-        completed_at: *a3
+        completed_at:
+          type:
+            - string
+            - "null"
+          format: date-time
         policy_version:
           type: string
-          const: D08-0.1
+          pattern: ^D08-[0-9]+\.[0-9]+$
         schedule_status:
           type: string
           enum:
@@ -4044,7 +7089,7 @@ components:
             - blocked
             - complete
             - delayed
-      examples: &a4
+      examples:
         - case_id: 00000000-0000-4000-8000-000000000001
           resource_type: document
           resource_id: 00000000-0000-4000-8000-000000000001
@@ -4135,7 +7180,15 @@ components:
             - "null"
           maxLength: 2048
       examples:
-        - items: *a4
+        - items:
+            - case_id: 00000000-0000-4000-8000-000000000001
+              resource_type: document
+              resource_id: 00000000-0000-4000-8000-000000000001
+              state: scheduled
+              planned_deletion_at: 2026-11-14T18:00:00Z
+              completed_at: null
+              policy_version: D08-0.1
+              schedule_status: planned
           next_cursor: null
     RetentionCommand:
       type: object
@@ -4150,9 +7203,14 @@ components:
         - basis_code
         - case_reference
         - review_at
+        - decision_kind
       properties:
-        command_id: *a1
-        case_id: *a1
+        command_id:
+          type: string
+          format: uuid
+        case_id:
+          type: string
+          format: uuid
         expected_revision:
           type: integer
           minimum: 1
@@ -4182,7 +7240,19 @@ components:
           minLength: 1
           maxLength: 120
           pattern: \S
-        review_at: *a3
+        review_at:
+          type:
+            - string
+            - "null"
+          format: date-time
+        decision_kind:
+          anyOf:
+            - type: string
+              enum:
+                - membership
+                - seller
+                - restriction
+            - type: "null"
       allOf:
         - if:
             properties:
@@ -4190,7 +7260,9 @@ components:
                 const: finalize
           then:
             properties:
-              decision_id: *a1
+              decision_id:
+                type: string
+                format: uuid
               hold_id:
                 type: "null"
               review_at:
@@ -4212,8 +7284,26 @@ components:
                 const: release
           then:
             properties:
-              hold_id: *a1
+              hold_id:
+                type: string
+                format: uuid
               review_at:
+                type: "null"
+        - if:
+            properties:
+              action:
+                const: finalize
+          then:
+            properties:
+              decision_kind:
+                type: string
+                enum:
+                  - membership
+                  - seller
+                  - restriction
+          else:
+            properties:
+              decision_kind:
                 type: "null"
       examples:
         - command_id: 00000000-0000-4000-8000-000000000001
@@ -4225,6 +7315,2805 @@ components:
           basis_code: documented_dispute
           case_reference: CASE-DEMO01
           review_at: 2026-10-22T18:00:00Z
+          decision_kind: null
+    ChangeResidenceRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        reason_code:
+          type: string
+          enum:
+            - relocation
+            - evidence_update
+      required:
+        - expected_revision
+        - reason_code
+      examples:
+        - expected_revision: 1
+          reason_code: evidence_update
+    ReopenRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        archived_version_id:
+          type: string
+          format: uuid
+        reconsideration_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+      required:
+        - expected_revision
+        - archived_version_id
+        - reconsideration_reason
+      examples:
+        - expected_revision: 1
+          archived_version_id: 00000000-0000-4000-8000-000000000100
+          reconsideration_reason: null
+    Eligibility:
+      type: object
+      additionalProperties: false
+      properties:
+        buy_allowed:
+          type: boolean
+        offer_allowed:
+          type: boolean
+        reason_codes:
+          type: array
+          items:
+            type: string
+            enum:
+              - membership_missing
+              - membership_pending
+              - membership_rejected
+              - membership_archived
+              - restriction_active
+              - seller_not_enabled
+              - seller_paused
+          minItems: 0
+          maxItems: 7
+          uniqueItems: true
+        eligibility_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        checked_at:
+          type: string
+          format: date-time
+      required:
+        - buy_allowed
+        - offer_allowed
+        - reason_codes
+        - eligibility_revision
+        - checked_at
+      examples:
+        - buy_allowed: false
+          offer_allowed: false
+          reason_codes:
+            - membership_pending
+          eligibility_revision: 1
+          checked_at: 2026-10-15T23:00:00Z
+      allOf:
+        - if:
+            properties:
+              offer_allowed:
+                const: true
+          then:
+            properties:
+              buy_allowed:
+                const: true
+    SellerInput:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        display_name:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+              pattern: \S
+            - type: "null"
+        description:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        modalities:
+          type: array
+          items:
+            type: string
+            enum:
+              - delivery
+              - pickup
+              - on_site
+              - remote
+          minItems: 0
+          maxItems: 4
+          uniqueItems: true
+        coverage:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          minItems: 0
+          maxItems: 7
+          uniqueItems: true
+        attention_mode:
+          anyOf:
+            - type: string
+              enum:
+                - private_location
+                - customer_location
+                - remote
+            - type: "null"
+        response_minutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: "null"
+        service_window:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 500
+              pattern: \S
+            - type: "null"
+        legal_name:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 200
+              pattern: \S
+            - type: "null"
+        contract_address:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        phone:
+          anyOf:
+            - type: string
+              pattern: ^\+[1-9][0-9]{7,14}$
+            - type: "null"
+        support_hours:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 500
+              pattern: \S
+            - type: "null"
+        attention_address:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        reconsideration_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+      required:
+        - expected_revision
+        - display_name
+        - description
+        - modalities
+        - coverage
+        - attention_mode
+        - response_minutes
+        - service_window
+        - legal_name
+        - contract_address
+        - phone
+        - support_hours
+        - attention_address
+        - reconsideration_reason
+      examples:
+        - expected_revision: 1
+          display_name: Oferente ficticio
+          description: Productos y servicios de ejemplo.
+          modalities:
+            - pickup
+          coverage:
+            - 1
+          attention_mode: private_location
+          response_minutes: 60
+          service_window: Con confirmación previa
+          legal_name: Persona ficticia
+          contract_address: Domicilio contractual ficticio
+          phone: "+529990000000"
+          support_hours: Lunes a viernes
+          attention_address: Punto privado ficticio
+          reconsideration_reason: null
+    SellerPublic:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        version_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: \S
+        description:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+        modalities:
+          type: array
+          items:
+            type: string
+            enum:
+              - delivery
+              - pickup
+              - on_site
+              - remote
+          minItems: 1
+          maxItems: 4
+          uniqueItems: true
+        coverage:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          minItems: 1
+          maxItems: 7
+          uniqueItems: true
+        attention_mode:
+          type: string
+          enum:
+            - private_location
+            - customer_location
+            - remote
+        response_minutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+        service_window:
+          type: string
+          minLength: 1
+          maxLength: 500
+          pattern: \S
+      required:
+        - id
+        - version_id
+        - display_name
+        - description
+        - modalities
+        - coverage
+        - attention_mode
+        - response_minutes
+        - service_window
+      examples:
+        - id: 00000000-0000-4000-8000-000000000102
+          version_id: 00000000-0000-4000-8000-000000000101
+          display_name: Perfil ficticio de revisión
+          description: Servicios de ejemplo entre vecinos.
+          modalities:
+            - pickup
+          coverage:
+            - 1
+          attention_mode: private_location
+          response_minutes: 60
+          service_window: Con cita previa
+    SellerContractSummary:
+      type: object
+      additionalProperties: false
+      properties:
+        seller_id:
+          type: string
+          format: uuid
+        seller_version_id:
+          type: string
+          format: uuid
+        legal_name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          pattern: \S
+        contract_address:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+        phone:
+          type: string
+          pattern: ^\+[1-9][0-9]{7,14}$
+        support_hours:
+          type: string
+          minLength: 1
+          maxLength: 500
+          pattern: \S
+        attention_address:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        purpose:
+          const: pre_contract_information
+        checked_at:
+          type: string
+          format: date-time
+      required:
+        - seller_id
+        - seller_version_id
+        - legal_name
+        - contract_address
+        - phone
+        - support_hours
+        - attention_address
+        - purpose
+        - checked_at
+      examples:
+        - seller_id: 00000000-0000-4000-8000-000000000102
+          seller_version_id: 00000000-0000-4000-8000-000000000101
+          legal_name: Persona ficticia
+          contract_address: Domicilio contractual de ejemplo
+          phone: "+529990000000"
+          support_hours: Lunes a viernes
+          attention_address: Punto privado de ejemplo
+          purpose: pre_contract_information
+          checked_at: 2026-10-15T23:00:00Z
+    SellerVersion:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        origin:
+          type: string
+          enum:
+            - initial
+            - correction
+            - reconsideration
+            - material_change
+        previous_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        source_decision_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        lifecycle:
+          type: string
+          enum:
+            - draft
+            - submitted
+        created_at:
+          type: string
+          format: date-time
+        submitted_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        private_data_available:
+          type: boolean
+        display_name:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+              pattern: \S
+            - type: "null"
+        description:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        modalities:
+          type: array
+          items:
+            type: string
+            enum:
+              - delivery
+              - pickup
+              - on_site
+              - remote
+          minItems: 0
+          maxItems: 4
+          uniqueItems: true
+        coverage:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          minItems: 0
+          maxItems: 7
+          uniqueItems: true
+        attention_mode:
+          anyOf:
+            - type: string
+              enum:
+                - private_location
+                - customer_location
+                - remote
+            - type: "null"
+        response_minutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: "null"
+        service_window:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 500
+              pattern: \S
+            - type: "null"
+        legal_name:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 200
+              pattern: \S
+            - type: "null"
+        contract_address:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        phone:
+          anyOf:
+            - type: string
+              pattern: ^\+[1-9][0-9]{7,14}$
+            - type: "null"
+        support_hours:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 500
+              pattern: \S
+            - type: "null"
+        attention_address:
+          anyOf:
+            - anyOf:
+                - type: string
+                  minLength: 1
+                  maxLength: 1000
+                  pattern: \S
+                - type: "null"
+            - type: "null"
+        reconsideration_reason:
+          anyOf:
+            - anyOf:
+                - type: string
+                  minLength: 1
+                  maxLength: 2000
+                  pattern: \S
+                - type: "null"
+            - type: "null"
+      required:
+        - id
+        - number
+        - origin
+        - previous_version_id
+        - source_decision_id
+        - lifecycle
+        - created_at
+        - submitted_at
+        - private_data_available
+        - display_name
+        - description
+        - modalities
+        - coverage
+        - attention_mode
+        - response_minutes
+        - service_window
+        - legal_name
+        - contract_address
+        - phone
+        - support_hours
+        - attention_address
+        - reconsideration_reason
+      allOf:
+        - if:
+            properties:
+              private_data_available:
+                const: false
+          then:
+            properties:
+              legal_name:
+                type: "null"
+              contract_address:
+                type: "null"
+              phone:
+                type: "null"
+              support_hours:
+                type: "null"
+              attention_address:
+                type: "null"
+              reconsideration_reason:
+                type: "null"
+        - if:
+            properties:
+              origin:
+                const: initial
+          then:
+            properties:
+              previous_version_id:
+                type: "null"
+              source_decision_id:
+                type: "null"
+              number:
+                const: 1
+          else:
+            properties:
+              previous_version_id:
+                type: string
+                format: uuid
+              source_decision_id:
+                type: string
+                format: uuid
+              number:
+                minimum: 2
+        - if:
+            properties:
+              origin:
+                not:
+                  const: reconsideration
+          then:
+            properties:
+              reconsideration_reason:
+                type: "null"
+        - if:
+            properties:
+              origin:
+                const: reconsideration
+              private_data_available:
+                const: true
+          then:
+            properties:
+              reconsideration_reason:
+                type: string
+                minLength: 1
+                maxLength: 2000
+                pattern: \S
+        - if:
+            properties:
+              lifecycle:
+                const: draft
+          then:
+            properties:
+              submitted_at:
+                type: "null"
+          else:
+            properties:
+              submitted_at:
+                type: string
+                format: date-time
+      examples:
+        - id: 00000000-0000-4000-8000-000000000101
+          number: 1
+          origin: initial
+          previous_version_id: null
+          source_decision_id: null
+          lifecycle: draft
+          created_at: 2026-10-15T23:00:00Z
+          submitted_at: null
+          private_data_available: true
+          display_name: Perfil ficticio de revisión
+          description: Servicios de ejemplo entre vecinos.
+          modalities:
+            - pickup
+          coverage:
+            - 1
+          attention_mode: private_location
+          response_minutes: 60
+          service_window: Con cita previa
+          legal_name: Persona ficticia
+          contract_address: Domicilio contractual de ejemplo
+          phone: "+529990000000"
+          support_hours: Lunes a viernes
+          attention_address: Punto privado de ejemplo
+          reconsideration_reason: null
+    SellerPrepareRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        origin:
+          type: string
+          enum:
+            - correction
+            - reconsideration
+            - material_change
+        source_decision_id:
+          type: string
+          format: uuid
+        previous_version_id:
+          type: string
+          format: uuid
+        reconsideration_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+      required:
+        - expected_revision
+        - origin
+        - source_decision_id
+        - previous_version_id
+        - reconsideration_reason
+      allOf:
+        - if:
+            properties:
+              origin:
+                const: reconsideration
+          then:
+            properties:
+              reconsideration_reason:
+                type: string
+                minLength: 1
+                maxLength: 2000
+                pattern: \S
+          else:
+            properties:
+              reconsideration_reason:
+                type: "null"
+      examples:
+        - expected_revision: 1
+          origin: reconsideration
+          source_decision_id: 00000000-0000-4000-8000-000000000100
+          previous_version_id: 00000000-0000-4000-8000-000000000100
+          reconsideration_reason: Solicito nueva revisión con campos corregidos.
+    SellerSubmitRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        version_id:
+          type: string
+          format: uuid
+        terms_policy_id:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        terms_accepted:
+          const: true
+        terms_content_sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+      required:
+        - expected_revision
+        - version_id
+        - terms_policy_id
+        - terms_accepted
+        - terms_content_sha256
+      examples:
+        - expected_revision: 1
+          version_id: 00000000-0000-4000-8000-000000000100
+          terms_policy_id: M2-TERMS-0.1
+          terms_accepted: true
+          terms_content_sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+    SellerActionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        version_id:
+          type: string
+          format: uuid
+      required:
+        - expected_revision
+        - version_id
+      examples:
+        - expected_revision: 1
+          version_id: 00000000-0000-4000-8000-000000000101
+    SellerCorrectionField:
+      type: string
+      enum:
+        - display_name
+        - description
+        - modalities
+        - coverage
+        - attention_mode
+        - response_minutes
+        - service_window
+        - legal_name
+        - contract_address
+        - phone
+        - support_hours
+        - attention_address
+        - reconsideration_reason
+        - terms_acceptance
+    SellerReasonCode:
+      type: string
+      enum:
+        - approved_seller
+        - incomplete_contract
+        - invalid_coverage
+        - invalid_modality
+        - membership_not_eligible
+        - terms_not_active
+        - inconsistent_data
+        - other_noncompliant
+    SellerDecisionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        version_id:
+          type: string
+          format: uuid
+        expected_submission_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        assignment_id:
+          type: string
+          format: uuid
+        expected_assignment_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        outcome:
+          type: string
+          enum:
+            - enabled
+            - correction
+            - rejected
+        reason_code:
+          $ref: "#/components/schemas/SellerReasonCode"
+        visible_reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        correction_fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/SellerCorrectionField"
+          minItems: 0
+          maxItems: 14
+          uniqueItems: true
+        internal_note:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+            - type: "null"
+      required:
+        - expected_revision
+        - version_id
+        - expected_submission_revision
+        - assignment_id
+        - expected_assignment_revision
+        - outcome
+        - reason_code
+        - visible_reason
+        - correction_fields
+        - internal_note
+      allOf:
+        - if:
+            properties:
+              outcome:
+                const: enabled
+          then:
+            properties:
+              reason_code:
+                const: approved_seller
+              correction_fields:
+                maxItems: 0
+          else:
+            properties:
+              reason_code:
+                not:
+                  const: approved_seller
+        - if:
+            properties:
+              outcome:
+                const: correction
+          then:
+            properties:
+              correction_fields:
+                minItems: 1
+          else:
+            properties:
+              correction_fields:
+                maxItems: 0
+      examples:
+        - expected_revision: 6
+          version_id: 00000000-0000-4000-8000-000000000002
+          expected_submission_revision: 2
+          assignment_id: 00000000-0000-4000-8000-000000000004
+          expected_assignment_revision: 1
+          outcome: correction
+          reason_code: incomplete_contract
+          visible_reason: Carga una copia legible del comprobante.
+          correction_fields:
+            - support_hours
+          internal_note: null
+    SellerVisibleDecision:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        submission_id:
+          type: string
+          format: uuid
+        outcome:
+          type: string
+          enum:
+            - enabled
+            - correction
+            - rejected
+        reason_code:
+          $ref: "#/components/schemas/SellerReasonCode"
+        private_data_available:
+          type: boolean
+        visible_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        correction_fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/SellerCorrectionField"
+          minItems: 0
+          maxItems: 14
+          uniqueItems: true
+        decided_at:
+          type: string
+          format: date-time
+        finality_state:
+          type: string
+          enum:
+            - provisional
+            - final
+            - challenged
+        finalized_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - id
+        - submission_id
+        - outcome
+        - reason_code
+        - private_data_available
+        - visible_reason
+        - correction_fields
+        - decided_at
+        - finality_state
+        - finalized_at
+      allOf:
+        - if:
+            properties:
+              private_data_available:
+                const: false
+          then:
+            properties:
+              visible_reason:
+                type: "null"
+              correction_fields:
+                maxItems: 0
+        - if:
+            properties:
+              finality_state:
+                const: final
+          then:
+            properties:
+              finalized_at:
+                type: string
+                format: date-time
+        - if:
+            properties:
+              finality_state:
+                const: provisional
+          then:
+            properties:
+              finalized_at:
+                type: "null"
+        - if:
+            properties:
+              outcome:
+                const: enabled
+          then:
+            properties:
+              reason_code:
+                const: approved_seller
+              correction_fields:
+                maxItems: 0
+          else:
+            properties:
+              reason_code:
+                not:
+                  const: approved_seller
+        - if:
+            properties:
+              outcome:
+                const: correction
+              private_data_available:
+                const: true
+          then:
+            properties:
+              correction_fields:
+                minItems: 1
+      examples:
+        - id: 00000000-0000-4000-8000-000000000103
+          submission_id: 00000000-0000-4000-8000-000000000104
+          outcome: correction
+          reason_code: incomplete_contract
+          private_data_available: true
+          visible_reason: Completa el horario de atención.
+          correction_fields:
+            - support_hours
+          decided_at: 2026-10-15T23:00:00Z
+          finality_state: provisional
+          finalized_at: null
+    SellerProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        application_id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+            - draft
+            - pending
+            - correction
+            - enabled
+            - rejected
+        effective_state:
+          type: string
+          enum:
+            - draft
+            - pending
+            - correction
+            - enabled
+            - rejected
+            - paused
+            - suspended
+            - ineligible
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        is_paused:
+          type: boolean
+        current_version:
+          $ref: "#/components/schemas/SellerVersion"
+        approved_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        latest_submission:
+          anyOf:
+            - $ref: "#/components/schemas/Submission"
+            - type: "null"
+        latest_decision:
+          anyOf:
+            - $ref: "#/components/schemas/SellerVisibleDecision"
+            - type: "null"
+        acciones_permitidas:
+          type: array
+          items:
+            type: string
+            enum:
+              - save
+              - prepare
+              - submit
+              - pause
+              - resume
+          minItems: 0
+          maxItems: 5
+          uniqueItems: true
+      required:
+        - id
+        - application_id
+        - state
+        - effective_state
+        - revision
+        - is_paused
+        - current_version
+        - approved_version_id
+        - latest_submission
+        - latest_decision
+        - acciones_permitidas
+      examples:
+        - id: 00000000-0000-4000-8000-000000000102
+          application_id: 00000000-0000-4000-8000-000000000100
+          state: draft
+          effective_state: draft
+          revision: 1
+          is_paused: false
+          current_version:
+            id: 00000000-0000-4000-8000-000000000101
+            number: 1
+            origin: initial
+            previous_version_id: null
+            source_decision_id: null
+            lifecycle: draft
+            created_at: 2026-10-15T23:00:00Z
+            submitted_at: null
+            private_data_available: true
+            display_name: Perfil ficticio de revisión
+            description: Servicios de ejemplo entre vecinos.
+            modalities:
+              - pickup
+            coverage:
+              - 1
+            attention_mode: private_location
+            response_minutes: 60
+            service_window: Con cita previa
+            legal_name: Persona ficticia
+            contract_address: Domicilio contractual de ejemplo
+            phone: "+529990000000"
+            support_hours: Lunes a viernes
+            attention_address: Punto privado de ejemplo
+            reconsideration_reason: null
+          approved_version_id: null
+          latest_submission: null
+          latest_decision: null
+          acciones_permitidas:
+            - save
+            - submit
+    OwnSeller:
+      type: object
+      additionalProperties: false
+      properties:
+        profile:
+          anyOf:
+            - $ref: "#/components/schemas/SellerProfile"
+            - type: "null"
+      required:
+        - profile
+      examples:
+        - profile:
+            id: 00000000-0000-4000-8000-000000000102
+            application_id: 00000000-0000-4000-8000-000000000100
+            state: draft
+            effective_state: draft
+            revision: 1
+            is_paused: false
+            current_version:
+              id: 00000000-0000-4000-8000-000000000101
+              number: 1
+              origin: initial
+              previous_version_id: null
+              source_decision_id: null
+              lifecycle: draft
+              created_at: 2026-10-15T23:00:00Z
+              submitted_at: null
+              private_data_available: true
+              display_name: Perfil ficticio de revisión
+              description: Servicios de ejemplo entre vecinos.
+              modalities:
+                - pickup
+              coverage:
+                - 1
+              attention_mode: private_location
+              response_minutes: 60
+              service_window: Con cita previa
+              legal_name: Persona ficticia
+              contract_address: Domicilio contractual de ejemplo
+              phone: "+529990000000"
+              support_hours: Lunes a viernes
+              attention_address: Punto privado de ejemplo
+              reconsideration_reason: null
+            approved_version_id: null
+            latest_submission: null
+            latest_decision: null
+            acciones_permitidas:
+              - save
+              - submit
+    SellerHistoryItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        origin:
+          type: string
+          enum:
+            - initial
+            - correction
+            - reconsideration
+            - material_change
+        lifecycle:
+          type: string
+          enum:
+            - draft
+            - submitted
+        created_at:
+          type: string
+          format: date-time
+        submitted_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        submission:
+          anyOf:
+            - $ref: "#/components/schemas/Submission"
+            - type: "null"
+        decision:
+          anyOf:
+            - type: object
+              additionalProperties: false
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                outcome:
+                  type: string
+                  enum:
+                    - enabled
+                    - correction
+                    - rejected
+                reason_code:
+                  $ref: "#/components/schemas/SellerReasonCode"
+                decided_at:
+                  type: string
+                  format: date-time
+              required:
+                - id
+                - outcome
+                - reason_code
+                - decided_at
+            - type: "null"
+      required:
+        - id
+        - number
+        - origin
+        - lifecycle
+        - created_at
+        - submitted_at
+        - submission
+        - decision
+    SellerHistory:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            $ref: "#/components/schemas/SellerHistoryItem"
+        next_cursor:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2048
+              pattern: \S
+            - type: "null"
+      required:
+        - items
+        - next_cursor
+      examples:
+        - items:
+            - id: 00000000-0000-4000-8000-000000000101
+              number: 1
+              origin: initial
+              lifecycle: draft
+              created_at: 2026-10-15T23:00:00Z
+              submitted_at: null
+              submission: null
+              decision: null
+          next_cursor: null
+    TermsPolicy:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        state:
+          type: string
+          enum:
+            - draft
+            - active
+            - retired
+        content:
+          type: string
+          minLength: 1
+          maxLength: 12000
+          pattern: \S
+        content_sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        effective_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - id
+        - state
+        - content
+        - content_sha256
+        - effective_at
+      allOf:
+        - if:
+            properties:
+              state:
+                const: active
+          then:
+            properties:
+              effective_at:
+                type: string
+                format: date-time
+      examples:
+        - id: M2-TERMS-0.1
+          state: draft
+          content: Propuesta documental de condiciones; no activa.
+          content_sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+          effective_at: null
+    Restriction:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        application_id:
+          type: string
+          format: uuid
+        profile_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        target_kind:
+          type: string
+          enum:
+            - membership
+            - seller
+        scope:
+          type: string
+          enum:
+            - buy
+            - offer
+            - both
+        state:
+          type: string
+          enum:
+            - active
+            - lifted
+        reason_code:
+          type: string
+          enum:
+            - residence_contradiction
+            - community_terms
+            - seller_terms
+            - safety_review
+            - documented_other
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        created_at:
+          type: string
+          format: date-time
+        lifted_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        private_data_available:
+          type: boolean
+        visible_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+      required:
+        - id
+        - application_id
+        - profile_id
+        - target_kind
+        - scope
+        - state
+        - reason_code
+        - revision
+        - created_at
+        - lifted_at
+        - private_data_available
+        - visible_reason
+      allOf:
+        - if:
+            properties:
+              target_kind:
+                const: seller
+          then:
+            properties:
+              profile_id:
+                type: string
+                format: uuid
+              scope:
+                const: offer
+          else:
+            properties:
+              profile_id:
+                type: "null"
+        - if:
+            properties:
+              state:
+                const: active
+          then:
+            properties:
+              lifted_at:
+                type: "null"
+          else:
+            properties:
+              lifted_at:
+                type: string
+                format: date-time
+        - if:
+            properties:
+              private_data_available:
+                const: false
+          then:
+            properties:
+              visible_reason:
+                type: "null"
+      examples:
+        - id: 00000000-0000-4000-8000-000000000110
+          application_id: 00000000-0000-4000-8000-000000000100
+          profile_id: null
+          target_kind: membership
+          scope: both
+          state: active
+          reason_code: residence_contradiction
+          revision: 1
+          created_at: 2026-10-15T23:00:00Z
+          lifted_at: null
+          private_data_available: true
+          visible_reason: Se requiere revisión del vínculo vecinal.
+    Restrictions:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            $ref: "#/components/schemas/Restriction"
+        next_cursor:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2048
+              pattern: \S
+            - type: "null"
+      required:
+        - items
+        - next_cursor
+      examples:
+        - items:
+            - id: 00000000-0000-4000-8000-000000000110
+              application_id: 00000000-0000-4000-8000-000000000100
+              profile_id: null
+              target_kind: membership
+              scope: both
+              state: active
+              reason_code: residence_contradiction
+              revision: 1
+              created_at: 2026-10-15T23:00:00Z
+              lifted_at: null
+              private_data_available: true
+              visible_reason: Se requiere revisión del vínculo vecinal.
+          next_cursor: null
+    RestrictionCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        application_id:
+          type: string
+          format: uuid
+        profile_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        target_kind:
+          type: string
+          enum:
+            - membership
+            - seller
+        scope:
+          type: string
+          enum:
+            - buy
+            - offer
+            - both
+        reason_code:
+          type: string
+          enum:
+            - residence_contradiction
+            - community_terms
+            - seller_terms
+            - safety_review
+            - documented_other
+        visible_reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+        internal_note:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+        expected_eligibility_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        expected_profile_revision:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 2147483647
+            - type: "null"
+      required:
+        - expected_revision
+        - application_id
+        - profile_id
+        - target_kind
+        - scope
+        - reason_code
+        - visible_reason
+        - internal_note
+        - expected_eligibility_revision
+        - expected_profile_revision
+      allOf:
+        - if:
+            properties:
+              target_kind:
+                const: seller
+          then:
+            properties:
+              profile_id:
+                type: string
+                format: uuid
+              scope:
+                const: offer
+          else:
+            properties:
+              profile_id:
+                type: "null"
+        - if:
+            properties:
+              target_kind:
+                const: seller
+          then:
+            properties:
+              expected_profile_revision:
+                type: integer
+                minimum: 1
+                maximum: 2147483647
+          else:
+            properties:
+              expected_profile_revision:
+                type: "null"
+      examples:
+        - expected_revision: 1
+          application_id: 00000000-0000-4000-8000-000000000100
+          profile_id: null
+          target_kind: membership
+          scope: both
+          reason_code: residence_contradiction
+          visible_reason: Se requiere revisión del vínculo vecinal.
+          internal_note: null
+          expected_eligibility_revision: 1
+          expected_profile_revision: null
+    AppealInput:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          pattern: \S
+        evidence_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        document_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 0
+          maxItems: 2
+          uniqueItems: true
+      required:
+        - expected_revision
+        - reason
+        - evidence_version_id
+        - document_ids
+      examples:
+        - expected_revision: 1
+          reason: Solicito revisión de la causa indicada.
+          evidence_version_id: null
+          document_ids: []
+      allOf:
+        - if:
+            properties:
+              evidence_version_id:
+                type: "null"
+          then:
+            properties:
+              document_ids:
+                maxItems: 0
+    AppealSubmitRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+      required:
+        - expected_revision
+      examples:
+        - expected_revision: 1
+    Appeal:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        restriction_id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+            - draft
+            - pending
+            - decided
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        private_data_available:
+          type: boolean
+        reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+        evidence_version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        documents:
+          type: array
+          maxItems: 2
+          items:
+            $ref: "#/components/schemas/Document"
+        created_at:
+          type: string
+          format: date-time
+        submitted_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        decided_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        latest_decision_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+      required:
+        - id
+        - restriction_id
+        - state
+        - revision
+        - private_data_available
+        - reason
+        - evidence_version_id
+        - documents
+        - created_at
+        - submitted_at
+        - decided_at
+        - latest_decision_id
+      allOf:
+        - if:
+            properties:
+              private_data_available:
+                const: false
+          then:
+            properties:
+              reason:
+                type: "null"
+        - if:
+            properties:
+              state:
+                const: draft
+          then:
+            properties:
+              submitted_at:
+                type: "null"
+              decided_at:
+                type: "null"
+        - if:
+            properties:
+              state:
+                const: pending
+          then:
+            properties:
+              submitted_at:
+                type: string
+                format: date-time
+              decided_at:
+                type: "null"
+        - if:
+            properties:
+              state:
+                const: decided
+          then:
+            properties:
+              submitted_at:
+                type: string
+                format: date-time
+              decided_at:
+                type: string
+                format: date-time
+        - if:
+            properties:
+              state:
+                const: decided
+          then:
+            properties:
+              latest_decision_id:
+                type: string
+                format: uuid
+          else:
+            properties:
+              latest_decision_id:
+                type: "null"
+      examples:
+        - id: 00000000-0000-4000-8000-000000000111
+          restriction_id: 00000000-0000-4000-8000-000000000110
+          state: draft
+          revision: 1
+          private_data_available: true
+          reason: Solicito revisión de esta causa.
+          evidence_version_id: null
+          documents: []
+          created_at: 2026-10-15T23:00:00Z
+          submitted_at: null
+          decided_at: null
+          latest_decision_id: null
+    RestrictionDecisionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        appeal_id:
+          type: string
+          format: uuid
+        assignment_id:
+          type: string
+          format: uuid
+        expected_assignment_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        outcome:
+          type: string
+          enum:
+            - lift
+            - maintain
+        reason_code:
+          type: string
+          enum:
+            - restriction_resolved
+            - restriction_still_applicable
+            - evidence_insufficient
+        visible_reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+        internal_note:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+              pattern: \S
+            - type: "null"
+      required:
+        - expected_revision
+        - appeal_id
+        - assignment_id
+        - expected_assignment_revision
+        - outcome
+        - reason_code
+        - visible_reason
+        - internal_note
+      examples:
+        - expected_revision: 1
+          appeal_id: 00000000-0000-4000-8000-000000000100
+          assignment_id: 00000000-0000-4000-8000-000000000100
+          expected_assignment_revision: 1
+          outcome: maintain
+          reason_code: evidence_insufficient
+          visible_reason: Falta evidencia suficiente para levantar esta causa.
+          internal_note: null
+    RestrictionVisibleDecision:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        appeal_id:
+          type: string
+          format: uuid
+        outcome:
+          type: string
+          enum:
+            - lift
+            - maintain
+        reason_code:
+          type: string
+          enum:
+            - restriction_resolved
+            - restriction_still_applicable
+            - evidence_insufficient
+        private_data_available:
+          type: boolean
+        visible_reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 1000
+              pattern: \S
+            - type: "null"
+        decided_at:
+          type: string
+          format: date-time
+        finality_state:
+          type: string
+          enum:
+            - provisional
+            - final
+            - challenged
+        finalized_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - id
+        - appeal_id
+        - outcome
+        - reason_code
+        - private_data_available
+        - visible_reason
+        - decided_at
+        - finality_state
+        - finalized_at
+      allOf:
+        - if:
+            properties:
+              private_data_available:
+                const: false
+          then:
+            properties:
+              visible_reason:
+                type: "null"
+        - if:
+            properties:
+              finality_state:
+                const: final
+          then:
+            properties:
+              finalized_at:
+                type: string
+                format: date-time
+        - if:
+            properties:
+              finality_state:
+                const: provisional
+          then:
+            properties:
+              finalized_at:
+                type: "null"
+      examples:
+        - id: 00000000-0000-4000-8000-000000000116
+          appeal_id: 00000000-0000-4000-8000-000000000111
+          outcome: maintain
+          reason_code: evidence_insufficient
+          private_data_available: true
+          visible_reason: La causa sigue pendiente de aclarar.
+          decided_at: 2026-10-15T23:00:00Z
+          finality_state: provisional
+          finalized_at: null
+    RestrictionAssignmentRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        expected_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        appeal_id:
+          type: string
+          format: uuid
+        previous_assignment_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        expected_assignment_revision:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 2147483647
+            - type: "null"
+        reviewer_id:
+          type: string
+          format: uuid
+      required:
+        - expected_revision
+        - appeal_id
+        - previous_assignment_id
+        - expected_assignment_revision
+        - reviewer_id
+      allOf:
+        - if:
+            properties:
+              previous_assignment_id:
+                type: "null"
+          then:
+            properties:
+              expected_assignment_revision:
+                type: "null"
+          else:
+            properties:
+              expected_assignment_revision:
+                type: integer
+                minimum: 1
+                maximum: 2147483647
+      examples:
+        - expected_revision: 1
+          appeal_id: 00000000-0000-4000-8000-000000000111
+          previous_assignment_id: null
+          expected_assignment_revision: null
+          reviewer_id: 00000000-0000-4000-8000-000000000114
+    RestrictionAccessRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        appeal_id:
+          type: string
+          format: uuid
+        version_id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        assignment_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+      required:
+        - appeal_id
+        - version_id
+        - document_id
+        - assignment_id
+      examples:
+        - appeal_id: 00000000-0000-4000-8000-000000000111
+          version_id: 00000000-0000-4000-8000-000000000112
+          document_id: 00000000-0000-4000-8000-000000000113
+          assignment_id: null
+    RestrictionReview:
+      type: object
+      additionalProperties: false
+      properties:
+        restriction:
+          $ref: "#/components/schemas/Restriction"
+        appeal:
+          $ref: "#/components/schemas/Appeal"
+        assignment:
+          $ref: "#/components/schemas/RestrictionAssignment"
+        seller_summary:
+          anyOf:
+            - $ref: "#/components/schemas/SellerPublic"
+            - type: "null"
+      required:
+        - restriction
+        - appeal
+        - assignment
+        - seller_summary
+      examples:
+        - restriction:
+            id: 00000000-0000-4000-8000-000000000110
+            application_id: 00000000-0000-4000-8000-000000000100
+            profile_id: null
+            target_kind: membership
+            scope: both
+            state: active
+            reason_code: residence_contradiction
+            revision: 1
+            created_at: 2026-10-15T23:00:00Z
+            lifted_at: null
+            private_data_available: true
+            visible_reason: Se requiere revisión del vínculo vecinal.
+          appeal:
+            id: 00000000-0000-4000-8000-000000000111
+            restriction_id: 00000000-0000-4000-8000-000000000110
+            state: pending
+            revision: 1
+            private_data_available: true
+            reason: Solicito revisión de esta causa.
+            evidence_version_id: null
+            documents: []
+            created_at: 2026-10-15T23:00:00Z
+            submitted_at: 2026-10-15T23:00:00Z
+            decided_at: null
+            latest_decision_id: null
+          assignment:
+            id: 00000000-0000-4000-8000-000000000115
+            appeal_id: 00000000-0000-4000-8000-000000000111
+            reviewer_id: 00000000-0000-4000-8000-000000000114
+            revision: 1
+            assigned_at: 2026-10-15T23:00:00Z
+          seller_summary: null
+    SellerReview:
+      type: object
+      additionalProperties: false
+      properties:
+        profile_id:
+          type: string
+          format: uuid
+        profile_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        submission:
+          $ref: "#/components/schemas/Submission"
+        assignment:
+          $ref: "#/components/schemas/Assignment"
+        version:
+          $ref: "#/components/schemas/SellerVersion"
+        source_decision:
+          anyOf:
+            - $ref: "#/components/schemas/SellerVisibleDecision"
+            - type: "null"
+      required:
+        - profile_id
+        - profile_revision
+        - submission
+        - assignment
+        - version
+        - source_decision
+      examples:
+        - profile_id: 00000000-0000-4000-8000-000000000102
+          profile_revision: 1
+          submission:
+            id: 00000000-0000-4000-8000-000000000003
+            version_id: 00000000-0000-4000-8000-000000000002
+            submitted_at: 2026-10-15T22:00:00Z
+            status: pending
+            revision: 1
+            decided_at: null
+          assignment:
+            id: 00000000-0000-4000-8000-000000000004
+            submission_id: 00000000-0000-4000-8000-000000000003
+            reviewer_id: 00000000-0000-4000-8000-000000000005
+            assigned_at: 2026-10-15T22:00:00Z
+            revision: 1
+            ended_at: null
+          version:
+            id: 00000000-0000-4000-8000-000000000101
+            number: 1
+            origin: initial
+            previous_version_id: null
+            source_decision_id: null
+            lifecycle: submitted
+            created_at: 2026-10-15T23:00:00Z
+            submitted_at: 2026-10-15T23:00:00Z
+            private_data_available: true
+            display_name: Perfil ficticio de revisión
+            description: Servicios de ejemplo entre vecinos.
+            modalities:
+              - pickup
+            coverage:
+              - 1
+            attention_mode: private_location
+            response_minutes: 60
+            service_window: Con cita previa
+            legal_name: Persona ficticia
+            contract_address: Domicilio contractual de ejemplo
+            phone: "+529990000000"
+            support_hours: Lunes a viernes
+            attention_address: Punto privado de ejemplo
+            reconsideration_reason: null
+          source_decision: null
+    CommunityReceipt:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        operation:
+          type: string
+          enum:
+            - create_seller
+            - save_seller
+            - prepare_seller
+            - submit_seller
+            - pause_seller
+            - resume_seller
+            - assign_seller
+            - decide_seller
+            - create_restriction
+            - create_appeal
+            - save_appeal
+            - submit_appeal
+            - assign_restriction
+            - decide_restriction
+        application_id:
+          type: string
+          format: uuid
+        profile_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        restriction_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        appeal_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        version_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        submission_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        assignment_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        decision_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        restriction_assignment_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        restriction_decision_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+        result_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - operation
+        - application_id
+        - profile_id
+        - restriction_id
+        - appeal_id
+        - version_id
+        - submission_id
+        - assignment_id
+        - decision_id
+        - restriction_assignment_id
+        - restriction_decision_id
+        - result_revision
+        - created_at
+        - expires_at
+      examples:
+        - id: 00000000-0000-4000-8000-000000000120
+          operation: create_seller
+          application_id: 00000000-0000-4000-8000-000000000100
+          profile_id: 00000000-0000-4000-8000-000000000102
+          restriction_id: null
+          appeal_id: null
+          version_id: 00000000-0000-4000-8000-000000000101
+          submission_id: null
+          assignment_id: null
+          decision_id: null
+          restriction_assignment_id: null
+          restriction_decision_id: null
+          result_revision: 1
+          created_at: 2026-10-15T23:00:00Z
+          expires_at: 2026-10-18T23:00:00Z
+      allOf:
+        - if:
+            properties:
+              operation:
+                enum:
+                  - create_seller
+                  - save_seller
+                  - prepare_seller
+                  - submit_seller
+                  - pause_seller
+                  - resume_seller
+                  - assign_seller
+                  - decide_seller
+          then:
+            properties:
+              profile_id:
+                type: string
+                format: uuid
+              restriction_id:
+                type: "null"
+              appeal_id:
+                type: "null"
+              restriction_assignment_id:
+                type: "null"
+              restriction_decision_id:
+                type: "null"
+        - if:
+            properties:
+              operation:
+                enum:
+                  - create_seller
+                  - save_seller
+                  - prepare_seller
+                  - submit_seller
+                  - pause_seller
+                  - resume_seller
+          then:
+            properties:
+              version_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - submit_seller
+                  - assign_seller
+                  - decide_seller
+          then:
+            properties:
+              submission_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - assign_seller
+                  - decide_seller
+          then:
+            properties:
+              assignment_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - decide_seller
+          then:
+            properties:
+              decision_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - create_restriction
+                  - create_appeal
+                  - save_appeal
+                  - submit_appeal
+                  - assign_restriction
+                  - decide_restriction
+          then:
+            properties:
+              restriction_id:
+                type: string
+                format: uuid
+              version_id:
+                type: "null"
+              submission_id:
+                type: "null"
+              assignment_id:
+                type: "null"
+              decision_id:
+                type: "null"
+        - if:
+            properties:
+              operation:
+                enum:
+                  - create_appeal
+                  - save_appeal
+                  - submit_appeal
+                  - assign_restriction
+                  - decide_restriction
+          then:
+            properties:
+              appeal_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - assign_restriction
+                  - decide_restriction
+          then:
+            properties:
+              restriction_assignment_id:
+                type: string
+                format: uuid
+        - if:
+            properties:
+              operation:
+                enum:
+                  - decide_restriction
+          then:
+            properties:
+              restriction_decision_id:
+                type: string
+                format: uuid
+    CommunityCommandResult:
+      type: object
+      additionalProperties: false
+      properties:
+        receipt:
+          $ref: "#/components/schemas/CommunityReceipt"
+      required:
+        - receipt
+      examples:
+        - receipt:
+            id: 00000000-0000-4000-8000-000000000120
+            operation: create_seller
+            application_id: 00000000-0000-4000-8000-000000000100
+            profile_id: 00000000-0000-4000-8000-000000000102
+            restriction_id: null
+            appeal_id: null
+            version_id: 00000000-0000-4000-8000-000000000101
+            submission_id: null
+            assignment_id: null
+            decision_id: null
+            restriction_assignment_id: null
+            restriction_decision_id: null
+            result_revision: 1
+            created_at: 2026-10-15T23:00:00Z
+            expires_at: 2026-10-18T23:00:00Z
+    ConservationResult:
+      type: object
+      additionalProperties: false
+      properties:
+        command_id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        case_id:
+          type: string
+          format: uuid
+        result_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        state:
+          type: string
+          enum:
+            - uncalculated
+            - scheduled
+            - held
+            - delete_pending
+            - deleted
+            - error
+      required:
+        - command_id
+        - event_id
+        - case_id
+        - result_revision
+        - state
+      examples:
+        - command_id: 00000000-0000-4000-8000-000000000130
+          event_id: 00000000-0000-4000-8000-000000000131
+          case_id: 00000000-0000-4000-8000-000000000132
+          result_revision: 1
+          state: held
+    ConservationCase:
+      type: object
+      additionalProperties: false
+      properties:
+        case_id:
+          type: string
+          format: uuid
+        application_id:
+          type: string
+          format: uuid
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        resource_type:
+          type: string
+          enum:
+            - document
+            - version_private
+            - decision_private
+            - seller_version_private
+            - seller_decision_private
+            - restriction_private
+            - restriction_appeal_private
+            - restriction_decision_private
+        state:
+          type: string
+          enum:
+            - uncalculated
+            - scheduled
+            - held
+            - delete_pending
+            - deleted
+            - error
+        basis_code:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        case_reference:
+          type: string
+          minLength: 1
+          maxLength: 120
+          pattern: \S
+        review_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        due_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - case_id
+        - application_id
+        - revision
+        - resource_type
+        - state
+        - basis_code
+        - case_reference
+        - review_at
+        - due_at
+      examples:
+        - case_id: 00000000-0000-4000-8000-000000000132
+          application_id: 00000000-0000-4000-8000-000000000100
+          revision: 1
+          resource_type: document
+          state: held
+          basis_code: documented_dispute
+          case_reference: CASO-FICTICIO-001
+          review_at: 2026-10-22T23:00:00Z
+          due_at: null
+    RestrictionQueueItem:
+      type: object
+      additionalProperties: false
+      properties:
+        appeal_id:
+          type: string
+          format: uuid
+        restriction_id:
+          type: string
+          format: uuid
+        target_kind:
+          type: string
+          enum:
+            - membership
+            - seller
+        scope:
+          type: string
+          enum:
+            - buy
+            - offer
+            - both
+        appeal_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        restriction_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        submitted_at:
+          type: string
+          format: date-time
+        assignment_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+      required:
+        - appeal_id
+        - restriction_id
+        - target_kind
+        - scope
+        - appeal_revision
+        - restriction_revision
+        - submitted_at
+        - assignment_id
+    RestrictionQueue:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            $ref: "#/components/schemas/RestrictionQueueItem"
+        next_cursor:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2048
+              pattern: \S
+            - type: "null"
+      required:
+        - items
+        - next_cursor
+      examples:
+        - items:
+            - appeal_id: 00000000-0000-4000-8000-000000000111
+              restriction_id: 00000000-0000-4000-8000-000000000110
+              target_kind: membership
+              scope: both
+              appeal_revision: 1
+              restriction_revision: 1
+              submitted_at: 2026-10-15T23:00:00Z
+              assignment_id: null
+          next_cursor: null
+    RestrictionAssignment:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        appeal_id:
+          type: string
+          format: uuid
+        reviewer_id:
+          type: string
+          format: uuid
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        assigned_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - appeal_id
+        - reviewer_id
+        - revision
+        - assigned_at
+      examples:
+        - id: 00000000-0000-4000-8000-000000000115
+          appeal_id: 00000000-0000-4000-8000-000000000111
+          reviewer_id: 00000000-0000-4000-8000-000000000114
+          revision: 1
+          assigned_at: 2026-10-15T23:00:00Z
+      description: Proyección para gestor/revisor del caso, nunca titular; reviewer_id no aparece en
+        Appeal/RestrictionVisibleDecision.
+    ConservationQueueItem:
+      type: object
+      additionalProperties: false
+      properties:
+        case_id:
+          type: string
+          format: uuid
+        application_id:
+          type: string
+          format: uuid
+        resource_type:
+          type: string
+          enum:
+            - document
+            - version_private
+            - decision_private
+            - seller_version_private
+            - seller_decision_private
+            - restriction_private
+            - restriction_appeal_private
+            - restriction_decision_private
+        state:
+          type: string
+          enum:
+            - uncalculated
+            - scheduled
+            - held
+            - delete_pending
+            - deleted
+            - error
+        revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        due_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - case_id
+        - application_id
+        - resource_type
+        - state
+        - revision
+        - due_at
+    ConservationQueue:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          maxItems: 50
+          items:
+            $ref: "#/components/schemas/ConservationQueueItem"
+        next_cursor:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2048
+              pattern: \S
+            - type: "null"
+      required:
+        - items
+        - next_cursor
+      examples:
+        - items:
+            - case_id: 00000000-0000-4000-8000-000000000132
+              application_id: 00000000-0000-4000-8000-000000000100
+              resource_type: document
+              state: held
+              revision: 1
+              due_at: null
+          next_cursor: null
+    ArchiveCommand:
+      type: object
+      additionalProperties: false
+      properties:
+        command_id:
+          type: string
+          format: uuid
+        application_id:
+          type: string
+          format: uuid
+        version_id:
+          type: string
+          format: uuid
+        observed_revision:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        observed_last_activity_at:
+          type: string
+          format: date-time
+        action:
+          type: string
+          enum:
+            - warn
+            - archive
+        notice_id:
+          anyOf:
+            - type: string
+              format: uuid
+            - type: "null"
+      required:
+        - command_id
+        - application_id
+        - version_id
+        - observed_revision
+        - observed_last_activity_at
+        - action
+        - notice_id
+      description: Puerto interno propuesto, no endpoint. warn solo borrador actual sin envío tras30d de
+        inactividad del titular. archive exige aviso durable ya disponible y7d de gracia, mismas
+        revisión/actividad/versión, revalidación bajo bloqueo; carrera cancela tarea. Rejected con
+        borrador conserva rejected. Ningún efecto sobre solicitudes pendientes o datos purgados.
+      allOf:
+        - if:
+            properties:
+              action:
+                const: archive
+          then:
+            properties:
+              notice_id:
+                type: string
+                format: uuid
+          else:
+            properties:
+              notice_id:
+                type: "null"
+      examples:
+        - command_id: 00000000-0000-4000-8000-000000000140
+          application_id: 00000000-0000-4000-8000-000000000100
+          version_id: 00000000-0000-4000-8000-000000000141
+          observed_revision: 1
+          observed_last_activity_at: 2026-09-15T23:00:00Z
+          action: warn
+          notice_id: null
+    ArchiveNoticeSummary:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+            - pending_notice
+            - grace
+            - archived
+            - cancelled
+        noticed_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        archive_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
+      required:
+        - id
+        - state
+        - noticed_at
+        - archive_at
+      allOf:
+        - if:
+            properties:
+              state:
+                enum:
+                  - grace
+                  - archived
+          then:
+            properties:
+              noticed_at:
+                type: string
+                format: date-time
+              archive_at:
+                type: string
+                format: date-time
+      examples:
+        - id: 00000000-0000-4000-8000-000000000150
+          state: grace
+          noticed_at: 2026-10-15T23:00:00Z
+          archive_at: 2026-10-22T23:00:00Z
   parameters:
     IdempotencyKey:
       name: Idempotency-Key

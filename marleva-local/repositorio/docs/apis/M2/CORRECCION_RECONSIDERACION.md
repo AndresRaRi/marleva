@@ -1,3 +1,5 @@
+Estado vigente: detalle del recorrido vecinal dentro del [diseño integral0.4.0](../../proceso/MATRIZ_CASOS_M2.md). Las cifras/alcances de sus cortes anteriores son históricos; contratos actuales en YAML y acta integral.
+
 # Corrección y reconsideración sobre el mismo expediente
 
 

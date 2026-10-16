@@ -5,16 +5,20 @@ actor G as Gestor autorizado M8
 participant A as API objetivo M2 y M8
 participant I as M1 identidad y sesión existente
 participant D as Persistencia objetivo por módulos
-G->>A: S010 Registrar causa legal/controversia, documentos y revisión
-A->>I: S020 Verificar permiso de conservación y MFA reciente
+G->>A: S010 Listar casos mínimos de ámbito y registrar finalize/hold/release con command_id y revisión
+A->>I: S020 Verificar membership_conserve/seller_conserve de ámbito, no titular y MFA reciente
 A->>D: S030 Comprobar acceso por finalidad y estado de borrado
 alt Bytes ya borrados
  A-->>G: S040 Informar imposibilidad de recuperar, no fingir bloqueo retroactivo
 else Evidencia conservable
- A->>D: S050 Guardar bloqueo y excluir uso ordinario de forma atómica
+ A->>D: S050 Finalizar ancla exacta o guardar bloqueo con base/referencia/revisión y evento de comando único
  A-->>G: S060 Bloqueo registrado con próxima revisión
 end
 G->>A: S070 Revisar/levantar causa con motivo y versión
 A->>I: S080 Revalidar permiso actual
 A->>D: S090 Levantar o mantener, conservar historial y recalcular borrado exigible
 Note over G,D: S100 Bloqueo sin causa/fecha inválido, no nueva gracia automática al levantar
+Note over G,D: S110 Idempotency-Key UUID igual command_id, mismo cuerpo mismo evento, divergencia400/409
+Note over A,D: S120 No múltiples anclas, ámbito y política D08-0.2 exactos, hold no autoriza leer bytes
+Note over A,D: S130 Casos vecinales C14 y privados comerciales/restricciones tienen finalidades/plazos distintos
+Note over A,D: S140 HTTP solo agenda, trabajador posterior verifica todas las réplicas antes de declarar deleted

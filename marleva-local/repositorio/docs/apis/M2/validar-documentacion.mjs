@@ -27,6 +27,26 @@ for(const item of Object.values(spec.paths))for(const o of Object.values(item))f
 const sample=n=>structuredClone(spec.components.schemas[n].examples[0]);
 const invalid=[];
 function reject(name,label,mutate){const value=sample(name);mutate(value);if(validators[name](value))throw new Error('Aceptado inválido: '+label);invalid.push(label);}
+reject('CommunityReceipt','recibo comercial sin versión',x=>x.version_id=null);
+reject('CommunityReceipt','recibo con causa de otro agregado',x=>x.restriction_id='00000000-0000-4000-8000-000000000100');
+reject('SellerSubmitRequest','hash de condiciones ausente',x=>delete x.terms_content_sha256);
+reject('Eligibility','ofrecer sin capacidad comprar',x=>{x.buy_allowed=false;x.offer_allowed=true});
+reject('ArchiveNoticeSummary','gracia sin aviso disponible',x=>x.noticed_at=null);
+reject('SellerPublic','contrato privado en perfil público',x=>x.legal_name='privado');
+reject('SellerInput','cobertura ajena octava',x=>x.coverage=[8]);
+reject('SellerInput','modalidades repetidas',x=>x.modalities=['pickup','pickup']);
+reject('SellerInput','teléfono fuera de E164',x=>x.phone='999');
+reject('SellerSubmitRequest','aceptación falsa',x=>x.terms_accepted=false);
+reject('SellerPrepareRequest','reconsideración comercial sin motivo',x=>x.reconsideration_reason=null);
+reject('SellerDecisionRequest','habilitar con criterio incorrecto',x=>{x.outcome='enabled';x.correction_fields=[]});
+reject('SellerVisibleDecision','motivo purgado expuesto',x=>x.private_data_available=false);
+reject('RestrictionCreateRequest','restricción comercial para comprar',x=>{x.target_kind='seller';x.profile_id='00000000-0000-4000-8000-000000000100';x.expected_profile_revision=1;x.scope='buy'});
+reject('AppealInput','tercer documento de apelación',x=>x.document_ids=['00000000-0000-4000-8000-000000000100','00000000-0000-4000-8000-000000000101','00000000-0000-4000-8000-000000000102']);
+reject('AppealInput','apelación sin motivo',x=>x.reason='   ');
+reject('Appeal','decisión ausente en apelación resuelta',x=>{x.state='decided';x.submitted_at='2026-10-15T23:00:00Z';x.decided_at=x.submitted_at});
+reject('ArchiveCommand','archivo sin aviso',x=>x.action='archive');
+reject('ConservationQueue','cola de conservación con bytes',x=>x.items[0].object_key='privado');
+reject('CommunityReceipt','recibo comunitario con texto privado',x=>x.reason='privado');
 reject('UploadRequest','archivo mayor a5.000.000bytes',x=>x.expected_bytes=5000001);
 reject('UploadRequest','archivo vacío',x=>x.expected_bytes=0);
 reject('UploadRequest','tipo no permitido',x=>x.claimed_mime='text/html');
@@ -100,5 +120,5 @@ for(const [route,item]of Object.entries(spec.paths))for(const [method,o]of Objec
  for(const seq of seqs){const mod=seq.id.split('-')[1];const text=await fs.readFile(path.join(docs,`diagramas/secuencia/${mod}/${seq.id}.mmd`),'utf8');for(const step of seq.steps)if(!text.includes(step))throw new Error('Paso ausente '+seq.id+step);}
  for(const table of o['x-data-tables'])if(!tables.some(t=>t.name===table))throw new Error('Tabla ausente '+table);operations++;
 }
-if(operations!==23)throw new Error('Conteo de API inesperado');
-console.log(JSON.stringify({date:'2026-10-15',chat:'MAR-CHAT-007',contractVersion:spec.info.version,operations,schemas:Object.keys(spec.components.schemas).length,schemaExamplesAccepted:accepted,responseExamplesAccepted:responseExamples,invalidExamplesRejected:invalid,sequenceStepsAndTables:'passed',foreignKeyTargetAndTypeReview:{references:references.length,errors:targetErrors},runtimeTests:'not_run',sqlApplied:false,requestsExecuted:false,limits:['Esquemas y referencias, no transacciones/autorización real/concurrencia/conservación','D08-0.1/D09-0.1 propuestos; D08-R/D09-R y transacciones/integración pendientes']},null,2));
+if(operations!==61)throw new Error('Conteo de API inesperado');
+console.log(JSON.stringify({date:'2026-10-15',chat:'MAR-CHAT-007',contractVersion:spec.info.version,operations,schemas:Object.keys(spec.components.schemas).length,schemaExamplesAccepted:accepted,responseExamplesAccepted:responseExamples,invalidExamplesRejected:invalid,sequenceStepsAndTables:'passed',foreignKeyTargetAndTypeReview:{references:references.length,errors:targetErrors},runtimeTests:'not_run',sqlApplied:false,requestsExecuted:false,limits:['Esquemas y referencias, no transacciones/autorización real/concurrencia/conservación','D08-0.2/D09-0.2 propuestos; D08-R/D09-R y transacciones/integración pendientes']},null,2));
