@@ -1,6 +1,6 @@
 import { mkdir, writeFile, readFile, open } from 'node:fs/promises';
 import { constants } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { resolve, relative, isAbsolute, dirname } from 'node:path';
 import { createHash } from 'node:crypto';
 import { CatalogError } from '../../domain/catalog.js';
 import type { PhotoStore } from '../../application/ports/photos.js';
@@ -9,11 +9,14 @@ export class LocalPhotoStore implements PhotoStore {
   constructor(private readonly root = resolve('artifacts/m3/photos')) {}
   private path(id: string, name: string) {
     if (!['original', 'card.jpg', 'detail.jpg'].includes(name)) throw Error('Invalid variant');
-    return join(this.root, photoId(id), name);
+    const file = resolve(this.root, photoId(id), name);
+    const inside = relative(this.root, file);
+    if (inside.startsWith('..') || isAbsolute(inside)) throw Error('Photo path outside store');
+    return file;
   }
   async quarantine(id: string, bytes: Buffer): Promise<string> {
     const path = this.path(id, 'original');
-    await mkdir(join(this.root, photoId(id)), { recursive: true, mode: 0o700 });
+    await mkdir(dirname(path), { recursive: true, mode: 0o700 });
     try {
       await writeFile(path, bytes, { flag: 'wx', mode: 0o600 });
     } catch (error) {

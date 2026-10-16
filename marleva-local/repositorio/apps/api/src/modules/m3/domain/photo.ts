@@ -43,7 +43,8 @@ export function validatePhoto(input: PhotoInput): void {
     fail('PHOTO_POSITION', 'Puedes añadir hasta seis fotos.');
 }
 
-export function photoId(value: string): string {
+export function photoId(value: unknown): string {
+  if (typeof value !== 'string') fail('PHOTO_ID', 'Identificador de foto inválido.');
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(value))
     fail('PHOTO_ID', 'Identificador de foto inválido.');
   return value;

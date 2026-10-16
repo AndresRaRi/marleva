@@ -44,6 +44,8 @@ it('MAR-M3-UT-BE-009-P | tipos reales, tamaño, posición y nombres cerrados', (
     expect(() => validatePhoto({ ...input(), ...patch })).toThrow();
   for (const id of ['../original', 'https://example.invalid/x', 'a', 'A'.repeat(36)])
     expect(() => photoId(id)).toThrow();
+  expect(() => photoId([input().id])).toThrow();
+  expect(() => photoId(null)).toThrow();
   expect(photoId(input().id)).toHaveLength(36);
 });
 it('MAR-M3-UT-BE-009-A | permiso antes de archivo e idempotencia sin volver a procesar', async () => {

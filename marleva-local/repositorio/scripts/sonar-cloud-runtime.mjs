@@ -84,6 +84,7 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       '-Dsonar.scanner.metadataFilePath=' + folder + '/.scannerwork/report-task.txt',
       '-Dsonar.sources=apps/api/src,apps/client/app,apps/client/src',
       '-Dsonar.exclusions=apps/api/src/generated/**',
+      '-Dsonar.inclusions=**/*.ts,**/*.tsx',
       '-Dsonar.typescript.tsconfigPaths=apps/api/tsconfig.json,apps/client/tsconfig.json',
       '-Dsonar.sourceEncoding=UTF-8',
       '-Dsonar.scanner.skipJreProvisioning=true',

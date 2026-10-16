@@ -164,6 +164,7 @@ const gitleaks = await ensureCiTool('gitleaks');
 run('Gitleaks', gitleaks, [
   'git',
   root,
+  '--log-opts=HEAD',
   '--redact',
   '--config',
   path.resolve('infra/ci/gitleaks.toml'),

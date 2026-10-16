@@ -17,7 +17,9 @@ export function cloudScope(log, expected) {
     Number(miss[2]) !== expected ||
     result.cachedFiles + result.uncachedFiles !== expected
   )
-    throw new Error('Inventario de lenguaje incompleto');
+    throw new Error(
+      'Inventario de lenguaje incompleto: ' + JSON.stringify({ expected, ...result }),
+    );
   return result;
 }
 
