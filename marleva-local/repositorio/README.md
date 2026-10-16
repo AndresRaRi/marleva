@@ -42,25 +42,21 @@ No borrar volúmenes. Estado API/proxy: scripts/local.mjs status. Arranque/parad
 
 Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integración API local preparada: pnpm test:integration. Chrome: pnpm test:frontend:integration. Usar siempre scripts/tool delante. B09: pnpm test:files (detiene/reinicia Storage; no correr junto con API/carga). Outbox y SQL aislados tienen puertas explícitas en tests/README.md; outbox detiene/reinicia el capturador, no correr junto con OTP. Pruebas de rendimiento tienen protección y destinos separados; no medir contra datos ajenos.
 
-## Estado real
+## Estado real y entrega Chrome
 
-Base/M1: backend de avisos, archivos privados y recuperación de operadores implementado; M1 sigue incompleta. Fase 1 del CI verificada en GitHub. Fase 2 pasó localmente calidad, 139 unitarias, 38 integraciones, siete operaciones de recuperación, contrato sobre 24 operaciones y accesibilidad web. En GitHub pasaron integración, contrato, web, calidad y CodeQL sobre 69672a5. Seguridad y revisión de dependencias pasaron en GitHub sobre 9cdde72. Dos paquetes vulnerables se retiraron; otros dos conservan versión original con parches locales comprobados mediante hashes y regresiones. OSV original se conserva. El primer pipeline completo pasó en 38773873030 y la negativa de seguridad fue rechazada; la correspondencia quedó restaurada. PR #3/#4 integrados y CI propio de main 40c6583 correcto en 38789774598. SonarQube Cloud Free privado comprobado en [38821867592](https://github.com/AndresRaRi/marleva/actions/runs/38821867592): base/cambio OK, defecto S1764 rechazado por gate nativo y comparador, corrección OK. Sin tarjeta ni gasto; acta tests/results/sonar-cloud.json. Community conserva su guardia histórica; restantes componentes de fase 3 y aceptación M1 pendientes. Estado único y límites en [avance](docs/avance.md) y [ADR002](docs/adr/002-pipeline-ci.md). Google sigue pendiente; Prisma y YAML canónico conservados.
+Main91b0d19 integra PR8–13; su [CI38935513484](https://github.com/AndresRaRi/marleva/actions/runs/38935513484) está aprobado. Acceso/cuenta, cambio por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA tienen pruebas reales Chrome/API. B12 esencial Chrome está probado y repetido desde el mismo backup; no RPO/RTO productivos. [Actas y límites](docs/proceso/RECUPERACION_B12_M1.md). M1 conserva implementación y aceptación separadas en [avance](docs/avance.md).
 
-Sonar CI: scanner oficial → MCP nativo, proyecto privado sin vincular al repositorio público. El job `sonar` exige inventarios completos, compara contra main y prueba defecto/corrección antes de habilitar build. GitHub no recibe comentarios nativos de Sonar; el aviso exacto de decoración se registra separado de los avisos del análisis. Detalle privado cifrado en artifact, resumen y acta sin credenciales. [Diseño y límites](docs/adr/002-pipeline-ci.md#continuación-sonarqube-cloud-gratuito-y-privado--15-10-2026).
+[PR14](https://github.com/AndresRaRi/marleva/pull/14) completa verificaciones de carreras de sesión, teclado/foco/navegación/zoom y rendimiento remoto, junto con controles periódicos y manual. Consultar su SHA/CI y el main posterior antes de integrar; no heredar verdes. Revisión estática resuelta y401unitarias/cobertura locales aprobadas al guardar el incremento inicial. No despliegue ni módulos nuevos.
 
-Revisar este README al inicio/fin de cada proceso y chat; corregirlo solo si cambió la realidad. Cerrar con resultados, instructivo/revisión, porcentajes medibles y commit claro. Origin configurado; rama codex/fix-quality-and-rules subida el 14-10, seguimiento activo y pull --ff-only comprobado. Fuentes y originales sincronizados no se modifican ni se consideran subidos por guardado local. [ADR001](docs/adr/001-consolidacion-tecnica.md), [avance](docs/avance.md), reglas en 00. Hooks desde raíz: git config core.hooksPath .githooks; precommit ejecuta quality, unitarias y cobertura; commit-msg exige Conventional Commits.
+El [instructivo único](docs/revision/M1/INSTRUCTIVO_M1.md) permite probar Chrome y registrar aceptación. Android/iOS están apagados y pendientes por petición del usuario; Safari fuera del cierre actual. Evidencia Android14-10 conservada, no sustituye la repetición de la versión actual. Directorio iOS generado localmente no compilado/aprobado: se conserva sin incluirlo en la entrega. Google permanece fuera de estas funciones, sin cambiar OTP ni proveedor.
 
-Android: APK debug ARM64 recompilado en005; acta tests/results/android-build.json y ubicación en el instructivo. Requiere Metro. Recorrido emulado de acceso/error/OTP/cuenta/reinicio/salida pasó en 1080×1920; acta tests/results/android-test.json. Los demás flujos, 320×640, accesibilidad/físicos/iOS siguen pendientes. Cuota OTP corregida y probada: tests/results/otp-android-increment.md.
-
-Recuperación B12: copia con atributos, borrado posterior, revocación, cola restaurada y recuperación de operador probados en ensayos separados. Falta el ensayo integral y la aceptación de plataformas. [Procedimiento](docs/proceso/RECUPERACION_B12_M1.md). No mezclar destinos ni dar por restaurado todo por pasar una fase.
-
-Recuperación de operadores UC014: siete operaciones backend y roles persistidos, revisión por otro administrador, revocación y factor nuevo. Quinta migración local aplicada. [Instructivo](docs/revision/M1/INSTRUCTIVO_M1.md), [ensayo de recuperación](tests/results/recovery-api.json) y [ensayo CI separado](tests/results/ci-operators.json). Cliente parcial implementado; recorrido integral de pantallas/plataformas y aceptación pendientes.
+SonarCloud privado y sus controles negativos/restauración se mantienen. No reabrirlos por rutina ni desactivar gates. Prisma y contratos YAML canónicos, migraciones y recursos originales conservados. Hooks de raíz ejecutan calidad, unitarias y cobertura; GitHub Actions es la validación principal.
 
 ## Leer el CI
 
 [![CI](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AndresRaRi/marleva/actions/workflows/ci.yml)
 
-Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español y corregir la causa según00§13; CI es validación principal y los diagnósticos locales se limitan a lo necesario.
+Pipeline activo sin despliegue; consultar [avance](docs/avance.md) y [decisión técnica](docs/adr/002-pipeline-ci.md). Un resultado rojo impide integrar; abrir el job y su resumen en español y corregir la causa según00§13; CI es validación principal y los diagnósticos locales se limitan a lo necesario.
 
 | Etapa | Ejecutar desde esta carpeta |
 |---|---|
@@ -75,6 +71,7 @@ Pipeline en preparación por fases; consultar [avance](docs/avance.md) y [decisi
 | Integración general y operadores CI | pnpm ci:run integracion |
 | Navegador, axe y Lighthouse | pnpm ci:run web |
 | Generador de contrato | pnpm ci:run contrato; Python fijado en infra/ci/.python-version |
+| Rendimiento M1 remoto/periódico | Workflow m1-verificacion.yml; no emuladores ni stack local |
 | Detener servicios CI conservando datos | pnpm ci:stack:stop |
 
 El CI usa pnpm ci:run con el nombre de etapa, reutilizando los scripts anteriores. Setup genera Prisma sin conexión a datos. La imagen no incluye secretos ni herramientas locales; usuario numérico sin privilegios, varias etapas y comprobación de salud. Se compila y analiza, no se publica. La ejecución de aplicación sigue limitada al entorno local; activar despliegue exige otra decisión.

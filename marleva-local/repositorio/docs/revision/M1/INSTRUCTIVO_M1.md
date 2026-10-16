@@ -1,86 +1,88 @@
-# M1: revisar acceso, cuenta y avisos
+# M1: prueba de aceptación en Chrome
 
-Fecha:14-10-2026 America/Merida. Entrega parcial, MAR-CHAT-005. Las capturas son de la aplicación real en Chrome y, en el apartado Android, del emulador, con datos ficticios; no son una maqueta ni una aprobación del diseño. No acreditan iOS, dispositivos físicos, lectores de pantalla o M1 terminada.
+Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome; comprobar la versión y CI finales en PR14. La aceptación corresponde al usuario. Android/iOS están aplazados y apagados por instrucción del usuario; Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
 
-## Abrir la aplicación
+## Abrir y preparar la prueba
 
-En este Mac, abrir https://localhost:8443. Correo de prueba: una dirección nueva terminada en @example.test. Los mensajes llegan únicamente al capturador local en http://127.0.0.1:54324. Nunca escribir datos o dinero reales. Si la página no responde, seguir el arranque del [README](../../../README.md); no borrar la base ni desactivar la validación del certificado.
+Abrir [Marleva local](https://localhost:8443) en Chrome y el [capturador local](http://127.0.0.1:54324) en otra pestaña. Usar una dirección nueva, por ejemplo `prueba-vecino-01@example.test`. Si ya existe un ensayo con ese correo, cambiar el número. Los correos solo llegan al capturador; no usar datos reales. Si los servicios están apagados, seguir el arranque conservando datos del [README del código](../../../README.md#arranque-de-este-entorno-preparado). No arrancar emuladores para esta revisión.
 
-## 1. Entrar por correo
+## 1. Acceso y error recuperable
 
-1. Escribir un correo ficticio nuevo.
-2. Pulsar Recibir código.
-3. Abrir el capturador y localizar ese correo. No publicar ni copiar su código en documentación.
-4. Volver a Marleva, escribir el código y pulsar Verificar código.
-5. Debe aparecer Tu cuenta. Tener cuenta todavía no permite comprar u ofrecer.
+1. Escribir el correo ficticio y pulsar **Recibir código**.
+2. Escribir un código incorrecto: debe aparecer el error y conservarse el paso y el correo.
+3. Buscar el mensaje correcto en el capturador y escribir su código vigente.
+4. Pulsar **Verificar código**: debe aparecer **Tu cuenta** con el correo propio.
+5. Recargar Chrome: la cuenta debe seguir abierta. Registrar el correo utilizado para las siguientes pruebas.
 
-![Pantalla de acceso real](capturas/01-acceso.png)
-![Espera del código, campo vacío](capturas/02-codigo-pendiente.png)
+Espera de reenvío60s; código10min; cinco fallos bloquean15min. No acelerar cuotas ni relojes de la aplicación. Una cuenta normal no recibe permisos de operador ni pertenencia vecinal aprobada.
 
-Caso:UC001/UC002; secuencias001/002; API001/002. Recorrido Chrome probado. Espera de reenvío60s; código10min; cinco fallos/pausa15min. No se acorta la espera para la revisión.
+![Acceso real de Chrome](capturas/01-acceso.png)
+![Error real, código retirado](capturas/03-codigo-invalido.png)
 
-## 2. Código incorrecto y recuperación del paso
+## 2. Cuenta, avisos y ayuda
 
-Un código incorrecto debe mostrar el error y conservar el correo/paso. Corregirlo con el código vigente; si venció o se consumió, pedir otro cuando termine la espera. La captura se tomó después de limpiar el valor incorrecto; no muestra un código válido.
+Cambiar entre **Cuenta**, **Avisos** y **Ayuda**: deben cambiar el contenido y la pestaña seleccionada. **Actualizar cuenta** consulta de nuevo; **Cargar más avisos** añade la página siguiente y desaparece al terminar. Una cuenta nueva puede no tener avisos: debe mostrarse el vacío confirmado. Tras cambiar correo habrá un aviso propio. El ensayo automatizado prepara55avisos propios y comprueba tres páginas; no hay que insertar datos manualmente para aceptar el vacío de una cuenta nueva.
 
-![Error real por código inválido](capturas/03-codigo-invalido.png)
+Si falla la conexión, conservar el paso y usar la acción de consulta/reintento. Si terminó la sesión, volver por OTP; una intención interna pertenece a esa cuenta y nunca debe ejecutarse con otra identidad ni repetir automáticamente una modificación.
 
-Caso:UC002. Error y continuación comprobados en Chrome; fallos/consumo/concurrencia también en pruebas API. No se han comprobado todas las combinaciones web/nativas.
+![Cuenta real de Chrome](capturas/04-cuenta.png)
 
-## 3. Consultar cuenta y avisos
+## 3. Cambiar el correo
 
-Usar Actualizar cuenta. Verificar correo y acciones propias. Avisos de cuenta muestra los avisos disponibles. La API permite páginas de24/máximo50 con cursor y conserva orden exacto. Incremento006, PR #8: pulsar Cargar más avisos para anexar la siguiente página; ante error conservar los avisos y reintentar. El control desaparece al terminar; Actualizar cuenta vuelve a primera página. Chrome con API controlada comprobó55 avisos y503/reintento; no acredita Android/iOS ni aceptación visual. Las capturas siguientes son anteriores al control nuevo.
+1. En **Cuenta**, escribir otra dirección ficticia en **Nuevo correo** y pulsar **Iniciar cambio**.
+2. Buscar en el capturador los mensajes del buzón anterior y del nuevo.
+3. En **Buzón que estás verificando** y **Código del cambio**, confirmar el primer buzón mediante **Confirmar buzón**.
+4. Recargar: el cambio pendiente debe recuperarse. Un código incorrecto debe permitir corregirlo sin iniciar otro cambio.
+5. Confirmar el otro buzón. Solo entonces se completa el cambio, se conserva la identidad de cuenta y se cierran sus sesiones anteriores.
+6. Entrar por OTP al correo nuevo. Revisar el aviso de cambio. Para el ensayo, abrir previamente otra sesión del mismo correo en una ventana de incógnito; después del cambio tampoco debe conservar acceso.
 
-![Cuenta real con datos ficticios](capturas/04-cuenta.png)
+Si la respuesta fue incierta, pulsar **Consultar cambio de correo** antes de repetir la acción. Si exige acceso reciente, iniciar sesión con un OTP nuevo. No cambiar el correo del usuario real.
 
-Casos:UC003/UC008; API003/009. API:73avisos con empates/microsegundos, otra cuenta denegada, inserción y frontera borrada comprobadas. Correo caído no pierde la tarea ni repite negocio; SMTP puede repetir una entrega tras resultado incierto.
+![Sección de cambio de correo](capturas/05-cambio-correo.png)
 
-## 4. Cambiar correo
+## 4. Salida actual y salida total
 
-1. Escribir otra dirección ficticia en Nuevo correo.
-2. Pulsar Iniciar cambio.
-3. En el capturador, revisar los mensajes dirigidos al correo actual y al nuevo.
-4. Confirmar cada buzón con su código; la primera confirmación conserva el correo anterior.
-5. Al completar ambos, la cuenta conserva su ID y cierra las sesiones anteriores. Entrar con el correo nuevo.
-
-![Sección real de cambio de correo](capturas/05-cambio-correo.png)
-
-Casos:UC005/UC006; API007/008. Ambos buzones/ID/revocación probados en API; esta captura muestra la sección disponible, no acredita el recorrido completo de cambio por UI. Si pide verificar de nuevo el acceso, cerrar sesión y entrar con otro código antes de iniciar el cambio.
-
-## 5. Salir
-
-Cerrar esta sesión debe devolver al acceso. Cerrar todas las sesiones requiere autenticación reciente y debe invalidar las otras sesiones de la aplicación. Volver al historial del navegador no debe recuperar una sesión revocada.
+**Cerrar esta sesión** devuelve al acceso. Recargar y volver por el historial no debe recuperar esa sesión. Para probar **Cerrar todas las sesiones**, entrar con el mismo correo ficticio también en incógnito, esperar60s si corresponde y usar un OTP nuevo. Ambas ventanas deben funcionar antes de la prueba. Pulsar la salida total desde una autenticación reciente; al consultar o recargar, ambas deben pedir acceso nuevamente.
 
 ![Salida real confirmada](capturas/06-sesion-cerrada.png)
 
-Caso:UC004. Salida actual probada en Chrome; actual/total, cookie segura y CSRF en API. Recorrido físico en dos dispositivos pendiente.
+## 5. Operador y segundo factor
 
-## 6. Segundo factor del operador ficticio
+Esta prueba usa exclusivamente un operador ficticio ya preparado y un autenticador local; una cuenta normal no se convierte en operador por escribir un correo especial. No conceder roles para probar una pantalla ni compartir claves del autenticador.
 
-Solo las cuentas operadoras ficticias preparadas por el entorno muestran esa sección. Verificar correo reciente, preparar TOTP con un autenticador local y verificar el factor. No guardar capturas del secreto/QR ni compartirlo. El registro normal no concede el rol. Rol/AAL y revocación comprobados por API; instructivo con capturas seguras de ese flujo y pantallas de recuperación administrativa todavía pendientes.
+En **Cuenta**, sección **Acceso de operador ficticio**: comprobar que entrar solo por correo no permite operar; si no tiene un factor configurado, usar **Preparar segundo factor**, añadir la clave privadamente al autenticador y verificar **Código del segundo factor**. Si ya existe un factor, usar su autenticador vigente. **Comprobar permiso de operador** solo debe aprobar después de verificar el factor. La clave privada debe desaparecer después de verificar o salir; no guardarla en capturas.
 
-## 7. Pérdida del buzón y sesión vencida
+## 6. Recuperación del operador
 
-Recuperar el buzón con su proveedor. Un comprobante vecinal no transfiere la cuenta. Si la sesión venció, volver a entrar y consultar el estado antes de repetir una acción. Retomar destinos internos completos, recuperación MFA ya tiene backend probado; pantalla y restauración integral siguen pendientes. Google/Supabase permanece pendiente; no es una función de esta entrega.
+El recorrido completo ya tiene evidencia Chrome con dos operadores ficticios en un destino B12 restaurado. No repetir la retirada de factores en otros entornos: la autorización de borrado está limitada al factor ficticio perdido de ese ensayo.
 
-## 8. Archivos privados B09
+Para revisar el comportamiento, usar esta secuencia y el [resultado integral](../../../tests/results/recovery-integral-1792167720153-browser-1792168307453.json):
 
-No hay formulario de documentos M2. B09 trabaja con texto ficticio privado. Revisión de su contrato en [YAML](../../apis/M1/openapi-objetivo-archivos.yaml) y [especificación](../../apis/M1/CONTRATO_B09_ARCHIVOS_PRIVADOS.md); Ya hay tres operaciones backend: emitir permiso temporal, leer y pedir borrado. Se probaron dos cuentas, otra sesión, caducidad/reemisión, cuota, contenido alterado, borrado idempotente, caída/reinicio de Storage y trabajadores concurrentes. Ver [acta B09](../../../tests/results/files-increment.json). No existe pantalla de archivos y este ensayo no acredita expedientes M2 ni restauración B12. Puede revisarse el contrato en un IDE; el Swagger local muestra las operaciones y no ejecuta solicitudes.
+| Paso | Resultado esperado |
+|---|---|
+| Titular: Ayuda → Motivo de recuperación → Solicitar recuperación | Solicitud en revisión y referencia propia |
+| Intentar revisar la propia solicitud | Denegación; no conceder permiso por ser titular |
+| Otro revisor autorizado con segundo factor: consultar referencia y aprobar | Aprobación por persona distinta y rol vigente |
+| Trabajador retira exclusivamente el factor perdido autorizado | Sesión anterior termina; caída conserva proceso pendiente |
+| Titular entra por OTP y vuelve a Ayuda | Recuperación propia y estado vigente, sin repetir solicitud |
+| Solicitar autorización temporal → Preparar nuevo factor → Completar recuperación | Capacidad limitada a esa sesión, nuevo autenticador verificado y sesiones revocadas |
+| Entrar otra vez por OTP y verificar nuevo factor | OTP solo no habilita operación; factor nuevo sí |
 
-## Qué revisa cada parte
+Los rechazos, caducidad, capacidad ligada, rol actual y caída/reinicio también tienen [pruebas backend](../../../tests/results/recovery-api.json). La recuperación del buzón corresponde a su proveedor; domicilio/nombre no transfieren cuentas. Google no es una función de esta entrega.
 
-| Parte | Función | Cómo localizarla |
-|---|---|---|
-| Frontend | Presenta correo/código/cuenta, errores y acciones | apps/client/app/index.tsx; adaptador src/api.ts; pruebas tests/integration/frontend/M1 |
-| Backend | Autoriza cuenta/sesión, guarda transiciones, lista avisos y entrega correo durable | apps/api/src; casos/puertos/repositorios de modules/m1; OpenAPI/Swagger en docs/apis/M1 |
-| Datos | Conserva registros privados e historial de migraciones | Prisma en apps/api/prisma; DBML/DDL en docs/modelado-datos |
-| Evidencia | Resultado esperado, obtenido y límites | tests/results/notices-increment.json y files-increment.json; matriz docs/proceso/MATRIZ_CASOS_M1.md |
+## 7. Teclado, lectura y ampliación
 
-Para reportar un fallo: indicar flujo, paso, qué se hizo, qué se esperaba y qué apareció. Añadir captura sin códigos, tokens ni datos reales. UC/SEQ/API permite rastrear el cambio y su prueba.
+Repetir acceso, Cuenta/Avisos/Ayuda y salida sin ratón: Tab/Mayús+Tab y Enter. El foco debe ser visible, alcanzar controles y permitir corregir errores. Ampliar Chrome al200% y comprobar texto/controles sin desbordamiento horizontal. Revisar nombres de campos, mensajes y selección de pestañas con el lector de pantalla que utilice el tester. Las auditorías Axe/árbol accesible/teclado no sustituyen esa revisión humana ni acreditan WCAG completa.
 
-## Estado de la revisión
+## 8. Base sin pantalla de usuario
 
-Usuario confirmó que revisará este instructivo y dará observaciones. Revisión/aceptación siguen pendientes; no hay aceptación por silencio. M1 no se declara terminada hasta cerrar casos, integración, accesibilidad, plataformas y recuperación. El [estado01](../../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md) conserva continuidad y porcentajes cuando exista base comprobada.
+B09 es soporte de archivos privados ficticios, no un formulario de documentos M2. Su [contrato](../../apis/M1/CONTRATO_B09_ARCHIVOS_PRIVADOS.md) y [acta](../../../tests/results/files-increment.json) comprueban permisos e integridad. No borrar archivos para esta aceptación. UC012 es un simulador aislado; no hay compras, cobros ni reembolsos reales.
+
+B12 esencial Chrome está probado y repetido desde el mismo backup: datos/Auth/Storage, atributos/hashes/relaciones, borrado autorizado reaplicado, revocación, cola, OTP/retorno, MFA y recuperación Prisma. [Procedimiento y actas](../../proceso/RECUPERACION_B12_M1.md). Tiempos de etapas no son un RTO; no se promete pérdida máxima, operación productiva ni pruebas de plataformas aplazadas.
+
+## Registrar la aceptación
+
+Recorrer1–4 y7 con una cuenta ficticia propia. Revisar5–6 con la evidencia del ensayo autorizado; no provocar otra pérdida de factor. Informar flujo/paso, esperado/obtenido y captura sin códigos o claves. Registrar cada recorrido como aprobado, con observaciones o no probado. La aceptación nunca se deduce del silencio. El [avance](../../avance.md) conserva implementación y aceptación separadas; [01](../../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md) registra continuidad y límites. Android/iOS y revisión humana con lector permanecen identificados hasta probarlos.
 
 ## Revisar en Android emulado
 
@@ -93,20 +95,3 @@ APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk
 ![Salida Android](capturas/android/05-sesion-cerrada.png)
 
 Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS siguen pendientes. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.
-
-## 9. Revisar recuperación de operadores en el IDE
-
-El backend está disponible localmente; todavía no hay pantalla nueva aprobada. Abrir docs/apis/M1/swagger.html para ver las siete operaciones y sus entradas/respuestas. Este visor no envía solicitudes ni concede permisos. El [resultado real](../../../tests/results/recovery-api.json) registra el recorrido probado con dos operadores ficticios; el [contrato explicado](../../apis/M1/CONTRATO_RECUPERACION_MFA.md) detalla controles y límites.
-
-| Paso | Quién | Qué sucede |
-|---|---|---|
-| 1. Solicitar | Titular, correo recién verificado | POST /v1/auth/mfa-recoveries; recibe ID y estado |
-| 2. Consultar | Titular o administrador autorizado con segundo factor | GET /v1/auth/mfa-recoveries/{id}; muestra estado y versión |
-| 3. Revisar | Otro administrador vigente, acceso reciente y segundo factor | POST .../{id}/approvals o .../{id}/rejections; nunca autorrevisión |
-| 4. Recuperar proveedor | Trabajador del backend | Revoca accesos y elimina solo el factor perdido; ante caída conserva tarea pendiente |
-| 5. Entrar de nuevo | Titular | Verifica mismo buzón; POST .../{id}/capabilities obtiene permiso temporal ligado a esta sesión |
-| 6. Preparar factor | Titular con capacidad | POST .../{id}/enrollments; configurar autenticador sin guardar captura de secreto/QR |
-| 7. Completar | Titular con capacidad y código actual | POST .../{id}/verifications; completa, consume capacidad y cierra sesiones |
-| 8. Volver a operar | Titular | Entra nuevamente por correo y verifica nuevo factor; correo solo no habilita al operador |
-
-Si el proveedor sigue pendiente por una credencial antigua, entrar nuevamente por correo y reenviar la solicitud continúa el mismo proceso. Capacidad vencida, cinco códigos fallidos o recuperación vencida no conceden acceso. La revisión visual y capturas de esta pantalla se harán después de aprobar su diseño; las capturas existentes no acreditan este flujo nuevo.

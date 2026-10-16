@@ -56,6 +56,10 @@ try {
       incorrect = 0,
       sequence = 0,
       measuredRequests = 0;
+    const failures = {};
+    const recordFailure = (label) => {
+      failures[label] = (failures[label] ?? 0) + 1;
+    };
     async function load(milliseconds, measuring) {
       const until = performance.now() + milliseconds;
       await Promise.all(
@@ -74,8 +78,10 @@ try {
                 },
               );
               const body = await r.json();
-              if (r.status !== 200) errors++;
-              else if (
+              if (r.status !== 200) {
+                errors++;
+                recordFailure(String(r.status) + ':' + String(body.codigo ?? 'SIN_CODIGO'));
+              } else if (
                 kind === 'me'
                   ? body.id !== a.id
                   : body.items.length !== Math.min(a.size, 24) ||
@@ -83,8 +89,14 @@ try {
                     (body.next_cursor !== null) !== a.size > 24
               )
                 incorrect++;
-            } catch {
+            } catch (error) {
               errors++;
+              recordFailure(
+                'transport:' +
+                  error.name +
+                  ':' +
+                  String(error.cause?.code ?? error.code ?? 'unknown'),
+              );
             }
             if (measuring) {
               samples[kind].push(performance.now() - started);
@@ -107,6 +119,7 @@ try {
       me: quantiles(samples.me),
       notices: quantiles(samples.notices),
       unexpectedErrors: errors,
+      failures,
       incorrect,
       requestsPerSecond: measuredRequests / (durationMs / 1000),
       nodeRss: process.memoryUsage().rss,

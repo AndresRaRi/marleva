@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { expect } from '@playwright/test';
 import { performance } from 'node:perf_hooks';
 import { writeFile } from 'node:fs/promises';
 import { capturedCode } from './live-otp.mjs';
@@ -61,8 +62,8 @@ export async function verifyChromeReadiness(browser, origin, captures) {
       ['Cuenta', 'Tu cuenta'],
     ]) {
       await keyboardButton(page, tab, 'tab');
-      assert.equal(
-        await page.getByRole('tab', { name: tab, exact: true }).getAttribute('aria-selected'),
+      await expect(page.getByRole('tab', { name: tab, exact: true })).toHaveAttribute(
+        'aria-selected',
         'true',
       );
       await page.getByRole('heading', { name: heading, exact: true }).waitFor();
