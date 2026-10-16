@@ -17,6 +17,7 @@ async function create(data = product) {
   const id = randomUUID();
   const response = await cmd(ownerToken, 'post', '/v1/offers', { id, seller_id: sellerId, data });
   expect(response.status, response.text).toBe(200);
+  expect(response.headers['cache-control']).toBe('no-store');
   return response.body;
 }
 beforeAll(async () => {

@@ -42,7 +42,8 @@
     "test:e2e": "node scripts/ci-integration.mjs web",
     "contracts:fuzz": "node scripts/ci-integration.mjs contract",
     "ci:cert-trust": "node scripts/ci-cert-trust.mjs",
-    "test:recovery:ci": "MARLEVA_RECOVERY_CHECK=1 MARLEVA_ENV_FILE=artifacts/ci/stack/.env.operators node tests/integration/backend/M1/recovery-api.mjs"
+    "test:recovery:ci": "MARLEVA_RECOVERY_CHECK=1 MARLEVA_ENV_FILE=artifacts/ci/stack/.env.operators node tests/integration/backend/M1/recovery-api.mjs",
+    "ci:sonar": "node scripts/sonar-cloud.mjs"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "13.1.0",
@@ -69,6 +70,7 @@
     "prettier": "3.9.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-test-renderer": "19.2.3",
     "sharp": "0.35.5",
     "supertest": "7.3.1",
     "swagger-ui-dist": "5.33.2",

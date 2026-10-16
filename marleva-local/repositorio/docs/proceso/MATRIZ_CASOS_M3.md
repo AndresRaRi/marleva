@@ -185,3 +185,5 @@ Autorización más reciente: el usuario solicita commit, push e integración a m
 Plan proporcional PF-BE004 antes de medir: HTTP Nest/PostgreSQL propios, identidad ficticia inyectada, tres calentamientos y20 muestras a concurrencia1 por creación de borrador y lista propia24; p95≤500ms y cero errores inesperados como objetivo local, no compromiso productivo. Sin carga paralela a otras pruebas M3; conservar fixtures sin borrar datos. Fotos y catálogo conservan sus mediciones separadas.
 
 PF-BE004 local:20 muestras por escenario tras tres calentamientos, concurrencia1; p95 creación66,613ms y lista94,231ms, cero errores, objetivo local500ms cumplido. Acta m3-management-performance.json; no capacidad productiva.
+
+Integración preparatoria con main bf948c9: ocho conflictos documentales/configuración/lockfile resueltos conservando avances M1/Sonar y M3. Sonar conserva su gate y recibe además cobertura M3 del mismo run; no se excluye código para aprobar. Validación de integración mediante PR para evitar disparos duplicados push/PR en la rama M3. Main sigue disparando CI. Respuestas privadas llevan no-store, comprobado por integración.

@@ -59,6 +59,7 @@ function assignActor(req: ManagedRequest, actor: AuthenticatedActor) {
 function identityMiddleware(identity: CurrentIdentity) {
   return async (req: ManagedRequest, res: Response, next: NextFunction) => {
     try {
+      res.set('Cache-Control', 'no-store');
       validateOrigin(req.header('Origin'));
       if (req.method === 'OPTIONS') {
         next();

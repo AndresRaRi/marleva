@@ -13,6 +13,8 @@ export default defineConfig({
         'apps/api/src/modules/m1/domain/**/*.ts',
         'apps/api/src/modules/m1/application/use-cases/**/*.ts',
         'apps/client/src/api.ts',
+        'apps/client/src/modules/m1/**/*.ts',
+        'apps/client/src/modules/m1/**/*.tsx',
         'apps/client/src/status-messages.tsx',
         'apps/api/src/modules/m1/presentation/dtos/**/*.ts',
         'apps/api/src/modules/m1/infrastructure/adapters/local-private-storage.ts',

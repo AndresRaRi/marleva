@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { api } from '../src/api';
 import { StatusMessages } from '../src/status-messages';
+import { AccountNotices } from '../src/modules/m1/components/account-notices';
 import type { ApiResponse } from '../src/api-response';
 import type { components } from '../../../packages/contracts/generated';
 type Account = components['schemas']['Account'];
@@ -18,7 +19,7 @@ export default function Home() {
     [change, setChange] = useState(''),
     [mail, setMail] = useState(''),
     [changeOtp, setChangeOtp] = useState(''),
-    [notices, setNotices] = useState<ApiResponse<'MAR_M1_API_009'>['items']>([]),
+    [noticesRevision, setNoticesRevision] = useState(0),
     [factor, setFactor] = useState(''),
     [factorSetup, setFactorSetup] = useState(''),
     [factorCode, setFactorCode] = useState(''),
@@ -56,7 +57,7 @@ export default function Home() {
   async function refresh() {
     const a = await api<ApiResponse<'MAR_M1_API_003'>>('/v1/me');
     setAccount(a);
-    setNotices((await api<ApiResponse<'MAR_M1_API_009'>>('/v1/notifications')).items);
+    setNoticesRevision((revision) => revision + 1);
   }
   const button = (label: string, fn: () => Promise<void>, disabled = false) => (
     <Pressable
@@ -142,7 +143,6 @@ export default function Home() {
                     pending ? 'Sesión recuperada. Continúa en tu cuenta.' : 'Sesión iniciada',
                   );
                   setPending('');
-                  setNotices((await api<ApiResponse<'MAR_M1_API_009'>>('/v1/notifications')).items);
                 })}
               </>
             )}
@@ -260,15 +260,12 @@ export default function Home() {
             <Text accessibilityRole="header" style={styles.heading}>
               Avisos de cuenta
             </Text>
-            {notices.length === 0 ? (
-              <Text style={styles.body}>Todavía no hay avisos.</Text>
-            ) : (
-              notices.map((n) => (
-                <Text key={n.id} style={styles.body}>
-                  {n.text}
-                </Text>
-              ))
-            )}
+            <AccountNotices
+              key={`${account.id}:${noticesRevision}`}
+              accountId={account.id}
+              onSessionExpired={setAccount}
+              styles={styles}
+            />
           </>
         )}
         <Text style={styles.footer}>Acceso, cuenta y recuperación · M1 en comprobación</Text>

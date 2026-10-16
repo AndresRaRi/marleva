@@ -13,7 +13,7 @@ paths = ['''(^|/)tests/results/documentation-20261013\.json$''']
 condition = "AND"
 
 [[rules.allowlists]]
-description = "Identificador histórico de perfil Sonar comprobado; no token ni credencial"
+description = "Identificador del perfil TypeScript Cloud comprobado por API, no credencial ni permiso"
 regexTarget = "line"
 regexes = ['''^\s*"key": "AaFBim1byffhRH0TlHOJ",\s*$''']
 paths = ['''(^|/)infra/ci/sonar-cloud\.json$''']
