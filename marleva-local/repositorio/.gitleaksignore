@@ -15,3 +15,9 @@
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79
 99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80
+
+# SHA256 público comprobado; excepción histórica exacta autorizada16-10-2026. Evidencia: tests/results/ios-test.json.
+fa3719c9e289b6ac0d3fbbfe3e71853c6db7c8df:marleva-local/repositorio/tests/results/ios-test.json:generic-api-key:49
+
+# Cifras públicas del informe de carga, no credencial; excepción exacta autorizada 16-10-2026.
+8c9dc795cb4a947d1af50a4f64fcd76208ab1b40:marleva-local/repositorio/docs/proceso/MATRIZ_CASOS_M1.md:generic-api-key:230

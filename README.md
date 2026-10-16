@@ -28,7 +28,7 @@ Productos y servicios entre vecinos de los siete desarrollos de Gran Santa Fe, M
 
 M1 tiene implementadas las14salidas de su matriz. Chrome/API comprueban acceso, cuenta, correo por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA. B12 esencial Chrome está probado y repetido desde un mismo backup. [Panorama único](marleva-local/repositorio/docs/avance.md) y [actas B12](marleva-local/repositorio/docs/proceso/RECUPERACION_B12_M1.md); no equivalen a aceptación humana ni a operación productiva.
 
-Main91b0d19/CI38935513484 está verde e integra PR8–13. [PR14](https://github.com/AndresRaRi/marleva/pull/14) reúne las verificaciones finales sin emuladores y el manual para la prueba del usuario; comprobar CI propio porSHA antes del merge autorizado. Android/iOS quedan apagados y aplazados; Chrome es el navegador del cierre actual. No borrar recursos ni crear trabajo paralelo. No hay módulo M2–M10 completo; M3 conserva su avance aislado y el simulador no acredita M6.
+Main6fd9551 integra PR8–14 y su [CI38949673160](https://github.com/AndresRaRi/marleva/actions/runs/38949673160) pasó. Chrome tiene manual y verificaciones integradas. El usuario reanudó iOS: acceso, sesión tras relanzar y salida están comprobados localmente en Release; [acta](marleva-local/repositorio/tests/results/ios-test.json). Android sigue apagado; iOS completo y aceptación permanecen separados. No borrar recursos ni crear trabajo paralelo. No hay módulo M2–M10 completo; M3 conserva su avance aislado y el simulador no acredita M6.
 
 ## Cada proceso y chat
 

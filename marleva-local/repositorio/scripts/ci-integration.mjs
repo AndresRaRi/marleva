@@ -1,4 +1,5 @@
 import { spawn, spawnSync } from 'node:child_process';
+import { collectProviderDiagnostics } from './ci-provider-diagnostics.mjs';
 import { parseEnv } from 'node:util';
 import { readFileSync, mkdirSync, openSync, closeSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
@@ -88,6 +89,7 @@ try {
       {
         date: new Date().toISOString(),
         outcomes,
+        providerDiagnostics: mode === 'performance' ? collectProviderDiagnostics() : undefined,
         providerFailures:
           mode === 'performance' && existsSync(folder + '/api.log')
             ? readFileSync(folder + '/api.log', 'utf8')

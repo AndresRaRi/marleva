@@ -48,7 +48,7 @@ Main91b0d19 integra PR8–13; su [CI38935513484](https://github.com/AndresRaRi/m
 
 [PR14](https://github.com/AndresRaRi/marleva/pull/14) completa verificaciones de carreras de sesión, teclado/foco/navegación/zoom y rendimiento remoto, junto con controles periódicos y manual. Consultar su SHA/CI y el main posterior antes de integrar; no heredar verdes. Revisión estática resuelta y401unitarias/cobertura locales aprobadas al guardar el incremento inicial. No despliegue ni módulos nuevos.
 
-El [instructivo único](docs/revision/M1/INSTRUCTIVO_M1.md) permite probar Chrome y registrar aceptación. Android/iOS están apagados y pendientes por petición del usuario; Safari fuera del cierre actual. Evidencia Android14-10 conservada, no sustituye la repetición de la versión actual. Directorio iOS generado localmente no compilado/aprobado: se conserva sin incluirlo en la entrega. Google permanece fuera de estas funciones, sin cambiar OTP ni proveedor.
+El [instructivo único](docs/revision/M1/INSTRUCTIVO_M1.md) permite probar Chrome y registrar aceptación. Android sigue apagado y pendiente; iOS tiene la comprobación acotada indicada abajo; Safari fuera del cierre actual. Evidencia Android14-10 conservada, no sustituye la repetición de la versión actual. iOS fue reanudado después: Release ARM64 compiló y comprobó acceso, sesión tras relanzar y salida; acta y límites abajo. El proyecto nativo generado/Pods se conserva localmente. Google permanece fuera de estas funciones, sin cambiar OTP ni proveedor.
 
 SonarCloud privado y sus controles negativos/restauración se mantienen. No reabrirlos por rutina ni desactivar gates. Prisma y contratos YAML canónicos, migraciones y recursos originales conservados. Hooks de raíz ejecutan calidad, unitarias y cobertura; GitHub Actions es la validación principal.
 
@@ -91,3 +91,20 @@ Composición aislada autorizada en008, ahora reunida en009: [revisión y comando
 Consolidación009: la API M3 requiere M3_DATABASE_URL explícita y los ensayos/admin M3_ADMIN_DATABASE_URL; destino127.0.0.1:55432/marleva_m3_008 y rolesm3_api/postgres respectivamente. Configuración exclusivamente ficticia del entorno local existente: `export M3_DATABASE_URL=postgresql://m3_api:fixture-api-only@127.0.0.1:55432/marleva_m3_008` y `export M3_ADMIN_DATABASE_URL=postgresql://postgres:fixture-only@127.0.0.1:55432/marleva_m3_008`. No usar en producción. CI las proporciona explícitamente; no hay contraseña predeterminada en runtime.
 
 Entrega Chrome009: [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443) aprobó14trabajos para0d3b7ba. Teclado/zoom y carga100cuentas a1/5/10 sin errores comprobados; guía y actas actualizadas. La integración final se verifica en PR14 yCI del main resultante, sin atribuir resultados futuros.
+
+
+## iOS local: acceso y sesión comprobados16-10-2026
+
+[Acta iOS](tests/results/ios-test.json) y [pasos/capturas](docs/revision/M1/INSTRUCTIVO_M1.md#revisar-acceso-y-sesión-en-ios-simulator). En este entorno preparado, Xcode27/iOS27 y el workspace existente compilan Release ARM64 con bundle incorporado, sin Metro. Configuración canónica: app.json activa enableSceneSupport del plugin oficial expo-build-properties57.0.22, compatible con Expo57.0.28. El proyecto nativo generado, Pods, cachés y copia previa se conservan localmente; no se acredita una instalación limpia en otro equipo.
+
+Origen por defecto: web relativo, iOS Simulator https://localhost:8443, Android https://10.0.2.2:8443. EXPO_PUBLIC_API_URL permite un destino nativo explícito durante compilación; un iPhone físico requiere su destino y confianza TLS propios. No desactivar validación ni usar HTTP.
+
+Compilación comprobada desde esta carpeta, con el simulador iOS existente encendido:
+
+```sh
+xcodebuild -workspace apps/client/ios/Marlevalocal.xcworkspace -scheme Marlevalocal -configuration Release -sdk iphonesimulator -destination 'id=588D3E9B-A421-4F94-836F-8F15C92225BD' -derivedDataPath artifacts/native-ios -jobs 2 ONLY_ACTIVE_ARCH=YES ARCHS=arm64 COMPILER_INDEX_STORE_ENABLE=NO build
+xcrun simctl install 588D3E9B-A421-4F94-836F-8F15C92225BD artifacts/native-ios/Build/Products/Release-iphonesimulator/Marlevalocal.app
+xcrun simctl launch 588D3E9B-A421-4F94-836F-8F15C92225BD mx.marleva.local
+```
+
+Conservar firma ad hoc predeterminada del simulador: no usar CODE_SIGNING_ALLOWED=NO, porque SecureStore necesita el contexto de firma. No hace falta cuenta Apple ni firma de distribución para este ensayo. Instalar actualiza la app conservando sus datos; no desinstalar/resetear ni usar clean. El acceso por OTP, relanzamiento con sesión y salida/relanzamiento sin sesión pasaron; demás recorridos iOS, accesibilidad, físico y aceptación integral no se acreditan. Android no se encendió.

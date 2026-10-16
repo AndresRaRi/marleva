@@ -1,6 +1,6 @@
 # M1: prueba de aceptación en Chrome
 
-Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome comprobado en [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443), código0d3b7ba; comprobar la integración y CI finales de PR14 antes de aceptar. La aceptación corresponde al usuario. Android/iOS están aplazados y apagados por instrucción del usuario; Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
+Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Paquete de revisión Chrome comprobado en [CI38946169443](https://github.com/AndresRaRi/marleva/actions/runs/38946169443), código0d3b7ba; comprobar la integración y CI finales de PR14 antes de aceptar. La aceptación corresponde al usuario. Android permanece aplazado y apagado; el usuario reanudó iOS y su prueba acotada figura al final. Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
 
 ## Abrir y preparar la prueba
 
@@ -97,3 +97,21 @@ APK debug ARM64 en apps/client/android/app/build/outputs/apk/debug/app-debug.apk
 ![Salida Android](capturas/android/05-sesion-cerrada.png)
 
 Capturas reales a1080×1920, configuración efectiva del ensayo; tamaño físico del AVD320×640. El intento en320×640 quedó incompleto y no se acredita con estas capturas. Se ven controles del sistema/cliente de desarrollo; no forman parte del diseño aprobado. Cambio de correo/MFA completos, accesibilidad, dispositivo físico e iOS siguen pendientes. El AVD existente está en la carpeta de Android del usuario; no se afirma que todo el emulador esté dentro del repositorio.
+
+
+## Revisar acceso y sesión en iOS Simulator
+
+Prueba real16-10-2026: iPhone18Pro/iOS27.0, Release ARM64 con JavaScript incorporado, sin Metro. [Acta](../../../tests/results/ios-test.json). Se usa HTTPS con CA local y almacenamiento seguro del sistema. Android permanece apagado.
+
+1. En Marleva, pedir y verificar el código de una cuenta ficticia@example.test; obtenerlo del capturador local. Debe aparecer Tu cuenta con ese correo.
+2. Terminar solamente el proceso de Marleva y abrirlo de nuevo, sin reinstalar ni borrar datos. Debe aparecer la misma cuenta sin otro código.
+3. Pulsar Cerrar esta sesión. Debe aparecer Sesión cerrada.
+4. Terminar y reabrir Marleva otra vez. Debe aparecer Accede a tu cuenta, sin recuperar los datos privados de la sesión cerrada.
+
+Los cuatro pasos pasaron. La captura de cuenta se tomó después del primer relanzamiento; la última muestra el acceso después de salir y relanzar. No contiene códigos ni credenciales.
+
+![iOS: misma cuenta después de reabrir](capturas/08-ios-sesion-conservada.png)
+![iOS: salida confirmada](capturas/09-ios-sesion-cerrada.png)
+![iOS: no restaura la sesión cerrada al reabrir](capturas/10-ios-salida-tras-relanzar.png)
+
+Esto acredita acceso y conservación/salida de sesión en el simulador. Cambio de correo completo, MFA/recuperación, accesibilidad y dispositivo físico iOS siguen pendientes; no equivale a aceptación integral de M1.
