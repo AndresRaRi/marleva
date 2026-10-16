@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-15 America/Merida",
+  "base": "dbec16d52a45c6163a2a246dfb561c2639e82b60",
+  "originalRun": 38843912870,
+  "findings": [
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:79",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:80",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:470",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:472",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:474",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "99aca63802e67857b97617a4213a36fe4b3643d0:marleva-local/repositorio/docs/apis/M2/VALIDACION_INTEGRAL.json:generic-api-key:475",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:126",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_OPENAPI.json:generic-api-key:127",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:56",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_D08_D09.json:generic-api-key:57",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:55",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_ENTREGA.json:generic-api-key:56",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:118",
+      "ancestorOfM1": false
+    },
+    {
+      "fingerprint": "4269f7463fc54aa22ab40ea1554e615ce163f575:marleva-local/repositorio/docs/apis/M2/VALIDACION_AUDITORIA.json:generic-api-key:119",
+      "ancestorOfM1": false
+    }
+  ],
+  "gitleaksHead": {
+    "commitsScanned": 58,
+    "findings": 0,
+    "exit": 0
+  },
+  "negativeControls": "Profile exact permitted; other path and other value blocked, exit0",
+  "contracts": "Target generator repeated; generated HTML unchanged against staged version",
+  "limits": [
+    "No runtime, migrations, UI or business performance change",
+    "No acceptance or merge",
+    "General reading partial"
+  ],
+  "targetSwaggerSha256": "5cc2928072fe280fd271567b8bd7c6d888672b84ffafec9394d854d302c581dd",
+  "immutableMigrations": [
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120001_m1/migration.sql",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610120002_m1_tables/migration.sql",
+      "sha256": "407e1e18ae0b2034fb00045986c7653d1bd2033db6be9bd9de2548012a7fe20c"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130001_notice_cursor/migration.sql",
+      "sha256": "837a690a15c90d87807a41b284936263d13a61a9555f181fab247bec03e4c72b"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610130002_private_fixtures/migration.sql",
+      "sha256": "66d29d603602b87cf6bedbf40f65cc751fd74de0ad42d266fc90fda34eab1bd0"
+    },
+    {
+      "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql",
+      "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0"
+    }
+  ]
+}
