@@ -1,5 +1,15 @@
 # M1: casos, estados y pruebas antes de implementar
 
+## Cierre Chrome009 — diseño previo,16-10-2026
+
+Instrucción vigente: Android/iOS apagados y pendientes; Chrome es el navegador de esta entrega. No borrar recursos ni abrir trabajo paralelo. El cierre para revisión del usuario no acredita plataformas aplazadas ni aceptación humana.
+
+Brechas ejecutables: IT-BE-103-CONCURRENT (UC003→SEQ003:S020–S090→API003/004→Session/Auth): ocho lecturas con renovación necesaria, proveedor/PG reales y una sola renovación; IT-BE-103-LEASE: reserva ocupada devuelve503 sin rotar credenciales y permite reintento; IT-BE-104-RACE (SEQ004:S020–S070→API005): revocar durante consulta al proveedor impide devolver cuenta y no revive sesión. Intercalar transporte con barreras explícitas, sin sustituir respuestas del proveedor. Conservar fixtures y cerrar conexiones, sin limpieza de filas.
+
+Accesibilidad Chrome: completar recorrido solo con teclado, nombres/roles accesibles, foco visible, navegación Cuenta/Avisos/Ayuda y zoom200% sin desbordamiento horizontal. Axe ya existente se conserva; árbol accesible no equivale a prueba humana con lector. Instructivo final incluye prueba del usuario y límites.
+
+PF-BE-103/108: ejecutar el plan de rendimiento existente en runner GitHub aislado:100cuentas/sesiones ficticias,10/50/1000avisos, calentamiento10s y medición60s en1/5/10concurrentes; latencias/corrección/errores/recursos medidos. PF-FE-101:30navegaciones Chrome con caché fría identificada, p95 y recursos. Umbrales de ingeniería ya propuestos arriba se informan como tales, no compromisos productivos. Ningún emulador local para estas pruebas. Consolidar actas B12 existentes y mediciones, sin repetir retiros del factor ni borrados.
+
 ## Estado actual y trazabilidad documental — 15-10-2026
 
 Corrección documental autorizada por el usuario tras auditoría de solo lectura. Esta sección es el estado actual; los planes y resultados fechados posteriores conservan su contexto histórico. No acredita pruebas nuevas ni aceptación. Diseñado significa proceso documentado, con ramas aún por cerrar; implementado no significa probado. Se conservan todos los IDs. Prefijos: UC/SEQ/UI = MAR-M1-; API = MAR_M1_API_.

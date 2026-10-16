@@ -11,7 +11,8 @@ const env = {
 if (env.MARLEVA_CI_STACK !== '1') throw new Error('Requiere stack CI preparado');
 const proxyExists = process.env.MARLEVA_CI_EXISTING_PROXY === '1';
 const mode = process.argv[2] ?? 'backend';
-if (!['backend', 'web', 'contract'].includes(mode)) throw new Error('Modalidad CI desconocida');
+if (!['backend', 'web', 'contract', 'performance'].includes(mode))
+  throw new Error('Modalidad CI desconocida');
 if (proxyExists) env.MARLEVA_CA_FILE = path.resolve('infra/local/secrets/ca.crt');
 const children = [];
 const outcomes = [];
@@ -62,7 +63,11 @@ try {
       env: { ...env, MARLEVA_QUOTA_CHECK: '1' },
     });
     run('modelo objetivo', 'pnpm', ['test:schema'], { env: { ...env, MARLEVA_SCHEMA_CHECK: '1' } });
-  } else if (mode === 'web') run('web y accesibilidad', process.execPath, ['scripts/ci-e2e.mjs']);
+  } else if (mode === 'performance')
+    run('rendimiento cuenta y avisos', process.execPath, [
+      'tests/performance/backend/M1/account.mjs',
+    ]);
+  else if (mode === 'web') run('web y accesibilidad', process.execPath, ['scripts/ci-e2e.mjs']);
   else run('contrato generado', process.execPath, ['scripts/ci-contract.mjs']);
 } finally {
   for (const child of children.reverse()) {
