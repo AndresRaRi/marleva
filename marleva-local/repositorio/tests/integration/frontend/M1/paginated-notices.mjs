@@ -2,7 +2,14 @@ import assert from 'node:assert/strict';
 export async function verifyPaginatedNotices(browser, origin) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
-  const account = { id: 'pagination-fixture', correo: 'pages@example.test', operador: false };
+  const account = {
+    id: 'pagination-fixture',
+    correo: 'pages@example.test',
+    operador: false,
+    estado: 'active',
+    pertenencia: 'sin_solicitud',
+    acciones_permitidas: [],
+  };
   const items = Array.from({ length: 55 }, (_, index) => ({
     id: `notice-${index}`,
     accountId: account.id,

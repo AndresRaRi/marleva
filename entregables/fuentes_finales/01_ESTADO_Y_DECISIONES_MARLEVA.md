@@ -47,7 +47,7 @@ No cuentas externas, gasto, despliegue, contratación, contactos, cobros ni dato
 
 Excepción posterior expresa del usuario, 15-10-2026, solo Sonar: autoriza SonarQube Cloud en plan gratuito, crear/conectar cuenta y proyecto privado y enviar código para analizarlo, sin tarjeta ni gasto. Confirmó términos y permisos OAuth concretos mostrados por GitHub. Organización `andresrari-marleva` y proyecto `andresrari-marleva_marleva` comprobados Free/Private; conexión CI mediante secreto protegido. No amplía las otras operaciones externas ni autoriza merge a main. Diagnóstico, diseño, resultados y límites en ADR002; prueba completa Cloud acreditada en tests/results/sonar-cloud.json, con límites explícitos.
 
-## 3. Estado actual
+## 3. Estado anterior a consolidación009; estado vigente en §8
 
 El [avance por criterios](../../marleva-local/repositorio/docs/avance.md) es la única fuente de porcentajes; aquí se enlaza, no se replica.
 
@@ -91,7 +91,7 @@ Vigilancia CI del PR #2 eliminada tras comprobar su integración a main el 15-10
 | ID / prioridad | Pendiente | Regla / acción |
 |---|---|---|
 | MAR-TODO-AUTH-001 / Alta | Evaluar Google/Supabase y reducción de lógica propia | Usuario pidió dejarlo pendiente. No implementar Google ni bloquear tareas independientes |
-| MAR-TODO-UI-001 / Alta | Propuesta de diseño visual antes de pantallas nuevas | Paleta, tipografía, librería compatible con Expo y 2–3 pantallas clave comparadas con referentes de 00 §5; revisión del usuario antes de implementar |
+| MAR-TODO-UI-001 / Alta | Dirección visual M1 aprobada; aceptación integral pendiente | Verde/fondo cálido/tipografía sistema/Cuenta-Avisos-Ayuda; aplicar lo aprobado y comprobar recorridos. M2/M8 conserva revisión visual propia pendiente |
 | MAR-TODO-B12-PILOTO / Alta | Decisión A aprobada; ejecutar y cerrar recuperación esencial antes del piloto | Alcance en procedimiento B12. Pruebas prolongadas y escenarios avanzados quedan pendientes posteriores, sin acreditar B12 completo |
 | Revisión / Alta | Observaciones del instructivo y revisión de código antes de main | Usuario o segundo agente autorizado revisa código; aceptación de pantallas corresponde al usuario |
 | MAR-TODO-CI-SEC-001 / Seguimiento | Mantener y sustituir parches locales cuando exista corrección oficial compatible | Dos paquetes retirados por actualización y dos con parches locales, hashes y regresiones; conservar informe OSV original y pedigree. Estado y límites en ADR002/avance; sin aceptación de riesgo |
@@ -159,6 +159,14 @@ Ejecutor M1 reutilizado: artifacts/marleva-pr8-integracion, rama codex/integrate
 | CON-08 / P2 | Conciliar entrega Fuentes/configuración | Mantener idea preexistente distancia/minutos para después, fueraMVP1. Revisar diferencias00/02/03 entre ramas antes de reemplazar; solo01 afectada en esta consolidación. Guardar/push no realiza subida compartida |
 
 SonarCloud Free privado y A0/SDK conservados; Google pendiente y límites de activación de §2 permanecen. Avance exclusivamente en docs/avance.md de cada rama hasta conciliar criterios; no convertir0%M3 de M1 en ausencia de trabajo M3 ni sumar porcentajes incompatibles.
+
+### Correcciones y evidencia009
+
+PR8: e02afdb772791574c2427d2dd96d9b79be21abb1 subido; [38845447384](https://github.com/AndresRaRi/marleva/actions/runs/38845447384) pasó seguridad,contratos,calidad,unitarias,CodeQL,dependencias,Sonar y contratoHTTP; integración falló en factor pendienteAPI027 y web en fixtures incompletos. Corrección siguiente documentada en matriz/SEQ007 antes de código: all del proveedor conserva TOTP pendientes/verificados, totp solo verificados; proyección sin secretos y tope50. Fixtures web completan Account requerido, sin relajar validador.54unitarias dirigidas pasan; integración/web del nuevo SHA pendientes. CON01 no se declara cerrado por esos resultados parciales.
+
+M3: corrección guardada87fdc5c873f67824b9c45f51044ad2d083682f25;89M3 reales/fixtures y PFfoto p95153,07ms; hooks aprobados. CI/Sonar del SHA nuevo pendiente, sin sustituir la identidad real. El gate de duplicación corresponde únicamente a tipos OpenAPI generados; se conserva análisis de fuente y se omite solo suCPD, sin rebajar umbral. Ver actaM3 en su rama.
+
+Idea preexistente conservada para después: mostrar distancia aproximada entre comprador y productos/servicios y evaluar minutos de traslado. Sin exponer domicilios privados; cercanía no sustituye pertenencia a los siete desarrollos. Solicitud15-10-2026 del chat Cercanía de servicios; no aprobada, implementada ni incorporada aMVP1.
 
 ### Prompt activo revisado
 

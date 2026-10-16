@@ -118,7 +118,7 @@ beforeEach(() => {
     .mockResolvedValue({ data: { session: tokens }, error: null });
   fixture.auth.updateUser = vi.fn().mockResolvedValue({ error: null });
   fixture.auth.mfa = {
-    listFactors: vi.fn().mockResolvedValue({ data: { totp: [] }, error: null }),
+    listFactors: vi.fn().mockResolvedValue({ data: { all: [], totp: [] }, error: null }),
     enroll: vi.fn().mockResolvedValue({ data: { id, totp: { uri: 'fixture-only' } }, error: null }),
     challengeAndVerify: vi.fn().mockResolvedValue({ data: tokens, error: null }),
     getAuthenticatorAssuranceLevel: vi
@@ -526,11 +526,13 @@ it('MAR-M1-UT-BE-107-FACTORS | lista propia requiere rol y no devuelve secretos'
   account.operator = true;
   fixture.auth.mfa.listFactors.mockResolvedValue({
     data: {
-      totp: [
+      totp: [],
+      all: [
         {
           id,
           friendly_name: 'Mi autenticador',
-          status: 'verified',
+          status: 'unverified',
+          factor_type: 'totp',
           secret: 'never-exposed',
           uri: 'never-exposed',
         },
@@ -539,6 +541,29 @@ it('MAR-M1-UT-BE-107-FACTORS | lista propia requiere rol y no devuelve secretos'
     error: null,
   });
   expect(await service.factors(principal)).toEqual({
-    items: [{ id, nombre: 'Mi autenticador', estado: 'verified' }],
+    items: [{ id, nombre: 'Mi autenticador', estado: 'unverified' }],
+  });
+});
+
+it('MAR-M1-UT-BE-107-FACTORS-BOUNDARY | ignora otro tipo y falla cerrado por exceso o proveedor', async () => {
+  account.operator = true;
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: { totp: [], all: [{ id, factor_type: 'phone', status: 'verified', secret: 'private' }] },
+    error: null,
+  });
+  expect(await service.factors(principal)).toEqual({ items: [] });
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: { all: Array(51).fill({}), totp: [] },
+    error: null,
+  });
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'DEPENDENCIA' },
+  });
+  fixture.auth.mfa.listFactors.mockResolvedValue({
+    data: null,
+    error: Error('provider unavailable'),
+  });
+  await expect(service.factors(principal)).rejects.toMatchObject({
+    response: { codigo: 'DEPENDENCIA' },
   });
 });

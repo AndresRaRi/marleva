@@ -9,7 +9,14 @@ export async function verifyResumedNotices(browser, origin) {
   const pending = new Promise((resolve) => {
     release = resolve;
   });
-  const account = { id: 'account-fixture-a', correo: 'resume@example.test', operador: false };
+  const account = {
+    id: 'account-fixture-a',
+    correo: 'resume@example.test',
+    operador: false,
+    estado: 'active',
+    pertenencia: 'sin_solicitud',
+    acciones_permitidas: [],
+  };
   const notice = {
     id: 'notice-fixture',
     accountId: account.id,

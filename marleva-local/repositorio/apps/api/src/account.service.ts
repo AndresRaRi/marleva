@@ -447,14 +447,16 @@ export class AccountService {
     if (!p.account.operator) fail(403, 'PERMISO', 'No tienes permiso de operador');
     const { client } = await authenticatedIdentity(p.tokens);
     const { data, error } = await client.auth.mfa.listFactors();
-    if (error || !data || data.totp.length > 50)
+    if (error || !data || data.all.length > 50)
       fail(503, 'DEPENDENCIA', 'No pudimos consultar tus factores');
     return {
-      items: data.totp.map((factor) => ({
-        id: factor.id,
-        nombre: factor.friendly_name ?? 'Autenticador',
-        estado: factor.status,
-      })),
+      items: data.all
+        .filter((factor) => factor.factor_type === 'totp')
+        .map((factor) => ({
+          id: factor.id,
+          nombre: factor.friendly_name ?? 'Autenticador',
+          estado: factor.status,
+        })),
     };
   }
   async enroll(p: Principal) {

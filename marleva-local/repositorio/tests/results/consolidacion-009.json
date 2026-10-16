@@ -94,5 +94,29 @@
       "path": "marleva-local/repositorio/apps/api/prisma/migrations/202610140001_mfa_recovery/migration.sql",
       "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0"
     }
-  ]
+  ],
+  "firstCorrection": {
+    "sha": "e02afdb772791574c2427d2dd96d9b79be21abb1",
+    "run": 38845447384,
+    "passed": [
+      "calidad",
+      "unitarias",
+      "arquitectura-contratos",
+      "seguridad",
+      "codeql",
+      "revision-dependencias",
+      "contrato",
+      "sonar"
+    ],
+    "failed": [
+      "integracion: API027 pending factor omitted",
+      "web: incomplete Account fixture rejected"
+    ],
+    "build": "skipped"
+  },
+  "secondCorrection": {
+    "scope": "API027 all TOTP statuses; complete browser fixtures without weakening validation",
+    "directedUnit": "54/54",
+    "remoteCI": "pending"
+  }
 }
