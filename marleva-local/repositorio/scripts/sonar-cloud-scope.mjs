@@ -1,3 +1,8 @@
+export function verifyCloudCoverage(log) {
+  if (/WARN.*(?:Could not resolve \d+ file paths|First unresolved path:)/.test(log))
+    throw new Error('Cobertura Cloud contiene rutas sin fuente analizada');
+}
+
 export function cloudScope(log, expected) {
   const indexed = /\b(\d+) files indexed\b/.exec(log);
   const hit = /Hit the cache for (\d+) out of (\d+)/.exec(log);

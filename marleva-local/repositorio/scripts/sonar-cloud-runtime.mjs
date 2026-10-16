@@ -12,8 +12,9 @@ import {
   copyFileSync,
 } from 'node:fs';
 import path from 'node:path';
-import { command, save, sourceFiles } from './sonar-runtime.mjs';
-import { cloudScope } from './sonar-cloud-scope.mjs';
+import { command, save, sourceAreas, sourceFiles } from './sonar-runtime.mjs';
+import { cloudScope, verifyCloudCoverage } from './sonar-cloud-scope.mjs';
+import { cloudNegativeFixture } from './sonar-cloud-negative.mjs';
 
 export function prepareCloudCopy(root, folder, sha) {
   command('git', ['worktree', 'add', '--detach', folder, sha], { cwd: root });
@@ -27,11 +28,8 @@ export function prepareCloudCopy(root, folder, sha) {
   return workspace;
 }
 export function createCloudNegative(folder) {
-  const file = 'apps/api/src/sonar-negative-fixture.ts';
-  writeFileSync(
-    path.join(folder, file),
-    'export function sonarNegativeFixture(value: string): boolean {\n  return value.length > 0 && value.length > 0;\n}\n',
-  );
+  const { file, content } = cloudNegativeFixture();
+  writeFileSync(path.join(folder, file), content);
   command('git', ['add', file], { cwd: folder });
   command(
     'git',
@@ -46,7 +44,7 @@ export function createCloudNegative(folder) {
     ],
     { cwd: folder },
   );
-  return command('git', ['rev-parse', 'HEAD'], { cwd: folder }).trim();
+  return { file, revision: command('git', ['rev-parse', 'HEAD'], { cwd: folder }).trim() };
 }
 export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFile) {
   const descriptor = openSync(logFile, 'w', 0o600);
@@ -82,7 +80,7 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
       '-Dsonar.scm.revision=' + sha,
       '-Dsonar.projectBaseDir=' + folder,
       '-Dsonar.scanner.metadataFilePath=' + folder + '/.scannerwork/report-task.txt',
-      '-Dsonar.sources=apps/api/src,apps/client/app,apps/client/src',
+      '-Dsonar.sources=' + sourceAreas(folder).join(','),
       '-Dsonar.exclusions=apps/api/src/generated/**',
       '-Dsonar.inclusions=**/*.ts,**/*.tsx',
       '-Dsonar.typescript.tsconfigPaths=apps/api/tsconfig.json,apps/client/tsconfig.json',
@@ -103,6 +101,7 @@ export function scanCloud(manifest, root, folder, sha, context, tokenFile, logFi
     closeSync(descriptor);
   }
   const log = readFileSync(logFile, 'utf8');
+  verifyCloudCoverage(log);
   if (
     result.error ||
     result.signal ||

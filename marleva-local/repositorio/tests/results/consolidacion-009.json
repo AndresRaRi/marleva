@@ -69,7 +69,7 @@
   "contracts": "Target generator repeated; generated HTML unchanged against staged version",
   "limits": [
     "Initial tool/Swagger correction had no runtime change; later M1/M3 runtime corrections and their tests are recorded separately",
-    "No acceptance or merge",
+    "No product acceptance; authorized Git integration recorded separately",
     "General reading partial"
   ],
   "targetSwaggerSha256": "5cc2928072fe280fd271567b8bd7c6d888672b84ffafec9394d854d302c581dd",
@@ -205,7 +205,22 @@
       "url": "https://github.com/AndresRaRi/marleva/actions/runs/38847365871"
     },
     "acceptance": false,
-    "sha": "902308e8d02362b06689b1d04d03ae23793faa50"
+    "sha": "902308e8d02362b06689b1d04d03ae23793faa50",
+    "integration": {
+      "mainFunctionalSha": "422ec7268a62094f2e47093bd21d4e0cb28e741c",
+      "pr8": "MERGED",
+      "pr9": "MERGED by ancestry",
+      "candidateSha": "9633fd2c11c447dda2a1646052a8d1992ba27c90",
+      "candidateCI": 38849290058,
+      "candidateCIConclusion": "success",
+      "candidateChecks": 14,
+      "mainCI": 38850819719,
+      "mainCIConclusion": "failure: Sonar negative reopened historical issue; build skipped",
+      "branchesPreserved": true,
+      "localMainMatchesOrigin": true,
+      "review": "Independent static targeted runtime and final documentary review; no concrete blockers; global reading partial",
+      "m2m3candidateAncestorsVerified": true
+    }
   },
   "delivery": {
     "sharedSourcesUploaded": false,
@@ -225,5 +240,54 @@
       "CON08 shared replacement"
     ],
     "topicClosed": false
+  },
+  "codeqlReview": {
+    "dismissedWithExplicitUserAuthorization": [
+      7,
+      8
+    ],
+    "classification": "false positive",
+    "rulesOrGatesChanged": false,
+    "directedPhotoUnit": "5/5 PASS",
+    "invalidRuntimeTypes": "6/6 PHOTO_SIZE422; zero malicious length getter accesses",
+    "preexistingAlert1": "open; expected protected session cookie found by targeted review, no classification authorization"
+  },
+  "postMergeCorrection": {
+    "id": "CI-SONAR-NEG-002",
+    "failedMainRun": 38850819719,
+    "cause": "Fixed fixture reopened historical S1764; native negative gate remained OK, control correctly blocked",
+    "change": "Fresh path, function and parameter identity; exact rule/component; include optional M3 source directory and reject unresolved LCOV paths",
+    "directedUnit": "33/33 PASS, including six new regression cases",
+    "nativeValidation": {
+      "scope": "pull_request 10; final main context requires its own run",
+      "sha": "9409367109c405d763a78a3057a3e0043e1ea136",
+      "run": 38852827293,
+      "sonarConclusion": "success",
+      "negativeBlocked": true,
+      "negativeRule": "typescript:S1764",
+      "negativeRevision": "1b67ac4868da8f5427460234a38ad4a18510b317",
+      "negativeFile": "apps/api/src/sonar-negative-67fb258b164b450caa261d8049ec3c0e.ts",
+      "negativeGate": "ERROR",
+      "negativeExit": 3,
+      "positiveAndCorrectedGate": "OK",
+      "sourceCounts": {
+        "base": 146,
+        "head": 146,
+        "negative": 147,
+        "corrected": 146
+      },
+      "analysisWarnings": 0,
+      "unresolvedCoveragePaths": 0,
+      "evidenceEncryptedSha256": "04e54ef304fd75a0d4e64d128a392930a956c1c7d655c1fb8237ef9feab2bbff",
+      "ciConclusion": "success",
+      "ciJobs": 13,
+      "prChecksIncludingNativeCodeQL": 14
+    },
+    "gatesRulesOrThresholdsChanged": false,
+    "applicationOrMigrationChange": false,
+    "localHookRegression": "Initial isolated-repository test inherited hook Git environment and created local c757fe8; preserved in codex/preserved-sonar-hook-fixture, never pushed. Test now clears Git local environment, validates real temporary root, restores environment and asserts original HEAD unchanged. Synthetic file never existed in executor; removed only from unpublished commit index before amendment.",
+    "mandatoryHooks": "348/348 unit and coverage PASS; typecheck/lint/format/unused PASS",
+    "independentReview": "9409367 reviewed; no concrete blockers; no tracked deletion or negative fixture in final tree",
+    "closureEvidence": "PR10 merge state and final main CI must be read by exact current SHA in GitHub; this is a pre-merge evidence snapshot, not a claim about a future SHA"
   }
 }

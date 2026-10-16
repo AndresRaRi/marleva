@@ -7,6 +7,7 @@ import {
   openSync,
   closeSync,
   readdirSync,
+  existsSync,
 } from 'node:fs';
 import path from 'node:path';
 export function command(binary, args, options = {}) {
@@ -114,6 +115,11 @@ export function save(file, value) {
   writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { mode: 0o600 });
 }
 
+export function sourceAreas(folder) {
+  const areas = ['apps/api/src', 'apps/client/app', 'apps/client/src'];
+  if (existsSync(path.join(folder, 'apps/client/m3'))) areas.push('apps/client/m3');
+  return areas;
+}
 export function sourceFiles(folder) {
   const result = [];
   function visit(relative) {
@@ -124,6 +130,6 @@ export function sourceFiles(folder) {
       else if (/\.tsx?$/.test(file) && !file.endsWith('.d.ts')) result.push(file);
     }
   }
-  for (const area of ['apps/api/src', 'apps/client/app', 'apps/client/src']) visit(area);
+  for (const area of sourceAreas(folder)) visit(area);
   return result.sort();
 }
