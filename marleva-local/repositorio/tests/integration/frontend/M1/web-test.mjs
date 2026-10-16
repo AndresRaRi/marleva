@@ -1,3 +1,4 @@
+import { verifyChromeReadiness } from './chrome-readiness.mjs';
 import { verifyLiveEmailChange } from './live-email-change.mjs';
 import { verifyLiveAccountContinuity } from './live-account-continuity.mjs';
 import { verifyPaginatedNotices } from './paginated-notices.mjs';
@@ -140,6 +141,11 @@ try {
     browser,
     process.env.APP_ORIGIN ?? 'https://localhost:8443',
   );
+  const chromeReadiness = await verifyChromeReadiness(
+    browser,
+    process.env.APP_ORIGIN ?? 'https://localhost:8443',
+    captures,
+  );
   await writeFile(
     'tests/results/web-test.json',
     JSON.stringify(
@@ -148,6 +154,7 @@ try {
         browser: await browser.version(),
         viewport: { width: 390, height: 844 },
         cases: {
+          chromeReadiness,
           https: true,
           otp: true,
           account: true,

@@ -188,3 +188,18 @@ Repetición1792167720153 desde el mismo backup inmutable1792118849918: copia63.2
 Código de aplicación corregido únicamente en lectura de permiso y claves distintas de paneles hermanos. No API nueva, cuota alterada, migración modificada, datos originales reemplazados ni limpieza de recursos. Revisión independiente estática del diff sin bloqueos concretos; CI del commit final se comprueba aparte. Source B12 y primer destino detenidos entre etapas con volúmenes conservados; destino repetido conservado. Core esencial Chrome probado y repetido, sin equivalencia Safari/Android/iOS/físicos, aceptación humana ni RPO/RTO productivos. Los tiempos de fases no se suman como tiempo de recuperación por incluir esperas/reanudaciones diferentes.
 
 Repetición113-H-PRISMA1792167720153: PASS49.369s, mismo Prisma7.10.0/digestPG y cinco hashes originales; interrupción real revierte candidata transaccional, reintento bloqueadoP3009, resolve/reaplicación de la misma candidata conserva datos previos. Acta recovery-integral-1792167720153-prisma.json. Contenedor detenido y volumen conservado; sin rollback general ni equivalencia de plataformas.
+
+## Conciliación del esencial Chrome para revisión —16-10-2026
+
+No se repite el ensayo ni se borran recursos para completar este registro. Primario1792118849918 y repetición1792167720153 mantienen el mismo backup/dataset b12-1792118117954, con actas separadas y fallos anteriores conservados.
+
+| Criterio esencial | Evidencia comprobada |
+|---|---|
+| Copia consistente e identidad/integridad | Repetido-copy:51tablas de tres esquemas,304filas del punto copiado;86marleva/140auth/78storage. Manifiestos/hashes/relaciones/atributos coinciden;1612archivos PG,3objetos Storage y1,050,624bytes ficticios. No diferencia inesperada observada respecto de ese punto; no afirma conservar escrituras posteriores no respaldadas. |
+| Borrado posterior, permisos y revocación | Ambos provider:once comprobaciones, ledger reaplicado, recurso retirado no reaparece, credenciales antiguas rechazadas y OTP conserva IDs; control positivo de origen y denegaciónB/público. |
+| Cola sin repetir negocio | Ambos outbox:misma copia física, reinicioPG/SMTPcaído/expiración/reintento y entrega solo en destino. Repetido5.508s; reloj de backoff explícito. |
+| Cliente y operador | Primario-browser-1792167651321 y repetido-browser-1792168307453:24avisos propios visibles/IDs conservados,401/OTP/retorno, dos operadores y MFA completo; cero erroresJS/Axe en estados medidos. |
+| Interrupción de actualización | Ambos prisma:42.334s/49.369s, rollback transaccional de candidata, bloqueoP3009 y resolve/reaplicación de la misma candidata; originales intactos y datos previos conservados. |
+| Repetibilidad y duración | Repetición desde backup inmutable pasó; copia63.221s y cliente/MFA195.869s son fases distintas. Pausa histórica de captura21.236s; no sumarlas como indisponibilidad total. |
+
+El esencial está probado y repetido para Chrome y se entrega a revisión del usuario. No implica B12/M1 aceptados, RPO/RTO aprobados, CPU/RAM históricas medidas ni autorización de piloto. La medición sostenida de capacidad y variantes avanzadas conserva la separación después del piloto ya acordada; la decisión operativa RPO/RTO sigue antes de operar. Android/iOS se aplazan y apagan por instrucción expresa; Safari fuera del navegador elegido para esta entrega. Todos los contenedores propios de estos ensayos quedaron detenidos, con volúmenes/copias conservados.

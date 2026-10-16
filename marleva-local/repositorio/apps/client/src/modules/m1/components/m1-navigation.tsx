@@ -16,6 +16,7 @@ export function M1Navigation({
   onChange: (destination: M1Destination) => void;
   disabled: boolean;
 }) {
+  const active = destination === 'cambio_correo' ? 'cuenta' : destination;
   return (
     <View role="tablist" accessibilityLabel="Navegación de tu cuenta" style={styles.navigation}>
       {tabs.map((tab) => (
@@ -23,25 +24,17 @@ export function M1Navigation({
           key={tab.route}
           accessibilityRole="tab"
           accessibilityLabel={tab.label}
+          aria-selected={active === tab.route}
+          aria-disabled={disabled}
           accessibilityState={{
-            selected: (destination === 'cambio_correo' ? 'cuenta' : destination) === tab.route,
+            selected: active === tab.route,
             disabled,
           }}
           disabled={disabled}
           onPress={() => onChange(tab.route)}
-          style={[
-            styles.navItem,
-            (destination === 'cambio_correo' ? 'cuenta' : destination) === tab.route &&
-              styles.navActive,
-          ]}
+          style={[styles.navItem, active === tab.route && styles.navActive]}
         >
-          <Text
-            style={[
-              styles.navText,
-              (destination === 'cambio_correo' ? 'cuenta' : destination) === tab.route &&
-                styles.navSelected,
-            ]}
-          >
+          <Text style={[styles.navText, active === tab.route && styles.navSelected]}>
             {tab.label}
           </Text>
         </Pressable>

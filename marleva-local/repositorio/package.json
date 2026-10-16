@@ -22,7 +22,7 @@
     "docs:target": "node scripts/generate-m1-target.mjs",
     "lint": "eslint .",
     "format:check": "prettier --check \"apps/**/*.{ts,tsx,mjs,cjs,json}\" \"scripts/*.{mjs,cjs}\" \"tests/**/*.{ts,mjs}\" eslint.config.mjs .prettierrc.json package.json",
-    "quality": "pnpm typecheck && node scripts/check-lint-controls.mjs && pnpm lint && pnpm format:check && node scripts/check-unused.mjs",
+    "quality": "pnpm typecheck && node scripts/check-lint-controls.mjs && pnpm lint && pnpm format:check && node scripts/check-unused.mjs && node scripts/ci-deployment-policy.mjs",
     "test:files": "vitest run tests/integration/backend/M1/files.test.mjs",
     "test:quota": "vitest run tests/integration/backend/M1/otp-quota.test.mjs",
     "test:coverage": "vitest run --config vitest.coverage.config.mjs --coverage",

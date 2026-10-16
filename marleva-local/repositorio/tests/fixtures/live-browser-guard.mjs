@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-export function assertLiveBrowserTarget(env, address) {
+export function assertCiTarget(env) {
   assert.equal(env.MARLEVA_CI_STACK, '1', 'Solo stack CI identificado');
   assert.equal(env.APP_MODE, 'local');
   const database = new URL(env.DATABASE_URL);
@@ -21,5 +21,9 @@ export function assertLiveBrowserTarget(env, address) {
   assert.equal(mail.origin, 'http://127.0.0.1:54624');
   assert.equal(auth.href, auth.origin + '/');
   assert.equal(mail.href, mail.origin + '/');
+}
+
+export function assertLiveBrowserTarget(env, address) {
+  assertCiTarget(env);
   assert.match(address, /^web-(?:other-)?\d{13}@example\.test$/);
 }

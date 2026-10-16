@@ -1,0 +1,144 @@
+{
+  "id": "MAR-M1-PF-BE-103/108",
+  "date": "2026-10-16T18:01:22.324Z",
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "linux",
+    "arch": "x64",
+    "memoryBytes": 16766414848,
+    "cpus": 4
+  },
+  "postgresImage": "sha256:94fe95acfce6e1d41106ff2abd4c08e7932a6941d453499a56f8a620a473de1a",
+  "prisma": "7.10.0",
+  "scope": "HTTP API/PG/Auth reales aislados; sesiones preparadas por OTP. No capacidad productiva, emuladores o SLO.",
+  "dataset": {
+    "accounts": 100,
+    "noticeSizes": [
+      10,
+      50,
+      1000
+    ]
+  },
+  "groups": [
+    {
+      "concurrency": 1,
+      "warmupMs": 10000,
+      "durationMs": 60032.527118,
+      "me": {
+        "requests": 735,
+        "p50": 33.595721999998204,
+        "p95": 62.1487969999871,
+        "p99": 157.38150999999198
+      },
+      "notices": {
+        "requests": 736,
+        "p50": 34.07604499999434,
+        "p95": 66.09836099999666,
+        "p99": 193.2324210000079
+      },
+      "unexpectedErrors": 0,
+      "incorrect": 0,
+      "requestsPerSecond": 24.503382926202672,
+      "nodeRss": 236081152,
+      "cpuUsage": {
+        "user": 3122228,
+        "system": 339417
+      },
+      "pgConnections": 10,
+      "postgresResources": {
+        "BlockIO": "139kB / 171MB",
+        "CPUPerc": "0.26%",
+        "Container": "supabase_db_marleva-ci",
+        "ID": "c5b1b1fc6b17",
+        "MemPerc": "0.77%",
+        "MemUsage": "123MiB / 15.61GiB",
+        "Name": "supabase_db_marleva-ci",
+        "NetIO": "25.6MB / 36.2MB",
+        "PIDs": "16"
+      }
+    },
+    {
+      "concurrency": 5,
+      "warmupMs": 10000,
+      "durationMs": 60113.24756199999,
+      "me": {
+        "requests": 1309,
+        "p50": 110.38672799999767,
+        "p95": 172.88641899998765,
+        "p99": 278.2631140000012
+      },
+      "notices": {
+        "requests": 1308,
+        "p50": 111.84257000000798,
+        "p95": 178.81921400000283,
+        "p99": 276.1400560000038
+      },
+      "unexpectedErrors": 0,
+      "incorrect": 0,
+      "requestsPerSecond": 43.53449707239426,
+      "nodeRss": 263081984,
+      "cpuUsage": {
+        "user": 5323079,
+        "system": 550068
+      },
+      "pgConnections": 14,
+      "postgresResources": {
+        "BlockIO": "139kB / 203MB",
+        "CPUPerc": "0.21%",
+        "Container": "supabase_db_marleva-ci",
+        "ID": "c5b1b1fc6b17",
+        "MemPerc": "0.84%",
+        "MemUsage": "133.9MiB / 15.61GiB",
+        "Name": "supabase_db_marleva-ci",
+        "NetIO": "63.4MB / 93.9MB",
+        "PIDs": "20"
+      }
+    },
+    {
+      "concurrency": 10,
+      "warmupMs": 10000,
+      "durationMs": 60057.18989099999,
+      "me": {
+        "requests": 1438,
+        "p50": 206.24223000000347,
+        "p95": 320.2394659999991,
+        "p99": 462.6819049999758
+      },
+      "notices": {
+        "requests": 1439,
+        "p50": 208.22239099998842,
+        "p95": 322.1624909999955,
+        "p99": 436.00902500000666
+      },
+      "unexpectedErrors": 245,
+      "incorrect": 0,
+      "requestsPerSecond": 47.904339267647615,
+      "nodeRss": 266809344,
+      "cpuUsage": {
+        "user": 7477443,
+        "system": 757351
+      },
+      "pgConnections": 15,
+      "postgresResources": {
+        "BlockIO": "139kB / 249MB",
+        "CPUPerc": "0.23%",
+        "Container": "supabase_db_marleva-ci",
+        "ID": "c5b1b1fc6b17",
+        "MemPerc": "0.86%",
+        "MemUsage": "137.4MiB / 15.61GiB",
+        "Name": "supabase_db_marleva-ci",
+        "NetIO": "102MB / 153MB",
+        "PIDs": "21"
+      }
+    }
+  ],
+  "engineeringTargets": {
+    "p95AtConcurrency5Ms": 500,
+    "unexpectedErrorsPercent": 1,
+    "status": "Objetivos propuestos, no compromisos de piloto"
+  },
+  "postgres": "17.11",
+  "correct": false,
+  "engineeringTargetsMet": true,
+  "finishedAt": "2026-10-16T18:05:13.005Z"
+}

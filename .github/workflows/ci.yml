@@ -81,6 +81,7 @@ jobs:
       - web
       - codeql
       - cobertura
+      - rendimiento
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -220,6 +221,7 @@ jobs:
             marleva-local/repositorio/artifacts/ci/capturas/
             marleva-local/repositorio/artifacts/ci/axe.json
             marleva-local/repositorio/tests/results/web-test.json
+            marleva-local/repositorio/tests/results/chrome-readiness.json
             marleva-local/repositorio/artifacts/ci/lighthouse/
           retention-days: 3
           if-no-files-found: error
@@ -338,3 +340,6 @@ jobs:
       - name: Resumen para revisión
         if: always()
         run: node scripts/ci-summary.mjs sonar '${{ job.status }}'
+
+  rendimiento:
+    uses: ./.github/workflows/m1-verificacion.yml

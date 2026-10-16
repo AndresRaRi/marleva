@@ -496,3 +496,20 @@ it('MAR-M1-IT-FE-103-KEYS | cuenta y actualización conservan identidades distin
     errors.mockRestore();
   }
 });
+
+it('MAR-M1-UT-FE-NAV-ARIA | selección accesible única coincide con el contenido al navegar', async () => {
+  await mount();
+  for (const [label, heading] of [
+    ['Avisos', 'Avisos privados de tu cuenta.'],
+    ['Ayuda', 'Ayuda con tu acceso'],
+    ['Cuenta', 'Tu cuenta'],
+  ]) {
+    await press(label);
+    const tabs = tree.root
+      .findAllByType('Pressable')
+      .filter((node) => node.props.accessibilityRole === 'tab');
+    const selected = tabs.filter((node) => node.props['aria-selected'] === true);
+    expect(selected.map((node) => node.props.accessibilityLabel)).toEqual([label]);
+    expect(text()).toContain(heading);
+  }
+});

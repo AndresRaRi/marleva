@@ -1,0 +1,11 @@
+name: CD desactivado
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  despliegue-desactivado:
+    if: ${{ false }}
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'Sin despliegue autorizado; borrador inactivo.'

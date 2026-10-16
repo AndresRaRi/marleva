@@ -1,0 +1,43 @@
+name: M1 verificación periódica
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * *"
+permissions:
+  contents: read
+concurrency:
+  group: m1-verificacion-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    working-directory: marleva-local/repositorio
+jobs:
+  rendimiento:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Preparar servicios CI aislados
+        run: pnpm ci:stack:start
+      - name: Verificar migraciones
+        run: pnpm ci:migrations
+      - name: Medir cuenta y avisos reales
+        run: node scripts/ci-integration.mjs performance
+      - name: Conservar resultado del ensayo
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: m1-rendimiento-${{ github.sha }}
+          path: |
+            marleva-local/repositorio/tests/results/account-performance.json
+            marleva-local/repositorio/tests/results/ci-integration-performance.json
+          retention-days: 3
+          if-no-files-found: error
+      - name: Detener únicamente el stack CI
+        if: always()
+        run: pnpm ci:stack:stop

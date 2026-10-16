@@ -1,18 +1,87 @@
 {
-  "date": "2026-10-15T15:31:52.710Z",
-  "browser": "155.0.8059.40",
+  "date": "2026-10-16T18:25:06.199Z",
+  "browser": "156.0.8078.4",
   "viewport": {
     "width": 390,
     "height": 844
   },
   "cases": {
+    "chromeReadiness": {
+      "id": "MAR-M1-IT-FE-ACCESSIBLE-009/PF-FE-101",
+      "date": "2026-10-16T18:25:06.195Z",
+      "browser": "156.0.8078.4",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "runs": 30,
+      "cache": "Contexto aislado nuevo por navegación; sin borrar cachés del usuario",
+      "p50": 203.0784879999992,
+      "p95": 249.3513110000058,
+      "p99": 267.94401199999265,
+      "engineeringTargetMs": 3000,
+      "engineeringTargetMet": true,
+      "cases": {
+        "keyboardOtp": true,
+        "keyboardNavigation": true,
+        "focusVisible": true,
+        "accessibleNames": true,
+        "zoom200NoHorizontalOverflow": true,
+        "keyboardLogout": true
+      },
+      "limits": [
+        "Árbol accesible y teclado no acreditan lector humano, Android/iOS ni WCAG completa",
+        "Umbral de ingeniería propuesto; no SLO de producción"
+      ]
+    },
     "https": true,
     "otp": true,
     "account": true,
     "cookie": true,
     "noLocalStorage": true,
     "keyboardFocus": true,
-    "logout": true
+    "logout": true,
+    "realSessionReloadNotices": true,
+    "liveAccountContinuity": {
+      "liveIntegration": true,
+      "provider": "Supabase Auth local CI",
+      "datastore": "PostgreSQL CI",
+      "seededNotices": 55,
+      "pages": 3,
+      "paginationRequests": 3,
+      "sameAccountReturn": true,
+      "differentAccountDiscard": true,
+      "cooldownWaitMs": 56837,
+      "durationExcludingCooldownMs": 3148
+    },
+    "liveEmailChange": {
+      "liveIntegration": true,
+      "twoIndependentSessions": true,
+      "incorrectCodeKeepsStep": true,
+      "serverProgressAfterReload": true,
+      "bothMailboxesConfirmed": true,
+      "identityPreserved": true,
+      "emailChangeRevokesPreviousSessions": true,
+      "logoutAllRevokesOtherSession": true
+    },
+    "resumedNotices": {
+      "fixtureBrowser": true,
+      "initialPending": true,
+      "reloadRestoresNotices": true,
+      "unavailableNotEmpty": true,
+      "retry": true,
+      "expiredHidesNotices": true,
+      "lateResponseDiscarded": true,
+      "requests": 7,
+      "firstLoadMs": 240
+    },
+    "paginatedNotices": {
+      "fixtureBrowser": true,
+      "items": 55,
+      "requests": 5,
+      "retryPreservesList": true,
+      "refreshResets": true
+    }
   },
   "pageErrors": []
 }

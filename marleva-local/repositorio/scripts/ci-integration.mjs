@@ -1,6 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { parseEnv } from 'node:util';
-import { readFileSync, mkdirSync, openSync, closeSync, writeFileSync } from 'node:fs';
+import { readFileSync, mkdirSync, openSync, closeSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 const folder = path.resolve('artifacts/ci/stack');
 const env = {
@@ -11,7 +11,8 @@ const env = {
 if (env.MARLEVA_CI_STACK !== '1') throw new Error('Requiere stack CI preparado');
 const proxyExists = process.env.MARLEVA_CI_EXISTING_PROXY === '1';
 const mode = process.argv[2] ?? 'backend';
-if (!['backend', 'web', 'contract'].includes(mode)) throw new Error('Modalidad CI desconocida');
+if (!['backend', 'web', 'contract', 'performance'].includes(mode))
+  throw new Error('Modalidad CI desconocida');
 if (proxyExists) env.MARLEVA_CA_FILE = path.resolve('infra/local/secrets/ca.crt');
 const children = [];
 const outcomes = [];
@@ -37,7 +38,9 @@ try {
   if (mode === 'web') run('build web', 'pnpm', ['--filter', '@marleva/client', 'build']);
   run('semillas ficticias', process.execPath, ['apps/api/seed.mjs']);
   if (!proxyExists) run('certificado CI', 'sh', ['scripts/create-certificates.sh']);
-  start('api', ['apps/api/dist/main.js']);
+  start('api', [
+    mode === 'performance' ? 'tests/fixtures/ci-api-observed.mjs' : 'apps/api/dist/main.js',
+  ]);
   if (!proxyExists) start('https', ['scripts/proxy.mjs']);
   let ready = false;
   for (let attempt = 0; attempt < 100; attempt++) {
@@ -62,7 +65,11 @@ try {
       env: { ...env, MARLEVA_QUOTA_CHECK: '1' },
     });
     run('modelo objetivo', 'pnpm', ['test:schema'], { env: { ...env, MARLEVA_SCHEMA_CHECK: '1' } });
-  } else if (mode === 'web') run('web y accesibilidad', process.execPath, ['scripts/ci-e2e.mjs']);
+  } else if (mode === 'performance')
+    run('rendimiento cuenta y avisos', process.execPath, [
+      'tests/performance/backend/M1/account.mjs',
+    ]);
+  else if (mode === 'web') run('web y accesibilidad', process.execPath, ['scripts/ci-e2e.mjs']);
   else run('contrato generado', process.execPath, ['scripts/ci-contract.mjs']);
 } finally {
   for (const child of children.reverse()) {
@@ -81,6 +88,18 @@ try {
       {
         date: new Date().toISOString(),
         outcomes,
+        providerFailures:
+          mode === 'performance' && existsSync(folder + '/api.log')
+            ? readFileSync(folder + '/api.log', 'utf8')
+                .split('\n')
+                .filter((line) => line.startsWith('{"event":"ci.provider.failure"'))
+                .reduce((counts, line) => {
+                  const row = JSON.parse(line);
+                  const key = row.endpoint + ':' + row.status;
+                  counts[key] = (counts[key] ?? 0) + 1;
+                  return counts;
+                }, {})
+            : undefined,
         limits: proxyExists
           ? 'Ensayo Mac usa proxy TLS existente y CA pública; API/datos/proveedor CI separados'
           : 'Ensayo CI local; no B12 integral ni plataformas nativas',

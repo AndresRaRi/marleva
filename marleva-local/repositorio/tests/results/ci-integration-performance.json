@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-16T18:23:02.501Z",
+  "outcomes": [
+    {
+      "name": "build API",
+      "status": 0
+    },
+    {
+      "name": "semillas ficticias",
+      "status": 0
+    },
+    {
+      "name": "certificado CI",
+      "status": 0
+    },
+    {
+      "name": "rendimiento cuenta y avisos",
+      "status": 0
+    }
+  ],
+  "providerFailures": {},
+  "limits": "Ensayo CI local; no B12 integral ni plataformas nativas"
+}
