@@ -13,6 +13,17 @@ async function confirmation(page, address, code, expectedStatus) {
   assert.equal(response.status(), expectedStatus);
   return response.json();
 }
+async function activeSession(page, accountId) {
+  const cookie = (await page.context().cookies()).find((item) => item.name === 'marleva_session');
+  assert.ok(cookie?.value, 'Cookie real no vacía antes de revocarla');
+  const pending = page.waitForResponse((response) => new URL(response.url()).pathname === '/v1/me');
+  await page.reload({ waitUntil: 'networkidle' });
+  const response = await pending;
+  assert.equal(response.status(), 200, 'Control positivo de sesión antes de revocación');
+  assert.equal((await response.json()).id, accountId);
+  await page.getByText('Tu cuenta', { exact: true }).waitFor();
+  return cookie.value;
+}
 async function rejectedSession(page) {
   const pending = page.waitForResponse((response) => new URL(response.url()).pathname === '/v1/me');
   await page.reload({ waitUntil: 'networkidle' });
@@ -35,13 +46,9 @@ export async function verifyLiveEmailChange(browser, page, origin, audit) {
     await waitOtpCooldown(startedAt);
     assert.equal(await liveOtp(other, address), accountId);
     await other.getByText('Tu cuenta', { exact: true }).waitFor();
-    const credentials = async (context) =>
-      (await context.cookies()).find((item) => item.name === 'marleva_session')?.value;
-    assert.notEqual(
-      await credentials(page.context()),
-      await credentials(second),
-      'Dos sesiones independientes',
-    );
+    const primaryCredential = await activeSession(page, accountId);
+    const secondaryCredential = await activeSession(other, accountId);
+    assert.notEqual(primaryCredential, secondaryCredential, 'Dos sesiones independientes');
     const next = `web-${Date.now()}@example.test`;
     const oldIds = await capturedIds(address);
     const newIds = await capturedIds(next);
@@ -79,6 +86,11 @@ export async function verifyLiveEmailChange(browser, page, origin, audit) {
     await waitOtpCooldown(lastLoginAt);
     assert.equal(await liveOtp(other, next), accountId);
     await other.getByText('Tu cuenta', { exact: true }).waitFor();
+    assert.notEqual(
+      await activeSession(page, accountId),
+      await activeSession(other, accountId),
+      'Ambas sesiones vigentes antes de cerrar todas',
+    );
     await page.getByRole('button', { name: 'Cerrar todas las sesiones', exact: true }).click();
     await page.getByText('Accede a tu cuenta', { exact: true }).waitFor();
     await rejectedSession(other);
