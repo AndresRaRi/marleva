@@ -13,6 +13,7 @@ Desde esta carpeta:
 ```sh
 ./scripts/tool colima start --profile marleva
 ./scripts/tool supabase start --workdir infra/local --network-id marleva-private --exclude studio,imgproxy,edge-runtime,logflare,vector
+./scripts/tool node scripts/configure-auth-pool.mjs marleva-m1 infra/local
 ./scripts/tool pnpm --filter @marleva/api build
 ./scripts/tool node scripts/local.mjs start
 ```
@@ -111,3 +112,10 @@ Conservar firma ad hoc predeterminada del simulador: no usar CODE_SIGNING_ALLOWE
 
 
 Continuación iOS16-10: ambos buzones, error/progreso tras relanzar, revocación, aviso/retorno a Cuenta y MFA básico pasaron. Recuperación híbrida: solicitud y revisión por API real; iOS comprobó cierre de sesión anterior, retorno a Ayuda por OTP, capacidad, nuevo factor, finalización y OTP/TOTP con permiso recuperado. Acta ios-test.json, sección extendedFlows; matriz inicial e instructivo distinguen pasos nativos y API. Este incremento documental requiere su propio CI/revisión; no acredita recuperación íntegra por UI nativa, accesibilidad, físico ni aceptación integral. Android apagado, datos y migraciones preservados.
+
+
+## Pool de conexiones Auth comprobado —16-10-2026
+
+Auth2.197.0 sin pool inactivo abre/cierra conexiones hasta agotar puertos bajo carga; causa observada en CI y descrita en la [incidencia oficial](https://github.com/supabase/auth/issues/2831). La preparación de stacks CI/B12 aplica automáticamente pool máximo20/inactivo20 mediante variables oficiales de Auth, conserva el bundle y comprueba los límites reales tras reiniciar solo Auth. Para el stack local, el comando anterior recibe su proyecto y workdir exactos; rechaza etiquetas/ruta o configuración ajenas antes de escribir. No resetear/recrear el stack si la ruta no coincide. En este Mac, el contenedor local existente pertenece a la ruta original del proyecto terminada en marleva-local/repositorio/infra/local; se comprobó y configuró explícitamente sin moverlo.
+
+[Acta causal](tests/results/auth-pool.json): en diez segundos y diez consultas concurrentes, antes547HTTP200 abrieron2736conexiones nuevas; después9058HTTP200 abrieron10. Prueba de reutilización, no capacidad productiva ni prueba de todos los cuerpos. El cliente/API y sus reglas no cambian; cuota, carga, imágenes y migraciones intactas. La misma carga completa remota debe pasar antes de integrar y comprobar main.

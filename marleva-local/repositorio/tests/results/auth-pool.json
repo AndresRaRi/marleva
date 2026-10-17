@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-16T23:43:38.926Z",
+  "chat": "MAR-CHAT-009",
+  "id": "MAR-CI-AUTH-POOL-001",
+  "provider": "Supabase Auth v2.197.0; CLI 2.120.0",
+  "cause": "Auth opened and closed database connections without an idle pool; remote dial tcp cannot assign requested address.",
+  "reference": "https://github.com/supabase/auth/issues/2831",
+  "failedMainRun": 38980945133,
+  "diagnosticRun": 38981993121,
+  "configuration": {
+    "maxOpen": 20,
+    "maxIdle": 20,
+    "source": "Official GOTRUE_DB_MAX_POOL_SIZE and GOTRUE_DB_MAX_IDLE_POOL_SIZE; supported Auth dotenv startup",
+    "verifiedTargets": [
+      "marleva-ci",
+      "marleva-m1"
+    ]
+  },
+  "localProbe": {
+    "scope": "Direct Auth reads of existing own fictitious CI accounts, concurrency10 and ten seconds per stage; no business mutation.",
+    "before": {
+      "newDatabaseSessions": 2736,
+      "date": "2026-10-16T23:42:52.195Z",
+      "scope": "Direct Auth local CI; existing own fictional performance sessions; no API/business mutation",
+      "concurrency": 10,
+      "durationMs": 10115,
+      "counts": {
+        "200": 547
+      }
+    },
+    "after": {
+      "newDatabaseSessions": 10,
+      "date": "2026-10-16T23:43:38.926Z",
+      "scope": "Direct Auth local CI; existing own fictional performance sessions; no API/business mutation",
+      "concurrency": 10,
+      "durationMs": 10014,
+      "counts": {
+        "200": 9058
+      }
+    }
+  },
+  "checks": {
+    "targetLabelsAndPath": true,
+    "foreignConfigurationNotOverwritten": true,
+    "restartOnlyAuth": true,
+    "appliedLimitsVerifiedFromStartup": true,
+    "localReadyHttpStatus": 200
+  },
+  "limits": [
+    "HTTP200 counters alone do not prove identity/body correctness or production capacity.",
+    "Remote unchanged full load, CI and main still required; no fix claimed from diagnosis alone.",
+    "No image, auth method, quota, kernel, database migration or data deletion changed."
+  ]
+}

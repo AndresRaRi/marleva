@@ -45,7 +45,7 @@ it('MAR-CI-PROVIDER-003 | error encadenado conserva solo vocabulario técnico ce
     request_id: 'private-request-id',
   });
   expect(providerErrorShape(message)).toBe(
-    'error finding user sql scan error column index cannot scan null into string',
+    'error finding user sql scan error column index cannot scan null into string select',
   );
   expect(providerErrorShape(JSON.stringify({ msg: 'secret error', token: 'sensitive' }))).toBe('');
   expect(providerErrorShape('ERROR sql connection already closed password=private-value')).toBe(
@@ -59,4 +59,34 @@ it('MAR-CI-PROVIDER-004 | limita palabras y formas sin devolver contenido descon
   expect(Object.keys(report.shapes)).toHaveLength(33);
   expect(report.shapes.other).toBe(8);
   expect(report.unclassified).toBe(40);
+});
+
+it('MAR-CI-PROVIDER-005 | distingue causas técnicas y descarta valores y nombres', () => {
+  expect(
+    providerErrorShape(
+      'ERROR database error: cannot assign requested address. password=private-value',
+    ),
+  ).toBe('error database error cannot assign requested address');
+  expect(
+    providerErrorShape(
+      'ERROR cannot serialize access due to concurrent update; private@example.test',
+    ),
+  ).toBe('error cannot serialize access due concurrent update');
+  expect(
+    providerErrorShape(
+      JSON.stringify({
+        error:
+          'failed to fetch user: database error: cannot acquire pool; user@example.test token=private-key',
+      }),
+    ),
+  ).toBe('failed fetch user database error cannot acquire pool');
+});
+
+it('MAR-CI-PROVIDER-006 | agotamiento de direcciones se clasifica sin emitir host/usuario', () => {
+  const report = summarizeProviderLog(
+    'ERROR failed connect host=private-host user=private-user database=private-database: dial tcp 172.1.2.3:5432 connect cannot assign requested address',
+  );
+  expect(report.categories).toEqual({ addressExhaustion: 1 });
+  expect(report.unclassified).toBe(0);
+  expect(JSON.stringify(report)).not.toMatch(/private|172|5432/);
 });

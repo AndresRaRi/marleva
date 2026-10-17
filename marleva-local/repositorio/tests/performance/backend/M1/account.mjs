@@ -51,6 +51,9 @@ try {
     accounts.push({ token: a.token, id: a.account.id, size });
   }
   for (const concurrency of [1, 5, 10]) {
+    const pgStart = (
+      await db.$queryRaw`SELECT sessions FROM pg_stat_database WHERE datname=current_database()`
+    )[0].sessions;
     const samples = { me: [], notices: [] };
     let errors = 0,
       incorrect = 0,
@@ -125,6 +128,11 @@ try {
       nodeRss: process.memoryUsage().rss,
       cpuUsage: process.cpuUsage(),
       pgConnections: pg[0].count,
+      newDatabaseSessions: Number(
+        (
+          await db.$queryRaw`SELECT sessions FROM pg_stat_database WHERE datname=current_database()`
+        )[0].sessions - pgStart,
+      ),
       postgresResources: JSON.parse(
         execFileSync(
           'docker',

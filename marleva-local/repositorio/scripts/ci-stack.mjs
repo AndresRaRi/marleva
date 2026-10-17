@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensureCiTool } from './ci-tool.mjs';
 import { ciStackContext, stackConfiguration } from './ci-stack-context.mjs';
+import { configureAuthPool } from './configure-auth-pool.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 process.chdir(root);
 const context = ciStackContext(root, process.env.MARLEVA_STACK_CONTEXT ?? 'ci');
@@ -52,6 +53,7 @@ if (action === 'stop') {
     ],
     { stdio: ['ignore', 'ignore', 'pipe'], timeout: 600000 },
   );
+  const authPool = await configureAuthPool(context);
   const state = JSON.parse(cli(['status', '--output', 'json']));
   const previous = existsSync(folder + '/.env')
     ? parseEnv(readFileSync(folder + '/.env', 'utf8'))
@@ -118,6 +120,7 @@ if (action === 'stop') {
       project,
       loopbackOnly: true,
       databaseMajor: 17,
+      authPool,
     }),
   );
   console.log(
