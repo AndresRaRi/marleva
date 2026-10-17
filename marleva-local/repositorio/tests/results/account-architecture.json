@@ -24,7 +24,13 @@
       "violations": 0,
       "clones": 0
     },
-    "staticReview": "sin hallazgos accionables; comparación completa con baseline"
+    "staticReview": "sin hallazgos accionables; comparación completa con baseline",
+    "newLineCoverage": {
+      "base": "e0aefd7bbdd386f18790dd3eda572270767edece",
+      "covered": 318,
+      "total": 321,
+      "percent": 99.07
+    }
   },
   "invariants": [
     "bloqueos en el mismo orden y con las mismas funciones PG",
