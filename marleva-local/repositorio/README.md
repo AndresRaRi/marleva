@@ -30,7 +30,7 @@ Aplicación: https://localhost:8443. Salud: https://localhost:8443/health/ready.
 ./scripts/tool colima stop --profile marleva
 ```
 
-No borrar volúmenes. Estado API/proxy: scripts/local.mjs status. Arranque/parada local comprobados; instalación limpia/restauración todavía pendientes.
+No borrar volúmenes. Estado API/proxy: scripts/local.mjs status. Arranque/parada local comprobados. Instalación con lockfile, API/web y migraciones desde cero pasan en CI; restauración esencial B12 repetida y aprobada en Chrome. Instalación limpia y recorridos nativos/físicos siguen en la lista C01–C06 de la matriz.
 
 ## Pruebas y lectura por parte
 
@@ -45,7 +45,7 @@ Unitarias: pnpm test:unit. Tipado: pnpm typecheck. Calidad: pnpm quality. Integr
 
 ## Estado real y entrega Chrome
 
-Main2156078 integra hasta PR19; su [CI38972892582](https://github.com/AndresRaRi/marleva/actions/runs/38972892582) está aprobado. Acceso/cuenta, cambio por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA tienen pruebas reales Chrome/API. B12 esencial Chrome está probado y repetido desde el mismo backup; no RPO/RTO productivos. [Actas y límites](docs/proceso/RECUPERACION_B12_M1.md). M1 conserva implementación y aceptación separadas en [avance](docs/avance.md).
+Main1bb5224 integra hasta PR21; su [CI38984321194](https://github.com/AndresRaRi/marleva/actions/runs/38984321194) completo está aprobado. La carga pasó en1/5/10concurrentes sin errores ni respuestas incorrectas, con reutilización Auth20/20 comprobada. Acceso/cuenta, cambio por ambos buzones, avisos/retorno, salida entre sesiones y recuperación MFA tienen pruebas reales Chrome/API. B12 esencial Chrome está probado y repetido desde el mismo backup; no RPO/RTO productivos. [Actas y límites](docs/proceso/RECUPERACION_B12_M1.md). M1 conserva implementación y aceptación separadas en [avance](docs/avance.md).
 
 [PR14](https://github.com/AndresRaRi/marleva/pull/14) completa verificaciones de carreras de sesión, teclado/foco/navegación/zoom y rendimiento remoto, junto con controles periódicos y manual. Consultar su SHA/CI y el main posterior antes de integrar; no heredar verdes. Revisión estática resuelta y401unitarias/cobertura locales aprobadas al guardar el incremento inicial. No despliegue ni módulos nuevos.
 
@@ -119,3 +119,6 @@ Continuación iOS16-10: ambos buzones, error/progreso tras relanzar, revocación
 Auth2.197.0 sin pool inactivo abre/cierra conexiones hasta agotar puertos bajo carga; causa observada en CI y descrita en la [incidencia oficial](https://github.com/supabase/auth/issues/2831). La preparación de stacks CI/B12 aplica automáticamente pool máximo20/inactivo20 mediante variables oficiales de Auth, conserva el bundle y comprueba los límites reales tras reiniciar solo Auth. Para el stack local, el comando anterior recibe su proyecto y workdir exactos; rechaza etiquetas/ruta o configuración ajenas antes de escribir. No resetear/recrear el stack si la ruta no coincide. En este Mac, el contenedor local existente pertenece a la ruta original del proyecto terminada en marleva-local/repositorio/infra/local; se comprobó y configuró explícitamente sin moverlo.
 
 [Acta causal](tests/results/auth-pool.json): en diez segundos y diez consultas concurrentes, antes547HTTP200 abrieron2736conexiones nuevas; después9058HTTP200 abrieron10. Prueba de reutilización, no capacidad productiva ni prueba de todos los cuerpos. El cliente/API y sus reglas no cambian; cuota, carga, imágenes y migraciones intactas. La misma carga completa remota debe pasar antes de integrar y comprobar main.
+
+
+Cierre UC010,16-10-2026: comprobación de salud separada, conexión/consulta PG limitadas a tres segundos y fallos de dependencia convertidos a503 con recuperación. Nueve unitarias dirigidas y ensayo HTTP real de cuatro dependencias CI, todas reanudadas y sin borrados; acta tests/results/readiness-failures.json. El runner se añade al final de integración CI, secuencial y fuera de OTP/archivos/outbox. La [lista finita de cierre](docs/proceso/MATRIZ_CASOS_M1.md#lista-finita-para-aceptar-y-cerrar-m1--16-10-2026) sustituye faltantes vagos; nuevo incremento aún requiere revisión/CI propios.

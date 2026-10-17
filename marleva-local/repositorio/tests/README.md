@@ -1,5 +1,9 @@
 # Pruebas Marleva
 
+Vigente16-10-2026: main1bb5224 tiene CI completo38984321194 aprobado. API/Chrome, carga y B12 esencial repetido tienen evidencia; consultar matriz M1 C01–C06 antes de interpretar los antecedentes siguientes. No ejecutar scripts históricos de limpieza/retirada durante la revisión actual: se conserva todo. Nuevo runner tests/integration/backend/M1/readiness-failures.mjs se ejecuta al final del backend CI, después de OTP/B09/outbox/esquema. Requiere stack marleva-ci y ruta/etiquetas exactas; detiene/reanuda solo Auth/Storage/correo/PG CI, de uno en uno, y no borra ni escribe negocio. Acta readiness-failures.json. No ejecutar junto a otros recorridos del mismo stack.
+
+## Antecedentes por incremento
+
 Leer primero docs/proceso/PROCESO_DESARROLLO_MARLEVA.md,02 §16.4 y secuencias del módulo. IDs y casos se vinculan a UC/SEQ/paso. Carpetas: unit/integration/performance → backend/frontend → módulo. Fixtures solo ficticios; resultados sin secretos. Ninguna carpeta vacía equivale a prueba realizada.
 
 - Unitarias: simulador, validación/cifrado backend y adaptador API frontend. Pruebas de pantallas/estados, reglas restantes y configuración completa pendientes.

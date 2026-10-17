@@ -8,6 +8,8 @@ Implementación: criterio cuya salida funcional descrita abajo tiene código dis
 
 ## M1: acceso/cuenta y base necesaria
 
+Estado vigente16-10: main1bb5224/PR21 tiene CI propio38984321194 completo aprobado, incluida carga sin errores ni respuestas incorrectas. Pendientes concretos y responsables únicamente en [C01–C06 de la matriz](proceso/MATRIZ_CASOS_M1.md#lista-finita-para-aceptar-y-cerrar-m1--16-10-2026); las fotografías posteriores son históricas. Instalación/build/arranque web/API desde lockfile y migraciones cero ya comprobados en CI, B12 esencial Chrome repetido. Nueva corrección UC010 comprobada localmente ante caída real de las cuatro dependencias; exige su CI/revisión propios. No aumenta aceptación por documentación ni por evidencia de otra plataforma.
+
 | Criterio estable | Salida funcional | Implementado | Aceptado | Evidencia / falta para aceptar |
 |---|---|---|---|---|
 | UC001 | Pedir código por correo con espera/cuota/respuesta genérica | Sí | No | AccountService.challenge; actas otp-quota; faltan todas las ramas/plataformas aplicables |
@@ -19,9 +21,9 @@ Implementación: criterio cuya salida funcional descrita abajo tiene código dis
 | UC007 | Segundo factor básico del operador y nivel de garantía AAL2 | Sí | No | enroll/verifyFactor/operator; API/unitarias; plataforma/rol/revisión completos pendientes; recuperación en UC014 |
 | UC008 | Avisos durables y navegación paginada propia en cliente | Sí | No | Cursor/outbox y NoticePages/AccountNotices conectados a API009. CI38923822365 comprueba paginación PG/Auth/Chrome real, recarga y retorno a Avisos tras OTP; plataformas y demás ramas pendientes |
 | UC009 | Recuperar acceso y retomar acción interna segura | Sí | No | M1App/SafeReturn/AccountWorkspace enlazan intención en memoria, nueva autenticación y consultas propias API025–027; unitarias de misma/otra identidad y cancelación en CI902308e. Retorno a Avisos con misma/otra identidad comprobado en CI38923822365; demás acciones/plataformas pendientes |
-| UC010 | Salud/configuración/dependencias locales y fallo recuperable | Sí | No | HealthController/config/adaptador; completar caídas/rendimiento/regresión de plataformas |
-| UC011 | Permiso/lectura/borrado de archivo ficticio privado con integridad | Sí | No | B09 código y actas files/recovery; sin pantalla M2 exigida; aceptación/recuperación completa pendiente |
-| UC012 | Simulador aislado: idempotencia, eventos, fallos y reembolso | Sí | No | PaymentSimulator y pruebas; no acredita M6; completar contrato/medición/aceptación aplicables |
+| UC010 | Salud/configuración/dependencias locales y fallo recuperable | Sí | No | Salud/rendimiento de main aprobados; readiness-failures.json comprueba localmente cuatro caídas/503/live200/recuperación. CI de la corrección y C03–C05 pendientes |
+| UC011 | Permiso/lectura/borrado de archivo ficticio privado con integridad | Sí | No | B09 y recuperación esencial repetida comprobados; sin pantalla M2 exigida. Revisión/aceptación del soporte y condiciones reales separadas; C05 |
+| UC012 | Simulador aislado: idempotencia, eventos, fallos y reembolso | Sí | No | PaymentSimulator y pruebas CI; alcance aislado, sin dinero real ni M6. Aceptar evidencia y límite en C05; no inventar compras como requisito M1 |
 | UC013 | Restauración/repetibilidad sin revivir accesos o borrados | Sí | No | Herramientas integrales, ensayo1792118849918 y repetición1792167720153 enlazan copia/Auth/Storage/ledger/permisos/revocación/cola/cliente; Prisma real separado por diseño. Plataformas, mediciones restantes y aceptación pendientes |
 | UC014 | Recuperación administrativa MFA con otro autorizado | Sí | No | Siete operaciones backend integradas y roles persistidos; recovery-api.json y recovery-schema.json. Recuperación integral UI Chrome con otro revisor, OTP/TOTP/capacidad y retorno comprobada en1792167720153; plataformas y aceptación pendientes |
 
@@ -126,3 +128,5 @@ Main2156078/PR19 tiene CI propio38972892582 aprobado. La [matriz vigente](proces
 
 
 Corrección de causa Auth16-10: main934ccd8 integraPR20 pero su CI38980945133 falló en carga. CI38981993121 precisó agotamiento de puertos por conexiones nuevas del proveedor sin pool inactivo. Configuración oficial máxima20/inactiva20, guardias de destino y verificación de límites; acta auth-pool.json confirma reutilización en prueba local. Carga remota íntegra y CI propio del main posterior aún pendientes. No cambia implementación/aceptación ni se convierte una mediciónHTTP en capacidad productiva.
+
+Cierre técnico ejecutable16-10: salud con cuatro caídas reales y recuperación pasa localmente; nueva FK EmailChange validada/aplicada al origen sin alterar filas ni cinco migraciones anteriores. Seis migraciones probadas desde cero y actualización; recuperación Prisma actualizada pasó en34.345s con acta por intento y volúmenes conservados. Contratos, datos y pantallas mantienen alcance; no aumenta aceptación. C06 mantiene separación restante de AccountService visible, además de C01–C05. Nuevo CI/revisión/merge del incremento aún necesarios.

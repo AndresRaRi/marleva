@@ -39,7 +39,7 @@ Table marleva.Challenge {
 }
 Table marleva.EmailChange {
  id uuid [pk, not null, default: `gen_random_uuid()`]
- accountId uuid [not null, note: 'Brecha MAR-M1-BUG-002: relación lógica con Account sin FK en migración aplicada; revisar y migrar antes de cierre.']
+ accountId uuid [not null, note: 'FK sin cascada en nueva migración 202610160001_email_change_owner; cinco migraciones anteriores inmutables.']
  oldEmail text [not null]
  newEmail text [not null]
  providerTokens text [not null]
@@ -84,6 +84,7 @@ Table marleva.Development {
 }
 Ref Session_accountId_fkey: marleva.Session.accountId > marleva.Account.id [delete: no action, update: no action]
 Ref Notice_accountId_fkey: marleva.Notice.accountId > marleva.Account.id [delete: no action, update: no action]
+Ref EmailChange_accountId_fkey: marleva.EmailChange.accountId > marleva.Account.id [delete: no action, update: no action]
 
 Table marleva.PrivateFixture {
  id uuid [pk, not null, default: `gen_random_uuid()`]

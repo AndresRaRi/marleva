@@ -1,0 +1,40 @@
+{
+  "id": "MAR-M1-IT-BE-110-DEPENDENCIES",
+  "date": "2026-10-17T02:51:48.048Z",
+  "cases": [
+    {
+      "service": "auth",
+      "status": 503,
+      "live": 200,
+      "unavailableMs": 3029.860708,
+      "recovered": true,
+      "durationMs": 3794.4388329999997
+    },
+    {
+      "service": "storage",
+      "status": 503,
+      "live": 200,
+      "unavailableMs": 3023.593917000001,
+      "recovered": true,
+      "durationMs": 9360.688834
+    },
+    {
+      "service": "inbucket",
+      "status": 503,
+      "live": 200,
+      "unavailableMs": 97.69599999999991,
+      "recovered": true,
+      "durationMs": 2811.5354579999985
+    },
+    {
+      "service": "db",
+      "status": 503,
+      "live": 200,
+      "unavailableMs": 13.792625000001863,
+      "recovered": true,
+      "durationMs": 3357.714165999998
+    }
+  ],
+  "passed": true,
+  "limits": "Solo salud HTTP con PG/Auth/Storage/correo CI reales, detenidos de uno en uno y reanudados; sin escrituras de negocio, borrados, plataformas móviles o SLO productivo."
+}

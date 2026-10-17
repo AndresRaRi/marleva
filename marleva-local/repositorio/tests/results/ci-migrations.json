@@ -1,15 +1,20 @@
 {
-  "date": "2026-10-15T15:31:43.561Z",
+  "date": "2026-10-17T02:57:33.970Z",
   "outcomes": [
     {
       "case": "desde cero",
-      "applied": 5,
+      "applied": 6,
+      "ownerConstraintValidated": true,
+      "orphanRejected": true,
       "status": "PASS"
     },
     {
-      "case": "cuatro anteriores → quinta",
-      "applied": 5,
+      "case": "cuatro anteriores → quinta → sexta",
+      "applied": 6,
       "operatorPreserved": true,
+      "emailChangePreserved": true,
+      "ownerConstraintValidated": true,
+      "orphanRejected": true,
       "status": "PASS"
     }
   ],
@@ -33,6 +38,10 @@
     {
       "name": "202610140001_mfa_recovery",
       "sha256": "dc97cffec26bca6c1f800f7307f600cf56e023e7fb16773383294c4e4ab6b4e0"
+    },
+    {
+      "name": "202610160001_email_change_owner",
+      "sha256": "0bd47b84a0f9fbe033a0ebb5a2fe61660ad5a6df9321afcf55243e66a411d2ae"
     }
   ],
   "limits": "Prisma/PG17 aislados; no acredita restauración B12 ni producción"

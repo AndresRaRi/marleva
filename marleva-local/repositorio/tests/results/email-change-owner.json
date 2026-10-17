@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-17T03:03:46.972Z",
+  "id": "MAR-M1-DATA-EMAIL-OWNER-001",
+  "target": "marleva-m1/local",
+  "migration": "202610160001_email_change_owner",
+  "orphans": 0,
+  "rows": {
+    "accounts": 170,
+    "emailChanges": 16
+  },
+  "rowDigestsPreserved": true,
+  "constraintValidated": true,
+  "noCascade": true,
+  "limits": "Solo añade FK; no borra, reasigna o corrige filas, no cambia migraciones anteriores, Auth, archivos o factores."
+}

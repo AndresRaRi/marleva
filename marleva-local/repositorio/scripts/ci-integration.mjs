@@ -66,6 +66,9 @@ try {
       env: { ...env, MARLEVA_QUOTA_CHECK: '1' },
     });
     run('modelo objetivo', 'pnpm', ['test:schema'], { env: { ...env, MARLEVA_SCHEMA_CHECK: '1' } });
+    run('salud y recuperación de dependencias', process.execPath, [
+      'tests/integration/backend/M1/readiness-failures.mjs',
+    ]);
   } else if (mode === 'performance')
     run('rendimiento cuenta y avisos', process.execPath, [
       'tests/performance/backend/M1/account.mjs',
