@@ -2,7 +2,6 @@ import { Controller, Get, Post, Delete, Body, Req, Res, Param } from '@nestjs/co
 import type { Request, Response } from 'express';
 import { AccountService } from './account.service.js';
 import { config } from './config.js';
-import { readiness } from './readiness.js';
 import { fail } from './security.js';
 import { accountRequest } from './modules/m1/presentation/dtos/account-request.js';
 @Controller('v1')
@@ -99,14 +98,5 @@ export class AccountController {
   }
   @Get('operator/access') async operator(@Req() r: Request) {
     return this.accounts.operator(await this.accounts.principal(r));
-  }
-}
-@Controller('health')
-export class HealthController {
-  @Get('live') live() {
-    return { status: 'alive' };
-  }
-  @Get('ready') async ready() {
-    return readiness();
   }
 }

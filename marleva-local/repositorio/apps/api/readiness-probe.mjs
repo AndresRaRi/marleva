@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { HealthController } from './dist/controller.js';
+import { HealthController } from './dist/health.controller.js';
 import { HttpErrors } from './dist/http-errors.filter.js';
 import { httpPolicy } from './dist/http-policy.js';
 

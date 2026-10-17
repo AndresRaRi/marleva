@@ -15,6 +15,7 @@ sequenceDiagram
     API->>DB: S020 comprobar PostgreSQL
     Note over API,DB: Conexión y consulta limitadas a 3 segundos; cerrar cliente también ante fallo
     API->>AUTH: S030 comprobar identidad y almacenamiento
+    Note over API,AUTH: Lectura Auth limitada a un registro verifica su conexión DB; descartar cuerpo sin exponer usuarios
     API->>MAIL: S040 comprobar capturador
     alt Dependencia caída o configuración inválida
      API-->>UI: S050 503 o rechazo de arranque con recuperación

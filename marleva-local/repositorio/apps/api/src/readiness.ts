@@ -14,20 +14,24 @@ async function probeDependencies() {
   const db = database({ connectionTimeoutMillis: 3000, query_timeout: 3000 });
   try {
     await db.$queryRaw`SELECT 1`;
-    const results = await Promise.all([
-      fetch(`${c.SUPABASE_URL}/auth/v1/health`, {
-        headers: { apikey: c.SUPABASE_ANON_KEY },
-        signal: AbortSignal.timeout(3000),
+    await Promise.all([
+      probeHttp(`${c.SUPABASE_URL}/auth/v1/admin/users?page=1&per_page=1`, {
+        apikey: c.SUPABASE_SERVICE_KEY,
+        Authorization: `Bearer ${c.SUPABASE_SERVICE_KEY}`,
       }),
-      fetch(`${c.SUPABASE_URL}/storage/v1/status`, {
-        headers: { apikey: c.SUPABASE_ANON_KEY },
-        signal: AbortSignal.timeout(3000),
-      }),
-      fetch(`${c.MAILPIT_URL}/api/v1/info`, { signal: AbortSignal.timeout(3000) }),
+      probeHttp(`${c.SUPABASE_URL}/storage/v1/status`, { apikey: c.SUPABASE_ANON_KEY }),
+      probeHttp(`${c.MAILPIT_URL}/api/v1/info`),
     ]);
-    if (results.some((r) => !r.ok)) throw new Error('Dependencia no disponible');
     return { status: 'ready', mode: 'local', payment: 'simulated' };
   } finally {
     await db.$disconnect();
+  }
+}
+async function probeHttp(url: string, headers?: HeadersInit) {
+  const response = await fetch(url, { headers, signal: AbortSignal.timeout(3000) });
+  try {
+    if (!response.ok) throw new Error('Dependencia no disponible');
+  } finally {
+    await response.body?.cancel();
   }
 }

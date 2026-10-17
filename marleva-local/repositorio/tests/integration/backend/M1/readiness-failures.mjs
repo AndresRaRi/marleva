@@ -66,6 +66,16 @@ try {
       await readyAgain();
     }
     report.cases.at(-1).recovered = true;
+    const auth = await fetch(process.env.SUPABASE_URL + '/auth/v1/admin/users?page=1&per_page=1', {
+      headers: {
+        apikey: process.env.SUPABASE_SERVICE_KEY,
+        Authorization: 'Bearer ' + process.env.SUPABASE_SERVICE_KEY,
+      },
+      signal: AbortSignal.timeout(3000),
+    });
+    await auth.body?.cancel();
+    assert.equal(auth.status, 200, 'Auth debe consultar su DB después de ready');
+    report.cases.at(-1).authDatabaseAfterRecovery = 200;
     report.cases.at(-1).durationMs = performance.now() - started;
   }
   report.passed = true;

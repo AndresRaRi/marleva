@@ -4,6 +4,7 @@ vi.mock('../../../../apps/api/src/config.js', () => ({
   config: () => ({
     SUPABASE_URL: 'http://127.0.0.1',
     SUPABASE_ANON_KEY: 'private-fixture',
+    SUPABASE_SERVICE_KEY: 'private-fixture-service',
     MAILPIT_URL: 'http://localhost',
   }),
 }));
@@ -66,6 +67,21 @@ it.each(['connection refused', 'TimeoutError'])(
 it('MAR-M1-UT-BE-110-CLOSE | fallo al cerrar tampoco divulga detalles ni responde ready', async () => {
   mocks.close.mockRejectedValue(new Error('private-fixture'));
   await unavailable();
+});
+it('MAR-M1-UT-BE-110-AUTH-DB | sondea conexión Auth y descarta cuerpos sin exponer usuarios', async () => {
+  const cancel = vi.fn().mockResolvedValue(undefined);
+  fetch.mockResolvedValue({ ok: true, body: { cancel } });
+  await readiness();
+  expect(fetch).toHaveBeenCalledWith(
+    'http://127.0.0.1/auth/v1/admin/users?page=1&per_page=1',
+    expect.objectContaining({
+      headers: {
+        apikey: 'private-fixture-service',
+        Authorization: 'Bearer private-fixture-service',
+      },
+    }),
+  );
+  expect(cancel).toHaveBeenCalledTimes(3);
 });
 it('MAR-M1-UT-BE-110-TARGET | ensayo rechaza otro proyecto, ruta, nombre o servicio', () => {
   const folder = '/private/tmp/marleva-ci';
