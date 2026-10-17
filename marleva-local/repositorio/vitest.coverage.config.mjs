@@ -8,6 +8,9 @@ export default defineConfig({
       include: [
         'apps/api/src/account.service.ts',
         'apps/api/src/security.ts',
+        'apps/api/src/readiness.ts',
+        'apps/api/src/health.controller.ts',
+        'apps/api/src/database.ts',
         'apps/api/src/http-*.ts',
         'apps/api/src/payment-simulator.ts',
         'apps/api/src/modules/m1/domain/**/*.ts',

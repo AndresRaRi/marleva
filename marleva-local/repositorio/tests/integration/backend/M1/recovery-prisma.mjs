@@ -38,7 +38,8 @@ const hash = (file) => createHash('sha256').update(readFileSync(file)).digest('h
 const migrations = readdirSync('apps/api/prisma/migrations')
   .filter((item) => /^\d{12}_/.test(item))
   .sort();
-assert.equal(migrations.length, 5);
+assert.equal(migrations.length, 6);
+assert.equal(migrations.at(-1), '202610160001_email_change_owner');
 const baseline = migrations.map((item) => ({
   name: item,
   sha256: hash('apps/api/prisma/migrations/' + item + '/migration.sql'),
@@ -200,7 +201,7 @@ try {
   prisma(['migrate', 'deploy'], 'baseline');
   assert.equal(
     sql('SELECT count(*) FROM marleva._prisma_migrations WHERE finished_at IS NOT NULL'),
-    '5',
+    String(migrations.length),
   );
   const id = randomUUID();
   sql(
@@ -209,7 +210,7 @@ try {
   const notices = () =>
     sql('SELECT md5(string_agg(t::text,\'\' ORDER BY t::text)) FROM marleva."Notice" t');
   const before = notices();
-  const candidate = '202610160001_b12_prisma_interrupt';
+  const candidate = '202610160002_b12_prisma_interrupt';
   mkdirSync(folder + '/migrations/' + candidate);
   const candidateFile = folder + '/migrations/' + candidate + '/migration.sql';
   const application = 'b12_prisma_' + context.run;
@@ -271,7 +272,7 @@ try {
   assert.equal(sql('SELECT count(*) FROM marleva.b12_candidate'), '1');
   assert.equal(
     sql('SELECT count(*) FROM marleva._prisma_migrations WHERE finished_at IS NOT NULL'),
-    '6',
+    String(migrations.length + 1),
   );
   assert.equal(notices(), before);
   for (const migration of baseline)
@@ -299,7 +300,7 @@ try {
     context.report('prisma-' + attempt + (report.result === 'FAIL' ? '-failure' : '')),
     JSON.stringify(report, null, 2) + '\n',
   );
-  if (report.result === 'PASS')
-    writeFileSync(context.report('prisma'), JSON.stringify(report, null, 2) + '\n');
+  // The stable report belongs to the historical five-migration rehearsal.
+  // Keep it intact; each new baseline/candidate has its own attempt report above.
 }
 console.log('B12 Prisma: ' + report.result);

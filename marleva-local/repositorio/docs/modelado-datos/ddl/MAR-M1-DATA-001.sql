@@ -205,7 +205,7 @@ COMMENT ON COLUMN "marleva"."Account"."operator" IS 'Proyección compatible de R
 
 COMMENT ON COLUMN "marleva"."Session"."providerTokens" IS 'Credenciales cifradas en servidor; nunca valores de ejemplo reales.';
 
-COMMENT ON COLUMN "marleva"."EmailChange"."accountId" IS 'Brecha MAR-M1-BUG-002: relación lógica con Account sin FK en migración aplicada; revisar y migrar antes de cierre.';
+COMMENT ON COLUMN "marleva"."EmailChange"."accountId" IS 'FK sin cascada en nueva migración 202610160001_email_change_owner; cinco migraciones anteriores inmutables.';
 
 COMMENT ON COLUMN "marleva"."Audit"."accountId" IS 'Actor mínimo registrado; FK/conservación por finalidad por revisar antes de cierre.';
 
@@ -238,6 +238,8 @@ COMMENT ON COLUMN "marleva"."MfaRecovery"."capabilityHash" IS 'Solo hash; capaci
 ALTER TABLE "marleva"."Session" ADD CONSTRAINT "Session_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 ALTER TABLE "marleva"."Notice" ADD CONSTRAINT "Notice_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
+ALTER TABLE "marleva"."EmailChange" ADD CONSTRAINT "EmailChange_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 ALTER TABLE "marleva"."PrivateFixture" ADD CONSTRAINT "Fixture_account" FOREIGN KEY ("accountId") REFERENCES "marleva"."Account" ("id") NOT DEFERRABLE;
 

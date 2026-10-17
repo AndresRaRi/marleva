@@ -232,7 +232,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Comprueba PG/Auth/Storage/capturador. No confirma pagos ni plataforma móvil. Caída conserva503; rendimiento de crear/desconectar Prisma por consulta pendiente. */
+        /** @description Comprueba PG, conexión real de Auth mediante lectura de servidor limitada a un registro cuyo cuerpo se descarta, Storage y capturador. No expone usuarios ni confirma pagos o plataforma móvil. Esperas de conexión, consulta y HTTP acotadas; caída conserva503 recuperable, sin promesa de SLO. */
         get: operations["MAR_M1_API_014"];
         put?: never;
         post?: never;

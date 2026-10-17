@@ -1,6 +1,6 @@
 # M1: prueba de aceptación en Chrome
 
-Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Versión integrada de referencia: main 2156078, [CI propio completo aprobado](https://github.com/AndresRaRi/marleva/actions/runs/38972892582). Los resultados actuales y sus límites se consultan en la tabla vigente de la matriz M1. La aceptación corresponde al usuario. Android permanece aplazado y apagado; el usuario reanudó iOS y su prueba acotada figura al final. Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
+Fecha:16-10-2026, America/Merida. MAR-CHAT-009. Esta guía sustituye instrucciones parciales anteriores. Versión integrada de referencia: main 1bb5224, [CI propio completo aprobado](https://github.com/AndresRaRi/marleva/actions/runs/38984321194). Los resultados actuales y sus límites se consultan en la tabla vigente de la matriz M1. La aceptación corresponde al usuario. Android permanece aplazado y apagado; el usuario reanudó iOS y su prueba acotada figura al final. Safari no forma parte de esta revisión. No equivale a publicar Marleva ni a habilitar compras.
 
 ## Abrir y preparar la prueba
 
@@ -84,7 +84,9 @@ B12 esencial Chrome está probado y repetido desde el mismo backup: datos/Auth/S
 
 ## Registrar la aceptación
 
-Recorrer1–4 y7 con una cuenta ficticia propia. Revisar5–6 con la evidencia del ensayo autorizado; no provocar otra pérdida de factor. Informar flujo/paso, esperado/obtenido y captura sin códigos o claves. Registrar cada recorrido como aprobado, con observaciones o no probado. La aceptación nunca se deduce del silencio. El [avance](../../avance.md) conserva implementación y aceptación separadas; [01](../../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md) registra continuidad y límites. Android/iOS y revisión humana con lector permanecen identificados hasta probarlos.
+La [lista finita C01–C06](../../proceso/MATRIZ_CASOS_M1.md#lista-finita-para-aceptar-y-cerrar-m1--16-10-2026) distingue qué prueba falta, quién puede hacerla y qué está aplazado. El cierre web para revisión no completa M1 multiplataforma. No hace falta repetir recorridos que ya aceptó el usuario; registrar el alcance de esa aceptación y sus observaciones.
+
+Recorrer1–4 y7 con una cuenta ficticia propia. Revisar5–6 con la evidencia del ensayo autorizado; no provocar otra pérdida de factor. Informar flujo/paso, esperado/obtenido y captura sin códigos o claves. Registrar cada recorrido como aprobado, con observaciones o no probado. La aceptación nunca se deduce del silencio. El [avance](../../avance.md) conserva implementación y aceptación separadas; [01](../../../../../entregables/fuentes_finales/01_ESTADO_Y_DECISIONES_MARLEVA.md) registra continuidad y límites. Android/iOS y revisión humana con lector permanecen identificados hasta probarlos. Para revisar soporte sin provocar borrados, aceptar los resultados existentes de B09, UC012 y B12 por su alcance; no convertirlos en operación real ni pedir otro retiro de factor.
 
 ## Revisar en Android emulado
 

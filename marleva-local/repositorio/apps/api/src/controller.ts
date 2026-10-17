@@ -2,7 +2,6 @@ import { Controller, Get, Post, Delete, Body, Req, Res, Param } from '@nestjs/co
 import type { Request, Response } from 'express';
 import { AccountService } from './account.service.js';
 import { config } from './config.js';
-import { database } from './database.js';
 import { fail } from './security.js';
 import { accountRequest } from './modules/m1/presentation/dtos/account-request.js';
 @Controller('v1')
@@ -99,34 +98,5 @@ export class AccountController {
   }
   @Get('operator/access') async operator(@Req() r: Request) {
     return this.accounts.operator(await this.accounts.principal(r));
-  }
-}
-@Controller('health')
-export class HealthController {
-  @Get('live') live() {
-    return { status: 'alive' };
-  }
-  @Get('ready') async ready() {
-    const c = config(),
-      db = database();
-    try {
-      await db.$queryRaw`SELECT 1`;
-      const results = await Promise.all([
-        fetch(`${c.SUPABASE_URL}/auth/v1/health`, {
-          headers: { apikey: c.SUPABASE_ANON_KEY },
-          signal: AbortSignal.timeout(3000),
-        }),
-        fetch(`${c.SUPABASE_URL}/storage/v1/status`, {
-          headers: { apikey: c.SUPABASE_ANON_KEY },
-          signal: AbortSignal.timeout(3000),
-        }),
-        fetch(`${c.MAILPIT_URL}/api/v1/info`, { signal: AbortSignal.timeout(3000) }),
-      ]);
-      if (results.some((r) => !r.ok))
-        fail(503, 'DEPENDENCIA', 'Una dependencia local no está disponible');
-      return { status: 'ready', mode: 'local', payment: 'simulated' };
-    } finally {
-      await db.$disconnect();
-    }
   }
 }
