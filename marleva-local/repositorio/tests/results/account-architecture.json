@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-17T03:32:54.492903+00:00",
+  "chat": "MAR-CHAT-009",
+  "scope": "C06: separar responsabilidades de AccountService conservando contratos y comportamiento",
+  "baseline": "651fcab11aac9a85d022a8e392461b158d139ee9",
+  "implemented": [
+    "fachada y extracción HTTP compatibles",
+    "coordinadores OTP, sesión, correo y MFA",
+    "contratos de repositorio/proveedor limitados por consumidor",
+    "repositorio Prisma transaccional y adaptadores Supabase/cifrado",
+    "registros propios sin ORM, Express ni SDK"
+  ],
+  "local": {
+    "unitTests": 438,
+    "unitPassed": 438,
+    "coverage": {
+      "lines": 97.24,
+      "branches": 92.17,
+      "statements": 95.54
+    },
+    "architecture": {
+      "modules": 134,
+      "dependencies": 402,
+      "violations": 0,
+      "clones": 0
+    },
+    "staticReview": "sin hallazgos accionables; comparación completa con baseline"
+  },
+  "invariants": [
+    "bloqueos en el mismo orden y con las mismas funciones PG",
+    "proveedor fuera de transacciones",
+    "cuotas y estados preservados",
+    "refresh lease y revocación posterior",
+    "cambio de correo atómico con aviso/audit/outbox y revocación",
+    "MFA: rol, sesión reciente, recuperación y AAL2"
+  ],
+  "limits": [
+    "unitarias con mocks no acreditan PG/Auth reales",
+    "CI del incremento y de main deben aprobar antes de cerrar integración",
+    "C01-C05 continúan: móviles, accesibilidad, físicos y aceptación",
+    "sin nuevos contratos/migraciones ni borrados; emuladores apagados"
+  ]
+}
