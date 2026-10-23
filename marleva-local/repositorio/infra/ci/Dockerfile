@@ -17,7 +17,7 @@ COPY . .
 RUN pnpm ci:prepare && pnpm --filter @marleva/api build \
     && pnpm --filter @marleva/api deploy --prod /runtime
 
-FROM gcr.io/distroless/cc-debian13:nonroot@sha256:e792ab3d241a468a4fd7519ddbbebe66b49b5f365771716ea688ad40b6c6f1c2 AS runtime
+FROM gcr.io/distroless/cc-debian13:nonroot@sha256:83b9b50586253821cf63ffcec87d3d94265a093ad30da232039af962dd8f4edf AS runtime
 ENV NODE_ENV=production
 COPY --from=build /usr/local/bin/node /usr/local/bin/node
 WORKDIR /workspace/apps/api
